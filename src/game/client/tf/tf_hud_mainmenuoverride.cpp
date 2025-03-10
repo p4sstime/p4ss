@@ -1961,6 +1961,12 @@ void CHudMainMenuOverride::OnCommand( const char *command )
 		//SetWatchStreamVisible( !m_pWatchStreamsPanel->IsVisible() );
 		vgui::system()->ShellExecute( "open", "https://www.twitch.tv/directory/game/Team%20Fortress%202" );
 	}
+
+	else if ( FStrEq( "open_website", command ) )
+	{
+		vgui::system()->ShellExecute("open", "https://passtime.tf/" );
+	}
+
 	else if ( FStrEq( "close_quest_map", command ) )
 	{
 		SetQuestMapVisible( false );

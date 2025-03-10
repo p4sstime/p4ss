@@ -250,7 +250,7 @@
 		"tall"			"84"
 		"visible"		"1"
 		"enabled"		"1"
-		"image"			"../hud/pass_time_logo_eu"
+		"image"			"../hud/pass_time_logo"
 		"scaleImage"	"1"
 		"mouseinputenabled"	"0"
 	}	
@@ -860,10 +860,10 @@
 	}
 	
 	
-	"DiscordButton"
+	"PlaceholderButton"
 	{
 		"ControlName"	"CExImageButton"
-		"fieldname"		"DiscordButton"
+		"fieldname"		"PlaceholderButton"
 		"xpos"			"670"
 		"ypos"			"320"
 		"zpos"			"15"
@@ -873,8 +873,8 @@
 		"PaintBackgroundType"	"2"
 
 		"font"			"HudFontSmallBold"
-		"command" 		"open_discord"
-		"labeltext"		"Discord"
+		"command" 		"open_placeholder"
+		"labeltext"		"Placeholder"
 		"OnlyInGame"	"1"
 
 		"border_default"	"MainMenuButtonDefault"
