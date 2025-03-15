@@ -281,6 +281,9 @@ bool C_BaseViewModel::ShouldDraw()
 // Purpose: Render the weapon. Draw the Viewmodel if the weapon's being carried
 //			by this player, otherwise draw the worldmodel.
 //-----------------------------------------------------------------------------
+
+ConVar cl_viewmodel_opacity( "cl_viewmodel_opacity", "1", FCVAR_ARCHIVE );
+
 int C_BaseViewModel::DrawModel( int flags )
 {
 	if ( !m_bReadyToDraw )
@@ -296,7 +299,7 @@ int C_BaseViewModel::DrawModel( int flags )
 			return 0;
 
 		// Tell engine
-		render->SetBlend( blend );
+		render->SetBlend( blend * cl_viewmodel_opacity.GetFloat() );
 
 		float color[3];
 		GetColorModulation( color );
