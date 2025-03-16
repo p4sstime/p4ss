@@ -74,6 +74,7 @@ BEGIN_DATADESC( CTFPasstimeLogic )
 	DEFINE_INPUTFUNC( FIELD_VOID, "staticc", staticc ), // SecretRoom_InputPlugDamaged NOTE: intentionally not in FGD
 	DEFINE_INPUTFUNC( FIELD_VOID, "RoomTriggerOnTouch", InputRoomTriggerOnTouch ),
 
+	// these are accessable by the mappers
 	DEFINE_OUTPUT( m_onBallFree, "OnBallFree" ),
 	DEFINE_OUTPUT( m_onBallGetBlu, "OnBallGetBlu" ),
 	DEFINE_OUTPUT( m_onBallGetRed, "OnBallGetRed" ),
@@ -84,6 +85,8 @@ BEGIN_DATADESC( CTFPasstimeLogic )
 	DEFINE_OUTPUT( m_onScoreAny, "OnScoreAny" ),
 	DEFINE_OUTPUT( m_onBallPowerUp, "OnBallPowerUp" ),
 	DEFINE_OUTPUT( m_onBallPowerDown, "OnBallPowerDown" ),
+	DEFINE_OUTPUT( m_onBallRespawn, "OnBallRespawn" ),
+	DEFINE_OUTPUT( m_onBallDespawn, "OnBallDespawn" ),
 END_DATADESC()
 
 //-----------------------------------------------------------------------------
@@ -973,6 +976,7 @@ void CTFPasstimeLogic::RespawnBall()
 	}
 	else if ( ( state == GR_STATE_RND_RUNNING ) || ( state == GR_STATE_STALEMATE ) )
 	{
+		m_onBallDespawn.FireOutput( m_hBall, this ); // Fire output to mapper for ball despawn
 		m_hBall->SetStateOutOfPlay();
 		MoveBallToSpawner();
 		CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
@@ -1023,6 +1027,7 @@ void CTFPasstimeLogic::SpawnBallAtRandomSpawner()
 	int i = RandomInt( 0, allSpawns.Count() - 1 );
 	CPasstimeBallSpawn *pSpawner = static_cast< CPasstimeBallSpawn *>( allSpawns[i] );	
 	SpawnBallAtSpawner( pSpawner );
+	m_onBallRespawn.FireOutput( m_hBall, this ); // Fire output to mapper for ball respawn
 }
 
 //-----------------------------------------------------------------------------

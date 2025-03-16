@@ -119,6 +119,8 @@ private:
 	COutputEvent m_onScoreAny;
 	COutputEvent m_onBallPowerUp;
 	COutputEvent m_onBallPowerDown;
+	COutputEvent m_onBallRespawn;
+	COutputEvent m_onBallDespawn;
 
 	// secret room stuff
 	void SecretRoom_Spawn();
