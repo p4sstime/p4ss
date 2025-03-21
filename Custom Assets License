@@ -1,0 +1,54 @@
+Definitions
+	Mapper						Someone who creates a custom gameplay map made to be played on
+	The Mod						P4SS, the SDK mod made available through Steam for free
+    Pack						To include a custom game asset file within a particular map file that references it
+	Published Custom Map		A custom gameplay map licensed to and published directly alongside the mod
+
+This mod contains a variety of custom-made assets, including particles, textures, materials, models, sounds, and maps.
+Some are created by the internal mod development team, some are created by members of the PASS Time community, and
+some are graciously licensed to the mappers and mod by TF2 community artists. These assets are only intended for use
+in alignment with the following terms and conditions.
+
+Assets created by the internal development team for the mod, and maps and custom assets created by PASS Time community
+mappers published alongside the mod, are only intended for use within the mod unless otherwise stated. Some custom
+maps are made available for download from other sources, such as TF2Maps.net, passtime.tf, and the 4v4 PASS Time Discord
+guild. These decisions are made at the mapper's discretion and follow separate guidelines not detailed here.
+
+A number of art assets included in published custom maps have been licensed to the mod/mapper by artists and asset
+creators from the TF2Maps community. These assets, unless otherwise stated, are only intended for use within the maps
+with which they're packed. These assets have been graciously licensed to the mod with the understanding that the mod
+remain entirely free to download and play. In addition, this license does NOT grant users the ability to use these
+assets in other games, mods, or projects. Mappers who create maps using these assets for Team Fortress 2 must still
+acquire all the necessary licensing and permissions for these assets through their intended channels. This license does
+NOT grant the ability to use these assets in a map published to the Steam Workshop for Team Fortress 2 or any other mod,
+game, or project.
+
+Some custom assets created by the TF2Maps community have been granted to the mod as assets to be officially included
+with the mod. These assets are published directly within the mod's files, rather than individually per map. This
+special allowance is intended first and foremost for published custom maps to utilize a single, central copy of the
+assets, reducing the file size of the maps. However, this also grants special permission and access to mappers making
+maps for the mod to use these assets in their maps. Access to these assets is only intended for maps made for the mod.
+Maps that use this access CANNOT be published via channels not intended for use with the mod, unless standard
+permissions have been granted by the asset creators to the mapper. Maps that use this access CANNOT be published to the
+Team Fortress 2 Workshop.
+
+	The assets made available through this allowance include:
+		[Assets list excised until publication]
+
+////////////////IGNORE THIS SECTION WITHIN THE SLASHES UNTIL WORKSHOP SUPPORT FOR THE MOD IS IMPLEMENTED////////////////
+
+This mod contains Steam Workshop support. In addition to the terms for uploading content to the Steam Workshop laid out
+by the Steam Subscriber agreement (6.B), users must also agree to the following terms to upload content to the Steam
+Workshop.
+
+The P4SS Workshop is intended only for custom maps. Custom maps made available through the Workshop that use
+third-party custom assets, including assets from TF2Maps.net, must first acquire explicit permission from the artists
+and asset creators to publish said custom assets within a map intended for a custom SDK mod. In addition, mappers must
+appropriately credit creators and artists of used custom assets through the intended tools available during Workshop
+upload.
+
+Maps made available through the P4SS workshop are NOT intended for use in other games, mods, or projects, and
+custom assets packed with maps do NOT grant license to use them in other games, mods, or projects; this includes the
+Team Fortress 2 Workshop.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
