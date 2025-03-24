@@ -1,0 +1,6 @@
+[submodule "src/thirdparty/src/thirdparty/luajit"]
+	path = src/thirdparty/src/thirdparty/luajit
+	url = https://luajit.org/git/luajit.git
+[submodule "src/thirdparty/luajit"]
+	path = src/thirdparty/luajit
+	url = https://luajit.org/git/luajit.git

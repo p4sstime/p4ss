@@ -33,7 +33,7 @@ fi
 
 
 if [[ ! -e "$solution_out.ninja" ]] || [[ "$should_clean" = true ]]; then
-    # python3 compile_libs.py
+    python3 compile_libs.py
     devtools/bin/vpc /tf /linux64 /ninja /define:LUAJIT /define:SOURCESDK +everything /mksln "$solution_out"
 
     # Generate compile commands.

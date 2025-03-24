@@ -14,7 +14,7 @@ is_64bit = uname.machine == "x86_64"
 is_linux = uname.system == "Linux"
 is_windows = uname.system == "Windows"
 
-LUAJIT_DIR = "./thirdparty/luajit"
+LUAJIT_DIR = "thirdparty/luajit"
 
 def cmd_or_error(cmd: str):
 	exit_code = os.system(cmd)
