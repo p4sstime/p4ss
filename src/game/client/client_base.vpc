@@ -516,6 +516,10 @@ $Project
 
 		$File	"$SRCDIR\game\shared\secure_command_line.cpp"
 
+		$Folder "P4SS Lua UI Source"
+		{
+			$File "$SRCDIR\lua_ui\lui.cpp"
+		}
 
 		$Folder	"Sixense"
 		{
@@ -1114,6 +1118,7 @@ $Project
 		$File	"$SRCDIR\public\vgui_controls\WizardSubPanel.h"
 		$File	"$SRCDIR\public\worldsize.h"
 		$File	"$SRCDIR\public\zip_uncompressed.h"
+		$File "$SRCDIR\public\lua_ui\lui.h"
 		//Haptics
 		$File   "$SRCDIR\public\haptics\ihaptics.h"	[$WIN32]
 		$File   "$SRCDIR\public\haptics\haptic_utils.h"	[$WIN32]
@@ -1252,7 +1257,7 @@ $Project
 		$File	"game_controls\vguitextwindow.h"
 		$File	"game_controls\IconPanel.h"
 	}
-	
+
 	$Folder	"Link Libraries"
 	{
 		$Lib		bitmap
@@ -1261,6 +1266,7 @@ $Project
 		$Lib		mathlib
 		$Lib		matsys_controls
 		$Lib		particles
+		$Lib		libluajit [$LUAJIT]
 		$Lib		tier1
 		$Lib		tier2
 		$Lib		tier3

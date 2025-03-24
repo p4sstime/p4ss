@@ -1,1 +1,2 @@
-devtools\bin\vpc.exe /tf /define:SOURCESDK +everything /mksln everything.sln
+python3 compile_libs.py
+devtools\bin\vpc.exe /tf /define:LUAJIT /define:SOURCESDK +everything /mksln everything.sln
