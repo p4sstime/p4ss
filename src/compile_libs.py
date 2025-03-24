@@ -6,6 +6,7 @@
 import os
 import sys
 import shutil
+import subprocess
 import platform
 
 script_directory = os.path.dirname(os.path.realpath(__file__))
@@ -37,7 +38,8 @@ def compile_lua_jit():
 			cmd_or_error("make amalg")
 			out_lib_name = "libluajit.a"
 		elif is_windows:
-			cmd_or_error('"%ProgramFiles%\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat" ' "&&" " msvcbuild.bat")
+			
+			pipe = subprocess.run(executable=script_directory+"/compile_luajit.bat")
 			out_lib_name = "luajit.lib"
 	except Exception as e:
 		print("Error while compiling LuaJIT: " + str(e))
