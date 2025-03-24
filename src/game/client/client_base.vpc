@@ -1266,7 +1266,8 @@ $Project
 		$Lib		mathlib
 		$Lib		matsys_controls
 		$Lib		particles
-		$Lib		libluajit [$LUAJIT]
+		$Lib		libluajit [$LUAJIT&&$LINUXALL]
+		$Lib		luajit [$LUAJIT&&$WINDOWS]
 		$Lib		tier1
 		$Lib		tier2
 		$Lib		tier3
