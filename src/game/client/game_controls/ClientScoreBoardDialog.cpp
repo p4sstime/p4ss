@@ -32,7 +32,9 @@
 #include <igameresources.h>
 
 #include "vgui_avatarimage.h"
-
+#if defined( LUAUI )
+#include "lua_ui/c_luaui.h"
+#endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -48,6 +50,9 @@ bool AvatarIndexLessFunc( const int &lhs, const int &rhs )
 //-----------------------------------------------------------------------------
 CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : EditablePanel( NULL, PANEL_SCOREBOARD )
 {
+	#if defined( LUAUI )
+	C_LuaUi::Get()->Test();
+	#endif
 	m_iPlayerIndexSymbol = KeyValuesSystem()->GetSymbolForString("playerIndex");
 	m_nCloseKey = BUTTON_CODE_INVALID;
 

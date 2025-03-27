@@ -150,6 +150,9 @@
 
 #endif
 
+#if defined( LUAUI )
+#include "lua_ui/c_luaui.h"
+#endif
 #if defined ( DISCORD_RPC )
 // Discord RPC
 #include "discord_rpc.h"
@@ -1193,6 +1196,10 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		Discord_UpdatePresence( &discordPresence );
 	}
 #endif
+
+	#if defined ( LUAUI )
+	C_LuaUi::Init();
+	#endif
 
 	return true;
 }
