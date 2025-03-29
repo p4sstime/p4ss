@@ -1181,7 +1181,7 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	handlers.joinRequest = HandleDiscordJoinRequest;
 
 	char appid[255];
-	sprintf( appid, "%d", engine->GetAppID() );
+	Q_snprintf( appid, sizeof(appid), "%d", engine->GetAppID() );
 	Discord_Initialize( cl_discord_appid.GetString(), &handlers, 1, appid );
 
 	if ( !g_bTextMode )
