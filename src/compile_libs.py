@@ -25,6 +25,9 @@ elif is_windows and is_64bit:
 	target_name = "x64"
 elif is_windows and not is_64bit:
 	target_name = "x86"
+else:
+	print("Unsupported platform: " + uname.system + " " + uname.machine)
+	sys.exit(1)
 	
 TARGET_DIR = target_base + target_name + "/"
 
@@ -64,7 +67,7 @@ def compile_lua_jit():
 	
 	os.makedirs(target_base, exist_ok=True)
 	# Copy the lib in a platform agnostic way
-	shutil.copyfile(LUAJIT_DIR + "/src/" + out_lib_name, target_base + out_lib_name)
+	shutil.copyfile(LUAJIT_DIR + "/src/" + out_lib_name, TARGET_DIR + out_lib_name)
 
 
 if __name__ == "__main__":

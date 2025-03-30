@@ -1285,10 +1285,15 @@ void CHLClient::PostInit()
 //-----------------------------------------------------------------------------
 void CHLClient::Shutdown( void )
 {
-    if (g_pAchievementsAndStatsInterface)
-    {
-        g_pAchievementsAndStatsInterface->ReleasePanel();
-    }
+	// Discord RPC
+	Discord_Shutdown();
+	#if defined ( LUAUI )
+	C_LuaUi::Shutdown();
+	#endif
+  if (g_pAchievementsAndStatsInterface)
+  {
+    g_pAchievementsAndStatsInterface->ReleasePanel();
+  }
 
 #ifdef SIXENSE
 	g_pSixenseInput->Shutdown();

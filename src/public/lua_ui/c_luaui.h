@@ -1,6 +1,7 @@
-#ifndef LUI_H
-#define LUI_H
+#ifndef CLUAUI_H
+#define CLUAUI_H
 #ifdef LUAUI
+#ifdef CLIENT_DLL
 
 #ifdef _WIN32
 #pragma once
@@ -12,10 +13,13 @@ class C_LuaUi
 {
 private:
 	C_LuaUi();
+	~C_LuaUi();
 	static C_LuaUi* instance;
 public:
 	// Call this when Client DLL is loaded.
 	static void Init();
+
+	static void Shutdown();
 
 	// Valid at all times after Client DLL is loaded
 	static C_LuaUi* Get();
@@ -24,5 +28,6 @@ public:
 
 };
 
+#endif // CLIENT_DLL
 #endif // LUAUI
-#endif // !LUI_H
+#endif // !CLUAUI_H

@@ -1,4 +1,3 @@
-
 local function draw()
 	local panel = UI.Panel.new()
 

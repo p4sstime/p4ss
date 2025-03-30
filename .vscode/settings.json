@@ -9,6 +9,14 @@
     "editor.defaultFormatter": "pfwobcke.vscode-vdf"
   },
   "[lua]": {
+    "editor.formatOnSave": true,
     "editor.defaultFormatter": "JohnnyMorganz.stylua"
-  }
+  },
+  "Lua.diagnostics.globals": [
+    "UI"
+  ],
+  "Lua.workspace.library": [
+    "${workspaceFolder}/game/resource/ui/schema.lua",
+  ],
+  "Lua.runtime.version": "LuaJIT"
 }

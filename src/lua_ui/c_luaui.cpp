@@ -12,12 +12,26 @@ C_LuaUi* C_LuaUi::instance = nullptr;
 C_LuaUi::C_LuaUi() 
 {
 }
+C_LuaUi::~C_LuaUi()
+{
+	
+}
 
+/// @brief Safe to call multiple times
 void C_LuaUi::Init()
 {
 	if (instance == nullptr)
 	{
 		instance = new C_LuaUi();
+	}
+}
+
+void C_LuaUi::Shutdown()
+{
+	if (instance != nullptr)
+	{
+		delete instance;
+		instance = nullptr;
 	}
 }
 C_LuaUi* C_LuaUi::Get()

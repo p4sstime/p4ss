@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"ms-vscode.cpptools", // Microsoft C++ extension
+		"sumneko.lua",         // Lua LSP
+		"JohnnyMorganz.stylua", // Lua formatter
+		"pfwobcke.vscode-vdf"	// VDF formatter
+	]
+}
