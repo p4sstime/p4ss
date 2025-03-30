@@ -250,7 +250,7 @@
 		"tall"			"84"
 		"visible"		"1"
 		"enabled"		"1"
-		"image"			"../hud/pass_time_logo_eu"
+		"image"			"../hud/pass_time_logo"
 		"scaleImage"	"1"
 		"mouseinputenabled"	"0"
 	}	
@@ -860,10 +860,10 @@
 	}
 	
 	
-	"DiscordButton"
+	"PlaceholderButton"
 	{
 		"ControlName"	"CExImageButton"
-		"fieldname"		"DiscordButton"
+		"fieldname"		"PlaceholderButton"
 		"xpos"			"670"
 		"ypos"			"320"
 		"zpos"			"15"
@@ -873,8 +873,8 @@
 		"PaintBackgroundType"	"2"
 
 		"font"			"HudFontSmallBold"
-		"command" 		"open_discord"
-		"labeltext"		"Discord"
+		"command" 		"open_placeholder"
+		"labeltext"		"Tournaments"
 		"OnlyInGame"	"1"
 
 		"border_default"	"MainMenuButtonDefault"
@@ -2069,7 +2069,7 @@
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"CallVoteButton"
-		"xpos"			"67"
+		"xpos"			"107"
 		"ypos"			"447"
 		"zpos"			"12"
 		"wide"			"25"
@@ -2124,7 +2124,7 @@
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"MutePlayersButton"
-		"xpos"			"93"
+		"xpos"			"133"
 		"ypos"			"447"
 		"zpos"			"12"
 		"wide"			"25"
@@ -2360,10 +2360,6 @@
 		"default"		"1"
 		"Command"		"engine con_enable 1;toggleconsole"
 
-		"navUp"			"Notifications_Panel"
-		"navLeft"		"ReportBugButton"
-		"navRight"		"TF2SettingsButton"
-
 		"sound_depressed"	"UI/buttonclick.wav"
 		"sound_released"	"UI/buttonclickrelease.wav"
 		
@@ -2384,6 +2380,52 @@
 		}			
 	}
 
+	"githubissueButton"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldName"		"githubissueButton"
+		"xpos"			"67"
+		"ypos"			"447"
+		"zpos"			"1"
+		"wide"			"25"
+		"tall"			"25"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"labelText"		""
+		"font"			"HudFontSmallBold"
+		"textAlignment"	"west"
+		"textinsetx"	"25"
+		"use_proportional_insets" "1"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"default"		"1"
+		"Command"		"open_githubissue"
+
+		"sound_depressed"	"UI/buttonclick.wav"
+		"sound_released"	"UI/buttonclickrelease.wav"
+		
+		"image_drawcolor"	"235 226 202 255"
+		"SubImage"
+		{
+			"ControlName"	"ImagePanel"
+			"fieldName"		"SubImage"
+			"xpos"			"5"
+			"ypos"			"5"
+			"zpos"			"1"
+			"wide"			"15"
+			"tall"			"15"
+			"visible"		"1"
+			"enabled"		"1"
+			"scaleImage"	"1"
+			"image"			"glyph_bug"
+		}			
+	}
+
+
+		//This is not enabled, it shouldn't be as advanced settings already has a button on the main menu.
 	"TF2SettingsButton"
 	{
 		"ControlName"	"CExImageButton"
@@ -2729,7 +2771,7 @@
 	{
 		"ControlName"	"CExImageButton"
 		"fieldName"		"ReportBugButton"
-		"xpos"			"65"
+		"xpos"			"125"
 		"ypos"			"447"
 		"zpos"			"4"
 		"wide"			"25"
@@ -2886,13 +2928,70 @@
 		"xpos"			"c1"
 		"ypos"			"210"
 		"zpos"			"15"
-		"wide"			"140"
+		"wide"			"130"
 		"tall"			"30"
 		"visible"		"1"
 		
 		"font"			"HudFontSmallishBold"
 		"command" 		"engine mp_tournament 1; mp_restartgame_immediate 1"
 		"labeltext"		"restart round"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+	"Arena6Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren6Button"
+		"xpos"			"c1"
+		"ypos"			"240"
+		"zpos"			"15"
+		"wide"			"140"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+			//This line is so long but it ensures that everyone can use this buttons without installing cfg's.
+		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 60; ent_fire team_round_timer pause; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
+		"labeltext"		"practice mode"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena7Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren7Button"
+		"xpos"			"c130"
+		"ypos"			"210"
+		"zpos"			"15"
+		"wide"			"120"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine exec p4ss_pt_2025"
+		"labeltext"		"match mode"
 		"OnlyInGame"	"1"
 		
 		"border_default"	"storeinnershadowborder"

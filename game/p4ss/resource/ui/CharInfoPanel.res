@@ -138,6 +138,7 @@
 		"sound_released"	"UI/buttonclickrelease.wav"
 	}		
 
+		//What purpose does this serve? IMO not needed.
 	"ClearButton"
 	{
 		"ControlName"	"CExImageButton"
@@ -149,8 +150,8 @@
 		"tall"			"25"
 		"autoResize"	"0"
 		"pinCorner"		"3"
-		"visible"		"1"
-		"enabled"		"1"
+		"visible"		"0"
+		"enabled"		"0"
 		"tabPosition"	"0"
 		"labelText"		""
 		"image_drawcolor"	"235 226 202 255"
@@ -189,8 +190,8 @@
 		"tall"			"25"
 		"autoResize"	"0"
 		"pinCorner"		"3"
-		"visible"		"1"
-		"enabled"		"1"
+		"visible"		"0"
+		"enabled"		"0"
 		"tabPosition"	"0"
 		"labelText"		""
 		"image_drawcolor"	"235 226 202 255"
@@ -229,8 +230,8 @@
 		"tall"			"25"
 		"autoResize"	"0"
 		"pinCorner"		"3"
-		"visible"		"1"
-		"enabled"		"1"
+		"visible"		"0"
+		"enabled"		"0"
 		"tabPosition"	"0"
 		"labelText"		"#TF_SDK_LocalLoadout"
 		"image_drawcolor"	"235 226 202 255"

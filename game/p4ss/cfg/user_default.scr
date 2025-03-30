@@ -40,6 +40,30 @@ DESCRIPTION INFO_OPTIONS
 		{ CATEGORY }
 	}
 
+	"p4ss_legacy_throw_controls"
+	{
+		"#p4ss_legacy_throw_controls"
+		"#Tooltip_p4ss_legacy_throw_controls"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"p4ss_reverse_throw_controls"
+	{
+		"#p4ss_reverse_throw_controls"
+		"#Tooltip_p4ss_reverse_throw_controls"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"tf_passtime_crosshair_teamcolored"
+	{
+		"#tf_passtime_crosshair_teamcolored"
+		"#Tooltip_crosshair_teamcolored"
+		{ BOOL }
+		{ "0" }
+	}
+
 	"tf_passtime_crosshair_r"
 	{
 		"#Tooltip_PASSCrosshairRed"
@@ -71,7 +95,7 @@ DESCRIPTION INFO_OPTIONS
 		{ SLIDER 1 255 }
 		{ "255" }
 	}
-
+	
 	"category2"
 	{
 		"#TF_OptionCategory_Communication"
@@ -101,7 +125,16 @@ DESCRIPTION INFO_OPTIONS
 		{ BUTTON }
 		{ "open_chat_filter_settings" }
 	}
+	
+	"tf_chat_particle"
+	{
+		"#TF_Chat_Particle"
+		"#Tooltip_ChatParticle"
+		{ BOOL }
+		{ "0" }
+	}
 
+		//Weapon options
 	"category3"
 	{
 		"#TF_OptionCategory_Combat"
@@ -122,6 +155,144 @@ DESCRIPTION INFO_OPTIONS
 		"#Tooltip_hud_fastswitch"
 		{ BOOL }
 		{ "0" }
+	}
+	
+	"tf_remember_activeweapon"
+	{
+		"#TF_rememberactiveweapon"
+		"#Tooltip_rememberactiveweapon"
+		{ BOOL }
+		{ "0" }
+	}	
+	
+	"tf_remember_lastswitched"
+	{
+		"#TF_rememberlastweapon"
+		"#Tooltip_rememberlastweapon"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"cl_flipviewmodels"
+	{
+		"#TF_flipviewmodel_option"
+		"#Tooltip_flipviewmodel_option"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"tf_use_min_viewmodels"
+	{
+		"#TF_use_min_viewmodels_option"
+		"#Tooltip_use_min_viewmodels_option"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"r_drawviewmodel"
+	{
+		"#TF_r_drawviewmodel"
+		"#Tooltip_r_drawviewmodel"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"viewmodel_fov"
+	{
+		"#TF_viewmodelfov_option"
+		"#Tooltip_viewmodelfov_option"
+		{ SLIDER 54 80 }
+		{ "1" }
+	}
+	
+		
+	"category4"
+	{
+		"#TF_OptionCategory_ClassSpecific"
+		{ CATEGORY }
+	}
+	
+		"cl_rocketoffsetposition"
+	{
+		"#cl_rocketoffsetposition"
+		{ LIST
+			"#cl_rocketoffsetposition_perweapon"                "0"	//Per weapon
+			"#cl_rocketoffsetposition_stock"                "1"	//Stock
+			"#cl_rocketoffsetposition_original"                "2"	//Original
+			"#cl_rocketoffsetposition_cowmangler"                "3"	//Cowmangler
+		}
+		{ "0" }
+	}
+		
+//		"tf_simple_disguise_menu"
+//	
+//		"#TF_simple_disguise_menu_option"
+//		"#Tooltip_simple_disguise_menu_option"
+//		{ BOOL }
+//		{ "0" }
+//	}
+	
+//	"tf_sniper_fullcharge_bell"
+//	{
+//		"#TF_sniperbell"
+//		"#Tooltip_sniperbell"
+//		{ BOOL }
+//		{ "0" }
+//	}	
+	
+//	"cl_autorezoom"
+//	{
+//		"#TF_autozoom"
+//		"#Tooltip_autozoom"
+//		{ BOOL }
+//		{ "1" }
+//	}
+
+//	"tf_hud_no_crosshair_on_scope_zoom"
+//	{
+//		"#TF_nocrosshaironscopezoom"
+//		"#Tooltip_nocrosshaironscopezoomn"
+//		{ BOOL }
+//		{ "0" }
+//	}	
+	
+	"tf_medigun_autoheal"
+	{
+		"#TF_medigun_autoheal"
+		"#Tooltip_medigun_autoheal"
+		{ BOOL }
+		{ "1" }
+	}
+	
+	"hud_medichealtargetmarker"
+	{
+		"#TF_HealTargetMarker"
+		"#Tooltip_HealTargetMarker"
+		{ BOOL }
+		{ "1" }
+	}
+	
+	"hud_medicautocallers"
+	{
+		"#TF_AutoMedicCallers"
+		"#Tooltip_AutoMedicCallers"
+		{ BOOL }
+		{ "1" }
+	}
+	
+	"hud_medicautocallersthreshold"
+	{
+		"#TF_AutoMedicCallThreshold"
+		"#Tooltip_AutoMedicCallThreshold"
+		{ SLIDER 10 99 }
+		{ "75" }
+	}
+	
+		//Hitsounds
+	"category5"
+	{
+		"#TF_OptionCategory_Hitsounds"
+		{ CATEGORY }
 	}
 	
 	"tf_dingalingaling"
@@ -269,94 +440,8 @@ DESCRIPTION INFO_OPTIONS
 		{ SLIDER 1 255 }
 		{ "0" }
 	}
-	
-	"tf_remember_activeweapon"
-	{
-		"#TF_rememberactiveweapon"
-		"#Tooltip_rememberactiveweapon"
-		{ BOOL }
-		{ "0" }
-	}	
-	
-	"tf_remember_lastswitched"
-	{
-		"#TF_rememberlastweapon"
-		"#Tooltip_rememberlastweapon"
-		{ BOOL }
-		{ "0" }
-	}	
-	
-	"tf_sniper_fullcharge_bell"
-	{
-		"#TF_sniperbell"
-		"#Tooltip_sniperbell"
-		{ BOOL }
-		{ "0" }
-	}	
-	 	
-	"category4"
-	{
-		"#TF_OptionCategory_ClassSpecific"
-		{ CATEGORY }
-	}
-
-	"tf_simple_disguise_menu"
-	{
-		"#TF_simple_disguise_menu_option"
-		"#Tooltip_simple_disguise_menu_option"
-		{ BOOL }
-		{ "0" }
-	}
-	
-	"cl_autorezoom"
-	{
-		"#TF_autozoom"
-		"#Tooltip_autozoom"
-		{ BOOL }
-		{ "1" }
-	}
-
-	"tf_hud_no_crosshair_on_scope_zoom"
-	{
-		"#TF_nocrosshaironscopezoom"
-		"#Tooltip_nocrosshaironscopezoomn"
-		{ BOOL }
-		{ "0" }
-	}	
-	
-	"tf_medigun_autoheal"
-	{
-		"#TF_medigun_autoheal"
-		"#Tooltip_medigun_autoheal"
-		{ BOOL }
-		{ "0" }
-	}
-	
-	"hud_medichealtargetmarker"
-	{
-		"#TF_HealTargetMarker"
-		"#Tooltip_HealTargetMarker"
-		{ BOOL }
-		{ "0" }
-	}
-	
-	"hud_medicautocallers"
-	{
-		"#TF_AutoMedicCallers"
-		"#Tooltip_AutoMedicCallers"
-		{ BOOL }
-		{ "0" }
-	}
-	
-	"hud_medicautocallersthreshold"
-	{
-		"#TF_AutoMedicCallThreshold"
-		"#Tooltip_AutoMedicCallThreshold"
-		{ SLIDER 10 99 }
-		{ "75" }
-	}
 		
-	"category5"
+	"category6"
 	{
 		"#TF_OptionCategory_HUD"
 		{ CATEGORY }
@@ -378,12 +463,20 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}	
 	
+	"tf_use_match_hud"
+	{
+		"#TF_UseMatchHUD"
+		"#Tooltip_UseMatchHUD"
+		{ BOOL }
+		{ "1" }
+	}
+	
 	"cl_use_tournament_specgui"
 	{
 		"#TF_UseAdvancedTourneyGUI"
 		"#Tooltip_UseAdvancedTourneyGUI"
 		{ BOOL }
-		{ "0" }
+		{ "1" }
 	}	
 
 	"cl_spec_carrieditems"
@@ -417,14 +510,6 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 	
-	"viewmodel_fov"
-	{
-		"#TF_viewmodelfov_option"
-		"#Tooltip_viewmodelfov_option"
-		{ SLIDER 54 70 }
-		{ "1" }
-	}
-	
 	"tf_spectator_target_location"
 	{
 		"#TF_Spectator_TargetID_Location"
@@ -445,60 +530,60 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}	
 
-	"tf_spectate_pyrovision"
-	{
-		"#TF_SpectatePyroVision"
-		"#Tooltip_SpectatePyroVision"
-		{ BOOL }
-		{ "0" }
-	}
+//	"tf_spectate_pyrovision"
+//	{
+//		"#TF_SpectatePyroVision"
+//		"#Tooltip_SpectatePyroVision"
+//		{ BOOL }
+//		{ "0" }
+//	}
 	
-	"pyro_vignette"
-	{
-		"#TF_Pyrovision_Vignette"
-		{ LIST
-			"#TF_Pyrovision_Disable" "0"
-			"#TF_Pyrovision_Vignette_Static" "1"
-			"#TF_Pyrovision_Vignette_Dynamic" "2"
-		}
-		{ "2" }
-	}
+//	"pyro_vignette"
+//	{
+//		"#TF_Pyrovision_Vignette"
+//		{ LIST
+//			"#TF_Pyrovision_Disable" "0"
+//			"#TF_Pyrovision_Vignette_Static" "1"
+//			"#TF_Pyrovision_Vignette_Dynamic" "2"
+//		}
+//		{ "2" }
+//	}
 
-	"pyro_vignette_distortion"
-	{
-		"#TF_Pyrovision_Distortion"
-		{ LIST
-			"#TF_Pyrovision_Disable" "0"
-			"#TF_Pyrovision_Enable" "1"
-		}
-		{ "1" }
-	}
+//	"pyro_vignette_distortion"
+//	{
+//		"#TF_Pyrovision_Distortion"
+//		{ LIST
+//			"#TF_Pyrovision_Disable" "0"
+//			"#TF_Pyrovision_Enable" "1"
+//		}
+//		{ "1" }
+//	}
 
-	"pyro_dof"
-	{
-		"#TF_Pyrovision_Dof"
-		{ LIST
-			"#TF_Pyrovision_Disable" "0"
-			"#TF_Pyrovision_Enable" "1"
-		}
-		{ "1" }
-	}
-
-	"tf_romevision_opt_in"
-	{
-		"#TF_RomeVisionOptIn"
-		"#Tooltip_RomeVisionOptIn"
-		{ BOOL }
-		{ "0" }
-	}
-
-	"tf_hud_target_id_disable_floating_health"
-	{
-		"#TF_TargetID_Disable_Floating"
-		"#ToolTip_TargetID_Disable_Floating"
-		{ BOOL }
-		{ "0" }
-	}
+//	"pyro_dof"
+//	{
+//		"#TF_Pyrovision_Dof"
+//		{ LIST
+//			"#TF_Pyrovision_Disable" "0"
+//			"#TF_Pyrovision_Enable" "1"
+//		}
+//		{ "1" }
+//	}
+//
+//	"tf_romevision_opt_in"
+//	{
+//		"#TF_RomeVisionOptIn"
+//		"#Tooltip_RomeVisionOptIn"
+//		{ BOOL }
+//		{ "0" }
+//	}
+//
+//	"tf_hud_target_id_disable_floating_health"
+//	{
+//		"#TF_TargetID_Disable_Floating"
+//		"#ToolTip_TargetID_Disable_Floating"
+//		{ BOOL }
+//		{ "0" }
+//	}
 
 	"tf_hud_target_id_alpha"
 	{
@@ -508,29 +593,29 @@ DESCRIPTION INFO_OPTIONS
 		{ "100" }
 	}
 
-	"tf_contract_progress_show"
-	{
-		"#TF_Contract_Progress"
-		"#ToolTip_TF_Contract_Progress"
-		{ LIST
-			"#TF_Contract_Progress_None"	"0"
-			"#TF_Contract_Progress_All"		"1"
-			"#TF_Contract_Progress_Active"	"2"
-		}
-		{ "1" }
-	}
+//	"tf_contract_progress_show"
+//	{
+//		"#TF_Contract_Progress"
+//		"#ToolTip_TF_Contract_Progress"
+//		{ LIST
+//			"#TF_Contract_Progress_None"	"0"
+//			"#TF_Contract_Progress_All"		"1"
+//			"#TF_Contract_Progress_Active"	"2"
+//		}
+//		{ "0" }
+//	}
 
-	"tf_contract_competitive_show"
-	{
-		"#TF_Contract_Progress_Competitive"
-		"#ToolTip_TF_Contract_Progress"
-		{ LIST
-			"#TF_Contract_Progress_None"	"0"
-			"#TF_Contract_Progress_All"		"1"
-			"#TF_Contract_Progress_Active"	"2"
-		}
-		{ "1" }
-	}
+//	"tf_contract_competitive_show"
+//	{
+//		"#TF_Contract_Progress_Competitive"
+//		"#ToolTip_TF_Contract_Progress"
+//		{ LIST
+//			"#TF_Contract_Progress_None"	"0"
+//			"#TF_Contract_Progress_All"		"1"
+//			"#TF_Contract_Progress_Active"	"2"
+//		}
+//		{ "0" }
+//	}
 
 	"tf_scoreboard_mouse_mode"
 	{
@@ -553,14 +638,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}
 
-	"tf_use_match_hud"
-	{
-		"#TF_UseMatchHUD"
-		{ BOOL }
-		{ "1" }
-	}
-
-	"category6"
+	"category7"
 	{
 		"#TF_OptionCategory_Replay"
 		{ CATEGORY }
@@ -614,19 +692,27 @@ DESCRIPTION INFO_OPTIONS
 		{ "5" }
 	}
 
-	"tf_replay_pyrovision"
-	{
-		"#TF_ReplayPyroVision"
-		"#Tooltip_ReplayPyroVision"
-		{ BOOL }
-		{ "0" }
-	}
+//	"tf_replay_pyrovision"
+//	{
+//		"#TF_ReplayPyroVision"
+//		"#Tooltip_ReplayPyroVision"
+//		{ BOOL }
+//		{ "0" }
+//	}
 	
-	"category7"
+	"category8"
 	{
 		"#TF_OptionCategory_Performance"
 		{ CATEGORY }
 	}
+	
+	"cl_ragdoll_forcefade"
+	{
+		"#cl_ragdoll_forcefade"
+		"#Tooltip_cl_ragdoll_forcefade"
+		{ BOOL }
+		{ "0" }
+	}	
 	
 	"tf_particles_disable_weather"
 	{
@@ -649,10 +735,10 @@ DESCRIPTION INFO_OPTIONS
 		"#Valve_Multiplayer_Decal_Limit"
 		"#Tooltip_Multiplayer_Decal_Limit"
 		{ NUMBER 0 4096 }
-		{ "200" }
+		{ "25" }
 	}
 	
-	"category8"
+	"category9"
 	{
 		"#TF_OptionCategory_Misc"
 		{ CATEGORY }
@@ -680,22 +766,6 @@ DESCRIPTION INFO_OPTIONS
 		"#Tooltip_loadoutrespawn"
 		{ BOOL }
 		{ "1" }
-	}
-	
-	"cl_flipviewmodels"
-	{
-		"#TF_flipviewmodel_option"
-		"#Tooltip_flipviewmodel_option"
-		{ BOOL }
-		{ "0" }
-	}
-	
-	"tf_use_min_viewmodels"
-	{
-		"#TF_use_min_viewmodels_option"
-		"#Tooltip_use_min_viewmodels_option"
-		{ BOOL }
-		{ "0" }
 	}	
 	
 	"cl_spraydisable"
@@ -785,7 +855,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 
-	"category9"
+	"category10"
 	{
 		"#TF_OptionCategory_DemoSupport"
 		{ CATEGORY }

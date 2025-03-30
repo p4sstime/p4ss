@@ -1956,10 +1956,29 @@ void CHudMainMenuOverride::OnCommand( const char *command )
 	{
 		SetQuestMapVisible( !GetQuestMapPanel()->IsVisible() );
 	}
-	else if ( FStrEq( "watch_stream", command ) )
+	else if ( FStrEq( "watch_stream",
+					  command ) ) // Empty until we get a twitch page, twitch button can be used again once we do.
 	{
-		//SetWatchStreamVisible( !m_pWatchStreamsPanel->IsVisible() );
-		vgui::system()->ShellExecute( "open", "https://www.twitch.tv/directory/game/Team%20Fortress%202" );
+		// SetWatchStreamVisible( !m_pWatchStreamsPanel->IsVisible() );
+		vgui::system()->ShellExecute(
+		"open", "https://www.twitch.tv/directory/game/_______" );
+	}
+
+	else if ( FStrEq( "open_website", command ) )
+	{
+		vgui::system()->ShellExecute( "open", "https://passtime.tf/" );
+	}
+
+	else if ( FStrEq( "open_githubissue", command ) )
+	{
+		vgui::system()->ShellExecute(
+		"open", "https://github.com/p4sstime/p4ss/issues/new/choose" );
+	}
+
+	else if ( FStrEq( "open_placeholder", command ) )
+	{
+		vgui::system()->ShellExecute(
+		"open", "https://x.com/passtimetf/status/1896006920852717697" );
 	}
 	else if ( FStrEq( "close_quest_map", command ) )
 	{
