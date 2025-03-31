@@ -1,3 +1,4 @@
+#ifdef DISCORDSOCIAL
 #define DISCORDPP_IMPLEMENTATION
 #include "discordmanager.h"
 #include "discord_social/discordpp.h"
@@ -25,3 +26,4 @@ void DiscordManager::Shutdown()
 {
 	
 }
+#endif // DISCORDSOCIAL
