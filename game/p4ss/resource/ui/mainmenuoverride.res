@@ -3095,15 +3095,15 @@
 		"ControlName"	"CExImageButton"
 		"fieldname"		"Aren5Button"
 		"xpos"			"c130"
-		"ypos"			"180"
+		"ypos"			"150"
 		"zpos"			"15"
-		"wide"			"80"
+		"wide"			"90"
 		"tall"			"30"
 		"visible"		"1"
 		
 		"font"			"HudFontSmallishBold"
-		"command" 		"engine bot"
-		"labeltext"		"add bot"
+		"command" 		"engine tf_bot_add medic"
+		"labeltext"		"Medic Bot"
 		"OnlyInGame"	"1"
 		
 		"border_default"	"storeinnershadowborder"
@@ -3118,6 +3118,59 @@
 		"sound_released"	"p4ss/jack/ball_impact.wav"	
 	}
 	
+		"Arena6Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren6Button"
+		"xpos"			"c20"
+		"ypos"			"150"
+		"zpos"			"15"
+		"wide"			"110"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine tf_bot_add soldier"
+		"labeltext"		"Soldier Bot"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
 	
-	
+		"Arena7Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren7Button"
+		"xpos"			"c-70"
+		"ypos"			"150"
+		"zpos"			"15"
+		"wide"			"110"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine tf_bot_add demoman"
+		"labeltext"		"Demo Bot"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
 }
