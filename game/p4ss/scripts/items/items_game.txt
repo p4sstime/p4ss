@@ -26096,16 +26096,16 @@
 			}
 			"attributes"
 			{
-				"increase player capture value"
-				{
-					"attribute_class"	"add_player_capturevalue"
-					"value"	"1"
-				}
-				"dmg taken from bullets increased"
-				{
-					"attribute_class"	"mult_dmgtaken_from_bullets"
-					"value"	"1.1"
-				}
+				//"increase player capture value"
+				//{
+				//	"attribute_class"	"add_player_capturevalue"
+				//	"value"	"1"
+				//}
+				//"dmg taken from bullets increased"
+				//{
+				//	"attribute_class"	"mult_dmgtaken_from_bullets"
+				//	"value"	"1.1"
+				//}
 			}
 			"visuals"
 			{
@@ -36517,11 +36517,11 @@
 					"attribute_class"	"crit_while_airborne"
 					"value"	"1"
 				}
-				"crit mod disabled"
-				{
-					"attribute_class"	"mult_crit_chance"
-					"value"	"0"
-				}
+				//"crit mod disabled"
+				//{
+				//	"attribute_class"	"mult_crit_chance"
+				//	"value"	"0"
+				//}
 			}
 			"mouse_pressed_sound"	"ui/item_shovel_pickup.wav"
 			"drop_sound"		"ui/item_shovel_drop.wav"
