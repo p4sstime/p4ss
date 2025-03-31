@@ -33,7 +33,7 @@ fi
 
 
 if [[ ! -e "$solution_out.ninja" ]] || [[ "$should_clean" = true ]]; then
-    devtools/bin/vpc /tf /linux64 /ninja /define:SOURCESDK +everything /mksln "$solution_out"
+    devtools/bin/vpc /tf /linux64 /ninja /define:SOURCESDK /define:DISCORDSOCIAL +everything /mksln "$solution_out"
 
     # Generate compile commands.
     ninja -f "$solution_out.ninja" -t compdb > compile_commands.json

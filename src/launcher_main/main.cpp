@@ -616,6 +616,8 @@ int main( int argc, char *argv[] )
 	{
 		return 1;
 	}
+	printf("[Source Mod Launcher] Executable path: %s\n", moduleName);
+
 
 	char* pRootDir = GetBaseDir( moduleName );
 
@@ -629,6 +631,8 @@ int main( int argc, char *argv[] )
 
 	char szExecutable[8192];
 	snprintf(szExecutable, sizeof(szExecutable), "%s/hl2.sh", szGameInstallDir );
+
+	printf( "[Source Mod Launcher] Shell path: %s\n", szExecutable );
 
 	std::vector<char *> new_argv;
 

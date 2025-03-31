@@ -1190,7 +1190,7 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		discordPresence.details = "Main Menu";
 		discordPresence.startTimestamp = startTimestamp;
 		discordPresence.largeImageKey = "passtimelogo";
-		Discord_UpdatePresence( &discordPresence );
+		// Discord_UpdatePresence( &discordPresence );
 	}
 #endif
 
@@ -1755,7 +1755,7 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 		sprintf( buffer, "Playing on %s", pMapName );
 		discordPresence.details = buffer;
 		discordPresence.largeImageKey = pMapName;
-		Discord_UpdatePresence( &discordPresence );
+		// Discord_UpdatePresence( &discordPresence );
 	}
 #endif
 	// Check low violence settings for this map
@@ -1860,7 +1860,7 @@ void CHLClient::LevelShutdown( void )
 		discordPresence.details = "Main Menu";
 		discordPresence.startTimestamp = startTimestamp;
 		discordPresence.largeImageKey = "passtimelogo";
-		Discord_UpdatePresence( &discordPresence );
+		// Discord_UpdatePresence( &discordPresence );
 	}
 
 	internalCenterPrint->Clear();

@@ -1,6 +1,5 @@
 buildallprojects text
 vpc binary
-
 *.sh text
 *.bat text
 *.txt text
@@ -31,15 +30,12 @@ vpc binary
 *.vmt text
 *.inl text
 *.asm text
-
 .gitignore text
 README.md text
 CONTRIBUTING text
 LICENSE text
-
 *.exe binary
 *.dll binary
 protoc binary
 ccache binary
-
 *_english.txt binary

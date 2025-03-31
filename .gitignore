@@ -529,10 +529,14 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+src/lib/public/x64/*.lib
+
+
 !src/lib/public/x64/
+!src/lib/public/x64/discord-rpc.lib
+!src/lib/public/x64/discord_partner_sdk.lib
 game/p4ss_win64.exe
 
-src/lib/public/x64/*.lib
 
 game/p4ss/bin/x64/game_shader_generic_example.dll
 game/p4ss/downloadlists/
