@@ -979,6 +979,7 @@ void CTFPasstimeLogic::RespawnBall()
 		if ( !pTimer || ( pTimer->GetTimeRemaining() > m_iBallSpawnCountdownSec ) )
 		{
 			m_pRespawnCountdown->Start( m_iBallSpawnCountdownSec );
+
 			SpawnBallAtRandomSpawnerThink();
 		}
 		//----------------------------------------
@@ -1013,6 +1014,18 @@ void CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink()
 	else
 	{
 		SetContextThink( &CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink, gpGlobals->curtime + 1, "spawnball" );
+	}
+
+	if ( (int)m_pRespawnCountdown->GetTimeRemain() == 11 )
+	{
+		// P4SS: hud show countdown timer
+		CBroadcastRecipientFilter filter;
+		filter.MakeReliable();
+
+		UserMessageBegin( filter, "P4SS_Countdown" );
+		WRITE_FLOAT( gpGlobals->curtime );
+		WRITE_FLOAT( m_pRespawnCountdown->GetTimeRemain() + 1.0f );
+		MessageEnd();
 	}
 }
 
@@ -1071,6 +1084,23 @@ void CTFPasstimeLogic::StopAskForBallEffects()
 			pPlayer->m_Shared.SetAskForBallTime( 0 );
 		}
 	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Stop ask for ball effects on players in opposing team of the ball carrier.
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::StopAskForBallEffectsOnOpposingTeam(CTFPlayer *pCarrier)
+{
+	int carrierTeam = pCarrier->GetTeamNumber();
+
+    for (int i = 1; i <= MAX_PLAYERS; i++)
+    {
+        CTFPlayer *pPlayer = ToTFPlayer(UTIL_PlayerByIndex(i));
+        if ( pPlayer && ( pPlayer->GetTeamNumber() != carrierTeam || pPlayer == pCarrier ) )
+        {
+            pPlayer->m_Shared.SetAskForBallTime(0);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1314,7 +1344,10 @@ void CTFPasstimeLogic::EjectBall( CTFPlayer *pPlayer, CTFPlayer *pAttacker )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::LaunchBall( CTFPlayer *pPlayer, const Vector &vecPos, const Vector &vecVel )
 {
-	StopAskForBallEffects();
+	if ( !p4ss_whistle_more.GetBool() )
+	{
+		StopAskForBallEffects();
+	}
 	m_hBall->SetStateFree();
 	m_hBall->MoveTo( vecPos, vecVel );
 	m_onBallFree.FireOutput( m_hBall, this );
@@ -1418,8 +1451,11 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 				++CTF_GameStats.m_passtimeStats.classes[ pBall->GetLastHomingTarget()->GetPlayerClass()->GetClassIndex() ].nTotalScores;
 				CTF_GameStats.Event_PlayerCapturedPoint( pBall->GetLastHomingTarget() );
 
-				PasstimeGameEvents::Score( pBall->GetLastHomingTarget()->entindex(), pPlayer->entindex(),
-				iPoints, true, false, false ) // dont care that panacea exists BECAUSE WE JUST HIT THE DEATHBOMB.
+				auto pScorer = pBall->GetLastHomingTarget();
+				auto pAssister = pPlayer;
+				CTF_GameStats.Event_PlayerP4ssGoal( pScorer );
+				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
+				PasstimeGameEvents::Score( pScorer->entindex(), pAssister->entindex(), iPoints, true, false, false ) // dont care that panacea exists BECAUSE WE JUST HIT THE DEATHBOMB.
 				.Fire();
 			}
 		}
@@ -1451,12 +1487,14 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 			{
 				CTF_GameStats.Event_PlayerAwardBonusPoints( pAssister, 0, 10 );
 				PasstimeGameEvents::Score( pPlayer->entindex(), pAssister->entindex(), iPoints, false, isPanacea, isWinstrat ).Fire();
+				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
 			}
 			else
 			{
 				PasstimeGameEvents::Score( pPlayer->entindex(), iPoints, isPanacea, isWinstrat )
 				.Fire();
 			}
+			CTF_GameStats.Event_PlayerP4ssGoal( pPlayer );
 
 		}
 	}
@@ -1472,8 +1510,10 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 	//
 	// Award bonus conditions
 	//
-	AddCondToTeam( TF_COND_CRITBOOSTED_CTF_CAPTURE, pPlayer->GetTeamNumber(), tf_passtime_score_crit_sec.GetFloat() );
-
+	if ( tf_passtime_score_crit_sec.GetBool())
+	{
+		AddCondToTeam( TF_COND_CRITBOOSTED_CTF_CAPTURE, pPlayer->GetTeamNumber(), tf_passtime_score_crit_sec.GetFloat() );
+	}
 	//
 	// Feedback
 	//
@@ -1749,6 +1789,15 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 				isBlock = true;
 			}
 
+			if ( isBlock )
+			{
+				CTF_GameStats.Event_PlayerP4ssSave( pCatcher );
+			}
+			else
+			{
+				CTF_GameStats.Event_PlayerP4ssIntercept( pCatcher );
+			}
+
 			// award bonus effects for interception
 			pCatcher->m_Shared.AddCond( TF_COND_PASSTIME_INTERCEPTION, tf_passtime_speedboost_on_get_ball_time.GetFloat() );
 			pCatcher->m_Shared.AddCond( TF_COND_SPEED_BOOST, tf_passtime_speedboost_on_get_ball_time.GetFloat() );
@@ -1790,8 +1839,15 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::OnBallGet() 
-{
-	StopAskForBallEffects();
+{	
+	if ( p4ss_whistle_more.GetBool() )
+	{
+		StopAskForBallEffectsOnOpposingTeam(m_hBall->GetCarrier());
+	}
+	else
+	{
+		StopAskForBallEffects();
+	}
 	if ( CTFPlayer *pPlayer = m_hBall->GetCarrier() )
 	{
 		m_onBallGetAny.FireOutput( pPlayer, this );

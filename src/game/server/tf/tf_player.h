@@ -458,6 +458,10 @@ public:
 	void SetAutoRezoom( bool bAutoRezoom ) { m_bAutoRezoom = bAutoRezoom; }
 	bool ShouldAutoReload( void ){ return m_bAutoReload; }
 	void SetAutoReload( bool bAutoReload ) { m_bAutoReload = bAutoReload; }
+	bool ShouldUseLegacyPasstimeGunControls( void ){ return m_bLegacyPasstimeGunControls; }
+	void SetUseLegacyPasstimeGunControls( bool value ) { m_bLegacyPasstimeGunControls = value; }
+	bool ShouldUseReversedPasstimeGunControls( void ){ return m_bReversedPasstimeGunControls; }
+	void SetUseReversedPasstimeGunControls( bool value ) { m_bReversedPasstimeGunControls = value; }
 
 	virtual void	ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet );
 
@@ -941,8 +945,9 @@ public:
 
 	bool				m_bSuicideExplode;
 
-	bool				m_bScattergunJump;
 	int					m_iOldStunFlags;
+
+	int					m_iRocketFireOffset;
 
 	bool				m_bFlipViewModels;
 	int					m_iBlastJumpState;
@@ -1179,6 +1184,7 @@ private:
 	CTFPlayerClass		m_PlayerClass;
 	int					m_iLastWeaponFireUsercmd;				// Firing a weapon.  Last usercmd we shot a bullet on.
 	int					m_iLastWeaponSlot;				            // To save last switch between lives
+	int					iLastWeapon;
 	int					m_iLastSkin;
 	float				m_flLastDamageTime;
 	CNetworkVar( float, m_flMvMLastDamageTime );
@@ -1227,6 +1233,8 @@ private:
 	bool 				m_bMedigunAutoHeal;
 	bool				m_bAutoRezoom;	// does the player want to re-zoom after each shot for sniper rifles
 	bool				m_bAutoReload;
+	CNetworkVar( bool, m_bLegacyPasstimeGunControls );
+	CNetworkVar( bool, m_bReversedPasstimeGunControls);
 
 	bool				m_bForceItemRemovalOnRespawn;
 
@@ -1282,6 +1290,9 @@ private:
 	// Matchmaking
 	// is this player bound to the match on penalty of abandon. Sync'd via local-player-only DT
 	CNetworkVar( bool, m_bMatchSafeToLeave );
+
+		// Using the chat?
+	CNetworkVar( bool, m_bTyping );
 
 	CWaveSpawnPopulator *m_pWaveSpawnPopulator;
 	float				m_flLastReadySoundTime;

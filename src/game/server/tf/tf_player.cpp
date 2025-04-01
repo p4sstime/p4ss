@@ -113,6 +113,7 @@
 #include "tf_player_resource.h"
 #include "gcsdk/gcclient_sharedobjectcache.h"
 #include "tf_party.h"
+#include "passtime_convars.h"
 
 #ifdef TF_RAID_MODE
 #include "bot_npc/bot_npc_decoy.h"
@@ -126,7 +127,6 @@
 #include "tf_revive.h"
 #include "tf_logic_halloween_2014.h"
 #include "tf_logic_player_destruction.h"
-#include "tf_weapon_rocketpack.h"
 #include "tf_weapon_slap.h"
 #include "func_croc.h"
 #include "tf_weapon_bonesaw.h"
@@ -843,6 +843,9 @@ IMPLEMENT_SERVERCLASS_ST( CTFPlayer, DT_TFPlayer )
 	SendPropInt( SENDINFO( m_iPlayerSkinOverride ) ),
 	SendPropBool( SENDINFO( m_bViewingCYOAPDA ) ),
 	SendPropBool( SENDINFO( m_bRegenerating ) ),
+	SendPropBool( SENDINFO( m_bLegacyPasstimeGunControls ) ),
+	SendPropBool( SENDINFO( m_bReversedPasstimeGunControls ) ),
+	SendPropBool( SENDINFO( m_bTyping ) ),
 END_SEND_TABLE()
 
 // -------------------------------------------------------------------------------- //
@@ -997,7 +1000,6 @@ CTFPlayer::CTFPlayer()
 	m_flNextChangeClassTime = 0.0f;
 	m_flNextChangeTeamTime = 0.0f;
 
-	m_bScattergunJump = false;
 	m_iOldStunFlags = 0;
 	m_iLastWeaponSlot = 1;
 	m_iNumberofDominations = 0;
@@ -1123,6 +1125,8 @@ CTFPlayer::CTFPlayer()
 	m_bRespawning = false;
 
 	m_bAlreadyUsedExtendFreezeThisDeath = false;
+
+	m_bTyping = false;
 }
 
 
@@ -1454,35 +1458,6 @@ void CTFPlayer::TFPlayerThink()
 	else
 	{
 		m_iLeftGroundHealth = -1;
-		if ( GetFlags() & FL_ONGROUND )
-		{
-			// Airborne conditions end on ground contact
-			m_Shared.RemoveCond( TF_COND_KNOCKED_INTO_AIR );
-			m_Shared.RemoveCond( TF_COND_AIR_CURRENT );
-
-			if ( m_Shared.InCond( TF_COND_ROCKETPACK ) )
-			{
-				// Make sure we're still not dealing with launch, where it's possible
-				// to hit your head and fall to the ground before the second stage.
-				CTFWeaponBase *pRocketPack = Weapon_OwnsThisID( TF_WEAPON_ROCKETPACK );
-				if ( pRocketPack )
-				{
-					if ( gpGlobals->curtime > ( static_cast< CTFRocketPack* >( pRocketPack )->GetRefireTime() ) )
-					{
-						EmitSound( "Weapon_RocketPack.BoostersShutdown" );
-						EmitSound( "Weapon_RocketPack.Land" );
-						m_Shared.RemoveCond( TF_COND_ROCKETPACK );
-
-						IGameEvent *pEvent = gameeventmanager->CreateEvent( "rocketpack_landed" );
-						if ( pEvent )
-						{
-							pEvent->SetInt( "userid", GetUserID() );
-							gameeventmanager->FireEvent( pEvent );
-						}
-					}
-				}
-			}
-		}
 
 		if ( m_iBlastJumpState )
 		{
@@ -2834,6 +2809,7 @@ void CTFPlayer::PrecacheMvM()
 	PrecacheScriptSound( "MVM.DeployBombGiant" );
 	PrecacheScriptSound( "Weapon_Upgrade.ExplosiveHeadshot" );
 	PrecacheScriptSound( "Spy.MVM_Chuckle" );
+	PrecacheScriptSound( "Spy.MVM_TeaseVictim" );
 	PrecacheScriptSound( "MVM.Robot_Engineer_Spawn" );
 	PrecacheScriptSound( "MVM.Robot_Teleporter_Deliver" );
 	PrecacheScriptSound( "MVM.MoneyPickup" );
@@ -3036,6 +3012,7 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheParticleSystem( "speech_taunt_all" );
 	PrecacheParticleSystem( "speech_taunt_red" );
 	PrecacheParticleSystem( "speech_taunt_blue" );
+	PrecacheParticleSystem( "speech_typing" );
 	PrecacheParticleSystem( "player_recent_teleport_blue" );
 	PrecacheParticleSystem( "player_recent_teleport_red" );
 	PrecacheParticleSystem( "particle_nemesis_red" );
@@ -3185,6 +3162,8 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 
 	if ( !sv_runcmds.GetInt() )
 		return;
+
+	m_bTyping = ( ucmd->buttons & IN_TYPING ) != 0;
 
 	if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -3782,7 +3761,6 @@ void CTFPlayer::Spawn()
 
 	m_Shared.SetFeignDeathReady( false );
 
-	m_bScattergunJump = false;
 	m_iOldStunFlags = 0;
 
 	m_flAccumulatedHealthRegen = 0;
@@ -7179,7 +7157,9 @@ void CTFPlayer::Resupply( void )
 	if ( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN && TFGameRules()->GetWinningTeam() != GetTeamNumber() ) 
 		return;
 
+	iLastWeapon = m_iLastWeaponSlot;
 	ForceRegenerateAndRespawn();
+	m_iLastWeaponSlot = iLastWeapon;
 }
 
 void CC_Resupply( void )
@@ -16077,7 +16057,7 @@ bool CTFPlayer::SayAskForBall()
 	}
 
 	CTFPlayer *pBallCarrier = pBall->GetCarrier();
-	if ( !pBallCarrier )
+	if ( !pBallCarrier && !p4ss_whistle_more.GetBool())
 	{
 		return false;
 	}

@@ -14,7 +14,6 @@ namespace P4ss
 {
 	void ColorTextP4ss(vgui::TextImage *textImage, const wchar_t *text,  const int team)
 	{
-		Msg("ColorTextP4ss: Fired\n");
 		textImage->ClearColorChangeStream();
 		Color color;
 		Color secondaryColor;

@@ -1,6 +1,7 @@
 CompileFlags:
   Add: ["-Isrc/public", "-Isrc/game/public", -ferror-limit=999]
   Remove: ["-f*"]
+  CompilationDatabase: src/
 
 Diagnostics:
   UnusedIncludes: None
