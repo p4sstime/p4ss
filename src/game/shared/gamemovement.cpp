@@ -4399,8 +4399,10 @@ void CGameMovement::Duck( void )
 			// The player is in duck transition and not duck-jumping.
 			if ( player->m_Local.m_bDucking && !bDuckJump && !bDuckJumpTime )
 			{
-				float flDuckMilliseconds = MAX( 0.0f, GAMEMOVEMENT_DUCK_TIME - ( float )player->m_Local.m_flDucktime );
-				float flDuckSeconds = flDuckMilliseconds * 0.001f;
+				// Convert duck time to ticks for consistent timing
+				int ticksRemaining = (int)((GAMEMOVEMENT_DUCK_TIME - player->m_Local.m_flDucktime) / (gpGlobals->interval_per_tick * 1000.0f));
+				ticksRemaining = MAX(0, MIN(ticksRemaining, GAMEMOVEMENT_DUCK_TICKS));
+				float flDuckSeconds = ticksRemaining * gpGlobals->interval_per_tick;
 				
 				// Finish in duck transition when transition time is over, in "duck", in air.
 				if ( ( flDuckSeconds > TIME_TO_DUCK ) || bInDuck || bInAir )
@@ -4518,7 +4520,8 @@ void CGameMovement::Duck( void )
 				{
 					// Still under something where we can't unduck, so make sure we reset this timer so
 					//  that we'll unduck once we exit the tunnel, etc.
-					if ( player->m_Local.m_flDucktime != GAMEMOVEMENT_DUCK_TIME )
+					// Round duck time to nearest tick boundary
+				if ( fabs(player->m_Local.m_flDucktime - GAMEMOVEMENT_DUCK_TIME) > (gpGlobals->interval_per_tick * 1000.0f * 0.5f))
 					{
 						SetDuckedEyeOffset(1.0f);
 						player->m_Local.m_flDucktime = GAMEMOVEMENT_DUCK_TIME;
