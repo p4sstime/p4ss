@@ -11342,6 +11342,7 @@ void C_TFPlayer::UpdateGlowColor( void )
 	}
 }
 
+ConVar p4ss_glow_healthcolor( "p4ss_glow_healthcolor", "1", FCVAR_ARCHIVE, "Enables health-based coloring of the teammate glow." );
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -11395,6 +11396,30 @@ void C_TFPlayer::GetGlowEffectColor( float *r, float *g, float *b )
 		return;
 	}
 
+	if ( pLocalPlayer && p4ss_glow_healthcolor.GetBool() )
+	{
+		float flHealth = (float)GetHealth() / (float)GetMaxHealth();
+		if ( flHealth <= 0.5f )
+		{
+			*r = 1.0f;
+			*g = flHealth * 2.0f;
+			*b = 0.05f;
+		}
+		else if( flHealth > 0.5f && flHealth <= 1.0f )
+		{
+			*r = ( 1.0f - flHealth ) * 2.0f;
+			*g = 1.0f;
+			*b = 0.05f;
+		}          
+		else if ( flHealth > 1.0f )
+		{
+			*r = 0.00f;
+			*g = 1.0f;
+			*b = 0.05f;
+		}
+		return;
+	}
+
 	if ( !engine->IsHLTV() && ( GetLocalPlayerTeam() >= FIRST_GAME_TEAM ) )
 	{
 		if ( IsPlayerClass( TF_CLASS_SPY ) && m_Shared.InCond( TF_COND_DISGUISED ) && ( GetTeamNumber() != GetLocalPlayerTeam() ) )
@@ -11404,6 +11429,7 @@ void C_TFPlayer::GetGlowEffectColor( float *r, float *g, float *b )
 	}
 
 	TFGameRules()->GetTeamGlowColor( nTeam, *r, *g, *b );
+	
 }
 
 
