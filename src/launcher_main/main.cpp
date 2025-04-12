@@ -664,6 +664,21 @@ int main( int argc, char *argv[] )
 
 	new_argv.push_back(NULL);
 
+	char* szLibPath = getenv("LD_LIBRARY_PATH");
+	if ( szLibPath )
+	{
+		char szBuffer[4096];
+		snprintf( szBuffer, sizeof( szBuffer ), "LD_LIBRARY_PATH=%s:%s/%s", szLibPath, pRootDir, PLATFORM_BIN_DIR );
+		szBuffer[sizeof( szBuffer ) - 1] = '\0';
+		putenv( szBuffer );
+	}
+	else
+	{
+		char szBuffer[4096];
+		snprintf( szBuffer, sizeof( szBuffer ), "LD_LIBRARY_PATH=%s/%s", pRootDir, PLATFORM_BIN_DIR );
+		szBuffer[sizeof( szBuffer ) - 1] = '\0';
+		putenv( szBuffer );
+	}
 	execvp( szExecutable, new_argv.data() );
 
 	return 0;
