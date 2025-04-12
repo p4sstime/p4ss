@@ -6,18 +6,21 @@
 #endif
 
 #ifdef DISCORDSOCIAL
+#include "discord_social/discordpp.h"
 
 class DiscordManager
 {
 	private:
 	DiscordManager();
 	~DiscordManager();
-	DiscordManager* m_pInstance;
+	static DiscordManager* m_pInstance;
+
+	discordpp::Client* m_pClient;
 
   public:
-	DiscordManager* Get();
-	void Init();
-	void Shutdown();
+	static DiscordManager* Get();
+	static void Init();
+	static void Shutdown();
 };
 #endif // DISCORDSOCIAL
 #endif // DISCORDMANAGER_H

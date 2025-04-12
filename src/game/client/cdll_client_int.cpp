@@ -153,8 +153,14 @@
 #if defined ( DISCORD_RPC )
 // Discord RPC
 #include "discord_rpc.h"
-#include <time.h> 
 #endif
+
+#ifdef DISCORDSOCIAL
+#include "discord/discordmanager.h"
+#endif // DISCORDSOCIAL
+
+#include <time.h> 
+
 
 
 extern vgui::IInputInternal *g_InputInternal;
@@ -343,7 +349,7 @@ static ConVar s_cl_class("cl_class", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "D
 
 #ifdef DISCORD_RPC
 // Discord AppID
-static ConVar cl_discord_appid( "cl_discord_appid", "1342303659664609383", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT );
+extern ConVar cl_discord_appid;
 static int64_t startTimestamp = time( 0 );
 
 #endif
@@ -872,25 +878,25 @@ static void HandleDiscordReady( const DiscordUser *connectedUser )
 			connectedUser->discriminator, connectedUser->userId );
 }
 
-static void HandleDiscordDisconnected( int errcode, const char *message )
-{
-	DevMsg( "Discord: Disconnected (%d: %s)\n", errcode, message );
-}
+// static void HandleDiscordDisconnected( int errcode, const char *message )
+// {
+// 	DevMsg( "Discord: Disconnected (%d: %s)\n", errcode, message );
+// }
 
-static void HandleDiscordError( int errcode, const char *message )
-{
-	DevMsg( "Discord: Error (%d: %s)\n", errcode, message );
-}
+// static void HandleDiscordError( int errcode, const char *message )
+// {
+// 	DevMsg( "Discord: Error (%d: %s)\n", errcode, message );
+// }
 
-static void HandleDiscordJoin( const char *secret )
-{
-	// Not implemented
-}
+// static void HandleDiscordJoin( const char *secret )
+// {
+// 	// Not implemented
+// }
 
-static void HandleDiscordSpectate( const char *secret )
-{
-	// Not implemented
-}
+// static void HandleDiscordSpectate( const char *secret )
+// {
+// 	// Not implemented
+// }
 
 static void HandleDiscordJoinRequest( const DiscordUser *request )
 {
@@ -1190,7 +1196,7 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		discordPresence.details = "Main Menu";
 		discordPresence.startTimestamp = startTimestamp;
 		discordPresence.largeImageKey = "passtimelogo";
-		// Discord_UpdatePresence( &discordPresence );
+		Discord_UpdatePresence( &discordPresence );
 	}
 #endif
 
@@ -1341,6 +1347,9 @@ void CHLClient::Shutdown( void )
 	// Discord RPC
 	Discord_Shutdown();
 #endif
+	#ifdef DISCORDSOCIAL
+		DiscordManager::Shutdown();
+	#endif
 }
 
 
@@ -1747,15 +1756,15 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 	// Discord RPC
 	if ( !g_bTextMode )
 	{
-		DiscordRichPresence discordPresence;
-		memset( &discordPresence, 0, sizeof( discordPresence ) );
+		// DiscordRichPresence discordPresence;
+		// memset( &discordPresence, 0, sizeof( discordPresence ) );
 
-		char buffer[256];
-		discordPresence.state = "In Server";
-		sprintf( buffer, "Playing on %s", pMapName );
-		discordPresence.details = buffer;
-		discordPresence.largeImageKey = pMapName;
-		// Discord_UpdatePresence( &discordPresence );
+		// char buffer[256];
+		// discordPresence.state = "In Server";
+		// sprintf( buffer, "Playing on %s", pMapName );
+		// discordPresence.details = buffer;
+		// discordPresence.largeImageKey = pMapName;
+		// // Discord_UpdatePresence( &discordPresence );
 	}
 #endif
 	// Check low violence settings for this map
@@ -1853,14 +1862,14 @@ void CHLClient::LevelShutdown( void )
 	// Discord RPC
 	if ( !g_bTextMode )
 	{
-		DiscordRichPresence discordPresence;
-		memset( &discordPresence, 0, sizeof( discordPresence ) );
+		// DiscordRichPresence discordPresence;
+		// memset( &discordPresence, 0, sizeof( discordPresence ) );
 
-		discordPresence.state = "In-Game";
-		discordPresence.details = "Main Menu";
-		discordPresence.startTimestamp = startTimestamp;
-		discordPresence.largeImageKey = "passtimelogo";
-		// Discord_UpdatePresence( &discordPresence );
+		// discordPresence.state = "In-Game";
+		// discordPresence.details = "Main Menu";
+		// discordPresence.startTimestamp = startTimestamp;
+		// discordPresence.largeImageKey = "passtimelogo";
+		// // Discord_UpdatePresence( &discordPresence );
 	}
 
 	internalCenterPrint->Clear();
