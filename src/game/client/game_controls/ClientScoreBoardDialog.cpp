@@ -51,7 +51,7 @@ bool AvatarIndexLessFunc( const int &lhs, const int &rhs )
 CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : EditablePanel( NULL, PANEL_SCOREBOARD )
 {
 	#if defined( LUAUI )
-	C_LuaUi::Get()->Test();
+	LuaUiSystem()->Test();
 	#endif
 	m_iPlayerIndexSymbol = KeyValuesSystem()->GetSymbolForString("playerIndex");
 	m_nCloseKey = BUTTON_CODE_INVALID;

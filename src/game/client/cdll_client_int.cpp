@@ -1086,6 +1086,10 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	IGameSystem::Add( TFSharedContentManager() );
 	#endif
 
+	#if defined( LUAUI )
+	IGameSystem::Add( LuaUiSystem() );
+	#endif
+
 #if defined( TF_CLIENT_DLL )
 	if ( g_AbuseReportMgr != NULL )
 	{
@@ -1197,9 +1201,7 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	}
 #endif
 
-	#if defined ( LUAUI )
-	C_LuaUi::Init();
-	#endif
+	
 
 	return true;
 }
@@ -1287,9 +1289,6 @@ void CHLClient::Shutdown( void )
 {
 	// Discord RPC
 	Discord_Shutdown();
-	#if defined ( LUAUI )
-	C_LuaUi::Shutdown();
-	#endif
   if (g_pAchievementsAndStatsInterface)
   {
     g_pAchievementsAndStatsInterface->ReleasePanel();

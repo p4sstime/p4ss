@@ -1,45 +1,41 @@
 //========= Contributed by 4v4 PASS Time developers. ==========================//
 //
-// Purpose: Manager for the Lua UI.
-//
+// Purpose: Manager for the Lua UI. Wraps around VGUI and 
+// allows vgui::Panels
+// to be created in C++ and managed by custom defined Lua code.
 //=============================================================================//
 
+#ifdef LUAUI
 #include "cbase.h"
 #include "lua_ui/c_luaui.h"
 #include "dbg.h"
 
-C_LuaUi* C_LuaUi::instance = nullptr;
-C_LuaUi::C_LuaUi() 
-{
-}
-C_LuaUi::~C_LuaUi()
-{
-	
-}
+static CLuaUiSystem s_pLuaUi;
+
+
 
 /// @brief Safe to call multiple times
-void C_LuaUi::Init()
+bool CLuaUiSystem::Init()
 {
-	if (instance == nullptr)
-	{
-		instance = new C_LuaUi();
-	}
+	return true;
 }
 
-void C_LuaUi::Shutdown()
+void CLuaUiSystem::Shutdown()
 {
-	if (instance != nullptr)
-	{
-		delete instance;
-		instance = nullptr;
-	}
 }
-C_LuaUi* C_LuaUi::Get()
-{
-	return instance;
-};
 
-void C_LuaUi::Test()
+void CLuaUiSystem::Test()
 {
-	Msg("C_LuaUi::Test() called\n");
+	Msg("CLuaUiSystem::Test() called\n");
 }
+
+void CLuaUiSystem::Update(float frametime)
+{
+	// Update the Lua UI
+}
+CLuaUiSystem* LuaUiSystem()
+{
+	return &s_pLuaUi;
+}
+
+#endif // LUAUI
