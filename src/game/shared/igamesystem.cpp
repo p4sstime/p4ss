@@ -217,6 +217,10 @@ bool IGameSystem::InitAllSystems()
 		Q_snprintf( sz, sizeof( sz ), "%s->Init():Start", sys->Name() );
 		XBX_rTimeStampLog( Plat_FloatTime(), sz );
 #endif
+#if defined( DEBUG )
+		printf( "Init system %s\n", sys->Name() );
+#endif
+		// Call the init method
 		bool valid = sys->Init();
 
 #if defined( _X360 )

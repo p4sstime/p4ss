@@ -98,6 +98,7 @@ public:
 
 	virtual bool Init() OVERRIDE;
 	virtual void Update( float frametime ) OVERRIDE;
+	virtual const char* Name() OVERRIDE { return "CTFStreamManager"; }
 	void RequestTopStreams();
 
 	CStreamInfo * GetStreamInfoByName( char const *szName );
