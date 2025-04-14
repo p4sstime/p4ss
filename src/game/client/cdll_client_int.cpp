@@ -1089,6 +1089,10 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	IGameSystem::Add( TFSharedContentManager() );
 	#endif
 
+	#ifdef DISCORDSOCIAL
+	IGameSystem::Add( DiscordManager() );
+	#endif
+
 #if defined( TF_CLIENT_DLL )
 	if ( g_AbuseReportMgr != NULL )
 	{
@@ -1289,6 +1293,10 @@ void CHLClient::Shutdown( void )
         g_pAchievementsAndStatsInterface->ReleasePanel();
     }
 
+	#ifdef DISCORDSOCIAL
+		DiscordManager()->Shutdown();
+	#endif
+	
 #ifdef SIXENSE
 	g_pSixenseInput->Shutdown();
 	delete g_pSixenseInput;
@@ -1347,9 +1355,7 @@ void CHLClient::Shutdown( void )
 	// Discord RPC
 	Discord_Shutdown();
 #endif
-	#ifdef DISCORDSOCIAL
-		DiscordManager::Shutdown();
-	#endif
+	
 }
 
 

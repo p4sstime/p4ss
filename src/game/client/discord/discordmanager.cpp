@@ -3,29 +3,98 @@
 #include "discordmanager.h"
 #include "discord_social/discordpp.h"
 #include <convar.h>
+#include <thread>
 
 // Discord AppID
 static ConVar cl_discord_appid( "cl_discord_appid", "1342303659664609383", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT );
 
-DiscordManager* DiscordManager::m_pInstance = nullptr;
+static CDiscordManager s_pDiscordManager;
+
 // Replace with your Discord Application ID
 uint64_t APPLICATION_ID = cl_discord_appid.GetInt();
 
-DiscordManager::DiscordManager()
+bool CDiscordManager::Init()
 {
 	m_pClient = new discordpp::Client();
-}
-DiscordManager::~DiscordManager()
-{
-	delete m_pClient;
+	m_pClient->AddLogCallback( [] (std::string msg, auto severity) {
+		switch ( severity )
+		{
+			case discordpp::LoggingSeverity::None:
+				Msg( "[Discord NONE] %s\n", msg.c_str() );
+				break;
+			case discordpp::LoggingSeverity::Info:
+				DevMsg( "[Discord INFO] %s\n", msg.c_str() );
+				break;
+			case discordpp::LoggingSeverity::Warning:
+				Msg( "[Discord WARN] %s\n", msg.c_str() );
+				break;
+			case discordpp::LoggingSeverity::Error:
+				Msg( "[Discord  ERR] %s\n", msg.c_str() );
+				break;
+			default:
+				break;
+		}
+	}, discordpp::LoggingSeverity::Info ); 
+	m_pClient->SetStatusChangedCallback( [this] (auto status, auto err, auto errcode) {
+		Msg("[Discord] Client status changed: %s\n", discordpp::Client::StatusToString(status).c_str());
+		if (status == discordpp::Client::Status::Ready)
+		{
+			this->m_bReady = true;
+			Msg( "[Discord] Client is ready\n" );
+
+			discordpp::Activity activity;
+			activity.SetType( discordpp::ActivityTypes::Playing );
+			activity.SetName( "Half-Life 2" );
+			activity.SetState( "Test!" );
+			activity.SetDetails( "Puse dog" );
+			m_pClient->UpdateRichPresence( activity, [](discordpp::ClientResult result) {
+				if (result.Successful())
+				{
+					Msg( "[Discord] Rich presence updated successfully\n" );
+				}
+				else
+				{
+					Msg( "[Discord] Failed to update rich presence: %s\n", result.Error().c_str() );
+				}
+			});
+		}
+		else if (status == discordpp::Client::Status::Disconnected)
+		{
+			this->m_bReady = false;
+			Msg( "[Discord] Client is disconnected\n" );
+		}
+		else if (err != discordpp::Client::Error::None)
+		{
+			this->m_bReady = false;
+			Msg( "[Discord] Client error! : '%s', error detail %d\n", discordpp::Client::ErrorToString(err).c_str(), errcode );
+		}
+	} );
+
+	printf("[Discord] Setup!\n");
+	// discordpp::RunCallbacks();
+	return true;
 }
 
-void DiscordManager::Init()
+void CDiscordManager::Update(float frametime) 
 {
-	m_pInstance = new DiscordManager();	
+	// discordpp::RunCallbacks();
 }
-void DiscordManager::Shutdown()
+void CDiscordManager::Shutdown()
 {
-	delete m_pInstance;
+	if (m_bWasShutdown)
+		return;
+	m_bWasShutdown = true;
+	printf("CDiscordManager::Shutdown\n");
+	// discordpp::RunCallbacks();
+	m_pClient->Disconnect();
+	while (m_pClient->GetStatus() != discordpp::Client::Status::Disconnected)
+	{
+		// discordpp::RunCallbacks();
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	m_pClient->Drop();
+	delete m_pClient;
 }
 #endif // DISCORDSOCIAL
+
+CDiscordManager *DiscordManager() { return &s_pDiscordManager; }

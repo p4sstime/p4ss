@@ -219,6 +219,10 @@ CHudTexture::~CHudTexture()
 {
 	if ( vgui::surface() && textureId != -1 )
 	{
+		#ifdef DEBUG
+		printf("Destroying texture id %d, name %s, file %s\n", textureId, szShortName, szTextureFile);
+		#endif
+		// Destroy the texture ID
 		vgui::surface()->DestroyTextureID( textureId );
 		textureId = -1;
 	}

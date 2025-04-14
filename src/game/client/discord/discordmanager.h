@@ -7,20 +7,29 @@
 
 #ifdef DISCORDSOCIAL
 #include "discord_social/discordpp.h"
+#include "igamesystem.h"
 
-class DiscordManager
+
+class CDiscordManager : public CBaseGameSystemPerFrame
 {
-	private:
-	DiscordManager();
-	~DiscordManager();
-	static DiscordManager* m_pInstance;
+	public:
+	CDiscordManager() {};
 
+	private:
 	discordpp::Client* m_pClient;
+	bool m_bReady;
+	bool m_bWasShutdown;
 
   public:
-	static DiscordManager* Get();
-	static void Init();
-	static void Shutdown();
+	// methods of IGameSystem
+	virtual const char *Name() { return "CDiscordManager"; }
+	virtual bool Init();
+	virtual void PostInit() {};
+	virtual void Shutdown();
+	virtual void Update( float frametime );
 };
+
+extern CDiscordManager *DiscordManager();
+
 #endif // DISCORDSOCIAL
 #endif // DISCORDMANAGER_H
