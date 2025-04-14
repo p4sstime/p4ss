@@ -71,13 +71,13 @@ bool CDiscordManager::Init()
 	} );
 
 	printf("[Discord] Setup!\n");
-	// discordpp::RunCallbacks();
+	discordpp::RunCallbacks();
 	return true;
 }
 
 void CDiscordManager::Update(float frametime) 
 {
-	// discordpp::RunCallbacks();
+	discordpp::RunCallbacks();
 }
 void CDiscordManager::Shutdown()
 {
@@ -85,11 +85,11 @@ void CDiscordManager::Shutdown()
 		return;
 	m_bWasShutdown = true;
 	printf("CDiscordManager::Shutdown\n");
-	// discordpp::RunCallbacks();
+	discordpp::RunCallbacks();
 	m_pClient->Disconnect();
 	while (m_pClient->GetStatus() != discordpp::Client::Status::Disconnected)
 	{
-		// discordpp::RunCallbacks();
+		discordpp::RunCallbacks();
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	m_pClient->Drop();
