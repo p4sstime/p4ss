@@ -11,7 +11,7 @@ import platform
 
 script_directory = os.path.dirname(os.path.realpath(__file__))
 uname = platform.uname()
-is_64bit = uname.machine == "x86_64"
+is_64bit = uname.machine == "x86_64" or uname.machine == "AMD64"
 is_linux = uname.system == "Linux"
 is_windows = uname.system == "Windows"
 
@@ -56,6 +56,7 @@ def compile_lua_jit():
 			out_lib_name = "libluajit.a"
 		elif is_windows:
 			
+			os.chdir("src")
 			cmd_or_error(script_directory+"/compile_luajit.bat")
 			out_lib_name = "luajit.lib"
 	except Exception as e:
@@ -69,6 +70,9 @@ def compile_lua_jit():
 	os.makedirs(target_base, exist_ok=True)
 	# Copy the lib in a platform agnostic way
 	shutil.copyfile(LUAJIT_DIR + "/src/" + out_lib_name, TARGET_DIR + out_lib_name)
+
+	if is_windows:
+		shutil.copyfile(LUAJIT_DIR + "/src/" + "lua51.lib", TARGET_DIR + "lua51.lib")
 
 
 if __name__ == "__main__":

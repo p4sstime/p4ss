@@ -1,9 +1,11 @@
-#ifdef LUAUI
 #include "cbase.h"
 #include "lua_ui/luipanel.h"
 #include "lua_ui/c_luaui.h"
 #include "lua_loader.h"
 #include "filesystem.h"
+
+#ifdef LUAUI
+
 
 namespace lui
 {

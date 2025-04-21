@@ -1,4 +1,6 @@
+#include "cbase.h"
 #include "lua_loader.h"
+
 const char* loader_text = R""(
 local fake_env = {}
 

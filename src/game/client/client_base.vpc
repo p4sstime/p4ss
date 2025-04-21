@@ -1278,6 +1278,7 @@ $Project
 		$Lib		particles
 		$Lib		libluajit [$LUAJIT&&$LINUXALL]
 		$Lib		luajit [$LUAJIT&&$WINDOWS]
+		$Lib		lua51  [$LUAJIT&&$WINDOWS]
 		$Lib		tier1
 		$Lib		tier2
 		$Lib		tier3

@@ -5,15 +5,16 @@
 // to be created in C++ and managed by custom defined Lua code.
 //=============================================================================//
 
-#ifdef LUAUI
 #include "cbase.h"
+
+#ifdef LUAUI
+ 
 #include "lua_ui/c_luaui.h"
 #include "dbg.h"
 #include "lua.hpp"
 #include "lua_loader.h"
 
 static CLuaUiSystem s_pLuaUi;
-
 
 
 /// @brief Safe to call multiple times
