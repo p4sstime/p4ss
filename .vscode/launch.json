@@ -1,0 +1,48 @@
+{
+	"configurations": [
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "",
+			"linux": {
+				"program": "${workspaceFolder}/game/p4ss_linux64",
+				"args": [
+					"-secure",
+					"-developer",
+					"-console",
+					"-novid"
+				],
+				"stopAtEntry": false,
+				"cwd": "${workspaceFolder}/game",
+				"environment": [],
+				"externalConsole": false,
+				"MIMode": "gdb",
+				"preLaunchTask": "build",
+				"stopAtConnect": true,
+				"setupCommands": [
+					{
+						"description": "Enable pretty-printing for gdb",
+						"text": "-enable-pretty-printing",
+						"ignoreFailures": true
+					},
+					{
+						"description": "Set Disassembly Flavor to Intel",
+						"text": "-gdb-set disassembly-flavor intel",
+						"ignoreFailures": true
+					},
+					{
+						"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+						"text": "-gdb-set detach-on-fork off",
+						"ignoreFailures": true
+					},
+					// {
+					// 	"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
+					// 	"text": "-gdb-set follow-fork-mode child",
+					// 	"ignoreFailures": true
+					// }
+				],
+			}
+		},
+	]
+}

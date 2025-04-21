@@ -34,6 +34,7 @@
 #include "vgui_avatarimage.h"
 #if defined( LUAUI )
 #include "lua_ui/c_luaui.h"
+#include "lua_ui/luipanel.h"
 #endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -50,9 +51,7 @@ bool AvatarIndexLessFunc( const int &lhs, const int &rhs )
 //-----------------------------------------------------------------------------
 CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : EditablePanel( NULL, PANEL_SCOREBOARD )
 {
-	#if defined( LUAUI )
-	LuaUiSystem()->Test();
-	#endif
+	
 	m_iPlayerIndexSymbol = KeyValuesSystem()->GetSymbolForString("playerIndex");
 	m_nCloseKey = BUTTON_CODE_INVALID;
 
@@ -70,6 +69,10 @@ CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : Editabl
 
 	m_pPlayerList = new SectionedListPanel(this, "PlayerList");
 	m_pPlayerList->SetVerticalScrollbar(false);
+	#if defined( LUAUI )
+	m_pLuaPanel = new lui::Panel("scoreboard");
+	m_pLuaPanel->LoadWithFile("scripts/lua/ui/scoreboard.lua");
+	#endif
 
 	LoadControlSettings("Resource/UI/ScoreBoard.res");
 	m_iDesiredHeight = GetTall();
@@ -106,7 +109,6 @@ CClientScoreBoardDialog::~CClientScoreBoardDialog()
 void CClientScoreBoardDialog::OnThink()
 {
 	BaseClass::OnThink();
-
 	// NOTE: this is necessary because of the way input works.
 	// If a key down message is sent to vgui, then it will get the key up message
 	// Sometimes the scoreboard is activated by other vgui menus, 

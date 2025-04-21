@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "./src/buildallprojects",
+			"args": [
+				"debug"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "build (clean)",
+			"type": "shell",
+			"command": "./src/buildallprojects",
+			"args": [
+				"debug",
+				"clean"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+	]
+}

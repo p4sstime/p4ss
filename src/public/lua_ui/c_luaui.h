@@ -8,13 +8,17 @@
 #endif
 
 #include "igamesystem.h"
+#include "luipanel.h"
 // Our handle into the Lua UI system.
 // Valid at all times after Client DLL is loaded
 class CLuaUiSystem : public CAutoGameSystemPerFrame
 {
 private:
+	CUtlLinkedList<lui::Panel *> m_Panels;
 public:
-	CLuaUiSystem() {};
+	CLuaUiSystem() 
+	: m_Panels () 
+	{};
 	// Call this when Client DLL is loaded.
 	virtual const char *Name() override { return "CLuaUiSystem"; }
 	virtual bool Init() override;
@@ -22,8 +26,8 @@ public:
 	virtual void Shutdown();
 	virtual void Update( float frametime );
 
-	// Valid at all times after Client DLL is loaded
-	static CLuaUiSystem* Get();
+	void RegisterNewItem( lui::Panel* panel );
+	void DeregisterItem( lui::Panel* panel );
 
 	void Test();
 

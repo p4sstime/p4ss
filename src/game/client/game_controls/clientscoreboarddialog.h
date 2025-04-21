@@ -15,6 +15,10 @@
 #include <game/client/iviewport.h>
 #include "GameEventListener.h"
 
+#ifdef LUAUI
+#include "lua_ui/luipanel.h"
+#endif
+
 #define TYPE_NOTEAM			0	// NOTEAM must be zero :)
 #define TYPE_TEAM			1	// a section for a single team	
 #define TYPE_PLAYERS		2
@@ -68,6 +72,10 @@ public:
 	virtual GameActionSet_t GetPreferredActionSet() { return GAME_ACTION_SET_NONE;  }
 			
 protected:
+
+#ifdef LUAUI
+	lui::Panel* m_pLuaPanel;
+#endif // LUAUI
 	MESSAGE_FUNC_INT( OnPollHideCode, "PollHideCode", code );
 
 	// functions to override
