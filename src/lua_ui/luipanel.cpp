@@ -15,7 +15,7 @@ namespace lui
 	, m_L (luaL_newstate())
 	{
 		luaL_openlibs(m_L);
-
+		LuaUiSystem()->RegisterLuaFunctions(m_L);
 		if (luaL_dostring(m_L, loader_text) != LUA_OK)
 		{
 			Error("Error loading Lua UI panel '%s': %s\n", m_pName, lua_tostring(m_L, -1));
@@ -68,17 +68,14 @@ namespace lui
 		if ( lua_pcall(m_L, 2, 1, 0) != LUA_OK ) {
 			Error("Error running loader for Lua UI panel '%s': %s\n", m_pName, lua_tostring(m_L, -1));
 			lua_pop(m_L, 1);
-
-			( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
-			return false;
+			goto cleanup;
 		}
 		if ( !lua_istable(m_L, -1) )
 		{
 			Error("Error running loader for Lua UI panel '%s': LOAD(code) failed.", m_pName);
 			lua_pop(m_L, 1);
 
-			( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
-			return false;
+			goto cleanup;
 		}
 		// success, get the returned table for the panel's Lua code
 		m_iTableRef = luaL_ref(m_L, LUA_REGISTRYINDEX);
@@ -87,9 +84,10 @@ namespace lui
 	{
 		Error("Error reading file for Lua UI panel '%s': %s\n", m_pName, filename);
 
-		( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
-		return false;
+		goto cleanup;
 	}
+
+	// success, clean up manually
 	( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
 
 	// Call env["Init"]()
@@ -98,15 +96,13 @@ namespace lui
 	if (!lua_isfunction(m_L, -1))
 	{
 		Warning("Lua panel %s: Init() was not defined\n", m_pName);
-		lua_pop(m_L, 1);
 	} else {
 		if (lua_pcall(m_L, 0, 0, 0) != LUA_OK)
 		{
 			Warning("Lua panel '%s': Error running Init: %s\n", m_pName, lua_tostring(m_L, -1));
-			lua_pop(m_L, 1);
 		}
 	}
-	lua_pop(m_L, 1); // pop env off stack
+	lua_pop(m_L, 2); // pop function, env off stack
 
 	return true;
 	}

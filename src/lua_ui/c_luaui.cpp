@@ -27,7 +27,7 @@ void CLuaUiSystem::RegisterNewItem(lui::Panel* panel)
 {
 	// Register the new item with Lua
 	// This is where we store the panel in the list of things to call per frame
-	Msg("CLuaUiSystem::RegisterNewItem() called\n");
+	Msg("CLuaUiSystem::RegisterNewItem\n");
 	
 	m_Panels.AddToTail(panel);
 }
@@ -42,6 +42,12 @@ void CLuaUiSystem::DeregisterItem(lui::Panel* panel)
 }
 void CLuaUiSystem::Shutdown()
 {
+}
+
+void CLuaUiSystem::RegisterLuaFunctions(lua_State *L)
+{
+	// Register the Lua functions
+	Msg("CLuaUiSystem::RegisterLuaFunctions() called\n");
 }
 
 void CLuaUiSystem::Test()

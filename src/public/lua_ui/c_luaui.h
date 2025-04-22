@@ -31,6 +31,8 @@ public:
 
 	void Test();
 
+	static void RegisterLuaFunctions( lua_State *L );
+
 };
 
 extern CLuaUiSystem* LuaUiSystem();
