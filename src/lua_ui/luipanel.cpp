@@ -105,6 +105,21 @@ namespace lui
 	lua_pop(m_L, 2); // pop function, env off stack
 
 	return true;
+
+	// ugly, but safer than rewriting this multiple times
+	cleanup:
+	( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
+	return false;
+	}
+
+	const char* Panel::Name() const
+	{
+		return m_pName;
+	}
+	
+	void Panel::SetName(const char* name)
+	{
+		m_pName = name;
 	}
 
 	void Panel::Update(float frametime)
