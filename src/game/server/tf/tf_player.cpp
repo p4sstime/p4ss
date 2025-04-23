@@ -8080,7 +8080,9 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 		
 		return true;
 	}
-	else if ( FStrEq( "cyoa_pda_open", pcmd ) )
+
+//	Disabled to avoid an exploit in pass time
+/*	else if ( FStrEq( "cyoa_pda_open", pcmd ) )
 	{
 		bool bOpen = atoi( args[1] ) != 0;
 
@@ -8094,7 +8096,7 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 			TeamFortress_SetSpeed();
 		}
 		return true;
-	}
+	}*/
 
 	return BaseClass::ClientCommand( args );
 }
