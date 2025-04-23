@@ -224,38 +224,6 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}
 		
-//		"tf_simple_disguise_menu"
-//	
-//		"#TF_simple_disguise_menu_option"
-//		"#Tooltip_simple_disguise_menu_option"
-//		{ BOOL }
-//		{ "0" }
-//	}
-	
-//	"tf_sniper_fullcharge_bell"
-//	{
-//		"#TF_sniperbell"
-//		"#Tooltip_sniperbell"
-//		{ BOOL }
-//		{ "0" }
-//	}	
-	
-//	"cl_autorezoom"
-//	{
-//		"#TF_autozoom"
-//		"#Tooltip_autozoom"
-//		{ BOOL }
-//		{ "1" }
-//	}
-
-//	"tf_hud_no_crosshair_on_scope_zoom"
-//	{
-//		"#TF_nocrosshaironscopezoom"
-//		"#Tooltip_nocrosshaironscopezoomn"
-//		{ BOOL }
-//		{ "0" }
-//	}	
-	
 	"tf_medigun_autoheal"
 	{
 		"#TF_medigun_autoheal"
@@ -455,14 +423,6 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}
 	
-	"tf_colorblindassist"
-	{
-		"#TF_colorblindassist"
-		"#Tooltip_colorblindassist"
-		{ BOOL }
-		{ "0" }
-	}	
-	
 	"tf_use_match_hud"
 	{
 		"#TF_UseMatchHUD"
@@ -470,22 +430,6 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
-	
-	"cl_use_tournament_specgui"
-	{
-		"#TF_UseAdvancedTourneyGUI"
-		"#Tooltip_UseAdvancedTourneyGUI"
-		{ BOOL }
-		{ "1" }
-	}	
-
-	"cl_spec_carrieditems"
-	{
-		"#TF_SpectateCarriedItems"
-		"#Tooltip_SpectateCarriedItems"
-		{ BOOL }
-		{ "1" }
-	}	
 	
 	"glow_outline_effect_enable"
 	{
@@ -510,18 +454,6 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 	
-	"tf_spectator_target_location"
-	{
-		"#TF_Spectator_TargetID_Location"
-		{ LIST
-			"#TF_Spectator_Default" "0"
-			"#TF_Spectator_Bottom_Left" "1"
-			"#TF_Spectator_Bottom_Center" "2"
-			"#TF_Spectator_Bottom_Right" "3"
-		}
-		{ "0" }
-	}	
-	
 	"hud_freezecamhide"
 	{
 		"#TF_FreezeCamHide"
@@ -530,92 +462,13 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}	
 
-//	"tf_spectate_pyrovision"
-//	{
-//		"#TF_SpectatePyroVision"
-//		"#Tooltip_SpectatePyroVision"
-//		{ BOOL }
-//		{ "0" }
-//	}
-	
-//	"pyro_vignette"
-//	{
-//		"#TF_Pyrovision_Vignette"
-//		{ LIST
-//			"#TF_Pyrovision_Disable" "0"
-//			"#TF_Pyrovision_Vignette_Static" "1"
-//			"#TF_Pyrovision_Vignette_Dynamic" "2"
-//		}
-//		{ "2" }
-//	}
-
-//	"pyro_vignette_distortion"
-//	{
-//		"#TF_Pyrovision_Distortion"
-//		{ LIST
-//			"#TF_Pyrovision_Disable" "0"
-//			"#TF_Pyrovision_Enable" "1"
-//		}
-//		{ "1" }
-//	}
-
-//	"pyro_dof"
-//	{
-//		"#TF_Pyrovision_Dof"
-//		{ LIST
-//			"#TF_Pyrovision_Disable" "0"
-//			"#TF_Pyrovision_Enable" "1"
-//		}
-//		{ "1" }
-//	}
-//
-//	"tf_romevision_opt_in"
-//	{
-//		"#TF_RomeVisionOptIn"
-//		"#Tooltip_RomeVisionOptIn"
-//		{ BOOL }
-//		{ "0" }
-//	}
-//
-//	"tf_hud_target_id_disable_floating_health"
-//	{
-//		"#TF_TargetID_Disable_Floating"
-//		"#ToolTip_TargetID_Disable_Floating"
-//		{ BOOL }
-//		{ "0" }
-//	}
-
-	"tf_hud_target_id_alpha"
+	"tf_hud_target_id_disable_floating_health"
 	{
-		"#TF_TargetID_Alpha"
-		"#ToolTip_TargetID_Alpha"
-		{ SLIDER 0 255 }
-		{ "100" }
+		"#TF_TargetID_Disable_Floating"
+		"#ToolTip_TargetID_Disable_Floating"
+		{ BOOL }
+		{ "0" }
 	}
-
-//	"tf_contract_progress_show"
-//	{
-//		"#TF_Contract_Progress"
-//		"#ToolTip_TF_Contract_Progress"
-//		{ LIST
-//			"#TF_Contract_Progress_None"	"0"
-//			"#TF_Contract_Progress_All"		"1"
-//			"#TF_Contract_Progress_Active"	"2"
-//		}
-//		{ "0" }
-//	}
-
-//	"tf_contract_competitive_show"
-//	{
-//		"#TF_Contract_Progress_Competitive"
-//		"#ToolTip_TF_Contract_Progress"
-//		{ LIST
-//			"#TF_Contract_Progress_None"	"0"
-//			"#TF_Contract_Progress_All"		"1"
-//			"#TF_Contract_Progress_Active"	"2"
-//		}
-//		{ "0" }
-//	}
 
 	"tf_scoreboard_mouse_mode"
 	{
@@ -639,6 +492,56 @@ DESCRIPTION INFO_OPTIONS
 	}
 
 	"category7"
+	{
+		"#TF_OptionCategory_Spectator"
+		{ CATEGORY }
+	}
+	
+	"tf_spectator_target_location"
+	{
+		"#TF_Spectator_TargetID_Location"
+		{ LIST
+			"#TF_Spectator_Default" "0"
+			"#TF_Spectator_Bottom_Left" "1"
+			"#TF_Spectator_Bottom_Center" "2"
+			"#TF_Spectator_Bottom_Right" "3"
+		}
+		{ "0" }
+	}	
+	
+	"tf_hud_target_id_alpha"
+	{
+		"#TF_TargetID_Alpha"
+		"#ToolTip_TargetID_Alpha"
+		{ SLIDER 0 255 }
+		{ "100" }
+	}
+	
+	"cl_spec_carrieditems"
+	{
+		"#TF_SpectateCarriedItems"
+		"#Tooltip_SpectateCarriedItems"
+		{ BOOL }
+		{ "0" }
+	}
+	
+	"cl_use_tournament_specgui"
+	{
+		"#TF_UseAdvancedTourneyGUI"
+		"#Tooltip_UseAdvancedTourneyGUI"
+		{ BOOL }
+		{ "1" }
+	}	
+	
+	"tf_spec_xray_disable"
+	{
+		"TF_tf_spec_xray_disable"
+		"#Tooltip_tf_spec_xray_disable"
+		{ BOOL }
+		{ "0" }
+	}
+
+	"category8"
 	{
 		"#TF_OptionCategory_Replay"
 		{ CATEGORY }
@@ -691,16 +594,8 @@ DESCRIPTION INFO_OPTIONS
 		{ NUMBER 1 1000 }
 		{ "5" }
 	}
-
-//	"tf_replay_pyrovision"
-//	{
-//		"#TF_ReplayPyroVision"
-//		"#Tooltip_ReplayPyroVision"
-//		{ BOOL }
-//		{ "0" }
-//	}
 	
-	"category8"
+	"category9"
 	{
 		"#TF_OptionCategory_Performance"
 		{ CATEGORY }
@@ -738,7 +633,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "25" }
 	}
 	
-	"category9"
+	"category10"
 	{
 		"#TF_OptionCategory_Misc"
 		{ CATEGORY }
@@ -759,6 +654,14 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
+	
+	"tf_colorblindassist"
+	{
+		"#TF_colorblindassist"
+		"#Tooltip_colorblindassist"
+		{ BOOL }
+		{ "0" }
+	}	
 	
 	"tf_respawn_on_loadoutchanges"
 	{
@@ -847,15 +750,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 
-	"cl_promotional_codes_button_show"
-	{
-		"#TF_ShowPromotionalCodesButton"
-		"#Tooltip_ShowPromotionalCodesButton"
-		{ BOOL }
-		{ "1" }
-	}
-
-	"category10"
+	"category11"
 	{
 		"#TF_OptionCategory_DemoSupport"
 		{ CATEGORY }
