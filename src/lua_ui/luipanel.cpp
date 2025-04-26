@@ -25,8 +25,11 @@ void Context::Clear()
 	// }
 	// lua_close(m_L);
 	// m_L = luaL_newstate();
-	m_L.~state();
-	new ( &m_L ) sol::state();
+	sol::table empty_tbl;
+	m_luaTable = empty_tbl;
+	sol::state new_state;
+	m_L = std::move( new_state );
+	LuaUiSystem()->DeregisterItem( this );
 }
 void Context::Initialize()
 {
@@ -53,15 +56,20 @@ void Context::Reload()
 		const char *filename = m_apFileNames[i];
 		if ( filename )
 		{
-			LoadWithFile( filename );
+			LoadWithFile( filename, false );
 		}
 	}
 }
 
-bool Context::LoadWithFile( const char *filename )
+bool Context::LoadWithFile( const char *filename, bool addToList )
 {
-	// register this file to run again when we reload
-	m_apFileNames.AddToTail( filename );
+	// avoid running this in an infinite loop if reloading based on
+	// m_apFileNames
+	if (addToList)
+	{
+		// register this file to run again when we reload
+		m_apFileNames.AddToTail( filename );
+	}
 
 	if ( !g_pFullFileSystem->FileExists( filename ) )
 	{

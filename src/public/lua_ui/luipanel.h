@@ -26,7 +26,7 @@ public:
 	Context(::lui::Context* parent);
 	virtual ~Context();
 
-	bool LoadWithFile(const char* filename);
+	bool LoadWithFile(const char* filename, bool addToList = true);
 	void SetName(const char* name);
 	void Reload();
 	virtual const char* Name() const;
