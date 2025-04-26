@@ -52,7 +52,7 @@ def compile_lua_jit():
 	try:
 		if is_linux:
 			# cmd_or_error("make clean")
-			cmd_or_error("""make STATIC_CC="\$(CROSS)\$(CC) -fPIC" amalg""")
+			cmd_or_error("""make STATIC_CC="gcc -fPIC" amalg""")
 			out_lib_name = "libluajit.a"
 		elif is_windows:
 			

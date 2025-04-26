@@ -1,11 +1,7 @@
-#include "cbase.h"
-#include "lua_loader.h"
-
-const char* loader_text = R""(
 local fake_env = {}
 
 local env = {}
-env.ConMsg = Print -- whitelist safe functions
+env.print = print -- whitelist safe functions
 env.coroutine = {
 	create = coroutine.create,
 	resume = coroutine.resume,
@@ -14,15 +10,14 @@ env.coroutine = {
 	wrap = coroutine.wrap,
 	running = coroutine.running,
 }
-env.ConWarn = Warn
 env._ENV = "PASS Fortress Lua UI"
 env._G = env
 
 setmetatable(fake_env, { __index = env })
 -- Add any other safe functions/modules here
 
-function LOAD(code, filename)
-	local chunk, err = load(code, filename, "t", fake_env)
+function LOAD(code)
+	local chunk, err = load(code, "user_script", "t", fake_env)
 	if not chunk then
 		return nil, err
 	end
@@ -34,4 +29,3 @@ function LOAD(code, filename)
 
 	return fake_env -- return the sandboxed environment containing Init, Update, etc.
 end
-)"";

@@ -14,7 +14,7 @@
 class CLuaUiSystem : public CAutoGameSystemPerFrame
 {
 private:
-	CUtlLinkedList<lui::Panel *> m_Panels;
+	CUtlLinkedList<lui::Context *> m_Panels;
 public:
 	CLuaUiSystem() 
 	: m_Panels () 
@@ -26,8 +26,9 @@ public:
 	virtual void Shutdown();
 	virtual void Update( float frametime );
 
-	void RegisterNewItem( lui::Panel* panel );
-	void DeregisterItem( lui::Panel* panel );
+	void RegisterNewItem( lui::Context* panel );
+	void DeregisterItem( lui::Context* panel );
+	void ReloadAll();
 
 	void Test();
 

@@ -56,6 +56,10 @@ public:
 	MESSAGE_FUNC_PARAMS( OnVoteKickPlayer, "VoteKickPlayer", pData );
 
 protected:
+
+#ifdef LUAUI
+	lui::Context* m_pLuaPanel;
+#endif // LUAUI
 	virtual void PerformLayout();
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 

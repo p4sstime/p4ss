@@ -94,6 +94,11 @@ $Configuration
 		// normally, MSVC sets it to C++97, for VC6 compatibility. This is stupid. and C++97 doesn't even exist!
 		// mimalloc (by Microsoft) naively relies on this being set to the proper values, due to how poorly
 		// documented this terrible hack is -- which is important if we ever wanted to ship that on Windows.
+		
+		// C++98 was created in '97, that's why C++97 doesn't exist
+		// See https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170#c-standards-support
 		$AdditionalOptions	"$BASE /Zc:__cplusplus" [$AT_LEAST_VS2017]
+
+		$AdditionalOptions	"$BASE /std:c17 /std:c++17" [$AT_LEAST_VS2022] // Use C17 standard
 	}
 }

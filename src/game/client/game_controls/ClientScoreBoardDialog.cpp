@@ -69,10 +69,7 @@ CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : Editabl
 
 	m_pPlayerList = new SectionedListPanel(this, "PlayerList");
 	m_pPlayerList->SetVerticalScrollbar(false);
-	#if defined( LUAUI )
-	m_pLuaPanel = new lui::Panel("scoreboard");
-	m_pLuaPanel->LoadWithFile("scripts/lua/ui/scoreboard.lua");
-	#endif
+	
 
 	LoadControlSettings("Resource/UI/ScoreBoard.res");
 	m_iDesiredHeight = GetTall();

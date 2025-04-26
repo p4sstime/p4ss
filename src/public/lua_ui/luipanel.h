@@ -3,24 +3,34 @@
 #ifdef LUAUI
 
 #include "cbase.h"
-#include "lua.hpp"
+#include "sol.hpp"
+#include "vgui_controls/Panel.h"
 
 namespace lui
 {
-class Panel
+class Context
 {
 private:
-	int m_iTableRef;
 protected:
-	lua_State* m_L;
+	sol::table m_luaTable;
+	vgui::Panel* m_pPanel;
+	CUtlLinkedList<const char*> m_apFileNames;
+	sol::state m_L;
 	const char* m_pName;
+
+	void Initialize();
+	void Clear();
 public:
-	Panel();
-	Panel(const char* name);
-	~Panel();
+	Context();
+	Context(vgui::Panel* parent);
+	Context(::lui::Context* parent);
+	virtual ~Context();
 
 	bool LoadWithFile(const char* filename);
-	void Update(float frametime);
+	void SetName(const char* name);
+	void Reload();
+	virtual const char* Name() const;
+	virtual void Update(float frametime);
 };
 }
 #endif // LUAUI

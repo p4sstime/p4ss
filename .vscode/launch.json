@@ -31,11 +31,11 @@
 						"text": "-gdb-set disassembly-flavor intel",
 						"ignoreFailures": true
 					},
-					{
-						"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
-						"text": "-gdb-set detach-on-fork off",
-						"ignoreFailures": true
-					},
+					// {
+					// 	"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+					// 	"text": "-gdb-set detach-on-fork off",
+					// 	"ignoreFailures": true
+					// },
 					// {
 					// 	"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
 					// 	"text": "-gdb-set follow-fork-mode child",

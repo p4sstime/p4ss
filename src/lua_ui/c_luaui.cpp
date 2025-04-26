@@ -13,8 +13,12 @@
 #include "dbg.h"
 #include "lua.hpp"
 #include "lua_loader.h"
+#include "lua_functions.h"
 
 static CLuaUiSystem s_pLuaUi;
+
+ConCommand lua_reload("lua_reload", [] () {LuaUiSystem()->ReloadAll();}, "Reload all Lua UI panels", FCVAR_CLIENTCMD_CAN_EXECUTE);
+
 
 
 /// @brief Safe to call multiple times
@@ -23,7 +27,7 @@ bool CLuaUiSystem::Init()
 	return true;
 }
 
-void CLuaUiSystem::RegisterNewItem(lui::Panel* panel)
+void CLuaUiSystem::RegisterNewItem(lui::Context* panel)
 {
 	// Register the new item with Lua
 	// This is where we store the panel in the list of things to call per frame
@@ -32,7 +36,7 @@ void CLuaUiSystem::RegisterNewItem(lui::Panel* panel)
 	m_Panels.AddToTail(panel);
 }
 
-void CLuaUiSystem::DeregisterItem(lui::Panel* panel)
+void CLuaUiSystem::DeregisterItem(lui::Context* panel)
 {
 	// De-register the item from Lua
 	// This is where we remove the panel from the list of things to call per frame
@@ -48,6 +52,8 @@ void CLuaUiSystem::RegisterLuaFunctions(lua_State *L)
 {
 	// Register the Lua functions
 	Msg("CLuaUiSystem::RegisterLuaFunctions() called\n");
+	lua_register(L, "Print", CLua::Print);
+	lua_register(L, "Warn", CLua::Warn);
 }
 
 void CLuaUiSystem::Test()
@@ -60,8 +66,19 @@ void CLuaUiSystem::Update(float frametime)
 	// Update the Lua UI
 	FOR_EACH_LL(m_Panels, i)
 	{
-		lui::Panel* panel = m_Panels[i];
+		lui::Context* panel = m_Panels[i];
 		panel->Update(frametime);
+	}
+}
+
+void CLuaUiSystem::ReloadAll()
+{
+	// Reload all Lua UI panels
+	Msg("CLuaUiSystem::ReloadAll() called\n");
+	FOR_EACH_LL(m_Panels, i)
+	{
+		lui::Context* panel = m_Panels[i];
+		panel->Reload();
 	}
 }
 CLuaUiSystem* LuaUiSystem()

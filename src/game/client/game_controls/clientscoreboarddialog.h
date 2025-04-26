@@ -73,9 +73,6 @@ public:
 			
 protected:
 
-#ifdef LUAUI
-	lui::Panel* m_pLuaPanel;
-#endif // LUAUI
 	MESSAGE_FUNC_INT( OnPollHideCode, "PollHideCode", code );
 
 	// functions to override

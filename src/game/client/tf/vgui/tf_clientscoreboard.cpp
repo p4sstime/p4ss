@@ -166,6 +166,12 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 	SetKeyBoardInputEnabled( false );
 	SetScheme( "ClientScheme" );
 
+	#if defined( LUAUI )
+	m_pLuaPanel = new lui::Context( this );
+	m_pLuaPanel->SetName("LuaScoreboard");
+	m_pLuaPanel->LoadWithFile("scripts/lua/ui/scoreboard.lua");
+	#endif
+
 	m_pPlayerListBlue = new SectionedListPanel( this, "BluePlayerList" );
 	m_pPlayerListRed = new SectionedListPanel( this, "RedPlayerList" );
 	m_pLabelPlayerName = new CExLabel( this, "PlayerNameLabel", "" );
@@ -213,6 +219,8 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 
 	SetDialogVariable( "server", "" );
 	SetVisible( false );
+
+	
 
 	m_nPlayerModelPanelIndex = -1;
 	m_bRedScrollBarVisible = false;

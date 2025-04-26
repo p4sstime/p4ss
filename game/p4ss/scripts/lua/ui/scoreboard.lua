@@ -1,7 +1,4 @@
-function Update()
-	print("Update called")
-end
+function Update(frametime) end
 function Init()
-	print("Init called")
-	os.exit(0)
+	ConMsg("scoreboard.lua: Init called")
 end

@@ -54,7 +54,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories	".\;$BASE;$SRCDIR\vgui2\include;$SRCDIR\vgui2\controls;$SRCDIR\game\shared;.\game_controls;$SRCDIR\thirdparty\sixensesdk\include"
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\luajit\src" [$LUAJIT]
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\luajit\src;$SRCDIR\thirdparty\sol2" [$LUAJIT]
 		$PreprocessorDefinitions		"$BASE;NO_STRING_T;CLIENT_DLL;VECTOR;VERSION_SAFE_STEAM_API_INTERFACES;PROTECTED_THINGS_ENABLE;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead" 
 		$PreprocessorDefinitions		"$BASE;INCLUDED_STEAM2_USERID_STRUCTS" 
 		$PreprocessorDefinitions		"$BASE;LUAUI" [$LUAJIT]
@@ -523,6 +523,7 @@ $Project
 			$File "$SRCDIR\lua_ui\c_luaui.cpp"
 			$File "$SRCDIR\lua_ui\luipanel.cpp"
 			$File "$SRCDIR\lua_ui\lua_loader.cpp"
+			$File "$SRCDIR\lua_ui\lua_functions.cpp"
 		}
 
 		$Folder	"Sixense"
@@ -1132,6 +1133,8 @@ $Project
 	{
 		$File "$SRCDIR\public\lua_ui\c_luaui.h"
 		$File "$SRCDIR\public\lua_ui\luipanel.h"
+		$File "$SRCDIR\public\lua_ui\lua_loader.h"
+		$File "$SRCDIR\public\lua_ui\lua_functions.h"
 	}
 
 	$Folder	"Game Shared Header Files"
