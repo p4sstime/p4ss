@@ -119,7 +119,7 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 
 	if ( retc >= 2 && result[0].get_type() == sol::type::nil )
 	{
-		Error( "Error running loader for Lua UI panel '%s': %s\n", m_pName, result[1].get<char *>() );
+		Warning( "Loader failed for Lua UI panel '%s': %s\n", m_pName, result[1].get<char *>() );
 	}
 	// lua_getglobal(m_L, "LOAD");
 	// lua_pushlstring(m_L, buffer, fileSize);
@@ -154,8 +154,13 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 		return false;
 	}
 
-	sol::function initFunc = *Init;
-	initFunc();
+	sol::protected_function initFunc = *Init;
+	auto result = initFunc();
+	if ( !result.valid() )
+	{
+		sol::error err = result;
+		Warning( "Error running Init() for Lua UI panel '%s': %s\n", m_pName, err.what() );
+	}
 
 	return true;
 }
