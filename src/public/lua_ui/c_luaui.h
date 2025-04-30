@@ -8,7 +8,7 @@
 #endif
 
 #include "igamesystem.h"
-#include "luipanel.h"
+#include "contexts/Context.h"
 // Our handle into the Lua UI system.
 // Valid at all times after Client DLL is loaded
 class CLuaUiSystem : public CAutoGameSystemPerFrame
@@ -32,7 +32,7 @@ public:
 
 	void Test();
 
-	static void RegisterLuaFunctions( lua_State *L );
+	static void RegisterLuaFunctions( sol::state& L );
 
 };
 

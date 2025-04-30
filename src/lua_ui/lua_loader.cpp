@@ -15,7 +15,8 @@ env.coroutine = {
 	running = coroutine.running,
 }
 env.ConWarn = Warn
-env._ENV = "PASS Fortress Lua UI"
+env.type = type
+env.env = "PASS Fortress Lua UI"
 env._G = env
 
 setmetatable(fake_env, { __index = env })

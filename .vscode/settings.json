@@ -9,8 +9,11 @@
     "editor.defaultFormatter": "pfwobcke.vscode-vdf"
   },
   "[lua]": {
+    "gitlens.codeLens.scopes": [
+      "document"
+    ],
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "JohnnyMorganz.stylua"
+    "editor.defaultFormatter": "JohnnyMorganz.stylua",
   },
   "Lua.diagnostics.globals": [
     "UI"
@@ -88,5 +91,7 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-  }
+  },
+  "discord.enabled": false,
+  "stylua.targetReleaseVersion": "latest",
 }

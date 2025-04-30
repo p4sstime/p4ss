@@ -19,15 +19,26 @@ namespace CLua
 		}
 		std::string message;
 		message.reserve(256);
-		int i = 0;
-		for (; i < args; i++)
+		int args_oneindexed = args + 1;
+		for (int i = 1; i < args_oneindexed; i++)
 		{
-			message.append(lua_tolstring(L, i + 1, NULL));	
+			message.append(lua_tolstring(L, i, NULL));	
 			message.push_back(' ');
 		}
+		// this should never fire because we check for args < 1 above
+		// but it causes SIGABRT on linux if this fails
+		if (message.empty())
+		{
+			Msg("\n");
+			return 0;
+		}
+		
 		message.pop_back(); // remove last space
 		Msg("%s\n", message.c_str());
-		lua_pop(L, i + 1);
+
+		// turns out below is unnecessary since lua clears the stack after a func call
+		// // remove all the elements we stacked earlier in the loop
+		// lua_pop(L, i);
 		return 0;
 	}
 	int Warn(lua_State* L)

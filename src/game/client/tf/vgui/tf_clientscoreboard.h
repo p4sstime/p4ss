@@ -58,7 +58,7 @@ public:
 protected:
 
 #ifdef LUAUI
-	lui::Context* m_pLuaPanel;
+	lui::ScoreboardContext* m_pLuaPanel;
 #endif // LUAUI
 	virtual void PerformLayout();
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );

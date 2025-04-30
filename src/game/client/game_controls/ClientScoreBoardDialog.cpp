@@ -34,7 +34,7 @@
 #include "vgui_avatarimage.h"
 #if defined( LUAUI )
 #include "lua_ui/c_luaui.h"
-#include "lua_ui/luipanel.h"
+#include "lua_ui/contexts/Context.h"
 #endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

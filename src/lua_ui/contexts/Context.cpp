@@ -1,17 +1,21 @@
 #include "cbase.h"
-#include "lua_ui/luipanel.h"
+
+
+#ifdef LUAUI
+#include "lua_ui/contexts/Context.h"
 #include "lua_ui/c_luaui.h"
-#include "lua_loader.h"
+#include "../lua_loader.h"
 #include "filesystem.h"
 #include "vgui_controls/Panel.h"
 
-#ifdef LUAUI
-
+#ifndef SOL_ALL_SAFETIES_ON
+#define SOL_ALL_SAFETIES_ON 1
+#endif
 namespace lui
 {
 Context::Context() {};
 Context::Context( vgui::Panel *parent )
-	: m_L(), m_apFileNames(), m_pName( "unnamed" ), m_pPanel( parent )
+	: m_L(), m_apFileNames(), m_pName( "unnamed" ), m_pParentPanel( parent )
 {
 	Initialize();
 }
@@ -35,7 +39,7 @@ void Context::Initialize()
 {
 	m_L.open_libraries( sol::lib::base, sol::lib::string, sol::lib::math,
 						sol::lib::table, sol::lib::io, sol::lib::os );
-	LuaUiSystem()->RegisterLuaFunctions( m_L.lua_state() );
+	LuaUiSystem()->RegisterLuaFunctions( m_L );
 	auto result = m_L.safe_script( loader_text );
 	if ( result.status() != sol::call_status::ok )
 	{
@@ -60,7 +64,6 @@ void Context::Reload()
 		}
 	}
 }
-
 bool Context::LoadWithFile( const char *filename, bool addToList )
 {
 	// avoid running this in an infinite loop if reloading based on
@@ -146,22 +149,30 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 	// success, clean up manually
 	( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
 
-	auto Init = m_luaTable.get<sol::optional<sol::protected_function>>( "Init" );
+	// auto Init = m_luaTable.get<sol::optional<sol::protected_function>>( "Init" );
 
-	if ( !Init )
+	// if ( !Init )
+	// {
+	// 	Warning( "Lua panel %s: Init() was not defined\n", m_pName );
+	// 	return false;
+	// }
+
+	// sol::protected_function initFunc = *Init;
+	// auto initResult = initFunc();
+	// if ( !initResult.valid() )
+	// {
+	// 	sol::error err = initResult;
+	// 	Warning( "Error running Init() for Lua UI panel '%s': %s\n", m_pName, err.what() );
+	// }
+
+	if (m_pParentPanel)
 	{
-		Warning( "Lua panel %s: Init() was not defined\n", m_pName );
-		return false;
+		ProtectedCall( "Init", true, static_cast<vgui::Panel*>(m_pParentPanel));
 	}
-
-	sol::protected_function initFunc = *Init;
-	auto result = initFunc();
-	if ( !result.valid() )
+	else
 	{
-		sol::error err = result;
-		Warning( "Error running Init() for Lua UI panel '%s': %s\n", m_pName, err.what() );
+		ProtectedCall( "Init", true, sol::nil );
 	}
-
 	return true;
 }
 

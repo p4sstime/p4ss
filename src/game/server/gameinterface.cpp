@@ -3355,7 +3355,6 @@ void MessageWriteAngles( const QAngle& rgflValue)
 {
 	if (!g_pMsgBuffer)
 		Error( "WriteVec3Normal called with no active message\n" );
-
 	g_pMsgBuffer->WriteBitAngles( rgflValue );
 }
 

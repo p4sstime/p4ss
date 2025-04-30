@@ -16,7 +16,7 @@
 #include "GameEventListener.h"
 
 #ifdef LUAUI
-#include "lua_ui/luipanel.h"
+#include "lua_ui/contexts/ScoreboardContext.h"
 #endif
 
 #define TYPE_NOTEAM			0	// NOTEAM must be zero :)

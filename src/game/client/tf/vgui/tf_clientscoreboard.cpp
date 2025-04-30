@@ -167,7 +167,7 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 	SetScheme( "ClientScheme" );
 
 	#if defined( LUAUI )
-	m_pLuaPanel = new lui::Context( this );
+	m_pLuaPanel = new lui::ScoreboardContext( this );
 	m_pLuaPanel->SetName("LuaScoreboard");
 	m_pLuaPanel->LoadWithFile("scripts/lua/ui/scoreboard.lua");
 	#endif
@@ -442,6 +442,7 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 
 	if ( bShow )
 	{		
+		m_pLuaPanel->ShowPanel( bShow );
 		SetVisible( true );
 		MoveToFront();
 		InitializeInputScheme();
@@ -467,6 +468,7 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 	else
 	{
 		SetVisible( false );
+		m_pLuaPanel->ShowPanel( bShow );
 
 		if ( m_pRightClickMenu )
 		{

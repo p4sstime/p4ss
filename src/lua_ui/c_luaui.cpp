@@ -8,12 +8,18 @@
 #include "cbase.h"
 
 #ifdef LUAUI
- 
+#ifndef SOL_ALL_SAFETIES_ON
+#define SOL_ALL_SAFETIES_ON 1
+#endif
 #include "lua_ui/c_luaui.h"
 #include "dbg.h"
 #include "lua.hpp"
+#include "sol.hpp"
 #include "lua_loader.h"
 #include "lua_functions.h"
+
+#include "vgui_controls/Panel.h"
+#include "vgui_controls/Label.h"
 
 static CLuaUiSystem s_pLuaUi;
 
@@ -48,12 +54,33 @@ void CLuaUiSystem::Shutdown()
 {
 }
 
-void CLuaUiSystem::RegisterLuaFunctions(lua_State *L)
+void CLuaUiSystem::RegisterLuaFunctions(sol::state &L)
 {
 	// Register the Lua functions
-	Msg("CLuaUiSystem::RegisterLuaFunctions() called\n");
-	lua_register(L, "Print", CLua::Print);
-	lua_register(L, "Warn", CLua::Warn);
+	L.set_function("Print", CLua::Print);
+	L.set_function("Warn", CLua::Warn);
+
+	
+	L.new_usertype<vgui::Panel>(
+		"vguiPanel",
+		sol::constructors<vgui::Panel(vgui::Panel*, const char*), vgui::Panel(vgui::Panel*)>(),
+		"SetVisible", &vgui::Panel::SetVisible,
+		"SetPos", &vgui::Panel::SetPos,
+		"SetSize", &vgui::Panel::SetSize,
+		"GetParent", &vgui::Panel::GetParent
+	);
+
+	sol::usertype<vgui::Label> label_type = L.new_usertype<vgui::Label>(
+		"vguiLabel",
+		sol::constructors<vgui::Label(vgui::Panel*, const char*, const char*)>(),
+		sol::base_classes, sol::bases<vgui::Panel>()
+	);
+
+	label_type["SetText"] = [](vgui::Label& self, const std::string& text) {
+		self.SetText(text.c_str());
+	};
+	
+
 }
 
 void CLuaUiSystem::Test()

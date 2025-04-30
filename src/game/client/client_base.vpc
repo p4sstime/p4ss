@@ -521,7 +521,8 @@ $Project
 		$Folder "P4SS Lua UI Source"
 		{
 			$File "$SRCDIR\lua_ui\c_luaui.cpp"
-			$File "$SRCDIR\lua_ui\luipanel.cpp"
+			$File "$SRCDIR\lua_ui\contexts\Context.cpp"
+			$File "$SRCDIR\lua_ui\contexts\ScoreboardContext.cpp"
 			$File "$SRCDIR\lua_ui\lua_loader.cpp"
 			$File "$SRCDIR\lua_ui\lua_functions.cpp"
 		}
@@ -1132,7 +1133,8 @@ $Project
 	$Folder "P4SS Lua UI Header Files"
 	{
 		$File "$SRCDIR\public\lua_ui\c_luaui.h"
-		$File "$SRCDIR\public\lua_ui\luipanel.h"
+		$File "$SRCDIR\public\lua_ui\contexts\Context.h"
+		$File "$SRCDIR\public\lua_ui\contexts\ScoreboardContext.h"
 		$File "$SRCDIR\public\lua_ui\lua_loader.h"
 		$File "$SRCDIR\public\lua_ui\lua_functions.h"
 	}
