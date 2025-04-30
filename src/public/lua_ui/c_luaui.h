@@ -15,6 +15,7 @@ class CLuaUiSystem : public CAutoGameSystemPerFrame
 {
 private:
 	CUtlLinkedList<lui::Context *> m_Panels;
+	bool bIsShuttingDown = false;
 public:
 	CLuaUiSystem() 
 	: m_Panels () 

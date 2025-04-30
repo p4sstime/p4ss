@@ -48,10 +48,14 @@ void CLuaUiSystem::DeregisterItem(lui::Context* panel)
 	// This is where we remove the panel from the list of things to call per frame
 	Msg("CLuaUiSystem::DeRegisterItem() called\n");
 	
-	m_Panels.FindAndRemove(panel);
+	// Just so that we don't prematurely free this panel
+	// and cause Shutdown to assertfail.
+	if (!bIsShuttingDown)
+		m_Panels.FindAndRemove(panel);
 }
 void CLuaUiSystem::Shutdown()
 {
+	bIsShuttingDown = true;
 	// Shutdown the Lua UI system
 	Msg("CLuaUiSystem::Shutdown() called\n");
 	
@@ -62,7 +66,8 @@ void CLuaUiSystem::Shutdown()
 		lui::Context* panel = m_Panels[i];
 		panel->Clear();
 	}
-	m_Panels.Purge();
+	m_Panels.PurgeAndDeleteElements();
+	bIsShuttingDown = false;
 }
 
 void CLuaUiSystem::RegisterLuaFunctions(sol::state &L)
