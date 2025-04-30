@@ -1288,8 +1288,6 @@ void CHLClient::PostInit()
 //-----------------------------------------------------------------------------
 void CHLClient::Shutdown( void )
 {
-	// Discord RPC
-	Discord_Shutdown();
   if (g_pAchievementsAndStatsInterface)
   {
     g_pAchievementsAndStatsInterface->ReleasePanel();

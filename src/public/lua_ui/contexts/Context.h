@@ -10,19 +10,19 @@ namespace lui
 {
 class Context
 {
-private:
-protected:
-	sol::table m_luaTable;
-	vgui::Panel* m_pParentPanel;
-	CUtlLinkedList<const char*> m_apFileNames;
-	sol::state m_L;
-	const char* m_pName;
 
-	void Initialize();
-	void Clear();
+  private:
+  protected:
+	sol::table m_luaTable;
+	vgui::Panel *m_pParentPanel;
+	CUtlLinkedList<const char *> m_apFileNames;
+	sol::state m_L;
+	const char *m_pName;
+
+	
 
 	template <typename T, typename... Args>
-	bool ProtectedCall( T&& funcName, bool shouldLog, Args &&... args )
+	bool ProtectedCall( T &&funcName, bool shouldLog, Args &&...args )
 	{
 		auto func =
 		m_luaTable.get<sol::optional<sol::protected_function>>( funcName );
@@ -35,7 +35,7 @@ protected:
 
 		sol::protected_function initFunc = *func;
 
-		auto result = initFunc( std::forward<Args...>( args )...  );
+		auto result = initFunc( std::forward<Args...>( args )... );
 		if ( !result.valid() )
 		{
 			if ( shouldLog )
@@ -45,32 +45,40 @@ protected:
 				{
 					const char *funcName = funcName;
 					Warning( "Error pcalling %s() for Lua UI panel '%s': %s\n",
-						 funcName, m_pName, err.what() );
+							 funcName, m_pName, err.what() );
 				}
 				else
 				{
-					Warning( "Error pcalling for Lua UI panel '%s': %s\n", m_pName,
-						 err.what() );
+					Warning( "Error pcalling for Lua UI panel '%s': %s\n",
+							 m_pName, err.what() );
 				}
+			}
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
-	return true;
-	}
-public:
+  public:
 	Context();
-	Context(vgui::Panel* parent);
-	Context(::lui::Context* parent);
+	Context( vgui::Panel *parent );
+	Context( ::lui::Context *parent );
 	virtual ~Context();
 
-	vgui::Panel* GetParent() { return m_pParentPanel; }
-	bool LoadWithFile(const char* filename, bool addToList = true);
-	void SetName(const char* name);
+	// DO NOT call this if you are not ACUTELY aware of what you are doing.
+	// This is used to *reinitialize* the Lua state.
+	void Initialize();
+	// DO NOT call this if you are not ACUTELY aware of what you are doing.
+	// This is used to clear the Lua state.
+	void Clear();
+
+	vgui::Panel *GetParent() { return m_pParentPanel; }
+	bool LoadWithFile( const char *filename, bool addToList = true );
+	void SetName( const char *name );
 	void Reload();
-	virtual const char* Name() const;
-	virtual void Update(float frametime);
+	virtual const char *Name() const;
+	virtual void Update( float frametime );
 };
-}
+} // namespace lui
 #endif // LUAUI
 #endif // !LUIPANEL_H

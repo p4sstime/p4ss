@@ -5,6 +5,7 @@ TabWidth: 4
 BreakBeforeBraces: Allman
 SortIncludes: Never
 SkipMacroDefinitionBody: true
+ColumnLimit: 0
 ContinuationIndentWidth: 0
 SpacesInParens: Custom
 SpacesInParensOptions:

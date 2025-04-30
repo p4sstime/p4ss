@@ -19,6 +19,12 @@ env.type = type
 env.env = "PASS Fortress Lua UI"
 env._G = env
 
+env.pairs = pairs
+env.ipairs = ipairs
+
+env.vguiLabel = vguiLabel
+env.vguiPanel = vguiPanel
+
 setmetatable(fake_env, { __index = env })
 -- Add any other safe functions/modules here
 

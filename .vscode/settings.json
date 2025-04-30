@@ -3,6 +3,7 @@
     "--compile-commands-dir=src"
   ],
   "editor.formatOnSave": false,
+  "C_Cpp.clang_format_style": "file",
   "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
   "cmake.ignoreCMakeListsMissing": true,
   "[vdf]": {

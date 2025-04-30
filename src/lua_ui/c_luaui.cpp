@@ -52,6 +52,17 @@ void CLuaUiSystem::DeregisterItem(lui::Context* panel)
 }
 void CLuaUiSystem::Shutdown()
 {
+	// Shutdown the Lua UI system
+	Msg("CLuaUiSystem::Shutdown() called\n");
+	
+	if (m_Panels.IsEmpty())
+		return;
+	FOR_EACH_LL(m_Panels, i)
+	{
+		lui::Context* panel = m_Panels[i];
+		panel->Clear();
+	}
+	m_Panels.Purge();
 }
 
 void CLuaUiSystem::RegisterLuaFunctions(sol::state &L)
@@ -76,7 +87,7 @@ void CLuaUiSystem::RegisterLuaFunctions(sol::state &L)
 		sol::base_classes, sol::bases<vgui::Panel>()
 	);
 
-	label_type["SetText"] = [](vgui::Label& self, const std::string& text) {
+	label_type["SetTextLocalized"] = [](vgui::Label& self, const std::string& text) {
 		self.SetText(text.c_str());
 	};
 	

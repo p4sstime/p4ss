@@ -1,0 +1,244 @@
+"lang"
+{
+	"Language" "English"
+	
+	"Tokens"
+	{
+
+
+		//Menu
+		
+		//Advanced Options
+		"TF_OptionCategory_PASSTime"	"PASS Time Settings"
+		"Tooltip_PASSCrosshairRed"		"JACK Crosshair RED Channel"
+		"Tooltip_PASSCrosshairGreen"	"JACK Crosshair Green Channel"
+		"Tooltip_PASSCrosshairBlue"		"JACK Crosshair Blue Channel"
+		"Tooltip_PASSCrosshairAlpha"	"JACK Crosshair Transparency"
+		"Tooltip_PASSCrosshairColors"	"Edit the color of the crosshair that appears while holding primary fire with the JACK. (RGB values 0-255, right is higher)"
+		"Tooltip_PASSCrosshairColorsAlpha"	"Edit the transparency of the crosshair that appears while holding primary fire with the JACK. (0-255, right is more opaque)"
+
+
+		//Improved Pass Time Wording
+		// Killfeed
+		"Msg_PasstimeBallGet" 			"got the JACK!"
+		"Msg_PasstimeScoreCount" 		"scored %s1 points!"
+		"Msg_PasstimeScore"				"scored!"
+		"Msg_PasstimeDirect"				"directed the JACK!"
+		"Msg_PasstimeSplash"				"splashed the JACK to save!"
+		"Msg_PasstimeSplashDirected"				"directed the JACK to save!"
+		"Msg_PasstimePassComplete" 		"passed to"
+		"Msg_PasstimeInterception" 		"intercepted"
+		"Msg_PasstimeSteal" 			"stole from"
+		"Msg_PasstimeBlock" 			"blocked"
+
+					// 'Pop ups'
+		"Msg_PasstimePassIncoming" 		"PASS INCOMING"
+		"Msg_PasstimeLockedOn" 			"LOCKED ON"
+		"Msg_PasstimeInPassRange" 		"IN PASS RANGE"
+		"TF_Passtime_InPassRange"		"IN PASS RANGE"
+
+					// Notifs
+		"TF_Passtime_Goal"				"GOAL"
+		"TF_Passtime_CarrierName"		"Holder: %s1"
+
+					// events
+		"Msg_PasstimeEventStealTitle" 			"%team% STEAL"
+		"Msg_PasstimeEventStealDetail" 			"%subject% stole from %source%"
+		"Msg_PasstimeEventPassTitle"			"%team% PASS"
+		"Msg_PasstimeEventPassDetail" 			"%source% passed to %subject%"
+
+		"Msg_PasstimeEventHandoffTitle"			"%team% HANDOFF"
+		"Msg_PasstimeEventHandoffDetail" 		"%source%  handed off to %subject%"
+
+		"Msg_PasstimeEventScoreTitle"			"%team% SCORES"
+		"Msg_PasstimeEventScoreDetail_Assist"	"%subject% assisted by %source%"
+		"Msg_PasstimeEventScoreDetail_NoAssist"	"%subject%"
+
+		"Msg_PasstimeEventDeathbombTitle"			"%subject% DEATHBOMB"
+		"Msg_PasstimeEventDeathbombDetail"	"assisted by %source%"
+
+		"Msg_PasstimeEventPanaceaTitle"			"%team% PANACEA"
+		"Msg_PasstimeEventPanaceaDetail"	"%subject%"
+
+		"Msg_PasstimeEventWinstratTitle"			"%team% WINSTRAT"
+		"Msg_PasstimeEventWinstratDetail"	"%subject%"
+
+		// ADJUSTED
+		"Msg_PasstimeEventInterceptTitle"		"%team% INTERCEPT"		//%team% INTERCEPTION
+		"Msg_PasstimeEventInterceptDetail"		"%subject% intercepted %source%"
+
+		"Msg_PasstimeEventSaveTitle"		"%team%  SAVE"		//%team% INTERCEPTION
+		"Msg_PasstimeEventSaveDetail"		"%subject% stopped %source% from scoring"
+
+		"Msg_PasstimeEventWinstratBonus" 			"" 	
+
+		"Msg_PasstimeEventSaveBonus" 			"" 	
+		"Msg_PasstimeEventPanaceaBonus" 			"" 	
+		"Msg_PasstimeEventDeathbombBonus" 			"" 	
+		"Msg_PasstimeEventScoreBonus" 			"" 						// +CRIT Empty because there is no crits in pass time
+		"Msg_PasstimeEventPowerDownDetail"		""						// Has no text
+		"Msg_PasstimeEventStealBonus"			"" 						// +BOOST +DODGE
+		"Msg_PasstimeEventInterceptBonus" 		"" 						// +BOOST +DODGE
+		"Msg_PasstimeEventPassBonus" 			"" 						// +BOOST
+		"Msg_PasstimeEventPowerUpBonus"			"BONUS GOAL OPEN"		// Just used for Casual
+		"Msg_PasstimeEventPowerUpTitle"			""						// JACK POWER UP
+		"Msg_PasstimeEventPowerUpDetail"		""						// Bonus goal is worth more points
+		"Msg_PasstimeEventPowerDownTitle"		"POWER DOWN"			// JACK POWER DOWN
+
+				//Still in use for casual
+		"Msg_PasstimeEventPowerDownBonus"		"BONUS GOAL CLOSED"		//
+		//	/***
+		//	 * 
+		//	 * PASS TIME:
+		//	 * 	0x01 - Pure white
+		//	 * 	0x06 - Use Assist color
+		//	 *   	0x07 - Use Save color
+		//	 * 	0x08 - Use Intercept color
+		//	 * 	0x14 - Use Steal color
+		//	 * 	0x0F - Use Splash color
+		//	 * 	0x13 - Use PRIMARY TEAM color (%source% team, or if no %source%, %subject% team)
+		//	 * 	0x11 - Use SECONDARY TEAM color (opposite of previous team)
+		//	 * 	0x12 - Use Goal color
+		//	 *     0x15 - Use Deathbomb Color
+		//	 *     0x17 - Use Panacea Color
+		//	 */
+
+		//Most of this is copied from "drastically improved chat_english"
+			
+		// Class Selection Screen tips
+		// Scout
+		"ClassTips_1_Count"			"1"
+		"ClassTips_1_1"				"Don't!"
+		"ClassTips_1_1_Icon"		"/achievements/tf_scout_fast_cap.vmt"
+
+		// Sniper
+		"ClassTips_2_Count"			"1"
+		"ClassTips_2_1"				"Don't!"
+		"ClassTips_2_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Soldier
+		"ClassTips_3_Count"			"3"
+		"ClassTips_3_1"				"Rocket jump while being passed to!"
+		"ClassTips_3_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_3_2"				"Shoot the floor near the JACK, to pick it up while jumping!"
+		"ClassTips_3_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_3_3"				"Use surf ramps to your advantage!"
+		"ClassTips_3_3_Icon"		"/pve/chalf_circle.vmt"
+
+		// Demo
+		"ClassTips_4_Count"			"3"
+		"ClassTips_4_1"				"Use Caber jumps or trimps while being passed to!"
+		"ClassTips_4_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_4_2"				"Place grenades near the JACK to explosive jump with it!"
+		"ClassTips_4_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_4_3"				"Place the JACK on a ramp, and collect it while rampsliding!"
+		"ClassTips_4_3_Icon"		"/pve/chalf_circle.vmt"
+
+		// Medic
+		"ClassTips_5_Count"			"5"
+		"ClassTips_5_1"				"You can throw the JACK really far!"
+		"ClassTips_5_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_2"				"Use your superior run speed to steal the JACK with melee!"
+		"ClassTips_5_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_3"				"Heal teammates to enable more explosive jumping!"
+		"ClassTips_5_3_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_4"				"Don't ÜberCharge the JACK Carrier, it doesn't work!"
+		"ClassTips_5_4_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_5"				"Deny JACK scores with the Crossbow!"
+		"ClassTips_5_5_Icon"		"/pve/chalf_circle.vmt"
+
+		// Heavy
+		"ClassTips_6_Count"			"1"
+		"ClassTips_6_1"				"Don't!"
+		"ClassTips_6_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Pyro
+		"ClassTips_7_Count"			"1"
+		"ClassTips_7_1"				"Don't!"
+		"ClassTips_7_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Spy
+		"ClassTips_8_Count"			"1"
+		"ClassTips_8_1"				"Don't!"
+		"ClassTips_8_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Engi
+		"ClassTips_9_Count"			"1"
+		"ClassTips_9_1"				"Don't!"
+		"ClassTips_9_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Random
+		"ClassTips_12_Count"		"1"
+		"ClassTips_12_1"			"Let the game randomly choose a class for you."
+		"ClassTips_12_1_Icon"		"/pve/chalf_circle.vmt"
+		
+		
+		//Loading tips
+
+		"Tip_Abuse_Report"		"Powered by passtime.tf."
+		
+		"Tip_1_Count"				"0" //Scout
+		
+		"Tip_2_Count"				"0" //Sniper
+
+		"Tip_3_Count"				"13" //Soldier
+		"Tip_3_1"				"As a Soldier, you can pick up your own JACK throws by hitting the JACK with your rocket jump explosion."
+		"Tip_3_2"				"As a Soldier, you can airshot the JACK, but it's very tricky!"
+		"Tip_3_3"				"As a Soldier, you can deny scores by shooting the goal with rockets. The explosion covers a wide area."
+		"Tip_3_4"				"As a Soldier, the Market Gardener is excellent. Deny dribbles by predicting enemies, and smacking them mid-jump."
+		"Tip_3_5"				"As a Soldier, the Black Box lets you adopt a tankier playstyle. Eat all of the health packs. Become the Nombler."
+		"Tip_3_6"				"As a Soldier, know that JACK carriers are often marked for death. Hitting directs and airshots can deal massive damage!"
+		"Tip_3_7"				"As a Soldier, you can shoot the JACK with rockets to move it towards you, or send it away from enemies."
+		"Tip_3_8"				"As a Soldier, try to recieve passes while rocket jumping forward. Use surf ramps to go even further!"
+		"Tip_3_9"				"As a Soldier, you can perform a 'deathbomb' pressing your killbind next to a goal, while a JACK PASS is incoming. Very precise!"
+		"Tip_3_10"				"As a Soldier, 'speedshot' rocket jumps work when performed next to the JACK, and it can be extremely powerful."
+		"Tip_3_11"				"As a Soldier, you can pick up the JACK while wall jumping or surfing if you make sure the explosion hits the JACK."
+		"Tip_3_12"				"As a Soldier, remember that you can pick up the JACK when it's thrown by your teammate, even if it's still team colored."
+		"Tip_3_13"				"As a Soldier, you can pogo off of the JACK by shooting it as the JACK magnetizes towards you. This is very precise."
+
+		"Tip_4_Count"				"11" //Demoman
+		"Tip_4_1"				"As a Demoman, no stickybombs are allowed. Too unsportsmanlike."
+		"Tip_4_2"				"As a Demoman, the Iron Bomber is generally preferred due to its easier grenade jumps."
+		"Tip_4_3"				"As a Demoman, you can place grenades near the JACK to explosive jump with it!"
+		"Tip_4_4"				"As a Demoman, you can Caber jump by hitting the JACK itself."
+		"Tip_4_5"				"As a Demoman, the Ullapool Caber is great for explosive jumping, especially while rampsliding."
+		"Tip_4_6"				"As a Demoman, crouch when preparing a Caber jump in order to achieve maximum height."
+		"Tip_4_7"				"As a Demoman, use your Grenade Launcher for direct combat. Grenades detonate upon impact with an enemy unless they touch the ground first."
+		"Tip_4_8"				"As a Demoman, your Bottle deploys and holsters faster than the Caber, and it lets you play a steal-heavy playstyle called we call 'Scallop'."
+		"Tip_4_9"				"As a Demoman, using the Boots with the Caber is what we call 'Stoic Demo'."
+		"Tip_4_10"				"As a Soldier, you can... Wait, no..."
+		"Tip_4_11"				"As a Demoman, you can pogo off of the JACK by shooting it as the JACK magnetizes towards you. This is very precise."
+
+		"Tip_5_Count"				"12" //Medic
+		"Tip_5_1"				"As Medic, use your Medi Gun to buff your team's HP, enabling more blast jumping."
+		"Tip_5_2"				"As Medic, you have the best loose throw out of the three PASS Time classes. Passes, meanwhile, are identical."
+		"Tip_5_3"				"As Medic, your ÜberCharge provides invulnerability, but it won't work on the JACK carrier."
+		"Tip_5_4"				"As Medic, you can fill your ÜberCharge faster by healing teammates who are more injured."
+		"Tip_5_5"				"As Medic, use your superior movement speed to threaten JACK steals with your melee weapon. You can force people to toss it away."
+		"Tip_5_6"				"As Medic, if an opponent tries to steal the JACK from you, bounce it off the ground into their hands. They won't gain invulnerability, and you can steal it right back."
+		"Tip_5_7"				"As Medic, it is better to not use an Übercharge than it is to grief your team by preventing them from picking up the JACK."
+		"Tip_5_8"				"As Medic, heal Soldiers and Demomen at the beginning of a round so they can jump out of spawn and start early."
+		"Tip_5_9"				"As Medic, you can ÜberCharge without a heal target to save yourself. Use it or lose it!"
+		"Tip_5_10"				"As Medic, the Crusader's Crossbow heals teammates, damages enemies, and can deny goals by neutralizing the JACK."
+		"Tip_5_11"				"As Medic, the Crusader's Crossbow deals more damage the longer a bolt travels."
+		"Tip_5_12"				"As Medic, you can keep multiple targets overhealed, allowing them to absorb more damage."
+
+		"Tip_6_Count"				"0" //Heavy
+
+		"Tip_7_Count"				"0" //Pyro
+
+		"Tip_8_Count"				"0" //Spy
+
+		"Tip_9_Count"				"0" //Engineer
+
+		"Tip_10_Count"				"8" //THE JACK RAAAAGGGHHH
+		"Tip_10_1"				"You can curve a locked pass around obstacles and enemies by priming a throw and looking away from the target before releasing."
+		"Tip_10_2"				"The JACK has a team pack radius. If at least one teammate is within the holder's radius, they'll receive 2hp per second, speed up to the fastest pack member's speed, and prevent the holder from taking Mini-Crits."
+		"Tip_10_3"				"If nobody picks the JACK up after 15 seconds, it will disappear and respawn after an additional ten seconds."
+		"Tip_10_4"				"Not only can the JACK be splashed with explosives, but it can also be hit directly by them! Pipes and rockets will detonate upon making contact with it."
+		"Tip_10_5"				"Intercepting an enemy pass or stealing it (melee) out of their hands directly will grant you two seconds of invulnerability."
+		"Tip_10_6"				"If you're pushed into a corner with the JACK, most maps have catapults that let you launch the ball way out of the corner."
+		"Tip_10_7"				"The JACK floats on the surface of deep water but sinks in shallow pools."
+		"Tip_10_8"				"If the JACK hits a solid surface while in a homing pass, it will bounce and cancel the pass."
+	}
+}

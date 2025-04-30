@@ -13,36 +13,46 @@ ConWarn = function(...) end
 --- @param level integer?
 error = function(reason, level) end
 
---- @class Panel
---- @field parent Panel?
---- @field visible boolean
+--- @class vguiPanel
 vguiPanel = {
 	--- Construct a new Panel.
-	--- @param parent Panel?
+	--- @param parent vguiPanel?
 	--- @param name string?
+	--- @return vguiPanel
 	new = function(parent, name) end,
 
 	--- Set this panel visible. (will be rendered on the next frame)
-	---@param self Panel
+	---@param self vguiPanel
 	---@param visible any
 	SetVisible = function(self, visible) end,
 
 	--- Set this panel's position.
-	--- @param self Panel
+	--- @param self vguiPanel
 	--- @param x number
 	--- @param y number
 	SetPos = function(self, x, y) end,
 
 	--- Set this panel's size.
-	--- @param self Panel
+	--- @param self vguiPanel
 	--- @param x number
 	--- @param y number
 	SetSize = function(self, x, y) end,
 
 	--- Get the parent panel of this panel.
-	--- @param self Panel
+	--- @param self vguiPanel
 	--- @param x number
 	--- @param y number
-	--- @return Panel?
+	--- @return vguiPanel?
 	GetParent = function(self, x, y) end,
+}
+
+--- @class vguiLabel : vguiPanel
+vguiLabel = {
+	--- Construct a new Label.
+	--- @param parent vguiPanel
+	--- @param name string
+	--- @param initialText string
+	--- @return vguiLabel
+	new = function(parent, name, initialText) end,
+	SetTextLocalized = function(self, text) end,
 }

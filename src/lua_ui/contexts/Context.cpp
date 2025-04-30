@@ -1,6 +1,5 @@
 #include "cbase.h"
 
-
 #ifdef LUAUI
 #include "lua_ui/contexts/Context.h"
 #include "lua_ui/c_luaui.h"
@@ -15,7 +14,10 @@ namespace lui
 {
 Context::Context() {};
 Context::Context( vgui::Panel *parent )
-	: m_L(), m_apFileNames(), m_pName( "unnamed" ), m_pParentPanel( parent )
+	: m_L(),
+	  m_apFileNames(),
+	  m_pName( "unnamed" ),
+	  m_pParentPanel( parent )
 {
 	Initialize();
 }
@@ -30,15 +32,18 @@ void Context::Clear()
 	// lua_close(m_L);
 	// m_L = luaL_newstate();
 	sol::table empty_tbl;
+	m_luaTable.clear();
 	m_luaTable = empty_tbl;
 	sol::state new_state;
+
+
 	m_L = std::move( new_state );
+
 	LuaUiSystem()->DeregisterItem( this );
 }
 void Context::Initialize()
 {
-	m_L.open_libraries( sol::lib::base, sol::lib::string, sol::lib::math,
-						sol::lib::table, sol::lib::io, sol::lib::os );
+	m_L.open_libraries( sol::lib::base, sol::lib::string, sol::lib::math, sol::lib::table, sol::lib::io, sol::lib::os );
 	LuaUiSystem()->RegisterLuaFunctions( m_L );
 	auto result = m_L.safe_script( loader_text );
 	if ( result.status() != sol::call_status::ok )
@@ -68,7 +73,7 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 {
 	// avoid running this in an infinite loop if reloading based on
 	// m_apFileNames
-	if (addToList)
+	if ( addToList )
 	{
 		// register this file to run again when we reload
 		m_apFileNames.AddToTail( filename );
@@ -76,8 +81,7 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 
 	if ( !g_pFullFileSystem->FileExists( filename ) )
 	{
-		Error( "Lua UI panel resource file '%s' not found: %s\n", filename,
-			   m_pName );
+		Error( "Lua UI panel resource file '%s' not found: %s\n", filename, m_pName );
 		return false;
 	};
 	auto file = filesystem->Open( filename, "rb", NULL );
@@ -88,16 +92,13 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 	}
 	// load file into a null-terminated buffer
 	int fileSize = filesystem->Size( file );
-	unsigned bufSize =
-	( (IFileSystem *)filesystem )->GetOptimalReadSize( file, fileSize + 2 );
+	unsigned bufSize = ( (IFileSystem *)filesystem )->GetOptimalReadSize( file, fileSize + 2 );
 
-	char *buffer = (char *)( (IFileSystem *)filesystem )
-				   ->AllocOptimalReadBuffer( file, bufSize );
+	char *buffer = (char *)( (IFileSystem *)filesystem )->AllocOptimalReadBuffer( file, bufSize );
 	Assert( buffer );
 
 	// read into local buffer
-	bool bRetOK = ( ( (IFileSystem *)filesystem )
-					->ReadEx( buffer, bufSize, fileSize, file ) != 0 );
+	bool bRetOK = ( ( (IFileSystem *)filesystem )->ReadEx( buffer, bufSize, fileSize, file ) != 0 );
 
 	filesystem->Close( file ); // close file after reading
 
@@ -107,7 +108,7 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 	{
 		Error( "Error reading file '%s'", filename );
 	}
-	buffer[fileSize] = 0; // null terminate file as EOF
+	buffer[fileSize] = 0;	  // null terminate file as EOF
 	buffer[fileSize + 1] = 0; // double NULL terminating in case this is a unicode file
 	sol::protected_function load = m_L.globals().get<sol::protected_function>( "LOAD" );
 
@@ -149,7 +150,8 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 	// success, clean up manually
 	( (IFileSystem *)filesystem )->FreeOptimalReadBuffer( buffer );
 
-	// auto Init = m_luaTable.get<sol::optional<sol::protected_function>>( "Init" );
+	// auto Init = m_luaTable.get<sol::optional<sol::protected_function>>(
+	// "Init" );
 
 	// if ( !Init )
 	// {
@@ -162,12 +164,13 @@ bool Context::LoadWithFile( const char *filename, bool addToList )
 	// if ( !initResult.valid() )
 	// {
 	// 	sol::error err = initResult;
-	// 	Warning( "Error running Init() for Lua UI panel '%s': %s\n", m_pName, err.what() );
+	// 	Warning( "Error running Init() for Lua UI panel '%s': %s\n", m_pName,
+	// err.what() );
 	// }
 
-	if (m_pParentPanel)
+	if ( m_pParentPanel )
 	{
-		ProtectedCall( "Init", true, static_cast<vgui::Panel*>(m_pParentPanel));
+		ProtectedCall( "Init", true, static_cast<vgui::Panel *>( m_pParentPanel ) );
 	}
 	else
 	{
@@ -192,7 +195,7 @@ void Context::Update( float frametime )
 	sol::protected_function updateFunc = *optional_update;
 	auto result = updateFunc( frametime );
 
-	if (!result.valid() )
+	if ( !result.valid() )
 	{
 		sol::error err = result;
 		Warning( "Error running Update() for Lua UI panel '%s': %s\n", m_pName, err.what() );
