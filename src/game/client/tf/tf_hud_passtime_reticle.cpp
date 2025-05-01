@@ -24,9 +24,9 @@ static Color GetTeamColor( int iTeam )
 {
 	switch( iTeam )
 	{
-	case TF_TEAM_RED: return Color(0xFF, 0x51, 0x51);
+	case TF_TEAM_RED: return Color(0xFF, 0x64, 0x64);
 	case TF_TEAM_BLUE: return Color(0xA5, 0xDE, 0xFF);
-	default: return Color(0xF5, 0xE7, 0xDE);
+	default: return Color(0xFF, 0xFF, 0xFF);
 	};
 }
 //callback included in crosshair convars
