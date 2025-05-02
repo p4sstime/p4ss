@@ -713,6 +713,8 @@ static float g_fEternaweenAutodisableTime = 0.0f;
 ConVar tf_spec_xray( "tf_spec_xray", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Allows spectators to see player glows. 1 = same team, 2 = both teams" );
 ConVar tf_spawn_glows_duration( "tf_spawn_glows_duration", "10", FCVAR_NOTIFY | FCVAR_REPLICATED, "How long should teammates glow after respawning\n" );
 
+ConVar tf_disable_holidays( "tf_disable_holidays", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Disables all holidays" );
+
 #ifdef GAME_DLL
 void cc_tf_forced_holiday_changed( IConVar *pConVar, const char *pOldString, float flOldValue )
 {
@@ -17059,7 +17061,8 @@ bool CTFGameRules::IsHolidayActive( /*EHoliday*/ int eHoliday ) const
 {
 	//if ( IsPVEModeActive() )
 	//	return false;
-
+	if (tf_disable_holidays.GetBool())
+		return false;
 	return TF_IsHolidayActive( eHoliday );
 }
 
