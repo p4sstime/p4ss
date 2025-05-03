@@ -643,15 +643,31 @@ void CTFHudPasstimeEventText::Tick()
 			DevMsg( "m_pBonusLabelShadow: %s", m_pBonusLabelShadow ? "true" : "false" );
 			if ( m_pTitleLabel && m_pTitleLabelShadow )
 			{
-				SetLabelText( m_pTitleLabel, msg.title );
-				P4ss::ColorTextP4ss( m_pTitleLabel->GetTextImage(), msg.title, msg.team);
-				SetLabelText( m_pTitleLabelShadow, msg.title );
+				CUtlVector<P4ss::ColorChange> colorChanges;
+				auto text = P4ss::GetColorChanges( msg.title, msg.team, colorChanges );
+				CUtlVector<P4ss::ColorChange> colorChangesShadow;
+				// we don't actually need the text from this iteration, but
+				// we still need the color changes
+				auto _shadow = P4ss::GetColorChangesShadow( msg.title, msg.team, colorChangesShadow );
+
+				SetLabelText( m_pTitleLabel, text.c_str() );
+				P4ss::SetColors( m_pTitleLabel->GetTextImage(), colorChanges );
+				SetLabelText( m_pTitleLabelShadow, text.c_str() );
+				P4ss::SetColors( m_pTitleLabelShadow->GetTextImage(), colorChangesShadow );
 			}
 			if ( m_pDetailLabel && m_pDetailLabelShadow)
 			{
-				SetLabelText( m_pDetailLabel, msg.detail );
-				P4ss::ColorTextP4ss( m_pDetailLabel->GetTextImage(), msg.detail, msg.team );
-				SetLabelText( m_pDetailLabelShadow, msg.detail );
+				CUtlVector<P4ss::ColorChange> colorChanges;
+				auto text = P4ss::GetColorChanges( msg.detail, msg.team, colorChanges );
+				CUtlVector<P4ss::ColorChange> colorChangesShadow;
+				// we don't actually need the text from this iteration, but
+				// we still need the color changes
+				auto _shadow = P4ss::GetColorChangesShadow( msg.detail, msg.team, colorChangesShadow );
+
+				SetLabelText( m_pDetailLabel, text.c_str() );
+				P4ss::SetColors( m_pDetailLabel->GetTextImage(), colorChanges );
+				SetLabelText( m_pDetailLabelShadow, text.c_str() );
+				P4ss::SetColors( m_pDetailLabelShadow->GetTextImage(), colorChangesShadow );
 			}
 			if ( m_pBonusLabel && m_pBonusLabelShadow )
 			{

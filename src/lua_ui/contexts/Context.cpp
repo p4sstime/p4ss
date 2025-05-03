@@ -45,7 +45,7 @@ void Context::Initialize()
 {
 	m_L.open_libraries( sol::lib::base, sol::lib::string, sol::lib::math, sol::lib::table, sol::lib::io, sol::lib::os );
 	LuaUiSystem()->RegisterLuaFunctions( m_L );
-	auto result = m_L.safe_script( loader_text );
+	auto result = m_L.safe_script( loader_text, "LOADER" );
 	if ( result.status() != sol::call_status::ok )
 	{
 		sol::error err = result;

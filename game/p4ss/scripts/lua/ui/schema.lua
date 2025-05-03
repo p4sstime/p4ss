@@ -54,5 +54,32 @@ vguiLabel = {
 	--- @param initialText string
 	--- @return vguiLabel
 	new = function(parent, name, initialText) end,
-	SetTextLocalized = function(self, text) end,
+	--- Text of this label.
+	--- If this is set and the first char is #, it will look up a localization key.
+	---
+	---
+	---Valve description:
+	---`Purpose: Take the string and looks it up in the localization file
+	---to convert it to unicode. Setting the text will not set the size of the label.
+	---Set the size explicitly or use sizeToContents()`
+	text = "",
+
+	--- Resize the label to fit its contents.
+	--- @param self vguiLabel
+	--- @return nil
+	SizeToContents = function(self) end,
+}
+
+--- Functions related to engine functionality.
+engine = {
+	--- Run a client cmd as if it was typed in the console.
+	--- This checks for FCVAR_CLIENTCMD_CAN_EXECUTE.
+	--- @param cmd string
+	--- @return nil
+	ClientCmd = function(cmd) end,
+	--- Run a client cmd as if it was typed in the console.
+	--- This does not check for FCVAR_CLIENTCMD_CAN_EXECUTE.
+	--- @param cmd string
+	--- @return nil
+	ClientCmd_Unrestricted = function(cmd) end,
 }

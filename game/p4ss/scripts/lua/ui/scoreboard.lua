@@ -9,12 +9,12 @@ function Update(frametime)
 end
 
 function Special_ShowPanel(new_visibility)
-	ConMsg("Type: ", type(new_visibility))
 	testLabel:SetVisible(new_visibility)
 end
 
 function Init(parent)
 	testLabel = vguiLabel.new(parent, "testLabel", "wtv")
-	testLabel:SetTextLocalized("avg is fat")
+	testLabel.text = "avg is fat and gay!"
+	testLabel:SizeToContents()
 	ConMsg("scoreboard.lua: Init called")
 end

@@ -11,6 +11,8 @@
 #ifndef SOL_ALL_SAFETIES_ON
 #define SOL_ALL_SAFETIES_ON 1
 #endif
+
+#include "utllinkedlist.h"
 #include "lua_ui/c_luaui.h"
 #include "dbg.h"
 #include "lua.hpp"
@@ -83,19 +85,35 @@ void CLuaUiSystem::RegisterLuaFunctions(sol::state &L)
 		"SetVisible", &vgui::Panel::SetVisible,
 		"SetPos", &vgui::Panel::SetPos,
 		"SetSize", &vgui::Panel::SetSize,
+
 		"GetParent", &vgui::Panel::GetParent
 	);
+
+	auto engine_table = L.create_named_table("engine");
+
+	engine_table["ClientCmd_Unrestricted"] = [](const std::string cmd) {
+		engine->ClientCmd_Unrestricted(cmd.c_str());
+	};
+	engine_table["ClientCmd"] = [](const std::string cmd) {
+		engine->ClientCmd(cmd.c_str());
+	};
 
 	sol::usertype<vgui::Label> label_type = L.new_usertype<vgui::Label>(
 		"vguiLabel",
 		sol::constructors<vgui::Label(vgui::Panel*, const char*, const char*)>(),
-		sol::base_classes, sol::bases<vgui::Panel>()
+		sol::base_classes, sol::bases<vgui::Panel>(),
+		"text", sol::property(
+			[](vgui::Label& self) {
+				char text[256] = {0};
+				self.GetText(text, sizeof(text));
+				return std::string(text);
+			},
+			[](vgui::Label& self, std::string text) {
+				self.SetText(text.c_str());
+			}
+		),
+		"SizeToContents", &vgui::Label::SizeToContents
 	);
-
-	label_type["SetTextLocalized"] = [](vgui::Label& self, const std::string& text) {
-		self.SetText(text.c_str());
-	};
-	
 
 }
 
