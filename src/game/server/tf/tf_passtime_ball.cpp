@@ -30,6 +30,8 @@ static const float s_flPickupDist = 1000.f;
 static const float s_flBlockDist = 30.0f;
 static const float s_flClearDist = 50.0f;
 static const char *s_pHalloweenBallModel = "models/passtime/ball/passtime_ball_halloween.mdl";
+void OnTrailChanged( IConVar *var, const char *pOldValue, float flOldValue );
+ConVar pf_trail( "pf_trail", "", FCVAR_ARCHIVE, "Sets the trail effect for the passtime ball.", OnTrailChanged );
 
 //-----------------------------------------------------------------------------
 static objectparams_t SBallVPhysicsObjectParams()
@@ -129,12 +131,47 @@ CPasstimeBall::CPasstimeBall()
 	m_bPanacea = true;
 }
 
+static const char* FormatTrailPath(const char* trailName, const char* suffix)
+{
+    static char fullPath[256];
+    const char* defaultFolder = "trails/";
+    const char* basePath;
+
+    if (!trailName || strlen(trailName) == 0)
+    {
+        basePath = "trails/default";
+    }
+    else if (strnicmp(trailName, defaultFolder, strlen(defaultFolder)) != 0)
+    {
+        snprintf(fullPath, sizeof(fullPath), "%s%s", defaultFolder, trailName);
+        basePath = fullPath;
+    }
+	else
+	{
+		basePath = trailName;
+	}
+
+	if (suffix)
+	{
+		static char suffixPath[512];
+		snprintf(suffixPath, sizeof(suffixPath), "%s_%s.vmt", basePath, suffix);
+		return suffixPath;
+	}
+    
+    return basePath;
+}
+
 //-----------------------------------------------------------------------------
 void CPasstimeBall::Precache()
 {
-	PrecacheModel( "passtime/passtime_balltrail_red.vmt" );
-	PrecacheModel( "passtime/passtime_balltrail_blu.vmt" );
-	PrecacheModel( "passtime/passtime_balltrail_unassigned.vmt" );
+	//PrecacheModel( "passtime/passtime_balltrail_red.vmt" );
+	//PrecacheModel( "passtime/passtime_balltrail_blu.vmt" );
+	//PrecacheModel( "passtime/passtime_balltrail_unassigned.vmt" );
+	PrecacheModel(FormatTrailPath(pf_trail.GetString(), "r"));
+	PrecacheModel(FormatTrailPath(pf_trail.GetString(), "b"));
+	PrecacheModel(FormatTrailPath(pf_trail.GetString(), "n"));
+	//p4ss: precache each team color trail vmt based on console input
+
 	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
 	{
 		PrecacheModel( s_pHalloweenBallModel );
@@ -189,16 +226,19 @@ int CPasstimeBall::GetCarryDuration() const
 		: 0;
 }
 
-
 //-----------------------------------------------------------------------------
 static const char *GetTrailEffectForTeam( int iTeam )
 {
-	switch ( iTeam ) 
-	{
-	case TF_TEAM_RED: return "passtime/passtime_balltrail_red.vmt";
-	case TF_TEAM_BLUE: return "passtime/passtime_balltrail_blu.vmt";
-	default: return "passtime/passtime_balltrail_unassigned.vmt";
-	};
+
+    switch ( iTeam ) 
+    {
+    case TF_TEAM_RED:
+		return FormatTrailPath( pf_trail.GetString(), "r" );
+    case TF_TEAM_BLUE:
+		return FormatTrailPath( pf_trail.GetString(), "b" );
+    default:
+		return FormatTrailPath( pf_trail.GetString(), "n" );
+    };
 }
 
 //-----------------------------------------------------------------------------
@@ -1622,4 +1662,13 @@ void CPasstimeBall::KillMagnetSound()
 		CSoundEnvelopeController::GetController().SoundDestroy( 0 );
 		m_pCloseToTarget = 0;
 	}
+}
+void OnTrailChanged( IConVar *var, const char *pOldValue, float flOldValue )
+{
+	CPasstimeBall *pBall = dynamic_cast<CPasstimeBall*>(gEntList.FindEntityByClassname(NULL, "passtime_ball"));
+    if (pBall)
+    {
+        pBall->Precache();
+		pBall->ResetTrail();
+    }
 }
