@@ -17,6 +17,7 @@
 #include "tf_playerclass.h"
 #include "tf_team.h"
 #include "tf_gamestats.h"
+#include "ilagcompensationmanager.h"
 #else // !GAME_DLL
 #include "c_tf_passtime_logic.h"
 #include "c_tf_passtime_ball.h"
@@ -399,6 +400,10 @@ bool CPasstimeGun::SendWeaponAnim( int actBase )
 	return BaseClass::SendWeaponAnim( actBase );
 }
 
+#ifdef GAME_DLL
+static ConVar pass_fortress_lag_compensate_throw("pass_fortress_lag_compensate_throw", "0");
+#endif
+
 //-----------------------------------------------------------------------------
 void CPasstimeGun::ItemPostFrame()
 {
@@ -425,6 +430,8 @@ void CPasstimeGun::ItemPostFrame()
 	}
 
 #ifdef GAME_DLL
+	if (pass_fortress_lag_compensate_throw.GetBool())
+		lagcompensation->StartLagCompensation( pOwner, pOwner->GetCurrentCommand() );
 
 	//
 	// Update pass target
@@ -561,6 +568,8 @@ void CPasstimeGun::ItemPostFrame()
 				filter.RemoveAllRecipients();
 				filter.AddRecipient( pCurrentTarget );
 				EmitSound( filter, pCurrentTarget->entindex(), kTargetHightlightSound );
+				
+				Msg("Running at %d, buttons: %d\n", gpGlobals->tickcount, pOwner->m_afButtonPressed);
 			}
 		}
 		//
@@ -778,6 +787,9 @@ void CPasstimeGun::ItemPostFrame()
 	{
 		pOwner->SetFiredWeapon( true ); // not sure what this does, exactly, but it seems important
 	}
+#else
+	if (pass_fortress_lag_compensate_throw.GetBool())
+		lagcompensation->FinishLagCompensation( pOwner );
 #endif
 }
 
