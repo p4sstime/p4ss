@@ -432,6 +432,7 @@ void CPasstimeGun::ItemPostFrame()
 #ifdef GAME_DLL
 	if (pass_fortress_lag_compensate_throw.GetBool())
 		lagcompensation->StartLagCompensation( pOwner, pOwner->GetCurrentCommand() );
+#endif
 
 	//
 	// Update pass target
@@ -560,6 +561,8 @@ void CPasstimeGun::ItemPostFrame()
 				pCurrentTarget = pNewTarget;
 
 				// play the lock-on sound for the player
+				// FIXME: This should be on the client -- on the server only because that's what was originally here (before sharing it for prediction).
+#ifdef GAME_DLL
 				CRecipientFilter filter;
 				filter.AddRecipient( pOwner );
 				EmitSound( filter, pOwner->entindex(), kTargetHightlightSound );
@@ -570,6 +573,7 @@ void CPasstimeGun::ItemPostFrame()
 				EmitSound( filter, pCurrentTarget->entindex(), kTargetHightlightSound );
 				
 				Msg("Running at %d, buttons: %d\n", gpGlobals->tickcount, pOwner->m_afButtonPressed);
+#endif
 			}
 		}
 		//
@@ -606,7 +610,6 @@ void CPasstimeGun::ItemPostFrame()
 		pOwner->m_Shared.SetPasstimePassTarget( 0 );
 		m_flTargetResetTime = 0;
 	}
-#endif
 
 	//
 	// Update throw state
