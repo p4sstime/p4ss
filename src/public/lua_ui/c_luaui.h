@@ -30,6 +30,16 @@ public:
 	void RegisterNewItem( lui::Context* panel );
 	void DeregisterItem( lui::Context* panel );
 	void ReloadAll();
+	lui::Context* GetFirstChildContext( vgui::Panel* parent )
+	{
+		FOR_EACH_LL(m_Panels, idx)
+		{
+			lui::Context* panel = m_Panels[idx];
+			if (panel->GetParent() == parent)
+				return panel;
+		}
+		return NULL;
+	}
 
 	void Test();
 

@@ -15,7 +15,12 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty;$SRCDIR\thirdparty\cef;$GENERATED_PROTO_DIR"
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty;$SRCDIR\thirdparty\cef;$GENERATED_PROTO_DIR;$SRCDIR\game\shared;$SRCDIR\game\client"
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\luajit\src;$SRCDIR\thirdparty\sol2" [$LUAJIT]
+		$PreprocessorDefinitions		"$BASE;LUAUI;CLIENT_DLL" [$LUAJIT]
+		$Create/UsePrecompiledHeader	"Use Precompiled Header (/Yu)" [$LUAJIT]
+		$Create/UsePCHThroughFile		"$SRCDIR\game\client\cbase.h" [$LUAJIT]
+		$PrecompiledHeaderFile			"$(IntDir)/client.pch" [$LUAJIT]
 	}
 }
 

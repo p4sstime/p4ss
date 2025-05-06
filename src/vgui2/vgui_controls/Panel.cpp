@@ -44,6 +44,10 @@
 
 #include "tier0/vprof.h"
 
+#ifdef LUAUI
+#include "lua_ui/c_luaui.h"
+#endif
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
 
@@ -788,6 +792,18 @@ Panel::~Panel()
 			ipanel()->SetParent(child, NULL);
 		}
 	}
+
+#ifdef LUAUI
+
+	// P4SS: Lucy
+	// Remove any child contexts in LuaUI that may be depending on this panel
+	lui::Context* cont = LuaUiSystem()->GetFirstChildContext( this );
+	for (; cont != NULL; cont = LuaUiSystem()->GetFirstChildContext( this ))
+	{
+		LuaUiSystem()->DeregisterItem( cont );
+	}
+
+#endif
 
 	// delete VPanel
 	ivgui()->FreePanel(_vpanel);
@@ -2345,6 +2361,9 @@ void Panel::ReloadKeyBindings()
 	LoadKeyBindingsForOnePanel( GetKeyBindingsContext(), this );
 }
 
+#ifdef MAKE_STRING
+#undef MAKE_STRING
+#endif
 #define MAKE_STRING( x )	#x
 #define KEY_NAME( str, disp )	{ KEY_##str, MAKE_STRING( KEY_##str ), disp }
 
