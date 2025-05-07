@@ -28,7 +28,11 @@ ConVar cl_crosshair_blue( "cl_crosshair_blue", "200", FCVAR_ARCHIVE );
 ConVar cl_crosshair_file( "cl_crosshair_file", "", FCVAR_ARCHIVE );
 
 ConVar cl_crosshair_scale( "cl_crosshair_scale", "32.0", FCVAR_ARCHIVE );
-ConVar pf_crosshair_ballindicator( "pf_crosshair_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable the ball indicator on the crosshair." );
+
+ConVar pf_ballindicator( "pf_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable the HUD indicator when holding the ball." );
+ConVar pf_ballindicator_file( "pf_ballindicator_file", "vgui/crosshairs/ballindicator", FCVAR_ARCHIVE, "Change the material for the HUD indicator when holding the ball." );
+//void OnCrosshairSettingsChanged(IConVar* pConVar, const char* pOldValue, float flOldValue);
+
 using namespace vgui;
 
 // Everything else is expecting to find "CHudCrosshair"
@@ -220,23 +224,29 @@ void CHudTFCrosshair::Paint()
 	int iHeight = (int)( flHeight + 0.5f );
 	int iX = (int)( x + 0.5f );
 	int iY = (int)( y + 0.5f );
-	const char *ballindicatorfile = "vgui/crosshairs/ballindicator";
+
 	if ( pWeapon )
 	{
 		pWeapon->GetWeaponCrosshairScale( flWeaponScale );
-		if ( (dynamic_cast<C_PasstimeGun*>(pWeapon)) && (pf_crosshair_ballindicator.GetBool()) )
+
+		bool bShouldDrawBallIndicator = pf_ballindicator.GetBool();
+		if ( bShouldDrawBallIndicator ) 
 		{
-			if ( m_iBallIndicatorTextureID != -1 )
+			if ( pPlayer->m_Shared.HasPasstimeBall())
 			{
-				pSurf->DrawSetTextureFile( m_iBallIndicatorTextureID, ballindicatorfile, true, false );
+				const char *ballindicatorfile = pf_ballindicator_file.GetString();
+
+				if ( m_iBallIndicatorTextureID != -1 )
+				{
+					pSurf->DrawSetTextureFile( m_iBallIndicatorTextureID, ballindicatorfile, true, false );
+				}
+
+				pSurf->DrawSetColor( clr );
+				pSurf->DrawSetTexture( m_iBallIndicatorTextureID );
+				pSurf->DrawTexturedRect( iX-iWidth, iY-iHeight, iX+iWidth, iY+iHeight );
+				pSurf->DrawSetTexture(0);
 			}
-
-			pSurf->DrawSetColor( clr );
-			pSurf->DrawSetTexture( m_iBallIndicatorTextureID );
-			pSurf->DrawTexturedRect( iX-iWidth, iY-iHeight, iX+iWidth, iY+iHeight );
-			pSurf->DrawSetTexture(0);
 		}
-
 	}
 	
 	pSurf->DrawSetColor( clr );
@@ -246,5 +256,3 @@ void CHudTFCrosshair::Paint()
 
 
 }
-
-
