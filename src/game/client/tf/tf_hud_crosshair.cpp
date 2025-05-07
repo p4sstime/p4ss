@@ -21,14 +21,16 @@
 #include "mathlib/mathlib.h"
 #include "tf_weapon_passtime_gun.h"
 
-ConVar cl_crosshair_red( "cl_crosshair_red", "200", FCVAR_ARCHIVE );
-ConVar cl_crosshair_green( "cl_crosshair_green", "200", FCVAR_ARCHIVE );
-ConVar cl_crosshair_blue( "cl_crosshair_blue", "200", FCVAR_ARCHIVE );
+//ConVar cl_crosshair_red( "cl_crosshair_red", "200", FCVAR_ARCHIVE );
+//ConVar cl_crosshair_green( "cl_crosshair_green", "200", FCVAR_ARCHIVE );
+//ConVar cl_crosshair_blue( "cl_crosshair_blue", "200", FCVAR_ARCHIVE );
 
 ConVar cl_crosshair_file( "cl_crosshair_file", "", FCVAR_ARCHIVE );
 
 ConVar cl_crosshair_scale( "cl_crosshair_scale", "32.0", FCVAR_ARCHIVE );
 
+void OnCrosshairColorChanged( IConVar *var, const char *pOldValue, float flOldValue );
+ConVar cl_crosshaircolor( "cl_crosshaircolor", "200 200 200", FCVAR_ARCHIVE, "Crosshair color in RGB format (\"r g b\")", OnCrosshairColorChanged );
 ConVar pf_ballindicator( "pf_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable the HUD indicator when holding the ball." );
 ConVar pf_ballindicator_file( "pf_ballindicator_file", "vgui/crosshairs/ballindicator", FCVAR_ARCHIVE, "Change the material for the HUD indicator when holding the ball." );
 //void OnCrosshairSettingsChanged(IConVar* pConVar, const char* pOldValue, float flOldValue);
@@ -213,7 +215,10 @@ void CHudTFCrosshair::Paint()
 
 	float flPlayerScale = 1.0f;
 #ifdef TF_CLIENT_DLL
-	Color clr( cl_crosshair_red.GetInt(), cl_crosshair_green.GetInt(), cl_crosshair_blue.GetInt(), 255 );
+	//Color clr( cl_crosshair_red.GetInt(), cl_crosshair_green.GetInt(), cl_crosshair_blue.GetInt(), 255 );
+    int r = 200, g = 200, b = 200;
+	sscanf( cl_crosshaircolor.GetString(), "%d %d %d", &r, &g, &b );
+	Color clr( r, g, b, 255 );
 	flPlayerScale = cl_crosshair_scale.GetFloat() / 32.0f;  // the player can change the scale in the options/multiplayer tab
 #else
 	Color clr = m_clrCrosshair;
@@ -255,4 +260,16 @@ void CHudTFCrosshair::Paint()
 	pSurf->DrawSetTexture(0);
 
 
+}
+
+void OnCrosshairColorChanged( IConVar *var, const char *pOldValue, float flOldValue )
+{
+    int r = 200, g = 200, b = 200;
+    const char *value = ((ConVar*)var)->GetString();
+    sscanf( value, "%d %d %d", &r, &g, &b );
+    
+    // Clamp values
+    r = clamp( r, 0, 255 );
+    g = clamp( g, 0, 255 );
+    b = clamp( b, 0, 255 );
 }
