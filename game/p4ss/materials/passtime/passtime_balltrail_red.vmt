@@ -2,7 +2,7 @@
 {
 	"$basetexture" "trails/default"
 	"$translucent" "1"
-	"$color2" "[1 .08 .08]"
+	"$color2" "[1 .18 .18]"
 	"$vertexalpha" "1"
 	"$vertexcolor" "1"
 }
