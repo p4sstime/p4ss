@@ -31,7 +31,7 @@ ConVar cl_crosshair_file( "cl_crosshair_file", "", FCVAR_ARCHIVE );
 ConVar cl_crosshair_scale( "cl_crosshair_scale", "32.0", FCVAR_ARCHIVE );
 
 void OnCrosshairColorChanged( IConVar *var, const char *pOldValue, float flOldValue );
-ConVar cl_crosshaircolor( "cl_crosshaircolor", "200 200 200", FCVAR_ARCHIVE, "Crosshair color in RGB format (\"r g b\")", OnCrosshairColorChanged );
+ConVar cl_crosshair_color( "cl_crosshair_color", "200 200 200", FCVAR_ARCHIVE, "Crosshair color in RGB format (\"r g b\")", OnCrosshairColorChanged );
 ConVar pf_ballindicator( "pf_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable the HUD indicator when holding the ball." );
 ConVar pf_ballindicator_file( "pf_ballindicator_file", "vgui/crosshairs/ballindicator", FCVAR_ARCHIVE, "Change the material for the HUD indicator when holding the ball." );
 ConVar pf_ballindicator_color( "pf_ballindicator_color", "255 255 255", FCVAR_ARCHIVE, "Change the color of the HUD indicator when holding the ball.", OnCrosshairColorChanged );
@@ -220,7 +220,7 @@ void CHudTFCrosshair::Paint()
 #ifdef TF_CLIENT_DLL
 	//Color clr( cl_crosshair_red.GetInt(), cl_crosshair_green.GetInt(), cl_crosshair_blue.GetInt(), 255 );
     int r = 200, g = 200, b = 200;
-	sscanf( cl_crosshaircolor.GetString(), "%d %d %d", &r, &g, &b );
+	sscanf( cl_crosshair_color.GetString(), "%d %d %d", &r, &g, &b );
 	Color clr( r, g, b, 255 );
 	sscanf( pf_ballindicator_color.GetString(), "%d %d %d", &r, &g, &b );
 	Color clrbi( r, g, b, 255 );
