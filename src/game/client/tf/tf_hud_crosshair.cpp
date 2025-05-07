@@ -19,6 +19,7 @@
 #include "tf_logic_halloween_2014.h"
 #include "tf_gamerules.h"
 #include "mathlib/mathlib.h"
+#include "tf_weapon_passtime_gun.h"
 
 ConVar cl_crosshair_red( "cl_crosshair_red", "200", FCVAR_ARCHIVE );
 ConVar cl_crosshair_green( "cl_crosshair_green", "200", FCVAR_ARCHIVE );
@@ -27,7 +28,7 @@ ConVar cl_crosshair_blue( "cl_crosshair_blue", "200", FCVAR_ARCHIVE );
 ConVar cl_crosshair_file( "cl_crosshair_file", "", FCVAR_ARCHIVE );
 
 ConVar cl_crosshair_scale( "cl_crosshair_scale", "32.0", FCVAR_ARCHIVE );
-
+ConVar pf_crosshair_ballindicator( "pf_crosshair_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable the ball indicator on the crosshair." );
 using namespace vgui;
 
 // Everything else is expecting to find "CHudCrosshair"
@@ -41,6 +42,7 @@ CHudTFCrosshair::CHudTFCrosshair( const char *pName ) :
 {
 	m_szPreviousCrosshair[0] = '\0';
 	m_iCrosshairTextureID = -1;
+	m_iBallIndicatorTextureID = -1;
 	m_flTimeToHideUntil = -1.f;
 
 	ListenForGameEvent( "restart_timer_time" );
@@ -55,6 +57,11 @@ CHudTFCrosshair::~CHudTFCrosshair( void )
 	{
 		vgui::surface()->DestroyTextureID( m_iCrosshairTextureID );
 		m_iCrosshairTextureID = -1;
+		if ( m_iBallIndicatorTextureID != -1 )
+		{
+			vgui::surface()->DestroyTextureID( m_iBallIndicatorTextureID );
+			m_iBallIndicatorTextureID = -1;
+		}
 	}
 }
 
@@ -111,6 +118,11 @@ void CHudTFCrosshair::Init()
 	if ( m_iCrosshairTextureID == -1 )
 	{
 		m_iCrosshairTextureID = vgui::surface()->CreateNewTextureID();
+	}
+
+	if ( m_iBallIndicatorTextureID == -1 )
+	{
+		m_iBallIndicatorTextureID = vgui::surface()->CreateNewTextureID();
 	}
 
 	m_flTimeToHideUntil = -1.f;
@@ -172,6 +184,8 @@ void CHudTFCrosshair::Paint()
 		Q_strncpy( m_szPreviousCrosshair, crosshairfile, sizeof(m_szPreviousCrosshair) );
 	}
 
+	
+
 	if ( m_szPreviousCrosshair[0] == '\0' )
 	{
 		return BaseClass::Paint();
@@ -190,10 +204,8 @@ void CHudTFCrosshair::Paint()
 	int iTextureW = 32;
 	int iTextureH = 32;
 	C_BaseCombatWeapon *pWeapon = pPlayer->GetActiveWeapon();
-	if ( pWeapon )
-	{
-		pWeapon->GetWeaponCrosshairScale( flWeaponScale );
-	}
+	vgui::ISurface *pSurf = vgui::surface();
+
 
 	float flPlayerScale = 1.0f;
 #ifdef TF_CLIENT_DLL
@@ -208,12 +220,31 @@ void CHudTFCrosshair::Paint()
 	int iHeight = (int)( flHeight + 0.5f );
 	int iX = (int)( x + 0.5f );
 	int iY = (int)( y + 0.5f );
+	const char *ballindicatorfile = "vgui/crosshairs/ballindicator";
+	if ( pWeapon )
+	{
+		pWeapon->GetWeaponCrosshairScale( flWeaponScale );
+		if ( (dynamic_cast<C_PasstimeGun*>(pWeapon)) && (pf_crosshair_ballindicator.GetBool()) )
+		{
+			if ( m_iBallIndicatorTextureID != -1 )
+			{
+				pSurf->DrawSetTextureFile( m_iBallIndicatorTextureID, ballindicatorfile, true, false );
+			}
 
-	vgui::ISurface *pSurf = vgui::surface();
+			pSurf->DrawSetColor( clr );
+			pSurf->DrawSetTexture( m_iBallIndicatorTextureID );
+			pSurf->DrawTexturedRect( iX-iWidth, iY-iHeight, iX+iWidth, iY+iHeight );
+			pSurf->DrawSetTexture(0);
+		}
+
+	}
+	
 	pSurf->DrawSetColor( clr );
 	pSurf->DrawSetTexture( m_iCrosshairTextureID );
 	pSurf->DrawTexturedRect( iX-iWidth, iY-iHeight, iX+iWidth, iY+iHeight );
 	pSurf->DrawSetTexture(0);
+
+
 }
 
 
