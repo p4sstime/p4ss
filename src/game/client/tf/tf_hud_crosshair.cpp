@@ -36,6 +36,7 @@ ConVar pf_ballindicator( "pf_ballindicator", "1", FCVAR_ARCHIVE, "Enable/disable
 ConVar pf_ballindicator_file( "pf_ballindicator_file", "vgui/crosshairs/ballindicator", FCVAR_ARCHIVE, "Change the material for the HUD indicator when holding the ball." );
 ConVar pf_ballindicator_color( "pf_ballindicator_color", "255 255 255", FCVAR_ARCHIVE, "Change the color of the HUD indicator when holding the ball.", OnCrosshairColorChanged );
 ConVar pf_ballindicator_teamcolored( "pf_ballindicator_teamcolored", "1", FCVAR_ARCHIVE, "Overrides the color of the HUD indicator when holding the ball to always use your team's color." );
+ConVar pf_ballindicator_scale( "pf_ballindicator_scale", "1.0", FCVAR_ARCHIVE, "Scale factor of the HUD indicator when holding the ball." );
 using namespace vgui;
 
 // Everything else is expecting to find "CHudCrosshair"
@@ -215,6 +216,7 @@ void CHudTFCrosshair::Paint()
 
 
 	float flPlayerScale = 1.0f;
+	float flBallIndicatorScale = 1.0f;
 #ifdef TF_CLIENT_DLL
 	//Color clr( cl_crosshair_red.GetInt(), cl_crosshair_green.GetInt(), cl_crosshair_blue.GetInt(), 255 );
     int r = 200, g = 200, b = 200;
@@ -223,14 +225,19 @@ void CHudTFCrosshair::Paint()
 	sscanf( pf_ballindicator_color.GetString(), "%d %d %d", &r, &g, &b );
 	Color clrbi( r, g, b, 255 );
 	flPlayerScale = cl_crosshair_scale.GetFloat() / 32.0f;  // the player can change the scale in the options/multiplayer tab
+	flBallIndicatorScale = pf_ballindicator_scale.GetFloat(); // the player can change the scale in the options/multiplayer tab
 #else
 	Color clr = m_clrCrosshair;
 	Color clrbi = m_clrCrosshair;
 #endif
 	float flWidth = flWeaponScale * flPlayerScale * (float)iTextureW;
 	float flHeight = flWeaponScale * flPlayerScale * (float)iTextureH;
+	float flBallIndicatorWidth = flBallIndicatorScale * (float)iTextureW;
+	float flBallIndicatorHeight = flBallIndicatorScale * (float)iTextureH;
 	int iWidth = (int)( flWidth + 0.5f );
 	int iHeight = (int)( flHeight + 0.5f );
+	int iBallIndicatorWidth = (int)( flBallIndicatorWidth + 0.5f );
+	int iBallIndicatorHeight = (int)( flBallIndicatorHeight + 0.5f );
 	int iX = (int)( x + 0.5f );
 	int iY = (int)( y + 0.5f );
 
@@ -258,7 +265,7 @@ void CHudTFCrosshair::Paint()
 				}
 				pSurf->DrawSetColor( clrbi );
 				pSurf->DrawSetTexture( m_iBallIndicatorTextureID );
-				pSurf->DrawTexturedRect( iX-iWidth, iY-iHeight, iX+iWidth, iY+iHeight );
+				pSurf->DrawTexturedRect( iX-iBallIndicatorWidth, iY-iBallIndicatorHeight, iX+iBallIndicatorWidth, iY+iBallIndicatorHeight );
 				pSurf->DrawSetTexture(0);
 			}
 		}
