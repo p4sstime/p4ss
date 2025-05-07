@@ -20,7 +20,7 @@
 
 // The team colors from g_PR are wrong and I couldn't fix that fast enough.
 // These colors were sampled from HUD art.
-static Color GetTeamColor( int iTeam )
+Color GetTeamColor( int iTeam )
 {
 	switch( iTeam )
 	{
@@ -627,18 +627,10 @@ void C_PasstimeBounceReticle::Show( const Vector &vec, const Vector &normal )
 	}
 	if ( pf_crosshair_inner_teamcolored.GetBool() )
 	{
-		if ( nTeamNumber == TF_TEAM_RED )
+		if ( nTeamNumber )
 		{
-			SetRgba( 0, 192, 28, 0, pf_crosshair_inner_a.GetInt() );
-		}
-		else if ( nTeamNumber == TF_TEAM_BLUE )
-		{
-			SetRgba( 0, 33, 140, 255, pf_crosshair_inner_a.GetInt() );
-		}
-		else
-		{
-			// fallback
-			SetRgba( 0, 255, 255, 0, pf_crosshair_inner_a.GetInt() );
+		Color teamColor = GetTeamColor( nTeamNumber );
+		SetRgba( 0, teamColor.r(), teamColor.g(), teamColor.b(), pf_crosshair_inner_a.GetInt() );
 		}
 	}
 	else
@@ -648,18 +640,10 @@ void C_PasstimeBounceReticle::Show( const Vector &vec, const Vector &normal )
 	
 	if ( pf_crosshair_outer_teamcolored.GetBool() )
 	{
-		if ( nTeamNumber == TF_TEAM_RED )
+		if ( nTeamNumber )
 		{
-			SetRgba( 1, 192, 28, 0, pf_crosshair_outer_a.GetInt() );
-		}
-		else if ( nTeamNumber == TF_TEAM_BLUE )
-		{
-			SetRgba( 1, 33, 140, 255, pf_crosshair_outer_a.GetInt() );
-		}
-		else
-		{
-			// fallback
-			SetRgba( 1, 255, 255, 0, pf_crosshair_outer_a.GetInt() );
+		Color teamColor = GetTeamColor( nTeamNumber );
+		SetRgba( 1, teamColor.r(), teamColor.g(), teamColor.b(), pf_crosshair_inner_a.GetInt() );
 		}
 	}
 	else
