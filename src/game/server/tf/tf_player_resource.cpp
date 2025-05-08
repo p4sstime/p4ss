@@ -17,11 +17,20 @@
 #include "player_vs_environment/tf_population_manager.h"
 #include "tf_gc_server.h"
 
+// ConVars needed for respawn time calculations
+extern ConVar spec_freeze_traveltime;
+extern ConVar spec_freeze_time;
+extern ConVar mp_disable_respawn_times;
+
 #define STATS_SEND_FREQUENCY 1.f
 
 // Datatable
 IMPLEMENT_SERVERCLASS_ST( CTFPlayerResource, DT_TFPlayerResource )
 	SendPropArray3( SENDINFO_ARRAY3( m_iTotalScore ), SendPropInt( SENDINFO_ARRAY( m_iTotalScore ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssScores ), SendPropInt( SENDINFO_ARRAY( m_iP4ssScores ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssAssists ), SendPropInt( SENDINFO_ARRAY( m_iP4ssAssists ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssSaves ), SendPropInt( SENDINFO_ARRAY( m_iP4ssSaves ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssIntercepts ), SendPropInt( SENDINFO_ARRAY( m_iP4ssIntercepts ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iMaxHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iMaxBuffedHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxBuffedHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerClass ), SendPropInt( SENDINFO_ARRAY( m_iPlayerClass ), 5, SPROP_UNSIGNED ) ),
@@ -228,6 +237,14 @@ void CTFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer 
 			m_iBonusPoints.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_BONUS_POINTS] );
 			m_iPlayerLevel.Set( iIndex, pTFPlayer->GetExperienceLevel() );
 		}
+
+		if ( TFGameRules()->IsPasstimeMode() )
+		{
+			m_iP4ssScores.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SCORES] );
+			m_iP4ssAssists.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_ASSISTS] );
+			m_iP4ssSaves.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SAVES] );
+			m_iP4ssIntercepts.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_INTERCEPTS] );
+		}
 	}
 
 	m_iMaxHealth.Set( iIndex, pTFPlayer->GetMaxHealth() );
@@ -255,6 +272,7 @@ void CTFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer 
 		}
 	}
 		
+	
 	m_iTotalScore.Set( iIndex, iTotalScore );
 	m_bArenaSpectator.Set( iIndex, pTFPlayer->IsArenaSpectator() );
 
@@ -269,6 +287,15 @@ void CTFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer 
 	}
 
 	float flRespawnTime = pTFPlayer->IsAlive() ? 0 : TFGameRules()->GetNextRespawnWave( pTFPlayer->GetTeamNumber(), pTFPlayer );
+
+	if ( !pTFPlayer->IsAlive() && flRespawnTime <= gpGlobals->curtime && !mp_disable_respawn_times.GetBool() )
+	{
+		float flDeathAnimTime = 2.0f + spec_freeze_traveltime.GetFloat() + spec_freeze_time.GetFloat();
+		float flMinRespawnTime = pTFPlayer->GetDeathTime() + flDeathAnimTime;
+		
+		if ( flMinRespawnTime > gpGlobals->curtime ) flRespawnTime = flMinRespawnTime;
+	}
+
 	if ( pTFPlayer->GetRespawnTimeOverride() != -1.f )
 	{
 		flRespawnTime = pTFPlayer->GetDeathTime() + pTFPlayer->GetRespawnTimeOverride();
@@ -397,6 +424,10 @@ void CTFPlayerResource::Init( int iIndex )
 	m_iPlayerClassWhenKilled.Set( iIndex, TF_CLASS_UNDEFINED );
 	m_iConnectionState.Set( iIndex, MM_DISCONNECTED );
 	m_bValid.Set( iIndex, 0 );
+	m_iP4ssScores.Set( iIndex, 0 );
+	m_iP4ssAssists.Set( iIndex, 0 );
+	m_iP4ssSaves.Set( iIndex, 0 );
+	m_iP4ssIntercepts.Set( iIndex, 0 );
 }
 
 //-----------------------------------------------------------------------------

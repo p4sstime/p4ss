@@ -17,6 +17,7 @@
 
 //-----------------------------------------------------------------------------
 CFXQuad *CreateReticleSprite( const char *pModelName, float scale, float spinSpeed );
+Color GetTeamColor( int iTeam );
 class C_FuncPasstimeGoal;
 
 //-----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ class C_PasstimeReticle
 public:
 	virtual ~C_PasstimeReticle();
 	void OnClientThink();
+	virtual void ReloadSprites(); //added a virtual method for updating crosshairs
 
 protected:
 	C_PasstimeReticle() {}
@@ -56,8 +58,11 @@ class C_PasstimeBallReticle : public C_PasstimeReticle
 {
 public:
 	C_PasstimeBallReticle();
+	virtual void ReloadSprites() OVERRIDE;
+
 private:
 	virtual bool Update() OVERRIDE;
+	void InitializeSprites();
 };
 
 //-----------------------------------------------------------------------------
@@ -75,11 +80,13 @@ class C_PasstimePassReticle : public C_PasstimeReticle
 {
 public:
 	C_PasstimePassReticle();
+	virtual void ReloadSprites() OVERRIDE;
 private:
 	virtual bool Update() OVERRIDE;
 	void FindPassHintTarget( C_TFPlayer *pLocalPlayer );
 	float m_flTargetScore;
 	CHandle<C_BaseEntity> m_hTarget;
+	void InitializeSprites();
 };
 
 //-----------------------------------------------------------------------------
@@ -89,8 +96,10 @@ public:
 	C_PasstimeBounceReticle();
 	void Show( const Vector& pos, const Vector& normal );
 	void Hide();
+	virtual void ReloadSprites() OVERRIDE;
 private:
 	virtual bool Update() OVERRIDE;
+	void InitializeSprites();
 };
 
 //-----------------------------------------------------------------------------
@@ -98,9 +107,11 @@ class C_PasstimePlayerReticle : public C_PasstimeReticle
 {
 public:
 	C_PasstimePlayerReticle( C_TFPlayer *pPlayer );
+	virtual void ReloadSprites() OVERRIDE;
 private:
 	virtual bool Update() OVERRIDE;
 	CHandle<C_TFPlayer> m_hPlayer;
+	void InitializeSprites();
 };
 
 //-----------------------------------------------------------------------------
