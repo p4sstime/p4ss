@@ -82,6 +82,9 @@
 #include "weapon_physcannon.h"
 #endif
 
+// ConVar for suicide cooldown time (in seconds)
+ConVar sv_limit_suicide_rate( "sv_limit_suicide_rate", "0.0", FCVAR_REPLICATED, "The cooldown time in seconds between player suicides. Set to 0 to disable the cooldown." );
+
 ConVar autoaim_max_dist( "autoaim_max_dist", "2160" ); // 2160 = 180 feet
 ConVar autoaim_max_deflect( "autoaim_max_deflect", "0.99" );
 
@@ -5440,13 +5443,15 @@ void CBasePlayer::CommitSuicide( bool bExplode /*= false*/, bool bForce /*= fals
 	if( !IsAlive() )
 		return;
 		
-	// prevent suiciding too often
-	if ( m_fNextSuicideTime > gpGlobals->curtime && !bForce )
+	// Check suicide cooldown using the ConVar
+	float flSuicideTime = sv_limit_suicide_rate.GetFloat();
+	if ( flSuicideTime > 0.0f && m_fNextSuicideTime > gpGlobals->curtime && !bForce )
 		return;
-
-	// don't let them suicide for 5 seconds after suiciding
-	m_fNextSuicideTime = gpGlobals->curtime + 5;
-
+	
+	// Set next suicide time based on ConVar value
+	if ( flSuicideTime > 0.0f )
+		m_fNextSuicideTime = gpGlobals->curtime + flSuicideTime;
+	
 	int fDamage = DMG_PREVENT_PHYSICS_FORCE | ( bExplode ? ( DMG_BLAST | DMG_ALWAYSGIB ) : DMG_NEVERGIB );
 
 	// have the player kill themself
@@ -8102,6 +8107,14 @@ void CMovementSpeedMod::InputSpeedMod(inputdata_t &data)
 }
 
 
+void SendProxy_CropFlagsToPlayerFlagBitsLength( const SendProp *pProp, const void *pStruct, const void *pVarData, DVariant *pOut, int iElement, int objectID)
+{
+	int mask = (1<<PLAYER_FLAG_BITS) - 1;
+	int data = *(int *)pVarData;
+
+	pOut->m_Int = ( data & mask );
+}
+
 // -------------------------------------------------------------------------------- //
 // SendTable for CPlayerState.
 // -------------------------------------------------------------------------------- //
@@ -8188,7 +8201,7 @@ void CMovementSpeedMod::InputSpeedMod(inputdata_t &data)
 		SendPropFloat	(SENDINFO(m_flFOVTime) ),
 		SendPropInt		(SENDINFO(m_iDefaultFOV), 8, SPROP_UNSIGNED ),
 		SendPropEHandle	(SENDINFO(m_hZoomOwner) ),
-		SendPropArray	( SendPropEHandle( SENDINFO_ARRAY( m_hViewModel ) ), m_hViewModel ),
+		SendPropInt		(SENDINFO(m_fFlags), PLAYER_FLAG_BITS, SPROP_UNSIGNED|SPROP_CHANGES_OFTEN, SendProxy_CropFlagsToPlayerFlagBitsLength ),
 		SendPropString	(SENDINFO(m_szLastPlaceName) ),
 
 #if defined USES_ECON_ITEMS
