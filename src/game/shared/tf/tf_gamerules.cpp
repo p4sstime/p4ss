@@ -747,6 +747,7 @@ ConVar tf_caplinear( "tf_caplinear", "1", FCVAR_REPLICATED | FCVAR_DEVELOPMENTON
 ConVar tf_stalematechangeclasstime( "tf_stalematechangeclasstime", "20", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "Amount of time that players are allowed to change class in stalemates." );
 ConVar mp_tournament_redteamname( "mp_tournament_redteamname", "RED", FCVAR_REPLICATED | FCVAR_HIDDEN );
 ConVar mp_tournament_blueteamname( "mp_tournament_blueteamname", "BLU", FCVAR_REPLICATED | FCVAR_HIDDEN );
+ConVar mp_tournament_enable_team_naming( "mp_tournament_enable_team_naming", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Allow teams to set custom team names in tournament mode. If disabled, teams will be named RED and BLU." );
 
 ConVar tf_attack_defend_map( "tf_attack_defend_map", "0", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY );
 
@@ -7792,6 +7793,10 @@ bool CTFGameRules::ClientCommand( CBaseEntity *pEdict, const CCommand &args )
 				return true;
 
 			if ( IsCompetitiveMode() )
+				return true;
+				
+			// Don't allow team naming if the cvar is disabled
+			if ( !mp_tournament_enable_team_naming.GetBool() )
 				return true;
 
 			if ( args.ArgC() < 2 )

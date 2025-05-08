@@ -54,6 +54,7 @@ extern ConVar mp_timelimit;
 extern ConVar mp_winlimit;
 extern ConVar mp_maxrounds;
 extern ConVar mp_tournament;
+extern ConVar mp_tournament_enable_team_naming;
 
 class CHudChat;
 
@@ -1091,42 +1092,24 @@ void CHudTournamentSetup::OnCommand( const char *command )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Handles toggle state of tournament ready HUD
 //-----------------------------------------------------------------------------
-bool CHudTournamentSetup::ToggleState( ButtonCode_t code )
+bool CHudTournamentSetup::ToggleState( ButtonCode_t code, bool bCommandTriggered )
 {
-	if ( !IsVisible() )
+	// Only process command when it's explicitly triggered by the command or when handling specific keys in visible panel
+	if ( !bCommandTriggered && (!IsMouseInputEnabled() || (code != KEY_ESCAPE && code != KEY_ENTER)) )
+	{
+		// This is a key press that should not be handled by us
 		return false;
+	}
 
 	if ( !g_TF_PR )
 		return false;
-
-	if ( code == KEY_F4 || code == STEAMCONTROLLER_F4 )
+	
+	// If the panel is visible and this is a keyboard event, not a direct command
+	if ( IsMouseInputEnabled() && !bCommandTriggered )
 	{
-		if ( TFGameRules() && TFGameRules()->UsePlayerReadyStatusMode() )
-		{
-			int nReady = ( TFGameRules()->IsPlayerReady( GetLocalPlayerIndex() ) ) ? 0 : 1;
-			char szCommand[64];
-			Q_snprintf( szCommand, sizeof( szCommand ), "tournament_player_readystate %d", nReady );
-			engine->ClientCmd_Unrestricted( szCommand );
-		}
-		else
-		{
-			if ( IsMouseInputEnabled() )
-			{
-				DisableInput();
-				return true;
-			}
-			else
-			{
-				EnableInput();
-				return true;
-			}
-		}
-	}
-
-	if ( IsMouseInputEnabled() )
-	{
+		// Only handle escape and enter keys when the panel is visible
 		if ( code == KEY_ESCAPE || code == KEY_ENTER )
 		{
 			if ( code == KEY_ENTER )
@@ -1140,12 +1123,54 @@ bool CHudTournamentSetup::ToggleState( ButtonCode_t code )
 
 				m_flNextThink = gpGlobals->curtime + TOURNAMENT_PANEL_UPDATE_INTERVAL;
 			}
-
+			
 			DisableInput();
 			return true;
 		}
+		
+		return false; // Don't handle other keys when panel is visible
 	}
+	
+	// Only process if this is a direct command call
+	if ( bCommandTriggered )
+	{
+		// Handle player ready status mode
+		if ( TFGameRules() && TFGameRules()->UsePlayerReadyStatusMode() )
+		{
+			int nReady = ( TFGameRules()->IsPlayerReady( GetLocalPlayerIndex() ) ) ? 0 : 1;
+			char szCommand[64];
+			Q_snprintf( szCommand, sizeof( szCommand ), "tournament_player_readystate %d", nReady );
+			engine->ClientCmd_Unrestricted( szCommand );
+			return true;
+		}
+		
+		// Handle team ready status based on team naming setting
+		C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
+		if ( !pPlayer )
+			return false;
+			
+		int iLocalTeam = g_TF_PR->GetTeam( pPlayer->entindex() );
+		if ( iLocalTeam <= LAST_SHARED_TEAM )
+			return false;
 
+		// When team naming is disabled, just toggle ready state
+		if ( !mp_tournament_enable_team_naming.GetBool() )
+		{
+			// When team naming is disabled, directly toggle team ready state
+			int nReady = ( TFGameRules()->IsTeamReady( iLocalTeam ) ) ? 0 : 1;
+			char szCommand[64];
+			Q_snprintf( szCommand, sizeof( szCommand ), "tournament_readystate %d", nReady );
+			engine->ClientCmd_Unrestricted( szCommand );
+			return true;
+		}
+		else
+		{
+			// When team naming is enabled, show the input panel
+			EnableInput();
+			return true;
+		}
+	}
+	
 	return false;
 }
 
@@ -1221,12 +1246,20 @@ void CHudTournamentSetup::OnTick( void )
 			}
 		}
 	}
-
+	
 	if ( m_flNextThink <= gpGlobals->curtime )
 	{
+		// If team naming is enabled, display the current name, otherwise display RED/BLU
 		if ( !IsMouseInputEnabled() )
 		{
-			m_pNameEntry->SetText( ( iLocalTeam == TF_TEAM_BLUE ) ? mp_tournament_blueteamname.GetString() : mp_tournament_redteamname.GetString() );
+			if (mp_tournament_enable_team_naming.GetBool())
+			{
+				m_pNameEntry->SetText( ( iLocalTeam == TF_TEAM_BLUE ) ? mp_tournament_blueteamname.GetString() : mp_tournament_redteamname.GetString() );
+			}
+			else
+			{
+				m_pNameEntry->SetText( ( iLocalTeam == TF_TEAM_BLUE ) ? "BLU" : "RED" );
+			}
 		}
 
 		SetDialogVariable( "tournamentstatelabel", TFGameRules()->IsTeamReady( iLocalTeam ) ? g_pVGuiLocalize->Find( "Tournament_TeamSetupReady" ) : g_pVGuiLocalize->Find( "Tournament_TeamSetupNotReady" ) );
@@ -1244,12 +1277,41 @@ void CHudTournamentSetup::EnableInput( void )
 	vgui::SETUP_PANEL( this );
 	SetKeyBoardInputEnabled( true );
 	SetMouseInputEnabled( true );
-	m_pNameEntry->SetVisible( true );
+	
+	// Only show and enable name entry if team naming is allowed
+	if (mp_tournament_enable_team_naming.GetBool())
+	{
+		m_pNameEntry->SetVisible( true );
+		m_pNameEntry->RequestFocus();
+		m_pNameEntry->SetPaintBorderEnabled( true );
+		m_pNameEntry->SetMouseInputEnabled( true );
+		m_pNameEntry->SetKeyBoardInputEnabled( true );
+		
+		// Show related UI elements
+		if (m_pEntryBG)
+		{
+			m_pEntryBG->SetVisible(true);
+		}
+		if (m_pTeamNameLabel)
+		{
+			m_pTeamNameLabel->SetVisible(true);
+		}
+	}
+	else
+	{
+		m_pNameEntry->SetVisible( false );
+		
+		if (m_pEntryBG)
+		{
+			m_pEntryBG->SetVisible(false);
+		}
+		if (m_pTeamNameLabel)
+		{
+			m_pTeamNameLabel->SetVisible(false);
+		}
+	}
+	
 	vgui::surface()->CalculateMouseVisible();
-	m_pNameEntry->RequestFocus();
-	m_pNameEntry->SetPaintBorderEnabled( true );
-	m_pNameEntry->SetMouseInputEnabled( true );
-	m_pNameEntry->SetKeyBoardInputEnabled( true );
 	MakePopup();
 
 	m_pEntryBG->SetVisible( true );
@@ -1590,7 +1652,7 @@ CON_COMMAND( player_ready_toggle, "Toggle player ready state" )
 		CHudTournamentSetup *pTournamentPanel = dynamic_cast< CHudTournamentSetup* >( GET_HUDELEMENT( CHudTournamentSetup ) );
 		if ( pTournamentPanel )
 		{
-			pTournamentPanel->ToggleState( KEY_F4 );
+			pTournamentPanel->ToggleState( ButtonCode_t(0), true );
 		}
 	}
 }

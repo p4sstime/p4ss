@@ -111,13 +111,14 @@ public:
 	virtual void	FireGameEvent( IGameEvent * event );
 	void			EnableInput( void );
 	void			DisableInput( void );
-	bool			ToggleState( ButtonCode_t code );
+	bool			ToggleState( ButtonCode_t code, bool bCommandTriggered = false );
 	virtual void	OnCommand( const char *command );
 
 	virtual void OnKeyCodeTyped(vgui::KeyCode code)
 	{
-		if ( code == KEY_ESCAPE  || code == KEY_F4  || code == KEY_ENTER )
+		if ( code == KEY_ESCAPE  || code == KEY_ENTER )
 		{
+			// These keys handle panel interaction when it's already open
 			ToggleState( code );
 		}
 		else
