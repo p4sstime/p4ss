@@ -282,7 +282,8 @@ bool CTFRocketLauncher::CheckReloadMisfire( void )
 //-----------------------------------------------------------------------------
 bool CTFRocketLauncher::ShouldBlockPrimaryFire()
 {
-	return !AutoFiresFullClip();
+	// return !AutoFiresFullClip();
+	return false; // Allow firing and reloading rockets while holding right click
 }
 
 //-----------------------------------------------------------------------------

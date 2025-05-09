@@ -2943,7 +2943,7 @@ bool CTFGameMovement::GameHasLadders() const
 // Purpose: 
 //-----------------------------------------------------------------------------
 void CTFGameMovement::SetGroundEntity( trace_t *pm )
-{<
+{
 	if ( m_pTFPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_KART ) && !m_pTFPlayer->GetGroundEntity() && pm && pm->m_pEnt )
 	{
 		m_pTFPlayer->EmitSound( "BumperCar.JumpLand" );
