@@ -364,6 +364,24 @@ void CTFRocketLauncher::ItemPostFrame( void )
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Fix rocket launcher not firing when attacking for a single tick while reloading
+//-----------------------------------------------------------------------------
+void CTFRocketLauncher::ItemBusyFrame( void )
+{
+	BaseClass::ItemBusyFrame();
+
+	CTFPlayer *pOwner = ToTFPlayer( GetOwner() );
+	
+	if ( !pOwner )
+		return;
+
+	if ( pOwner->m_flNextAttack >= gpGlobals->curtime && ( pOwner->m_nButtons & IN_ATTACK ) && Clip1() > 0 )
+	{
+		this->ItemPostFrame();
+	}
+}
+
+//-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 bool CTFRocketLauncher::DefaultReload( int iClipSize1, int iClipSize2, int iActivity )
