@@ -28,9 +28,10 @@
 #include "tier0/memdbgon.h"
 
 static ConVar tf_passtime_mode_lock_eye_to_eye( "tf_passtime_mode_lock_eye_to_eye", "1" );
+static ConVar pf_nolock( "pf_nolock", "0", FCVAR_REPLICATED, "Disable automatic pass target locking in passtime mode" );
 #ifdef CLIENT_DLL
-static ConVar p4ss_legacy_throw_controls( "p4ss_legacy_throw_controls" , "0" , FCVAR_USERINFO, "For oldies who cannot fathom changes made to their game.");
-static ConVar p4ss_reverse_throw_controls( "p4ss_reverse_throw_controls", "0", FCVAR_USERINFO, "Switches mouse1 and mouse2 inputs for freethrow and passing" );
+static ConVar pf_legacy_throw_controls( "pf_legacy_throw_controls" , "0" , FCVAR_USERINFO, "For oldies who cannot fathom changes made to their game.");
+static ConVar pf_reverse_throw_controls( "pf_reverse_throw_controls", "0", FCVAR_USERINFO, "Switches mouse1 and mouse2 inputs for freethrow and passing" );
 #endif
 
 //-----------------------------------------------------------------------------
@@ -428,7 +429,7 @@ void CPasstimeGun::ItemPostFrame()
 	//
 	// Update pass target
 	//
-	if ( pOwner->m_Shared.HasPasstimeBall() )
+	if ( pOwner->m_Shared.HasPasstimeBall() && !pf_nolock.GetBool() )
 	{
 		VMatrix mWorldToView( SetupMatrixIdentity() );
 		Vector vecEyePos;
@@ -885,7 +886,7 @@ void CPasstimeGun::Throw( CTFPlayer *pOwner )
 	pOwner->m_Shared.SetHasPasstimeBall( 0 ); // predict throwing
 #endif
 
-	pOwner->m_Shared.SetPasstimePassTarget( 0 );
+	pOwner->m_Shared.SetPasstimePassTarget( 0 ); // Ball thrown, pass target no longer valid
 }
 
 //-----------------------------------------------------------------------------

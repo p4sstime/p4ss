@@ -22,7 +22,7 @@ src/compile_commands.json
 steam_appid.txt
 game/p4ss/trainingprogress.txt
 
-# Visual Studio 
+# Visual Studio
 *.suo
 *.user
 *.sln.docstates
@@ -530,7 +530,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 !src/lib/public/x64/
-!src/lib/public/x64/discord-rpc.lib
 game/p4ss_win64.exe
 
 src/lib/public/x64/*.lib
@@ -551,13 +550,15 @@ src/lib/public/linux64/raytrace.a
 
 game/p4ss/bin/linux64/game_shader_generic_example.so
 
-!game/p4ss/cfg/settings.scr
-!game/p4ss/cfg/user.scr
+!game/p4ss/cfg/settings_default.scr
 !game/p4ss/cfg/user_default.scr
+!game/p4ss/cfg/p4ss_*.cfg
 
 !game/p4ss/media/Valve_Intro.webm
+!game/p4ss/media/movie_readme.txt
 !game/p4ss/media/startupvids.txt
 game/p4ss/cfg/user.scr
 game/p4ss/cfg/settings.scr
 game/p4ss/screenshots/
 game/p4ss/screenshots/*
+.vscode/tasks.json

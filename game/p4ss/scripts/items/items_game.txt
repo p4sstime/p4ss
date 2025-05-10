@@ -20533,7 +20533,6 @@
 			{
 				"engineer"	"primary"
 				"pyro" "secondary"
-				"soldier" "secondary"
 				"heavy" "secondary"
 			}
 			"attributes"
@@ -20839,7 +20838,6 @@
 			"attach_to_hands"	"1"
 			"used_by_classes"
 			{
-				"demoman"	"1"
 			}
 			"static_attrs"
 			{
@@ -20882,7 +20880,6 @@
 			"attach_to_hands"	"1"
 			"used_by_classes"
 			{
-				"medic"	"1"
 			}
 			"static_attrs"
 			{
@@ -60163,7 +60160,7 @@
 			"image_inventory"	"backpack/weapons/w_models/w_wrench"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
-			"model_player" "models/passtime/ball/passtime_ball.mdl"
+			"model_player" "models/passtime/ball/passfortress_ball.mdl"
 			"static_attrs"
 			{
 				"min_viewmodel_offset"		"10 0 -10"
