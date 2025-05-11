@@ -6106,6 +6106,108 @@ float CTFPlayerShared::CapChargeTurnRate(float flYawDelta) const
 	return flYawDelta;
 }
 
+#ifdef CLIENT_DLL
+//-----------------------------------------------------------------------------
+// Purpose: Record the current view angle into the charge angle history buffer
+//-----------------------------------------------------------------------------
+void CTFPlayerShared::RecordChargeAngleHistory()
+{
+	C_TFPlayer *pPlayer = ToTFPlayer(m_pOuter);
+	if (!pPlayer || !InCond(TF_COND_SHIELD_CHARGE))
+		return;
+
+	// When first entering shield charge, initialize tracking
+	int currentTick = gpGlobals->tickcount;
+	if (m_ChargeAngleHistory.Count() == 0)
+	{
+		m_nChargeStartTick = currentTick;
+		m_flChargeStartTime = gpGlobals->curtime;
+		m_flLastAngleHistorySendTime = 0;
+	}
+
+	// Store the current view angle
+	CTFPlayerShared::ChargeAngleHistoryEntry_t historyEntry;
+	historyEntry.nClientTick = currentTick;
+	historyEntry.flClientTime = gpGlobals->curtime;
+	historyEntry.viewAngles = pPlayer->EyeAngles();
+
+	m_ChargeAngleHistory.AddToTail(historyEntry);
+
+	// Send the data periodically
+	if (gpGlobals->curtime >= m_flLastAngleHistorySendTime + 0.1f) // 10 updates per second is sufficient
+	{
+		SendChargeAngleData();
+		m_flLastAngleHistorySendTime = gpGlobals->curtime;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Send charge angle history to server for lag compensation
+//-----------------------------------------------------------------------------
+void CTFPlayerShared::SendChargeAngleData()
+{
+	C_TFPlayer *pPlayer = ToTFPlayer(m_pOuter);
+	if (!pPlayer || m_ChargeAngleHistory.Count() == 0)
+		return;
+
+	// Create a KeyValues object to send data to server
+	KeyValues *kv = new KeyValues("ChargeAngleData");
+	
+	// Send charge start time and tick
+	kv->SetFloat("start_time", m_flChargeStartTime);
+	kv->SetInt("start_tick", m_nChargeStartTick);
+	
+	// Send number of entries
+	int numEntries = MIN(10, m_ChargeAngleHistory.Count()); // Cap number of entries to send at once
+	kv->SetInt("entry_count", numEntries);
+	
+	// Send the most recent entries
+	int startIdx = m_ChargeAngleHistory.Count() - numEntries;
+	for (int i = startIdx; i < m_ChargeAngleHistory.Count(); i++)
+	{
+		char entryName[32];
+		
+		// Create a subkey for each entry
+		Q_snprintf(entryName, sizeof(entryName), "entry%d", i - startIdx);
+		KeyValues *entry = new KeyValues(entryName);
+		
+		entry->SetFloat("time", m_ChargeAngleHistory[i].flClientTime);
+		entry->SetInt("tick", m_ChargeAngleHistory[i].nClientTick);
+		entry->SetFloat("pitch", m_ChargeAngleHistory[i].viewAngles[PITCH]);
+		entry->SetFloat("yaw", m_ChargeAngleHistory[i].viewAngles[YAW]);
+		entry->SetFloat("roll", m_ChargeAngleHistory[i].viewAngles[ROLL]);
+		
+		kv->AddSubKey(entry);
+	}
+	
+	// Send the data to server
+	engine->ServerCmdKeyValues(kv);
+	
+	// The engine makes a copy, so we can free our instance
+	kv->deleteThis();
+}
+#else
+//-----------------------------------------------------------------------------
+// Purpose: Store client-provided angle data for better lag compensation
+//-----------------------------------------------------------------------------
+void CTFPlayerShared::ProcessClientChargeAngles(float flClientTime, int nClientTick, QAngle angles)
+{
+	// Add to the history
+	ChargeAngleHistoryEntry_t historyEntry;
+	historyEntry.flClientTime = flClientTime;
+	historyEntry.nClientTick = nClientTick;
+	historyEntry.viewAngles = angles;
+	
+	m_ClientChargeAngleHistory.AddToTail(historyEntry);
+	
+	// Cap the history buffer size
+	if (m_ClientChargeAngleHistory.Count() > 30)
+	{
+		m_ClientChargeAngleHistory.Remove(0);
+	}
+}
+#endif
+
 bool CTFPlayerShared::HasDemoShieldEquipped() const
 {
 	return GetEquippedDemoShield( m_pOuter ) != NULL;

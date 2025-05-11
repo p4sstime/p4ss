@@ -99,6 +99,9 @@ void RegisterUserMessages()
 
 	usermessages->Register( "MVMStatsReset", -1 );
 	usermessages->Register( "MVMPlayerEvent", -1 );
+	
+	// Message containing history of charge angles for server-side validation
+	usermessages->Register( "ChargeAngleData", -1 );
 	usermessages->Register( "MVMResetPlayerStats", -1 );
 	usermessages->Register( "MVMWaveFailed", 0 );
 	usermessages->Register( "MVMAnnouncement", 2 );	// Send an enumerated message

@@ -84,8 +84,25 @@ void CTFPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper 
 		// Server-side charge turn capping
 		if ( pTFPlayer->m_Shared.InCond( TF_COND_SHIELD_CHARGE ) )
 		{
-			// Calculate yaw delta between current view and the previous charge view angle.
-			float flYawDelta = AngleDiff( ucmd->viewangles[YAW], pTFPlayer->m_qPreviousChargeEyeAngle[YAW] );
+			// Check if client charge angle history is available
+			bool bUseClientHistory = false;
+			float flYawDelta = 0.0f;
+			flat lastHistoryTurnRate;
+			
+			// Get frame info
+			float frameTime = gpGlobals->frametime;
+			int currentTick = gpGlobals->tickcount;
+			
+			const int lastIdx = pTFPlayer->m_Shared.m_ClientChargeAngleHistory.Count() - 1;
+			const int prevIdx = lastIdx - 1;
+			
+			// Get the last two entries to calculate delta
+			float currentTurnRate = pTFPlayer->m_Shared.m_ClientChargeAngleHistory[lastIdx].viewAngles;
+			lastHistoryTurnRate = pTFPlayer->m_Shared.m_ClientChargeAngleHistory[prevIdx].viewAngles;
+			
+			// Calculate yaw delta from client history which will include lag
+			flYawDelta = AngleDiff(currentAngle[YAW], lastHistoryAngle[YAW]);
+			bUseClientHistory = true;
 			
 			// Clamp the yaw change using the unified function.
 			float flCappedYawDelta = pTFPlayer->m_Shared.CapChargeTurnRate( flYawDelta );
@@ -93,8 +110,8 @@ void CTFPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper 
 			// Only clamp if the yaw difference exceeds the cap by more than the tolerance.
 			if ( fabs(flYawDelta) > tf_charge_turn_tolerance.GetFloat() * fabs(flCappedYawDelta) )
 			{
-				// Adjust the view angle based on the capped delta.
-				ucmd->viewangles[YAW] = pTFPlayer->m_qPreviousChargeEyeAngle[YAW] + flCappedYawDelta;
+				// Apply cap to the historical client view for smoother experience
+				ucmd->viewangles[YAW] = lastHistoryAngle[YAW] + flCappedYawDelta;
 				pTFPlayer->SnapEyeAngles( ucmd->viewangles );
 			}
 			
@@ -103,6 +120,8 @@ void CTFPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper 
 		}
 		else
 		{
+			// Reset history when not charging
+			pTFPlayer->m_Shared.m_ClientChargeAngleHistory.RemoveAll();
 			pTFPlayer->m_qPreviousChargeEyeAngle = pTFPlayer->EyeAngles();
 		}
 	}

@@ -535,6 +535,32 @@ public:
 	void	CalcChargeCrit( bool bForceCrit=false );
 	bool	HasDemoShieldEquipped() const;
 
+	// Charge angle history tracking
+	struct ChargeAngleHistoryEntry_t
+	{
+		int     nClientTick;
+		float   flClientTime;
+		float   flClientTurnRate;
+	};
+
+#ifdef CLIENT_DLL
+	// Client-side functions for charge angle history
+	void	RecordChargeAngleHistory();
+	void	SendChargeAngleData();
+
+	// Client-side charge angle history
+	CUtlVector<ChargeAngleHistoryEntry_t> m_ChargeAngleHistory;
+	float m_flLastAngleHistorySendTime;
+	int m_nChargeStartTick;
+	float m_flChargeStartTime;
+#else
+// Store client charge angle data
+CUtlVector<ChargeAngleHistoryEntry_t> m_ClientChargeAngleHistory;
+
+// Processing client charge angle data
+void	ProcessClientChargeAngles(float flClientTime, int nClientTick, float flClientTurnRate);
+#endif
+
 	bool	IsJumping( void ) const			{ return m_bJumping; }
 	void	SetJumping( bool bJumping );
 	bool	IsAirDashing( void ) const		{ return (m_iAirDash > 0); }
@@ -1006,7 +1032,7 @@ private:
 		int		iKillsWhileBeingHealed; // for engineer achievement ACHIEVEMENT_TF_ENGINEER_TANK_DAMAGE
 		float	flHealedLastSecond;
 	};
-	CUtlVector< healers_t >	m_aHealers;	
+	CUtlVector< healers_t >	m_aHealers;
 	float					m_flHealFraction;	// Store fractional health amounts
 	float					m_flDisguiseHealFraction;	// Same for disguised healing
 	float					m_flBestOverhealDecayMult;

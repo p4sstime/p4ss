@@ -6599,6 +6599,12 @@ bool C_TFPlayer::CreateMove( float flInputSampleTime, CUserCmd *pCmd )
 
 	BaseClass::CreateMove( flInputSampleTime, pCmd );
 
+	// If player is charging with a shield, record view angles for server-side lag compensation
+	if ( m_Shared.InCond( TF_COND_SHIELD_CHARGE ) )
+	{
+		m_Shared.RecordChargeAngleHistory();
+	}
+
 	// Don't avoid players if in the middle of a high five. This prevents high-fivers from becoming separated.
 	if ( !bInTaunt || ( !m_bIsReadyToHighFive && !CTFPlayerSharedUtils::ConceptIsPartnerTaunt( m_Shared.m_iTauntConcept ) ) )
 	{
