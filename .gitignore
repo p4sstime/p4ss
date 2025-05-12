@@ -562,3 +562,12 @@ game/p4ss/cfg/settings.scr
 game/p4ss/screenshots/
 game/p4ss/screenshots/*
 .vscode/tasks.json
+game/p4ss/maps/pass_boutique_rc5.bsp
+*.bsp
+src/materialsystem/stdshaders/include/example_ascii_ps20b.inc
+src/materialsystem/stdshaders/shaders/fxc/example_ascii_ps20b.vcs
+src/materialsystem/stdshaders/common.hlsl
+src/materialsystem/stdshaders/example_ascii_ps2x.hlsl
+game/p4ss/shaders/fxc/example_ascii_ps20b.vcs
+game/p4ss_win64.exe - Shortcut.lnk
+CppProperties.json
