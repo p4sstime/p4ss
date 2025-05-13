@@ -40,25 +40,25 @@ DESCRIPTION INFO_OPTIONS
 		{ CATEGORY }
 	}
 
-	"p4ss_legacy_throw_controls"
+	"pf_legacy_throw_controls"
 	{
-		"#p4ss_legacy_throw_controls"
+		"#pf_legacy_throw_controls"
 		"#Tooltip_p4ss_legacy_throw_controls"
 		{ BOOL }
 		{ "0" }
 	}
 	
-	"p4ss_reverse_throw_controls"
+	"pf_reverse_throw_controls "
 	{
-		"#p4ss_reverse_throw_controls"
-		"#Tooltip_p4ss_reverse_throw_controls"
+		"#pf_reverse_throw_controls"
+		"#Tooltip_pf_reverse_throw_controls"
 		{ BOOL }
 		{ "0" }
 	}
 	
-	"tf_passtime_crosshair_teamcolored"
+	"pf_crosshair_inner_teamcolored"
 	{
-		"#tf_passtime_crosshair_teamcolored"
+		"#pf_crosshair_inner_teamcolored"
 		"#Tooltip_crosshair_teamcolored"
 		{ BOOL }
 		{ "0" }
@@ -212,14 +212,14 @@ DESCRIPTION INFO_OPTIONS
 		{ CATEGORY }
 	}
 	
-		"cl_rocketoffsetposition"
+	"cl_rocketoffsetposition"
 	{
 		"#cl_rocketoffsetposition"
 		{ LIST
-			"#cl_rocketoffsetposition_perweapon"                "0"	//Per weapon
+			"#cl_rocketoffsetposition_perweapon"            "0"	//Per weapon
 			"#cl_rocketoffsetposition_stock"                "1"	//Stock
-			"#cl_rocketoffsetposition_original"                "2"	//Original
-			"#cl_rocketoffsetposition_cowmangler"                "3"	//Cowmangler
+			"#cl_rocketoffsetposition_original"             "2"	//Original
+			"#cl_rocketoffsetposition_cowmangler"           "3"	//Cowmangler
 		}
 		{ "0" }
 	}
@@ -535,7 +535,7 @@ DESCRIPTION INFO_OPTIONS
 	
 	"tf_spec_xray_disable"
 	{
-		"TF_tf_spec_xray_disable"
+		"#tf_spec_xray_disable"
 		"#Tooltip_tf_spec_xray_disable"
 		{ BOOL }
 		{ "0" }

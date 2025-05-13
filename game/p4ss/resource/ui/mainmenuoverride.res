@@ -205,37 +205,37 @@
 			"tall"			"f0"
 		}
 		
-		if_halloween_0
+		if_halloween_0		//disabled temp.
 		{
-			"image"		"../console/title_team_halloween2011_widescreen"
+			//"image"		"../console/title_team_halloween2011_widescreen"
 		}
 		if_halloween_1
 		{
-			"image"		"../console/title_team_halloween2012_widescreen"
+			//"image"		"../console/title_team_halloween2012_widescreen"
 		}
 		if_halloween_2
 		{
-			"image"		"../console/title_team_halloween2013_widescreen"
+			//"image"		"../console/title_team_halloween2013_widescreen"
 		}
 		if_halloween_3
 		{
-			"image"		"../console/title_team_halloween2014_widescreen"
+			//"image"		"../console/title_team_halloween2014_widescreen"
 		}
 		if_halloween_4
 		{	
-			"image"		"../console/title_team_halloween2015_widescreen"
+			//"image"		"../console/title_team_halloween2015_widescreen"
 		}
 		if_halloween_5
 		{	
-			"image"		"../console/title_scream_fortress_2017_widescreen"
+			//"image"		"../console/title_scream_fortress_2017_widescreen"
 		}
 		if_fullmoon
 		{
-			"image"		"../console/title_fullmoon_widescreen"
+			//"image"		"../console/title_fullmoon_widescreen"
 		}
 		if_christmas
 		{
-			"image"		"../console/snowy_arena_widescreen"
+			//"image"		"../console/snowy_arena_widescreen"
 		}		
 	}
 	
@@ -250,7 +250,7 @@
 		"tall"			"84"
 		"visible"		"1"
 		"enabled"		"1"
-		"image"			"../hud/pass_time_logo"
+		"image"			"../hud/pass_fortress_main_logo"
 		"scaleImage"	"1"
 		"mouseinputenabled"	"0"
 	}	
@@ -706,9 +706,83 @@
 			}
 		}
 	}
+
+
+	"PlayernameBGBorder"
+	{
+		"ControlName"	"EditablePanel"
+		"fieldname"		"PlayernameBGBorder"
+		"xpos"			"660"
+		"ypos"			"79"
+		"zpos"			"0"
+		"wide"			"170"
+		"tall"			"48"
+		"visible"		"1"
+		"PaintBackgroundType"	"0"
+		"border"		"MainMenuBGBorder"
+	}
+
+	"RankPanel"		//Controls the playername pos
+	{
+		"ControlName"	"CPvPRankPanel"
+		"fieldName"		"RankPanel"
+		"xpos"			"585"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"320"
+		"tall"			"200"
+		"visible"		"1"
+		"proportionaltoparent"	"1"
+		"mouseinputenabled"	"1"
+
+		"matchgroup"	"MatchGroup_Casual_12v12"
+
+		"show_model"	"0"
+		"show_type"		"0"
+	}
 	
+	"AvataringSlot"
+	{
+		"ControlName"	"CDashboardPartyMember"
+		"fieldName"		"AvataringSlot"
+		"xpos"			"c192"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"45"
+		"tall"			"45"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"proportionaltoparent"	"0"
+		"mouseinputenabled"	"0"
+		"keyboardinputenabled"	"0"
+
+		"party_slot"	"0"
+	}
 	
-	
+	"WelcomeLabel"
+	{
+		"ControlName"	"CExLabel"
+		"fieldName"		"WelcomeLabel"
+		"font"			"Codepro12"
+		"labelText"		"Welcome Back,"
+		"textAlignment"	"west"
+		"xpos"			"278"
+		"ypos"			"0"
+		"wide"			"223"
+		"tall"			"30"
+		"autoResize"	"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"AvataringSlot"
+		"pin_corner_to_sibling" 	"1"
+		"pin_to_sibling_corner" 	"1"
+	}
 	
 	"QuitMainMenuBGBorder"
 	{
@@ -874,7 +948,7 @@
 
 		"font"			"HudFontSmallBold"
 		"command" 		"open_placeholder"
-		"labeltext"		"Tournaments"
+		"labeltext"		"Placeholder"
 		"OnlyInGame"	"1"
 
 		"border_default"	"MainMenuButtonDefault"
@@ -2898,7 +2972,7 @@
 	{
 		"ControlName"	"CExImageButton"
 		"fieldname"		"ArenaButton"
-		"xpos"			"c1"
+		"xpos"			"c-220"
 		"ypos"			"180"
 		"zpos"			"15"
 		"wide"			"60"
@@ -2906,7 +2980,7 @@
 		"visible"		"1"
 		
 		"font"			"HudFontSmallishBold"
-		"command" 		"engine map pass_arena2_b14b "
+		"command" 		"engine map pass_arena2_b15"
 		"labeltext"		"Arena"
 		
 		"border_default"	"storeinnershadowborder"
@@ -2962,7 +3036,7 @@
 		
 		"font"			"HudFontSmallishBold"
 			//This line is so long but it ensures that everyone can use this buttons without installing cfg's.
-		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 60; ent_fire team_round_timer pause; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
+		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 60; mp_tournament 1; mp_tournament_restart; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
 		"labeltext"		"practice mode"
 		"OnlyInGame"	"1"
 		

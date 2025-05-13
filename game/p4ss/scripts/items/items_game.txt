@@ -16870,11 +16870,6 @@
 					"attribute_class"	"mult_dmgtaken"
 					"value"	"1.15"
 				}
-				"crit mod disabled"
-				{
-					"attribute_class"	"mult_crit_chance"
-					"value"	"0"
-				}
 				"special taunt"
 				{
 					"attribute_class"	"special_taunt"
@@ -32366,11 +32361,6 @@
 					"attribute_class"	"mult_single_wep_deploy_time"
 					"value"	"2.0"
 				}
-				"crit mod disabled"
-				{
-					"attribute_class"	"mult_crit_chance"
-					"value"	"0"
-				}
 			}
 		}
 		"308"
@@ -34304,11 +34294,6 @@
 				{
 					"attribute_class"	"restore_health_on_kill"
 					"value"	"50"
-				}
-				"crit mod disabled"
-				{
-					"attribute_class"	"mult_crit_chance"
-					"value"	"0"
 				}
 				"honorbound"
 				{

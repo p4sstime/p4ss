@@ -5,10 +5,16 @@
 		"fieldName"		"HudPasstimeCountdown"
 		"visible"		"1"
 		"enabled"		"1"
-		"xpos"			"162"	[$WIN32]
-		"ypos"			"r52"	[$WIN32]
+		"xpos"			"c-45"	[$WIN32]	//tf_use_match_hud 0
+		"ypos"			"30"	[$WIN32]
 		"wide"			"100"
 		"tall"			"50"
+		
+		"if_match"		//tf_use_match_hud 1
+		{
+		"xpos"			"c-45"	[$WIN32]
+		"ypos"			"17"	[$WIN32]
+		}
 	}	
 
 	"background"
@@ -36,10 +42,10 @@
 	{
 			"ControlName"	"CExLabel"
 			"fieldName"		"CountdownLabel"
-			"xpos"			"50"
-			"xpos_minmode"	"42"
+			"xpos"			"30"
+			"xpos_minmode"	"30"
 			"ypos"			"18"
-			"ypos_minmode"	"12"
+			"ypos_minmode"	"-2"
 			"zpos"			"2"
 			"wide"			"35"
 			"tall"			"20"
@@ -50,7 +56,7 @@
 			"enabled"		"1"
 			"tabPosition"	"0"
 			"labelText"		"#P4SS_Countdown"
-			"textAlignment"	"west"
+			"textAlignment"	"center"
 			"dulltext"		"0"
 			"brighttext"	"0"
 			"font"			"HudFontMedium"
