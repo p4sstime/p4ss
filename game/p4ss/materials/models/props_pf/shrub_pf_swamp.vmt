@@ -1,0 +1,25 @@
+"VertexLitGeneric"
+{
+	$basetexture				"models/props_swamp/shrub_03"
+	$surfaceprop				"default"
+	$alphatest					1
+	$alphatestreference			0.5
+	
+	$treesway					1
+	
+	$treeswayheight				0
+	$treeswaystartheight		0.2
+	
+	$treeswayradius				220
+	$treeswaystartradius		0.1
+	
+	$treeswayspeed				.2
+	$treeswaystrength			.4
+	
+	$treeswayscrumblespeed		3
+	$treeswayscrumblestrength	1.75
+	$treeswayscrumblefrequency	6
+	
+	$treeswayfalloffexp			2
+	$treeswayscrumblefalloffexp	.5
+}
