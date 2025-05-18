@@ -1,0 +1,50 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/lambo1"
+	//"$alphatest" "1"
+	"$translucent" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/loosemid1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/nombler1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/checkmate1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/tomato1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/stoic1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}
+"LightmappedGeneric"
+{
+	"$basetexture" "poster/laxson1"
+	"$alphatest" "1"
+	"$decal" 1
+	"$decalscale" .25
+}

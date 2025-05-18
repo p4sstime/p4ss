@@ -1,0 +1,26 @@
+"LightmappedGeneric"
+{
+	$baseTexture 			"concrete/concretewall002"
+	//$bumpmap 				"concrete/concretewall002_normal"
+	%keywords				"tf,custom,bobby"
+	
+	$color					"{146 189 209}"
+	
+	$detail					"overlays/detail001"
+	$detailscale 			1.9
+	$detailblendmode		0
+	$detailblendfactor		0.5
+}
+"LightmappedGeneric"
+{
+	$baseTexture 			"concrete/concretewall002"
+	//$bumpmap 				"concrete\concretewall002_normal"
+	%keywords				"tf,custom,bobby"
+	
+	$color					"{234 63 45}"
+	
+	$detail					"overlays/detail001"
+	$detailscale 			1.9
+	$detailblendmode		0
+	$detailblendfactor		0.5
+}
