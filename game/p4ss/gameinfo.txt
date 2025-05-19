@@ -48,6 +48,8 @@
 			// VPK and we can avoid making thousands of file system calls to attempt to open files
 			// in folders where they don't exist.  (Searching a VPK is much faster than making an operating
 			// system call.)
+			game+mod			|gameinfo_path|pf_test.vpk
+			game+mod			|gameinfo_path|pf_textures.vpk
 			game_lv				|appid_440|tf/tf2_lv.vpk
 			game+mod			|appid_440|tf/tf2_textures.vpk
 			game+mod			|appid_440|tf/tf2_sound_vo_english.vpk
@@ -58,8 +60,6 @@
 			game				|appid_243750|hl2/hl2_sound_misc.vpk
 			game+vgui			|appid_243750|hl2/hl2_misc.vpk
 			platform+vgui		|appid_243750|platform/platform_misc.vpk
-			game+mod+vgui		p4ss/pf_test.vpk
-			game+mod+vgui		p4ss/pf_textures.vpk
 
 			// Last, mount in shared HL2 and TF2 loose files
 			game				|appid_440|tf
