@@ -62,7 +62,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"CountdownLabel"
-		"font"			"HudFontGiant"
+		"font"			"CompactaBlack24"
 		"xpos"			"cs-0.5"
 		"ypos"			"cs-0.1"
 		"wide"			"40"
@@ -89,7 +89,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"CountdownLabelShadow"
-		"font"			"HudFontGiant"
+		"font"			"CompactaBlack24"
 		"xpos"			"cs-0.48"
 		"ypos"			"cs-0.08"
 		"wide"			"40"
@@ -234,7 +234,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"RankUpLabel"
-		"font"			"HudFontMediumSmallBold"
+		"font"			"Compacta18"
 		"xpos"			"cs-0.5"
 		"ypos"			"80"
 		"wide"			"600"
@@ -257,7 +257,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"RankUpShadowLabel"
-		"font"			"HudFontMediumSmallBold"
+		"font"			"Compacta18"
 		"xpos"			"cs-0.5+2"
 		"ypos"			"80+2"
 		"wide"			"600"
@@ -300,7 +300,7 @@
 		"PositiveColor"			"0 255 0 255"
 		"NegativeColor"			"255 0 0 255"
 		"delta_lifetime"		"1.5"
-		"delta_item_font"		"HudFontMedium"
+		"delta_item_font"		"Compacta20"
 
 		if_match
 		{
@@ -313,16 +313,16 @@
 			"PositiveColor"			"0 255 0 255"
 			"NegativeColor"			"255 0 0 255"
 			"delta_lifetime"		"1.5"
-			"delta_item_font"		"HudFontMediumSmall"
+			"delta_item_font"		"Compacta18"
 		}
 		
 		"TimePanelValue"
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"TimePanelValue"
-			"font"			"HudFontMediumSmall"
-			"font_minmode"	"HudFontSmall"
-			"font_lodef"	"HudFontMedium"
+			"font"			"Compacta18"
+			"font_minmode"	"Compacta16"
+			"font_lodef"	"Compacta20"
 			"fgcolor"		"TanLight"
 			"xpos"			"23"
 			"xpos_minmode"	"39"
@@ -350,9 +350,9 @@
 				"ypos"			"12"
 				"ypos_minmode"	"12"
 				"tall"			"10"
-				"font"			"HudFontSmall"
-				"font_minmode"	"HudFontSmall"
-				"font_lodef"	"HudFontSmall"
+				"font"			"Compacta16"
+				"font_minmode"	"Compacta16"
+				"font_lodef"	"Compacta16"
 			}
 		}	
 	}
@@ -405,7 +405,7 @@
 			{
 				"ControlName"	"CExLabel"
 				"fieldName"		"playername"
-				"font"			"DefaultVerySmall"
+				"font"			"FuturaDemiCon10"
 				"xpos"			"5"
 				"ypos"			"24"
 				"zpos"			"5"
@@ -448,7 +448,7 @@
 			{	
 				"ControlName"			"ContinuousProgressBar"
 				"fieldName"				"healthbar"
-				"font"					"Default"																		
+				"font"					"FuturaDemiCon14"																		
 				"xpos"					"0"
 				"ypos"					"19"
 				"zpos"					"5"
@@ -468,7 +468,7 @@
 			{	
 				"ControlName"			"ContinuousProgressBar"
 				"fieldName"				"overhealbar"
-				"font"					"Default"																		
+				"font"					"FuturaDemiCon14"																		
 				"xpos"					"0"
 				"ypos"					"19"
 				"zpos"					"6"
@@ -498,7 +498,7 @@
 				"enabled"			"1"	
 				"HealthBonusPosAdj"	"10"
 				"HealthDeathWarning"		"0.49"
-				"TFFont"					"HudFontSmallest"
+				"TFFont"					"FuturaDemiCon10"
 				"HealthDeathWarningColor"	"HUDDeathWarning"
 				"TextColor"					"HudOffWhite"
 			}
@@ -558,7 +558,7 @@
 			{
 				"ControlName"	"CExLabel"
 				"fieldName"		"chargeamount"
-				"font"			"DefaultSmall"
+				"font"			"FuturaDemiCon12"
 				"xpos"			"25"
 				"ypos"			"17"
 				"zpos"			"6"
@@ -575,7 +575,7 @@
 			{
 				"ControlName"	"CExLabel"
 				"fieldName"		"specindex"
-				"font"			"DefaultVerySmall"
+				"font"			"FuturaDemiCon10"
 				"xpos"			"4"
 				"ypos"			"2"
 				"zpos"			"5"
@@ -671,7 +671,7 @@
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"BlueTeamLabel"
-			"font"			"CompMatchStartTeamNames"
+			"font"			"Compacta14"
 			"labelText"		"%blueteamname%"
 			"textAlignment"		"center"
 			"xpos"			"48"
@@ -809,7 +809,7 @@
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"RedTeamLabel"
-			"font"			"CompMatchStartTeamNames"
+			"font"			"Compacta14"
 			"labelText"		"%redteamname%"
 			"textAlignment"		"center"
 			"xpos"			"5"
