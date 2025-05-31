@@ -245,13 +245,13 @@
 			{
 				"ControlName"		"EditablePanel"
 				"fieldName"			"HealthIcon"
-				"xpos"				"22"
+				"xpos"				"522"
 				"ypos"				"-3"
 				"zpos"				"3"
 				"wide"				"32"
 				"tall"				"32"
-				"visible"			"1"
-				"enabled"			"1"	
+				"visible"			"0"
+				"enabled"			"0"	
 				"HealthBonusPosAdj"	"10"
 				"HealthDeathWarning"		"0.49"
 				"TFFont"					"HudFontSmallest"
@@ -262,7 +262,7 @@
 				{
 					"wide"			"p0.64"
 					"tall"			"p0.96"
-					"visible"		"1"
+					"visible"		"0"
 					"proportionaltoparent" "1"
 				}
 			}
@@ -418,7 +418,7 @@
 				"tall"			"8"
 				"autoResize"	"0"
 				"pinCorner"		"0"
-				"visible"		"1"
+				"visible"		"0"
 				"labelText"		"%specindex%"
 				"textAlignment"	"north-west"
 				//"fgcolor"		"235 226 202 255"

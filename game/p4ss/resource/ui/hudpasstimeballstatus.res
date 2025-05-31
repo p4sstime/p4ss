@@ -368,6 +368,8 @@
 		"zpos"			"10"
 		"wide"			"42"
 		"tall"			"42"
+		"wide_minmode"	"38"
+		"tall_minmode"	"38"
 		"autoResize"	"0"
 		"pinCorner"		"0"
 		"visible"		"1"
@@ -383,19 +385,57 @@
 		"ControlName"	"ImagePanel"
 		"fieldName"		"ProgressSelfPlayerIcon"
 		"xpos"			"0"
-		"ypos"			"0"
-		"zpos"			"-100"
-		"wide"			"42"
-		"tall"			"42"
+		"ypos"			"10"
+		"zpos"			"9"
+
+		"wide"			"13"
+		"tall"			"7"
+		
+		"wide_minmode"	"10"
+		"tall_minmode"	"5"
+		
 		"autoResize"	"0"
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"	"0"
 		"labelText"		""
-		"scaleImage"	"1"	
-	}	
-
+		"scaleImage"	"1"
+	}
+	
+	"Selfplayername"		//Custom added, Name plate
+	{
+		"controlname"		"CExLabel"
+		"fieldName"			"Selfplayername"
+		"labeltext"			"You"
+		
+		"zpos"				"200"
+		
+		"xpos"				"7"
+		"ypos"				"13"
+		"font"				"defaultlarge"
+		"textinsetx"				"13"
+		
+		"xpos_minmode"		"5"
+		"ypos_minmode"		"13"
+		"font_minmode"		"default"
+		"textinsetx_minmode"				"9"
+		
+		"textAlignment"		"center"
+		
+		"auto_wide_tocontents"		"3"
+		"use_proportional_insets"	"0"
+		
+		"visible"		"1"
+		"enabled"		"1"
+		
+		
+		"bgcolor_override"		"0 0 0 200"
+		"paintbackgroundtype"	"0"
+		
+		"pin_to_sibling" 			"ProgressSelfPlayerIcon"
+	}
+	
 	"ProgressBallCarrierName"
 	{
 		"ControlName"			"Label"
@@ -410,13 +450,15 @@
 		"wide"					"180"
 		"wide_minmode"			"125"		
 		
+		"auto_wide_tocontents"	"1"
+		"auto_wide_tocontents_minmode" "0"
+		
 		"tall"					"16"
 		"textAlignment"			"center"
 		"dulltext"				"0"
 		"brighttext"			"1"
 		"labelText"				"NameOfCarrier"
 		"border"				"TFFatLineBorder"
-		"auto_wide_tocontents"	"0"
 		"textinsetx"			"20"
 		
 		"pin_to_sibling"	"CarrierAnchor"
@@ -556,7 +598,7 @@
 	{
 		"ControlName"	"ImagePanel"
 		"fieldName"		"playericon0"
-		"wide" 			"16"
+		"wide" 			"0"
 		"tall" 			"16"
 	}
 

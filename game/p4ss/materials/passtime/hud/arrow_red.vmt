@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "passtime/hud/arrow_red"
+	"$translucent" 1
+}

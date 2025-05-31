@@ -369,17 +369,18 @@
 		"enabled"		"1"
 
 
-		"max_size"	"19"
+		"max_size"	"27"		//This controls the wideness of the whole thingy
+		"max_size_minmode"	"21"
 
 		"6v6_gap"	"4"
 		"12v12_gap"	"1"
 
-		"team1_grow_dir" "west"
-		"team1_base_x"	"c-45"
+		"team1_grow_dir" 	"west"
+		"team1_base_x"		"c-45"
 		"team1_max_expand"	"133"
 
-		"team2_grow_dir" "east"
-		"team2_base_x"	"c47"
+		"team2_grow_dir" 	"east"
+		"team2_base_x"		"c47"
 		"team2_max_expand"	"133"
 
 		"playerpanels_kv"
@@ -422,13 +423,17 @@
 				"xpos"			"cs-0.5"
 				"ypos"			"0"
 				"zpos"			"3"
-				"wide"			"19"
-				"tall"			"19"
+				"wide"			"16"
+				"tall"			"16"
 				"visible"		"1"
 				"enabled"		"1"
 				"image"			"../hud/class_scoutred"
 				"scaleImage"	"1"	
 				"proportionaltoparent"	"1"
+				
+				"tall_minmode"			"15"
+				"wide_minmode"			"15"
+				"ypos_minmode"			"2"
 			}
 			"classimagebg"
 			{

@@ -75,30 +75,12 @@ static const char *GetPlayerProgressPortrait( C_TFPlayer *pPlayer )
 	}
 
 	int iTeam = pPlayer->GetTeamNumber();
-	int iClass = pPlayer->GetPlayerClass()->GetClassIndex();
-
-	switch(iClass)
+	switch (iTeam)
 	{
-		case TF_CLASS_SOLDIER:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_soldier_red"	: "../passtime/hud/portrait_soldier_blu";
-		case TF_CLASS_SCOUT:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_scout_red"		: "../passtime/hud/portrait_scout_blu";
-		case TF_CLASS_SNIPER:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_sniper_red"		: "../passtime/hud/portrait_sniper_blu";
-		case TF_CLASS_DEMOMAN:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_demo_red"		: "../passtime/hud/portrait_demo_blu";
-		case TF_CLASS_MEDIC:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_medic_red"		: "../passtime/hud/portrait_medic_blu";
-		case TF_CLASS_HEAVYWEAPONS:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_heavy_red"		: "../passtime/hud/portrait_heavy_blu";
-		case TF_CLASS_PYRO:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_pyro_red"		: "../passtime/hud/portrait_pyro_blu";
-		case TF_CLASS_SPY:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_spy_red"		: "../passtime/hud/portrait_spy_blu";
-		case TF_CLASS_ENGINEER:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_eng_red"		: "../passtime/hud/portrait_eng_blu";
-		default:
-			return (iTeam == TF_TEAM_RED) ? "../passtime/hud/portrait_scout_red"		: "../passtime/hud/portrait_scout_blu";
+	case TF_TEAM_RED:
+		return ( iTeam == TF_TEAM_RED ) ? "../passtime/hud/arrow_red" : "../passtime/hud/arrow_blu";
+	case TF_TEAM_BLUE:
+		return ( iTeam == TF_TEAM_BLUE ) ? "../passtime/hud/arrow_blu" : "../passtime/hud/arrow_red";
 	}
 }
 
@@ -908,6 +890,7 @@ CTFHudPasstimeBallStatus::CTFHudPasstimeBallStatus( Panel *pParent )
 	memset( m_pGoalIconsRed, 0, sizeof( m_pGoalIconsRed ) );
 	memset( m_pPlayerIcons, 0, sizeof( m_pPlayerIcons ) );
 	m_pProgressBall = 0;
+	m_pSelfplayername = 0;
 	m_pProgressBallCarrierName = 0;
 	m_pProgressLevelBar = 0;
 	m_pSelfPlayerIcon = 0;
@@ -934,6 +917,7 @@ void CTFHudPasstimeBallStatus::ApplySchemeSettings( IScheme *pScheme )
 	m_pProgressBallCarrierName = FindControl<Label>( "ProgressBallCarrierName" );
 	m_pProgressLevelBar = FindControl<Panel>( "ProgressLevelBar" );
 	m_pSelfPlayerIcon = FindControl<ImagePanel>( "ProgressSelfPlayerIcon" );
+	m_pSelfplayername = FindControl<Label>( "Selfplayername" );
 
 	Panel *pBallPowerRoot = FindControl<Panel>( "BallPowerCluster" );
 	if ( !pBallPowerRoot ) 
@@ -1042,7 +1026,7 @@ void CTFHudPasstimeBallStatus::ApplySchemeSettings( IScheme *pScheme )
 bool CTFHudPasstimeBallStatus::BShouldDraw() const
 {
 	CBasePlayer *pPlayer = CBasePlayer::GetLocalPlayer();
-	if ( !pPlayer || !pPlayer->IsAlive() || ( pPlayer->GetObserverMode() == OBS_MODE_FREEZECAM ) )
+	if ( !pPlayer || ( pPlayer->GetObserverMode() == OBS_MODE_FREEZECAM ) )
 	{
 		return false;
 	}
@@ -1143,10 +1127,15 @@ void CTFHudPasstimeBallStatus::UpdateGoalIcon( vgui::ImagePanel *pIcon, C_FuncPa
 void CTFHudPasstimeBallStatus::OnTickHidden()
 {
 	m_bGoalsFound = false;
-	
+
 	if ( m_pProgressBall )
 	{
 		m_pProgressBall->SetVisible( false );
+	}
+
+	if ( m_pSelfplayername )
+	{
+		m_pSelfplayername->SetVisible( false );
 	}
 
 	if ( m_pProgressBallCarrierName )
@@ -1201,6 +1190,7 @@ void CTFHudPasstimeBallStatus::OnTickVisible( C_TFPlayer *pLocalPlayer, C_Passti
 	{
 		m_pProgressBall->SetVisible( true );
 		m_pProgressBall->SetPos( iX_Ball, iY_Ball );
+		m_pSelfplayername->SetVisible( true );
 	}
 
 	// todo setimage from event, not every frame
@@ -1263,6 +1253,7 @@ void CTFHudPasstimeBallStatus::OnTickVisible( C_TFPlayer *pLocalPlayer, C_Passti
 	if ( m_pSelfPlayerIcon )
 	{
 		m_pSelfPlayerIcon->SetVisible( false );
+		m_pSelfplayername->SetVisible( false );
 	}
 	const int iActualBarHalfHeight = m_pProgressLevelBar ? m_pProgressLevelBar->GetTall() / 7 : 0; // magic number because NPOT waste in image
 	for ( int iEntIndex = 1; iEntIndex <= MAX_PLAYERS; iEntIndex++ )
@@ -1340,6 +1331,7 @@ void CTFHudPasstimeBallStatus::OnTickVisible( C_TFPlayer *pLocalPlayer, C_Passti
 				if ( pLocalPlayer->IsObserver() && pSpecTarget )
 				{
 					m_pSelfPlayerIcon->SetImage( GetPlayerProgressPortrait( pSpecTarget ) );
+					m_pSelfplayername->SetVisible( false );
 				}
 				else
 				{
@@ -1349,6 +1341,7 @@ void CTFHudPasstimeBallStatus::OnTickVisible( C_TFPlayer *pLocalPlayer, C_Passti
 				int iX = Lerp( flProgressFrac, m_iXBlueProgress, m_iXRedProgress ) - (m_pSelfPlayerIcon->GetWide() / 2);
 				int iY = Lerp( flProgressFrac, m_iYBlueProgress, m_iYRedProgress ) - m_pSelfPlayerIcon->GetTall() - iActualBarHalfHeight;
 				m_pSelfPlayerIcon->SetVisible( true );
+				m_pSelfplayername->SetVisible( true );
 				m_pSelfPlayerIcon->SetPos( iX, iY );
 			}
 		}

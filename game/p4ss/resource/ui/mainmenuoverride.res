@@ -437,7 +437,7 @@
 		"visible"		"1"
 
 		"font"			"HudFontSmallBold"
-		"command" 		"engine echo learn"
+		"command" 		"engine training_showdlg"
 		"labeltext"		"Learn"
 		"OnlyInGame"	"1"
 
@@ -706,15 +706,90 @@
 			}
 		}
 	}
+
+
+	"PlayernameBGBorder"
+	{
+		"ControlName"	"EditablePanel"
+		"fieldname"		"PlayernameBGBorder"
+		"xpos"			"r190"
+		"ypos"			"79"
+		"zpos"			"0"
+		"wide"			"170"
+		"tall"			"48"
+		"visible"		"1"
+		"PaintBackgroundType"	"0"
+		"border"		"MainMenuBGBorder"
+	}
+
+	"RankPanel"		//Controls the playername pos
+	{
+		"ControlName"	"CPvPRankPanel"
+		"fieldName"		"RankPanel"
+		"xpos"			"r260"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"320"
+		"tall"			"200"
+		"visible"		"1"
+		"proportionaltoparent"	"1"
+		"mouseinputenabled"	"1"
+
+		"matchgroup"	"MatchGroup_Casual_12v12"
+
+		"show_model"	"0"
+		"show_type"		"0"
+	}
 	
+	"AvataringSlot"
+	{
+		"ControlName"	"CDashboardPartyMember"
+		"fieldName"		"AvataringSlot"
+		"xpos"			"r230"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"45"
+		"tall"			"45"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"proportionaltoparent"	"0"
+		"mouseinputenabled"	"0"
+		"keyboardinputenabled"	"0"
+
+		"party_slot"	"0"
+	}
 	
-	
+	"WelcomeLabel"
+	{
+		"ControlName"	"CExLabel"
+		"fieldName"		"WelcomeLabel"
+		"font"			"waawaa"
+		"labelText"		"Welcome Back,"
+		"textAlignment"	"center"
+		"xpos"			"200"
+		"zpos"			"6"
+		"ypos"			"0"
+		"wide"			"223"
+		"tall"			"30"
+		"autoResize"	"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"AvataringSlot"
+		"pin_corner_to_sibling" 	"1"
+		"pin_to_sibling_corner" 	"1"
+	}
 	
 	"QuitMainMenuBGBorder"
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"QuitMainMenuBGBorder"
-		"xpos"			"660"
+		"xpos"			"r190"
 		"ypos"			"395"
 		"zpos"			"0"
 		"wide"			"170"
@@ -729,7 +804,7 @@
 	{
 		"ControlName"	"CExImageButton"
 		"fieldname"		"DisconnectButton"
-		"xpos"			"670"
+		"xpos"			"r180"
 		"ypos"			"403"
 		"zpos"			"15"
 		"wide"			"150"
@@ -782,7 +857,7 @@
 	{
 		"ControlName"	"CExImageButton"
 		"fieldname"		"QuitButton"
-		"xpos"			"670"
+		"xpos"			"r180"
 		"ypos"			"403"
 		"zpos"			"15"
 		"wide"			"150"
@@ -833,7 +908,7 @@
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"QuitMainMenuBGBorder"
-		"xpos"			"660"
+		"xpos"			"r190"
 		"ypos"			"290"
 		"zpos"			"0"
 		"wide"			"170"
@@ -850,7 +925,7 @@
 		"labelText"			"Community"
 		"font"				"HudFontSmallishBold"
 		"textAlignment"			"west"
-		"xpos"					"675"
+		"xpos"					"r180"
 		"ypos"					"294"
 		"wide"					"150"
 		"tall"					"25"
@@ -863,8 +938,8 @@
 	"DiscordButton"
 	{
 		"ControlName"	"CExImageButton"
-		"fieldname"		"DiscordButton"
-		"xpos"			"670"
+		"fieldname"		"PlaceholderButton"
+		"xpos"			"r180"
 		"ypos"			"320"
 		"zpos"			"15"
 		"wide"			"150"
@@ -915,7 +990,7 @@
 	{
 		"ControlName"	"CExImageButton"
 		"fieldname"		"WebsiteButton"
-		"xpos"			"670"
+		"xpos"			"r180"
 		"ypos"			"355"
 		"zpos"			"15"
 		"wide"			"150"
@@ -1875,7 +1950,7 @@
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"FriendsContainer"
-		"xpos"			"660"
+		"xpos"			"r190"
 		"ypos"			"150" //goodbye. previously 260
 		"zpos"			"5"
 		"wide"			"170"
@@ -2893,6 +2968,63 @@
 		"font"			"HudFontSmallishBold"
 		"command" 		"engine mp_tournament 1; mp_restartgame_immediate 1"
 		"labeltext"		"restart round"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+	"Arena6Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren6Button"
+		"xpos"			"c1"
+		"ypos"			"240"
+		"zpos"			"15"
+		"wide"			"140"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+			//This line is so long but it ensures that everyone can use this buttons without installing cfg's.
+		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 120; mp_tournament 1; mp_tournament_restart; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
+		"labeltext"		"practice mode"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena7Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren7Button"
+		"xpos"			"c130"
+		"ypos"			"210"
+		"zpos"			"15"
+		"wide"			"120"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine exec p4ss_pt_2025"
+		"labeltext"		"match mode"
 		"OnlyInGame"	"1"
 		
 		"border_default"	"storeinnershadowborder"

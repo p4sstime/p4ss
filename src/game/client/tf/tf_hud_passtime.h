@@ -160,6 +160,7 @@ private:
 	CHandle<C_FuncPasstimeGoal> m_hGoalsRed[NumGoalIcons];
 	vgui::ImagePanel *m_pPlayerIcons[MAX_PLAYERS_ARRAY_SAFE];
 	vgui::ImagePanel *m_pProgressBall;
+	vgui::Label *m_pSelfplayername;
 	vgui::Label *m_pProgressBallCarrierName;
 	vgui::Panel *m_pProgressLevelBar;
 	vgui::ImagePanel *m_pSelfPlayerIcon;
