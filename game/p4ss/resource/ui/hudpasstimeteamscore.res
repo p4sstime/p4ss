@@ -12,6 +12,7 @@
 		"visible"			"1"
 		"enabled"			"1"
 	}
+
 	"GreyBG"
 	{
 		"ControlName"	"EditablePanel"
@@ -29,11 +30,10 @@
 		"enabled"		"1"
 		//"image"			"../hud/greybg"
 		"scaleImage"	"1"	
-		"bgcolor_override" "32 32 32 200"
-
-
+		"bgcolor_override" "PFGrey"
 	}
-			"LeftSideBG"
+
+	"LeftSideBG"
 	{
 		"ControlName"	"ImagePanel"
 		"fieldName"		"LeftSideBG"
@@ -46,7 +46,7 @@
 		"tall"			"22"
 		"wide_minmode"	"184"
 		"tall_minmode"	"64"
-		"visible"		"0"
+		"visible"		"1"
 		"enabled"		"1"
 		"image"			"../hud/objectives_flagpanel_bg_left"
 		"scaleImage"	"1"	
@@ -68,7 +68,7 @@
 		"tall"			"22"
 		"wide_minmode"	"184"
 		"tall_minmode"	"64"
-		"visible"		"0"
+		"visible"		"1"
 		"enabled"		"1"
 		"image"			"../hud/objectives_flagpanel_bg_right"
 		"scaleImage"	"1"	
@@ -112,8 +112,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"%bluescore%"
-		"font"			"HudFontMediumBigBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack34"
+		"font_minmode"	"MontserratBlack34"
 		"fgcolor"		"255 255 246 255"
 		"pin_to_sibling" 							"LeftSideBG"
 		"pin_corner_to_sibling" "PIN_TOPRIGHT"
@@ -133,8 +133,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"%bluescore%"
-		"font"			"HudFontMediumBigBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack34"
+		"font_minmode"	"MontserratBlack34"
 		"fgcolor"		"Black"
 		
 		"pin_to_sibling"		"BlueScore"
@@ -157,8 +157,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"%redscore%"
-		"font"			"HudFontMediumBigBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack34"
+		"font_minmode"	"MontserratBlack34"
 		"fgcolor"		"255 255 246 255"		
 		"pin_to_sibling" 							"RightSideBG"
 		"pin_corner_to_sibling" "PIN_TOPLEFT"
@@ -178,8 +178,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"%redscore%"
-		"font"			"HudFontMediumBigBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack34"
+		"font_minmode"	"MontserratBlack34"
 		"fgcolor"		"Black"	
 
 		"pin_to_sibling"		"RedScore"
@@ -200,8 +200,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"BLU"
-		"font"			"HudFontMediumBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack26"
+		"font_minmode"	"MontserratBlack26"
 		"fgcolor"		"255 255 246 255"	
 
 		"pin_to_sibling"		"LeftSideBG"
@@ -221,8 +221,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"BLU"
-		"font"			"HudFontMediumBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack26"
+		"font_minmode"	"MontserratBlack26"
 		"fgcolor"		"Black"	
 
 		"pin_to_sibling"		"BluTeamName"
@@ -243,8 +243,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"RED"
-		"font"			"HudFontMediumBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack26"
+		"font_minmode"	"MontserratBlack26"
 		"fgcolor"		"255 255 246 255"	
 
 		"pin_to_sibling"		"RightSideBG"
@@ -264,8 +264,8 @@
 		"enabled"		"1"
 		"textAlignment"	"center"	
 		"labelText"		"RED"
-		"font"			"HudFontMediumBold"
-		"font_minmode"	"HudFontMedium"
+		"font"			"MontserratBlack26"
+		"font_minmode"	"MontserratBlack26"
 		"fgcolor"		"Black"	
 
 		"pin_to_sibling"		"RedTeamName"

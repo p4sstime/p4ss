@@ -62,7 +62,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"CountdownLabel"
-		"font"			"HudFontGiant"
+		"font"			"MontserratSemibold32"
 		"xpos"			"cs-0.5"
 		"ypos"			"cs-0.1"
 		"wide"			"40"
@@ -89,7 +89,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"CountdownLabelShadow"
-		"font"			"HudFontGiant"
+		"font"			"MontserratSemibold32"
 		"xpos"			"cs-0.48"
 		"ypos"			"cs-0.08"
 		"wide"			"40"
@@ -102,7 +102,7 @@
 		"wrap"			"0"
 		"labelText"		"%countdown%"
 		"textAlignment"	"center"
-		"fgcolor"		"Black"
+		"fgcolor"		"PFGrey"
 		"proportionaltoparent"	"1"
 
 	
@@ -235,7 +235,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"RankUpLabel"
-		"font"			"HudFontMediumSmallBold"
+		"font"			"MontserratBlack24"
 		"xpos"			"cs-0.5"
 		"ypos"			"80"
 		"wide"			"600"
@@ -258,7 +258,7 @@
 	{	
 		"ControlName"	"CExLabel"
 		"fieldName"		"RankUpShadowLabel"
-		"font"			"HudFontMediumSmallBold"
+		"font"			"MontserratBlack24"
 		"xpos"			"cs-0.5+2"
 		"ypos"			"80+2"
 		"wide"			"600"
@@ -299,7 +299,7 @@
 		"PositiveColor"			"0 255 0 255"
 		"NegativeColor"			"255 0 0 255"
 		"delta_lifetime"		"1.5"
-		"delta_item_font"		"HudFontMedium"
+		"delta_item_font"		"MontserratSemibold28"
 
 		if_match
 		{
@@ -313,16 +313,16 @@
 			"PositiveColor"			"0 255 0 255"
 			"NegativeColor"			"255 0 0 255"
 			"delta_lifetime"		"1.5"
-			"delta_item_font"		"HudFontMediumSmall"
+			"delta_item_font"		"MontserratSemibold24"
 		}
 		
 		"TimePanelValue"
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"TimePanelValue"
-			"font"			"HudFontMediumSmall"
-			"font_minmode"	"HudFontSmall"
-			"font_lodef"	"HudFontMedium"
+			"font"			"MontserratSemibold24"
+			"font_minmode"	"MontserratSemibold16"
+			"font_lodef"	"MontserratSemibold28"
 			"fgcolor"		"255 255 246 255"
 			"xpos"			"23"
 			"xpos_minmode"	"39"
@@ -350,9 +350,9 @@
 				"ypos"			"c-60"
 				"ypos_minmode"	"12"
 				"tall"			"10"
-				"font"			"HudFontSmallBold"
-				"font_minmode"	"HudFontSmall"
-				"font_lodef"	"HudFontSmall"
+				"font"			"MontserratBlack14"
+				"font_minmode"	"MontserratSemibold16"
+				"font_lodef"	"MontserratSemibold16"
 			}
 		}	
 
@@ -378,7 +378,12 @@
 		"pin_corner_to_sibling" "PIN_TOPLEFT"
 		"pin_to_sibling_corner" "PIN_TOPLEFT"
 		}
-
+	"SetupLabel"
+	{
+	"ControlName" "CExLabel"
+	"fieldName" "SetupLabel"
+	"font" "MontserratBlack12"
+	}
 
 	}
 	"TeamStatus"
@@ -430,7 +435,7 @@
 			{
 				"ControlName"	"CExLabel"
 				"fieldName"		"playername"
-				"font"			"HudFont10BoldShadow"
+				"font"			"MontserratBlack12Shadow"
 				"xpos"			"0"
 				"ypos"			"r14"
 				"zpos"			"7"
@@ -450,7 +455,7 @@
 			{
 				"ControlName"	"EditablePanel"
 				"fieldName"		"playernameBG"
-				"font"			"PlayerPanelPlayerName"
+				"font"			"MontserratBlack12Shadow"
 				"xpos"			"cs-0.5"
 				"ypos"			"0"
 				"zpos"			"-15"
@@ -511,7 +516,7 @@
 				"textAlignment"			"Left"
 				"dulltext"				"0"
 				"brighttext"			"0"
-				"bgcolor_override"	   "36 36 36 255"
+				"bgcolor_override"	   "PFGrey"
 				"proportionaltoparent"	"1"
 			}
 			"overhealbar"
@@ -548,7 +553,7 @@
 				"enabled"			"1"	
 				"HealthBonusPosAdj"	"10"
 				"HealthDeathWarning"		"0.49"
-				"TFFont"					"HudFontSmallest"
+				"TFFont"					"MontserratSemibold12"
 				"HealthDeathWarningColor"	"HUDDeathWarning"
 				"TextColor"					"HudOffWhite"
 			}
@@ -721,7 +726,7 @@
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"BlueTeamLabel"
-			"font"			"CompMatchStartTeamNames"
+			"font"			"MontserratSemibold16"
 			"labelText"		"%blueteamname%"
 			"textAlignment"		"center"
 			"xpos"			"48"
@@ -859,7 +864,7 @@
 		{
 			"ControlName"		"CExLabel"
 			"fieldName"		"RedTeamLabel"
-			"font"			"CompMatchStartTeamNames"
+			"font"			"MontserratSemibold16"
 			"labelText"		"%redteamname%"
 			"textAlignment"		"center"
 			"xpos"			"5"

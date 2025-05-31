@@ -93,7 +93,7 @@
 		"enabled"		"1"
 		"labelText"		"%Health%"
 		"textAlignment"	"center"	
-		"font"			"HudFontMediumBold"
+		"font"			"MontserratBlack26"
 		"fgcolor"		"TanDark"
 		"pin_to_sibling" 	"PlayerStatusHealthImage"
 	}
