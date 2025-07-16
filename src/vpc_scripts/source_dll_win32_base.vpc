@@ -142,7 +142,8 @@ $Project
 		$Lib	"$LIBPUBLIC\tier1"
 		$Implib	"$LIBPUBLIC\vstdlib"
 		$Lib "$LIBPUBLIC\discord-rpc" [$DISCORDRPC]
-		// $Implib "$LIBPUBLIC\discord_partner_sdk" [$DISCORDSOCIAL]
+		$Implib "$LIBPUBLIC\discord_partner_sdk" [$DISCORDSOCIAL]
+		
 	}
 }
 

@@ -55,5 +55,6 @@ $Project
 	$Folder	"Link Libraries"
 	{
 		$Lib "$LIBPUBLIC\libdiscord-rpc" [$DISCORDRPC]
+		//$Implib "discord_partner_sdk" [$DISCORDSOCIAL]
 	}
 }

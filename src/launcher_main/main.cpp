@@ -671,6 +671,7 @@ int main( int argc, char *argv[] )
 		snprintf( szBuffer, sizeof( szBuffer ), "LD_LIBRARY_PATH=%s:%s/%s", szLibPath, pRootDir, PLATFORM_BIN_DIR );
 		szBuffer[sizeof( szBuffer ) - 1] = '\0';
 		putenv( szBuffer );
+		printf("LD_LIBRARY_PATH: %s\n", szBuffer);
 	}
 	else
 	{
@@ -678,7 +679,10 @@ int main( int argc, char *argv[] )
 		snprintf( szBuffer, sizeof( szBuffer ), "LD_LIBRARY_PATH=%s/%s", pRootDir, PLATFORM_BIN_DIR );
 		szBuffer[sizeof( szBuffer ) - 1] = '\0';
 		putenv( szBuffer );
+	printf("LD_LIBRARY_PATH: %s\n", szBuffer);
+
 	}
+
 	execvp( szExecutable, new_argv.data() );
 
 	return 0;

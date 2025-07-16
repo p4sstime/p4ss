@@ -1,5 +1,7 @@
 # Files to ignore when considering what GIT should commit.
 
+
+
 # Ignore SteamPipe build details
 steam/*
 steam/
@@ -566,3 +568,10 @@ game/p4ss/cfg/settings.scr
 game/p4ss/screenshots/
 game/p4ss/screenshots/*
 .vscode/tasks.json
+
+# Add external libraries
+!game/bin
+!game/bin/linux64
+game/bin/linux64/*
+!game/bin/linux64/libdiscord_partner_sdk.so
+!game/bin/linux64/libsteam_api.so
