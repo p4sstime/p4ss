@@ -682,7 +682,8 @@ int main( int argc, char *argv[] )
 	printf("LD_LIBRARY_PATH: %s\n", szBuffer);
 
 	}
-
+	setenv("SDL_VIDEODRIVER", "x11", 1);
+	
 	execvp( szExecutable, new_argv.data() );
 
 	return 0;

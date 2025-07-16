@@ -25,6 +25,9 @@ class CDiscordManager : public CBaseGameSystemPerFrame
 	virtual const char *Name() { return "CDiscordManager"; }
 	virtual bool Init();
 	virtual void PostInit() {};
+
+	virtual void LevelInitPreEntity();
+	virtual void LevelShutdownPreEntity() {};
 	virtual void Shutdown();
 	virtual void Update( float frametime );
 };

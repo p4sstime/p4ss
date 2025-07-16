@@ -16,6 +16,7 @@ uint64_t APPLICATION_ID = cl_discord_appid.GetInt();
 bool CDiscordManager::Init()
 {
 	m_pClient = new discordpp::Client();
+	m_pClient->SetApplicationId(APPLICATION_ID);
 	m_pClient->AddLogCallback( [] (std::string msg, auto severity) {
 		switch ( severity )
 		{
@@ -23,7 +24,7 @@ bool CDiscordManager::Init()
 				Msg( "[Discord NONE] %s\n", msg.c_str() );
 				break;
 			case discordpp::LoggingSeverity::Info:
-				DevMsg( "[Discord INFO] %s\n", msg.c_str() );
+				DevMsg( 1, "[Discord INFO] %s\n", msg.c_str() );
 				break;
 			case discordpp::LoggingSeverity::Warning:
 				Msg( "[Discord WARN] %s\n", msg.c_str() );
@@ -37,42 +38,58 @@ bool CDiscordManager::Init()
 	}, discordpp::LoggingSeverity::Info ); 
 	m_pClient->SetStatusChangedCallback( [this] (auto status, auto err, auto errcode) {
 		Msg("[Discord] Client status changed: %s\n", discordpp::Client::StatusToString(status).c_str());
-		if (status == discordpp::Client::Status::Ready)
+		if ( status == discordpp::Client::Status::Ready )
 		{
 			this->m_bReady = true;
 			Msg( "[Discord] Client is ready\n" );
-
-			discordpp::Activity activity;
-			activity.SetType( discordpp::ActivityTypes::Playing );
-			activity.SetName( "Half-Life 2" );
-			activity.SetState( "Test!" );
-			activity.SetDetails( "Puse dog" );
-			m_pClient->UpdateRichPresence( activity, [](discordpp::ClientResult result) {
-				if (result.Successful())
-				{
-					Msg( "[Discord] Rich presence updated successfully\n" );
-				}
-				else
-				{
-					Msg( "[Discord] Failed to update rich presence: %s\n", result.Error().c_str() );
-				}
-			});
+			
 		}
 		else if (status == discordpp::Client::Status::Disconnected)
 		{
 			this->m_bReady = false;
 			Msg( "[Discord] Client is disconnected\n" );
 		}
-		else if (err != discordpp::Client::Error::None)
+		if (err != discordpp::Client::Error::None)
 		{
 			this->m_bReady = false;
 			Msg( "[Discord] Client error! : '%s', error detail %d\n", discordpp::Client::ErrorToString(err).c_str(), errcode );
 		}
 	} );
 
-	printf("[Discord] Setup!\n");
+	// Create a new activity
+discordpp::Activity activity;
+activity.SetType(discordpp::ActivityTypes::Playing);
+activity.SetDetails("Battle Creek");
+activity.SetState("In Competitive Match");
+
+// Update the presence
+m_pClient->UpdateRichPresence(activity, [](discordpp::ClientResult result) {
+  if (result.Successful()) {
+    Msg("✅ Rich presence updated!\n");
+  }
+});
+
 	discordpp::RunCallbacks();
 	return true;
+}
+
+void CDiscordManager::LevelInitPreEntity() 
+{
+	Msg("[Discord] LevelInitPreEntity called, updating rich presence if ready. Ready: %s...\n", m_bReady ? "true" : "false"	);
+		discordpp::Activity activity;
+		activity.SetType( discordpp::ActivityTypes::Playing );
+		activity.SetDetails("Battle Creek");
+		activity.SetState( "In a level" );
+		// Update the presence
+		m_pClient->UpdateRichPresence( activity,
+									   []( discordpp::ClientResult result )
+									   {
+										   if ( result.Successful() )
+										   {
+											   Msg(
+											   "✅ Rich presence updated!\n" );
+										   }
+									   } );
 }
 
 void CDiscordManager::Update(float frametime) 
