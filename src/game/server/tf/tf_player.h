@@ -1558,6 +1558,14 @@ public:
 
 	virtual bool BCanCallVote() OVERRIDE;
 	bool m_bFirstSpawnAndCanCallVote = false;
+
+
+public:
+	const char *GetShortNick();
+
+	CNetworkString( m_sPlayerShortNick, 5 );
+private:
+
 };
 
 //-----------------------------------------------------------------------------
