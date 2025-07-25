@@ -11357,6 +11357,7 @@ void C_TFPlayer::UpdateGlowColor( void )
 	}
 }
 
+ConVar p4ss_glow_healthcolor( "p4ss_glow_healthcolor", "1", FCVAR_ARCHIVE, "Enables health-based coloring of the teammate glow." );
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -11386,6 +11387,31 @@ void C_TFPlayer::GetGlowEffectColor( float *r, float *g, float *b )
 	C_TFPlayer *pLocalPlayer = GetLocalTFPlayer();
 	// In CTF, show health color glow for alive player
 	if ( pLocalPlayer && pLocalPlayer->IsAlive() && TFGameRules() && ( TFGameRules()->GetGameType() == TF_GAMETYPE_CTF ) && HasTheFlag() )
+	{
+		float flHealth = (float)GetHealth() / (float)GetMaxHealth();
+
+		if ( flHealth > 0.6 )
+		{
+			*r = 0.33f;
+			*g = 0.75f;
+			*b = 0.23f;
+		}
+		else if( flHealth > 0.3 )
+		{
+			*r = 0.75f;
+			*g = 0.72f;
+			*b = 0.23f;
+		}
+		else
+		{
+			*r = 0.75f;
+			*g = 0.23f;
+			*b = 0.23f;
+		}
+		return;
+	}
+
+	if ( pLocalPlayer && p4ss_glow_healthcolor.GetBool() )
 	{
 		float flHealth = (float)GetHealth() / (float)GetMaxHealth();
 
