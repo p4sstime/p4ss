@@ -3366,6 +3366,19 @@ Scheme
 				"tall"	"16"
 			}
 		}
+		"NametagSmall"
+		{
+			"1"
+			{
+				"name"		"Montserrat Black"
+				"tall"		"16"
+				"weight"	"400"
+				"additive"	"1"
+				"antialias" "1"
+				"dropshadow"	"1"
+			}
+
+		 }	
 		
 	}
 
