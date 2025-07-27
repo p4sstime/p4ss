@@ -1,0 +1,53 @@
+"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{241 77 39}"
+	"%keywords"				"tf,pf,overlay""LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{48 153 241}"
+	"%keywords"			"tf,pf,overlay""LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{237 216 36}"
+	"%keywords"				"tf,pf,overlay""LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{241 77 39}"
+	"%keywords"				"tf,pf,overlay"
+}"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{48 153 241}"
+	"%keywords"			"tf,pf,overlay"
+}"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{237 216 36}"
+	"%keywords"				"tf,pf,overlay"
+}"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{1 18 132}"
+	"%keywords"				"tf,pf,overlay"
+}}"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{171 6 1}"
+	"%keywords"				"tf,pf,overlay"
+}
+}"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{255 198 1}"
+	"%keywords"				"tf,pf,overlay"
+}}

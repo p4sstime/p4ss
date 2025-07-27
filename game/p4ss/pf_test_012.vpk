@@ -1,0 +1,10 @@
+"LightmappedGeneric"
+{
+	"$baseTexture" 		"Concrete/concretewall_island001c"
+	"%keywords" 		"tf,pf,arena2,arena"
+	"$color"			"{ 255 220 175 }"
+	"$detail" 			"overlays/detail001"
+	"$detailscale" 		"1.9"
+	"$detailblendmode" 	"0"
+	"$detailblendfactor" "1"
+}

@@ -1,0 +1,18 @@
+"WorldVertexTransition"
+{
+	"$basetexture"				"concrete/concretefloor003"
+	"$basetexture2"				"nature/rockground002"
+	
+	"$ssbump"					1
+	"$bumpmap"					"concrete/concretefloor007b_height-ssbump"
+	"$bumpmap2"					"nature/rockground002_height-ssbump"
+	
+	"$blendmodulatetexture"		"nature/snowgrass_blendmask"
+	//"$detail" 					"overlays/detail001"
+	//"$detailscale" 				"1.86"
+	//"$detailblendmode" 			0
+	//"$detailblendfactor" 		"0.8"
+	
+	"$surfaceprop"				"concrete"
+	"%keywords"					"tf,pf,arena,arena2"
+}}

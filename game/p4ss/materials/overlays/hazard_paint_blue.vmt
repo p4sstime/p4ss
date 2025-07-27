@@ -1,0 +1,9 @@
+"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"$color"				"{1 18 132}"
+	"$envmap"				"env_cubemap"
+	"$envmaptint"			"{1 18 132}"
+	"%keywords"				"tf,pf,overlay"
+}

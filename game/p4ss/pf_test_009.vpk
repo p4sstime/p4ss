@@ -1,0 +1,14 @@
+"LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$translucent"			1
+	"%keywords"				"tf,pf,overlay"
+}lay""LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$color"				"{48 153 241}"
+	"%keywords"				"tf,pf,overlay""LightmappedGeneric"
+{
+	"$basetexture"			"overlays/hazard_paint"
+	"$color"				"{237 216 36}"
+	"%keywords"				"tf,pf,overlay"
