@@ -88,10 +88,15 @@ public:
 	void Event_PlayerThrowableHit( CTFPlayer *pPlayer );
 	void Event_PlayerThrowableKill( CTFPlayer *pPlayer );
 	void Event_PlayerEarnedKillStreak( CTFPlayer *pPlayer );
-	void Event_PlayerP4ssGoal( CTFPlayer *pPlayer );
-	void Event_PlayerP4ssAssist( CTFPlayer *pPlayer );
-	void Event_PlayerP4ssSave( CTFPlayer *pPlayer );
+
+	void Event_PlayerP4ssAssist(    CTFPlayer *pPlayer );
+	void Event_PlayerP4ssGoal(      CTFPlayer *pPlayer );
+	void Event_PlayerP4ssHandoff(   CTFPlayer *pPlayer );
 	void Event_PlayerP4ssIntercept( CTFPlayer *pPlayer );
+	void Event_PlayerP4ssPass(      CTFPlayer *pPlayer );
+	void Event_PlayerP4ssSave(      CTFPlayer *pPlayer );
+	void Event_PlayerP4ssSplash(    CTFPlayer *pPlayer );
+	void Event_PlayerP4ssSteal(     CTFPlayer *pPlayer );
 
 	void Event_HalloweenBossEvent( uint8 unBossType, uint16 unBossLevel, uint8 unEventType, uint8 unPlayersInvolved, float fElapsedTime );
 

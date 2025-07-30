@@ -1,49 +1,50 @@
 "Resource/UI/Scoreboard.res"
 {
+// P4SS: Need to sort out what stats to display on scoreboard.
 
-//Possibly broken in 4:3. MvM completely broken but who cares.
-//Competitive matchmaking leader avatar icons unaccounted for but who cares.
-//Dueling HUD unaccounted for, but we likely don't have working duels in this anyway. 
-//Bottom stats not centered, but will be revisited when/if adding more stats.
+// Possibly broken in 4:3. MvM completely broken but who cares.
+// Competitive matchmaking leader avatar icons unaccounted for but who cares.
+// Dueling HUD unaccounted for, but we likely don't have working duels in this anyway. 
+// Bottom stats not centered, but will be revisited when/if adding more stats.
 
 	"scores"
 	{
-		"ControlName"		"CTFClientScoreBoardDialog"
-		"fieldName"		"scoreinfo"
-		"xpos"			"0"
-		"ypos"			"0"
-		"wide"			"f0"
-		"tall"			"f0"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"		"0"
-		"medal_width"		"0"
-		"avatar_width"		"27"
-		"spacer"			"5"
-		"name_width"		"118"
-		"nemesis_width"		"25"
-		"class_width"		"25"
-		"score_width"		"25"
-		"ping_width"		"25"
-		"killstreak_width"	"15"
-		"killstreak_image_width" "15"
+		"ControlName"				"CTFClientScoreBoardDialog"
+		"fieldName"					"scoreinfo"
+		"xpos"						"0"
+		"ypos"						"0"
+		"wide"						"f0"
+		"tall"						"f0"
+		"autoResize"				"0"
+		"pinCorner"					"0"
+		"visible"					"1"
+		"enabled"					"1"
+		"tabPosition"				"0"
+		"medal_width"				"0"
+		"avatar_width"				"27"
+		"spacer"					"5"
+		"name_width"				"118"
+		"nemesis_width"				"25"
+		"class_width"				"25"
+		"score_width"				"25"
+		"ping_width"				"25"
+		"killstreak_width"			"15"
+		"killstreak_image_width"	"15"
 	}
 	"BlueScoreBG"
 	{
-		"ControlName"		"EditablePanel"
-		"fieldName"		"BlueScoreBG"
-		"xpos"			"30"
-		"ypos"			"-25"
-		"wide"			"70"
-		"tall"			"40"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"proportionaltoparent"	"1"
-		"border"		"TFFatLineBorderBlueBGOpaque"
+		"ControlName"          "EditablePanel"
+		"fieldName"            "BlueScoreBG"
+		"xpos"                 "30"
+		"ypos"                 "-25"
+		"wide"                 "70"
+		"tall"                 "40"
+		"autoResize"           "0"
+		"pinCorner"            "0"
+		"visible"              "1"
+		"enabled"              "1"
+		"proportionaltoparent" "1"
+		"border"               "TFFatLineBorderBlueBGOpaque"
 		
 		"pin_to_sibling"	"BlueTeamImage"
 		"pin_corner_to_sibling"		"PIN_BOTTOM_LEFT"

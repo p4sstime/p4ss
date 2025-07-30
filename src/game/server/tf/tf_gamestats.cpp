@@ -2933,24 +2933,29 @@ void CTFGameStats::Event_PlayerEarnedKillStreak( CTFPlayer *pAttacker )
 	}
 }
 
-void CTFGameStats::Event_PlayerP4ssGoal( CTFPlayer *pPlayer )
-{
-	IncrementStat( pPlayer, TFSTAT_P4SS_SCORES, 1 );
+void CTFGameStats::Event_PlayerP4ssAssist(    CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_ASSISTS,    1 );
 }
-
-void CTFGameStats::Event_PlayerP4ssSave( CTFPlayer *pPlayer )
-{
-	IncrementStat( pPlayer, TFSTAT_P4SS_SAVES, 1 );
+void CTFGameStats::Event_PlayerP4ssGoal(      CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_GOALS,      1 );
 }
-
-void CTFGameStats::Event_PlayerP4ssAssist( CTFPlayer *pPlayer )
-{
-	IncrementStat( pPlayer, TFSTAT_P4SS_ASSISTS, 1 );
+void CTFGameStats::Event_PlayerP4ssHandoff(   CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_HANDOFFS,   1 );
 }
-
-void CTFGameStats::Event_PlayerP4ssIntercept( CTFPlayer *pPlayer )
-{
+void CTFGameStats::Event_PlayerP4ssIntercept( CTFPlayer *pPlayer ) {
 	IncrementStat( pPlayer, TFSTAT_P4SS_INTERCEPTS, 1 );
+}
+void CTFGameStats::Event_PlayerP4ssPass(      CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_PASSES,     1 );
+}
+void CTFGameStats::Event_PlayerP4ssSave(      CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_SAVES,      1 );
+}
+void CTFGameStats::Event_PlayerP4ssSplash(    CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_SPLASHES,   1 );
+}
+void CTFGameStats::Event_PlayerP4ssSteal(     CTFPlayer *pPlayer ) {
+	IncrementStat( pPlayer, TFSTAT_P4SS_STEALS,     1 );
 }
 
 //-----------------------------------------------------------------------------

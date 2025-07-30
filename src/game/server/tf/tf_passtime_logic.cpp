@@ -1176,10 +1176,7 @@ void CTFPasstimeLogic::OnBallCarrierDamaged( CTFPlayer *pPlayer, CTFPlayer *pAtt
 		return;
 	}
 
-	//
-	// Only care about melee damage
-	//
-	// DMG_CLUB is demo charge
+	// Only melee and shield damage
 	if ( !tf_passtime_steal_on_melee.GetBool() || !(info.GetDamageType() & (DMG_MELEE | DMG_CLUB)) ) 
 	{
 		return;
@@ -1231,6 +1228,7 @@ void CTFPasstimeLogic::StealBall( CTFPlayer *pFrom, CTFPlayer *pTo )
 
 		TFGameRules()->BroadcastSound( 255, "Passtime.BallStolen" );
 
+		CTF_GameStats.Event_PlayerP4ssSteal( pTo );
 		++CTF_GameStats.m_passtimeStats.summary.nTotalSteals;
 
 		m_hBall->SetStateCarried( pTo );
@@ -1473,8 +1471,7 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 				auto pAssister = pPlayer;
 				CTF_GameStats.Event_PlayerP4ssGoal( pScorer );
 				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
-				PasstimeGameEvents::Score( pScorer->entindex(), pAssister->entindex(), iPoints, true, false, false ) // dont care that panacea exists BECAUSE WE JUST HIT THE DEATHBOMB.
-				.Fire();
+				PasstimeGameEvents::Goal( pScorer->entindex(), pAssister->entindex(), iPoints, true, false, false ).Fire(); // dont care that panacea exists BECAUSE WE JUST HIT THE DEATHBOMB.
 			}
 		}
 		else
@@ -1504,12 +1501,12 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 			if ( pAssister )
 			{
 				CTF_GameStats.Event_PlayerAwardBonusPoints( pAssister, 0, 10 );
-				PasstimeGameEvents::Score( pPlayer->entindex(), pAssister->entindex(), iPoints, false, isPanacea, isWinstrat ).Fire();
+				PasstimeGameEvents::Goal( pPlayer->entindex(), pAssister->entindex(), iPoints, false, isPanacea, isWinstrat ).Fire();
 				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
 			}
 			else
 			{
-				PasstimeGameEvents::Score( pPlayer->entindex(), iPoints, isPanacea, isWinstrat )
+				PasstimeGameEvents::Goal( pPlayer->entindex(), iPoints, isPanacea, isWinstrat )
 				.Fire();
 			}
 			CTF_GameStats.Event_PlayerP4ssGoal( pPlayer );
@@ -1607,7 +1604,7 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 		&& (pCatcher != pBall->GetPrevCarrier())) // and not passed to yourself...
 	{
 		bool isHandoff = false;
-		bool isBlock = false;
+		bool didPlayerSaveGoal = false;
 		bool bAllowCheerSound = false;
 
 		int iDistanceBonus = ( int ) ( pBall->GetAirtimeSec() * tf_passtime_powerball_airtimebonus.GetFloat() );
@@ -1627,6 +1624,8 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 				// pass was caught by teammate
 				++CTF_GameStats.m_passtimeStats.summary.nTotalPassesCompleted;
 				CTF_GameStats.m_passtimeStats.AddPassTravelDistSample( pBall->GetAirtimeDistance() );
+				
+				CTF_GameStats.Event_PlayerP4ssPass(pThrower);
 
 				// award bonus effects for pass
 				pCatcher->m_Shared.AddCond( TF_COND_SPEED_BOOST, tf_passtime_speedboost_on_get_ball_time.GetFloat() );
@@ -1688,9 +1687,9 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 			}
 			else
 			{
-				// toss was caught by teammate
-				DevMsg("P4SS Tossed ball caught by teammates\n");
 				// P4SS: handoff detection
+
+				DevMsg("P4SS Tossed ball caught by teammates\n");
 
 				// Code from Sourcemod: 
 				// https://github.com/p4sstime/p4sstime-server-resources/blob/f661e2e0f3e02c2d0ca2fc052df1c399454161b6/scripting/p4sstime.sp#L542
@@ -1717,6 +1716,7 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 						DevMsg("P4SS isHandoff = true\n");
 						isHandoff = true;
 						TFGameRules()->BroadcastSound( 255, "TFPlayer.StunImpactRange" );
+						CTF_GameStats.Event_PlayerP4ssHandoff(pThrower);
 					}
 				}
 				++CTF_GameStats.m_passtimeStats.summary.nTotalTossesCompleted;
@@ -1804,10 +1804,10 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 
 			if ( pBall->PlayerInGoalieZone( pCatcher ) && pBall->GetTeamNumber() != pCatcher->GetTeamNumber()  )
 			{
-				isBlock = true;
+				didPlayerSaveGoal = true;
 			}
 
-			if ( isBlock )
+			if ( didPlayerSaveGoal )
 			{
 				CTF_GameStats.Event_PlayerP4ssSave( pCatcher );
 			}
@@ -1825,7 +1825,7 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 			CrowdReactionSound( pCatcher->GetTeamNumber() );
 		}
 		Msg("Reached end of OnPlayerTouchBall, firing event PassCaught with isHandoff (%s)\n", isHandoff ? "true" : "false");
-		PasstimeGameEvents::PassCaught( pThrower->entindex(), pCatcher->entindex(), flFeet, pBall->GetAirtimeSec(), isHandoff, isBlock ).Fire();
+		PasstimeGameEvents::PassCaught( pThrower->entindex(), pCatcher->entindex(), flFeet, pBall->GetAirtimeSec(), isHandoff, didPlayerSaveGoal ).Fire();
 	}
 	else 
 	{

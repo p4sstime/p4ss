@@ -27,10 +27,16 @@ extern ConVar mp_disable_respawn_times;
 // Datatable
 IMPLEMENT_SERVERCLASS_ST( CTFPlayerResource, DT_TFPlayerResource )
 	SendPropArray3( SENDINFO_ARRAY3( m_iTotalScore ), SendPropInt( SENDINFO_ARRAY( m_iTotalScore ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssScores ), SendPropInt( SENDINFO_ARRAY( m_iP4ssScores ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssAssists ), SendPropInt( SENDINFO_ARRAY( m_iP4ssAssists ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssSaves ), SendPropInt( SENDINFO_ARRAY( m_iP4ssSaves ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssAssists ),    SendPropInt( SENDINFO_ARRAY( m_iP4ssAssists ),    -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssHandoffs ),   SendPropInt( SENDINFO_ARRAY( m_iP4ssHandoffs ),   -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssIntercepts ), SendPropInt( SENDINFO_ARRAY( m_iP4ssIntercepts ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssPasses ),     SendPropInt( SENDINFO_ARRAY( m_iP4ssPasses ),     -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssSaves ),      SendPropInt( SENDINFO_ARRAY( m_iP4ssSaves ),      -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssGoals ),      SendPropInt( SENDINFO_ARRAY( m_iP4ssGoals ),      -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssSplashes ),   SendPropInt( SENDINFO_ARRAY( m_iP4ssSplashes ),   -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_iP4ssSteals ),     SendPropInt( SENDINFO_ARRAY( m_iP4ssSteals ),     -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
+	
 	SendPropArray3( SENDINFO_ARRAY3( m_iMaxHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iMaxBuffedHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxBuffedHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerClass ), SendPropInt( SENDINFO_ARRAY( m_iPlayerClass ), 5, SPROP_UNSIGNED ) ),
@@ -240,10 +246,14 @@ void CTFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer 
 
 		if ( TFGameRules()->IsPasstimeMode() )
 		{
-			m_iP4ssScores.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SCORES] );
-			m_iP4ssAssists.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_ASSISTS] );
-			m_iP4ssSaves.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SAVES] );
+			m_iP4ssAssists.Set(    iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_ASSISTS] );
+			m_iP4ssHandoffs.Set(   iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_HANDOFFS] );
 			m_iP4ssIntercepts.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_INTERCEPTS] );
+			m_iP4ssPasses.Set(     iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_PASSES] );
+			m_iP4ssSaves.Set(      iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SAVES] );
+			m_iP4ssGoals.Set(      iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_GOALS] );
+			m_iP4ssSplashes.Set(   iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SPLASHES] );
+			m_iP4ssSteals.Set(     iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_STEALS] );
 		}
 	}
 
@@ -424,10 +434,15 @@ void CTFPlayerResource::Init( int iIndex )
 	m_iPlayerClassWhenKilled.Set( iIndex, TF_CLASS_UNDEFINED );
 	m_iConnectionState.Set( iIndex, MM_DISCONNECTED );
 	m_bValid.Set( iIndex, 0 );
-	m_iP4ssScores.Set( iIndex, 0 );
-	m_iP4ssAssists.Set( iIndex, 0 );
-	m_iP4ssSaves.Set( iIndex, 0 );
+
+	m_iP4ssAssists.Set(    iIndex, 0 );
+	m_iP4ssHandoffs.Set(   iIndex, 0 );
 	m_iP4ssIntercepts.Set( iIndex, 0 );
+	m_iP4ssPasses.Set(     iIndex, 0 );
+	m_iP4ssSaves.Set(      iIndex, 0 );
+	m_iP4ssGoals.Set(      iIndex, 0 );
+	m_iP4ssSplashes.Set(   iIndex, 0 );
+	m_iP4ssSteals.Set(     iIndex, 0 );
 }
 
 //-----------------------------------------------------------------------------

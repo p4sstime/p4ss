@@ -661,7 +661,7 @@ void CTFHudDeathNotice::Init()
 	ListenForGameEvent( PasstimeGameEvents::BallSplashed::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallDirected::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallStolen::s_eventName );
-	ListenForGameEvent( PasstimeGameEvents::Score::s_eventName );
+	ListenForGameEvent( PasstimeGameEvents::Goal::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::PassCaught::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallBlocked::s_eventName );
 }
@@ -1363,8 +1363,9 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		Q_snprintf( msg.szIcon, sizeof(msg.szIcon), "d_%s", killedwith );
 	}
-	else if ( FStrEq( PasstimeGameEvents::BallSplashed::s_eventName, pszEventName ) )
-	{
+
+	// P4SS: add killfeed notifications here
+	else if ( FStrEq( PasstimeGameEvents::BallSplashed::s_eventName, pszEventName ) ) { // passtime ball splashed
 		PasstimeGameEvents::BallSplashed ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[iDeathNoticeMsg];
 
@@ -1387,9 +1388,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		Q_snprintf( msg.szIcon, sizeof( msg.szIcon ), "d_%s", ev.inflictorName );
 	}
-	// P4SS: add killfeed notifications here
-	else if ( FStrEq( PasstimeGameEvents::BallDirected::s_eventName, pszEventName ) )
-	{
+	else if ( FStrEq( PasstimeGameEvents::BallDirected::s_eventName, pszEventName ) ) { // passtime ball directed
 		PasstimeGameEvents::BallDirected ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[iDeathNoticeMsg];
 
@@ -1410,10 +1409,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		Q_snprintf( msg.szIcon, sizeof( msg.szIcon ), "d_%s", ev.inflictorName );
 	}
-	else if ( FStrEq( PasstimeGameEvents::BallGet::s_eventName, pszEventName ) ) // passtime ball get
-	{
-		// P4SS: add killfeed notifications here
-
+	else if ( FStrEq( PasstimeGameEvents::BallGet::s_eventName, pszEventName ) ) {      // passtime ball get
 		PasstimeGameEvents::BallGet ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 
@@ -1433,8 +1429,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		const char *const icon = "d_passtime_pass";
 		Q_strncpy( msg.szIcon, icon, ARRAYSIZE( msg.szIcon ) );
 	}
-	else if ( FStrEq( PasstimeGameEvents::BallStolen::s_eventName, pszEventName ) ) // passtime ball stolen
-	{
+	else if ( FStrEq( PasstimeGameEvents::BallStolen::s_eventName, pszEventName ) ) {   // passtime ball stolen
 		PasstimeGameEvents::BallStolen ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 
@@ -1461,9 +1456,8 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		// icon
 		Q_strncpy( msg.szIcon, "d_passtime_steal", ARRAYSIZE(msg.szIcon) );
 	}
-	else if ( FStrEq( PasstimeGameEvents::Score::s_eventName, pszEventName ) ) // passtime score
-	{
-		PasstimeGameEvents::Score ev( event );
+	else if ( FStrEq( PasstimeGameEvents::Goal::s_eventName, pszEventName ) ) {         // passtime goal
+		PasstimeGameEvents::Goal ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 
 		// info
@@ -1493,8 +1487,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 			: "d_passtime_score_blue";
 		Q_strncpy( msg.szIcon, icon, ARRAYSIZE( msg.szIcon ) );
 	}
-	else if ( FStrEq( PasstimeGameEvents::PassCaught::s_eventName, pszEventName ) ) // passtime pass
-	{
+	else if ( FStrEq( PasstimeGameEvents::PassCaught::s_eventName, pszEventName ) ) {   // passtime pass
 		PasstimeGameEvents::PassCaught ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 
@@ -1510,20 +1503,20 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		{
 			// pass
 			killerIndex = ev.passerIndex;
-			killerTeam = passerTeam;
+			killerTeam  = passerTeam;
 			victimIndex = ev.catcherIndex;
-			victimTeam = catcherTeam;
-			pszDesc = "#Msg_PasstimePassComplete";
+			victimTeam  = catcherTeam;
+			pszDesc     = "#Msg_PasstimePassComplete";
 			Q_strncpy( msg.szIcon, "d_passtime_pass", ARRAYSIZE(msg.szIcon) );
 		}
 		else
 		{
 			// interception
 			victimIndex = ev.passerIndex;
-			victimTeam = passerTeam;
+			victimTeam  = passerTeam;
 			killerIndex = ev.catcherIndex;
-			killerTeam = catcherTeam;
-			pszDesc = "#Msg_PasstimeInterception";
+			killerTeam  = catcherTeam;
+			pszDesc     = "#Msg_PasstimeInterception";
 			Q_strncpy( msg.szIcon, "d_passtime_intercept", ARRAYSIZE(msg.szIcon) );
 		}
 
@@ -1544,8 +1537,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		msg.bLocalPlayerInvolved = (localPlayerIndex == ev.catcherIndex)
 			|| (localPlayerIndex == ev.passerIndex);
 	}
-	else if ( FStrEq( PasstimeGameEvents::BallBlocked::s_eventName, pszEventName ) ) // passtime ball stolen
-	{
+	else if ( FStrEq( PasstimeGameEvents::BallBlocked::s_eventName, pszEventName ) ) {  // passtime ball stolen
 		PasstimeGameEvents::BallBlocked ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 

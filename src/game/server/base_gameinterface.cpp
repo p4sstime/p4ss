@@ -13,8 +13,13 @@
 
 void CServerGameClients::GetPlayerLimits( int& minplayers, int& maxplayers, int &defaultMaxPlayers ) const
 {
-	minplayers = defaultMaxPlayers = 1; 
-	maxplayers = MAX_PLAYERS;
+	minplayers        = 1;
+	maxplayers        = MAX_PLAYERS;
+	defaultMaxPlayers = 16;
+
+	// Avoid prop buffer overflow
+	if (maxplayers > MAX_PLAYERS)
+		maxplayers = MAX_PLAYERS;
 }
 
 

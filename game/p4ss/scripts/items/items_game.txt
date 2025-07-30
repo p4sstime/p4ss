@@ -10760,7 +10760,7 @@
 				}
 				"type"		"AND"
 			}
-			"event_name"		"pass_pass_caught"
+			"event_name"		"pass_caught"
 			"type"		"event_listener"
 		}
 		"name"		"Intercept a PASS Time ball"

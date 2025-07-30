@@ -837,57 +837,37 @@ void CTFHudPasstimeEventText::EnqueueGeneric( const char *pTitle, const char *pD
 }
 
 //-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueueSteal( C_TFPlayer *pVictim, C_TFPlayer *pStealer )
-{
-	Enqueue( pVictim, pStealer, "#Msg_PasstimeEventStealTitle", "#Msg_PasstimeEventStealDetail", "#Msg_PasstimeEventStealBonus" );
-}
-
-//-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueuePass( C_TFPlayer *pThrower, C_TFPlayer *pCatcher )
-{
-	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventPassTitle", "#Msg_PasstimeEventPassDetail", "#Msg_PasstimeEventPassBonus" );
-}
-//-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueueSave( C_TFPlayer *pThrower, C_TFPlayer *pCatcher )
-{
-	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventSaveTitle", "#Msg_PasstimeEventSaveDetail", "#Msg_PasstimeEventSaveBonus" );
-}
-//-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueueHandoff( C_TFPlayer *pThrower, C_TFPlayer *pCatcher )
-{
-	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventHandoffTitle", "#Msg_PasstimeEventHandoffDetail", "#Msg_PasstimeEventPassBonus" );
-}
-//-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueueInterception( C_TFPlayer *pThrower, C_TFPlayer *pCatcher )
-{
-	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventInterceptTitle", "#Msg_PasstimeEventInterceptDetail", "#Msg_PasstimeEventInterceptBonus" );
-}
-
-//-----------------------------------------------------------------------------
-void CTFHudPasstimeEventText::EnqueueScore( C_TFPlayer *pThrower, C_TFPlayer *pAssister )
-{
+void CTFHudPasstimeEventText::EnqueueGoal(        C_TFPlayer *pThrower, C_TFPlayer *pAssister ) {
 	if ( pAssister )
 		Enqueue( pAssister, pThrower, "#Msg_PasstimeEventScoreTitle", "#Msg_PasstimeEventScoreDetail_Assist", "#Msg_PasstimeEventScoreBonus" );
 	else
 		Enqueue( pAssister, pThrower, "#Msg_PasstimeEventScoreTitle", "#Msg_PasstimeEventScoreDetail_NoAssist", "#Msg_PasstimeEventScoreBonus" );
 }
-
-void CTFHudPasstimeEventText::EnqueuePanacea( C_TFPlayer *pThrower )
-{
+void CTFHudPasstimeEventText::EnqueueHandoff(      C_TFPlayer *pThrower, C_TFPlayer *pCatcher ) {
+	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventHandoffTitle", "#Msg_PasstimeEventHandoffDetail", "#Msg_PasstimeEventPassBonus" );
+}
+void CTFHudPasstimeEventText::EnqueueInterception( C_TFPlayer *pThrower, C_TFPlayer *pCatcher ) {
+	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventInterceptTitle", "#Msg_PasstimeEventInterceptDetail", "#Msg_PasstimeEventInterceptBonus" );
+}
+void CTFHudPasstimeEventText::EnqueuePass(         C_TFPlayer *pThrower, C_TFPlayer *pCatcher ) {
+	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventPassTitle", "#Msg_PasstimeEventPassDetail", "#Msg_PasstimeEventPassBonus" );
+}
+void CTFHudPasstimeEventText::EnqueueSave(         C_TFPlayer *pThrower, C_TFPlayer *pCatcher ) {
+	Enqueue( pThrower, pCatcher, "#Msg_PasstimeEventSaveTitle", "#Msg_PasstimeEventSaveDetail", "#Msg_PasstimeEventSaveBonus" );
+}
+void CTFHudPasstimeEventText::EnqueueSteal(        C_TFPlayer *pVictim, C_TFPlayer *pStealer ) {
+	Enqueue( pVictim, pStealer, "#Msg_PasstimeEventStealTitle", "#Msg_PasstimeEventStealDetail", "#Msg_PasstimeEventStealBonus" );
+}
+void CTFHudPasstimeEventText::EnqueuePanacea(      C_TFPlayer *pThrower ) {
 	// we shouldn't have an assister if its a first grab
 	Enqueue( pThrower, pThrower, "#Msg_PasstimeEventPanaceaTitle", "#Msg_PasstimeEventPanaceaDetail", "#Msg_PasstimeEventDeathbombBonus");
 }
-
-void CTFHudPasstimeEventText::EnqueueWinstrat( C_TFPlayer *pThrower )
-{
+void CTFHudPasstimeEventText::EnqueueWinstrat(     C_TFPlayer *pThrower ) {
 	Enqueue( pThrower, pThrower, "#Msg_PasstimeEventWinstratTitle", "#Msg_PasstimeEventWinstratDetail", "#Msg_PasstimeEventWinstratBonus");
 }
-
-void CTFHudPasstimeEventText::EnqueueDeathbomb( C_TFPlayer *pThrower, C_TFPlayer *pAssister )
-{
+void CTFHudPasstimeEventText::EnqueueDeathbomb(    C_TFPlayer *pThrower, C_TFPlayer *pAssister ) {
 	Enqueue( pAssister, pThrower, "#Msg_PasstimeEventDeathbombTitle", "#Msg_PasstimeEventDeathbombDetail", "#Msg_PasstimeEventPanaceaBonus");
 }
-
 
 //-----------------------------------------------------------------------------
 // CTFHudPasstimeBallStatus
@@ -1018,7 +998,7 @@ void CTFHudPasstimeBallStatus::ApplySchemeSettings( IScheme *pScheme )
 	ListenForGameEvent( PasstimeGameEvents::BallStolen::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallSplashed::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::PassCaught::s_eventName );
-	ListenForGameEvent( PasstimeGameEvents::Score::s_eventName );
+	ListenForGameEvent( PasstimeGameEvents::Goal::s_eventName );
 	Reset(); // this ensures players will try to guess game state for the hud if they join a game in progress
 	vgui::ivgui()->AddTickSignal( GetVPanel() );
 
@@ -1658,10 +1638,10 @@ void CTFHudPasstimeBallStatus::FireGameEvent( IGameEvent *pEvent )
 			}
 		}
 	}
-	else if ( FStrEq( pszEventName, PasstimeGameEvents::Score::s_eventName ) )
+	else if ( FStrEq( pszEventName, PasstimeGameEvents::Goal::s_eventName ) )
 	{
 		OnBallScore();
-		PasstimeGameEvents::Score scoreEvent( pEvent );
+		PasstimeGameEvents::Goal scoreEvent( pEvent );
 		auto *pScorer = ToTFPlayer( UTIL_PlayerByIndex( scoreEvent.scorerIndex ) );
 		auto *pAssister = ToTFPlayer( UTIL_PlayerByIndex( scoreEvent.assisterIndex ) );
 
@@ -1684,7 +1664,7 @@ void CTFHudPasstimeBallStatus::FireGameEvent( IGameEvent *pEvent )
 			} 
 			else
 			{
-				m_pEventText->EnqueueScore( pScorer, pAssister );
+				m_pEventText->EnqueueGoal( pScorer, pAssister );
 			}
 		}
 

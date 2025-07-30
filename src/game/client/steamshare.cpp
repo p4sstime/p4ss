@@ -179,7 +179,7 @@ bool CSteamShareSystem::Init()
 	ListenForGameEvent( "object_detonated" );
 	ListenForGameEvent( "teamplay_flag_event" );
 	ListenForGameEvent( "teamplay_point_captured" );
-	ListenForGameEvent( PasstimeGameEvents::Score::s_eventName );
+	ListenForGameEvent( PasstimeGameEvents::Goal::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallGet::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallDirected::s_eventName );
 	ListenForGameEvent( PasstimeGameEvents::BallSplashed::s_eventName );
@@ -454,9 +454,9 @@ void CSteamShareSystem::FireGameEvent( IGameEvent *event )
 			}
 		}
 	}
-	else if ( FStrEq( PasstimeGameEvents::Score::s_eventName, event->GetName() ) )
+	else if ( FStrEq( PasstimeGameEvents::Goal::s_eventName, event->GetName() ) )
 	{
-		PasstimeGameEvents::Score ev( event );
+		PasstimeGameEvents::Goal ev( event );
 
 		int nLocalPlayer = GetLocalPlayerIndex();
 		int nScorer = ev.scorerIndex;

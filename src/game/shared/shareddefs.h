@@ -252,7 +252,7 @@ enum CastVote
 #if defined( CSTRIKE_DLL )
 	#define MAX_PLAYERS				65  // Absolute max players supported
 #elif defined( TF_DLL ) || defined ( TF_CLIENT_DLL ) || defined( HL2MP )
-	#define MAX_PLAYERS				101
+	#define MAX_PLAYERS				17  // Reduced for Pass Fortress, imagine the sh*tfest with 100, lol
 #else
 	#define MAX_PLAYERS				33  // Absolute max players supported
 #endif

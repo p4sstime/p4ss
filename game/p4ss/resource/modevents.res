@@ -1685,7 +1685,7 @@
 		"attacker" "short"
 	}
 
-	"pass_pass_caught"				// a game event, name may be 32 charaters long
+	"pass_caught"				// a game event, name may be 32 charaters long
 	{
 		"passer" "short"   	// user ID who passed
 		"catcher" "short"

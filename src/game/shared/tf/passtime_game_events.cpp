@@ -63,27 +63,27 @@ void BallGet::Fire()
 }
 
 //-----------------------------------------------------------------------------
-const char *const Score::s_eventName = "pass_score";
-const char *const Score::s_keyScorerIndex = "scorer";
-const char *const Score::s_keyAssisterIndex = "assister";
-const char *const Score::s_keyNumPoints = "points";
-const char *const Score::s_keyIsDeathBomb = "is_deathbomb";
-const char *const Score::s_keyIsPanacea = "is_panacea";
-const char *const Score::s_keyIsWinstrat = "is_winstrat";
+const char *const Goal::s_eventName        = "pass_score";
+const char *const Goal::s_keyScorerIndex   = "scorer";
+const char *const Goal::s_keyAssisterIndex = "assister";
+const char *const Goal::s_keyNumPoints     = "points";
+const char *const Goal::s_keyIsDeathBomb   = "is_deathbomb";
+const char *const Goal::s_keyIsPanacea     = "is_panacea";
+const char *const Goal::s_keyIsWinstrat    = "is_winstrat";
 
 
-Score::Score( IGameEvent *pEvent )
-	: scorerIndex( pEvent->GetInt( s_keyScorerIndex ) )
-	, assisterIndex( pEvent->GetInt( s_keyAssisterIndex ) )
-	, numPoints( pEvent->GetInt( s_keyNumPoints ) )
-	, isDeathBomb( pEvent->GetBool(s_keyIsDeathBomb) )
-	, isPanacea( pEvent->GetBool( s_keyIsPanacea ) )
-	, isWinstrat( pEvent->GetBool( s_keyIsWinstrat ) )
+Goal::Goal( IGameEvent *pEvent )
+	: scorerIndex(   pEvent->GetInt(  s_keyScorerIndex ) )
+	, assisterIndex( pEvent->GetInt(  s_keyAssisterIndex ) )
+	, numPoints(     pEvent->GetInt(  s_keyNumPoints ) )
+	, isDeathBomb(   pEvent->GetBool( s_keyIsDeathBomb ) )
+	, isPanacea(     pEvent->GetBool( s_keyIsPanacea ) )
+	, isWinstrat(    pEvent->GetBool( s_keyIsWinstrat ) )
 {
-	Assert( IsType<Score>( pEvent ) );
+	Assert( IsType<Goal>( pEvent ) );
 }
 
-Score::Score( int scorerIndex_, int assisterIndex_, int numPoints_, bool isDeathBomb_, bool isPanacea_, bool isWinstrat_ )
+Goal::Goal( int scorerIndex_, int assisterIndex_, int numPoints_, bool isDeathBomb_, bool isPanacea_, bool isWinstrat_ )
 	: scorerIndex( scorerIndex_ )
 	, assisterIndex( assisterIndex_ )
 	, numPoints( numPoints_ )
@@ -93,7 +93,7 @@ Score::Score( int scorerIndex_, int assisterIndex_, int numPoints_, bool isDeath
 {
 }
 
-Score::Score( int scorerIndex_, int numPoints_, bool isPanacea_, bool isWinstrat_ )
+Goal::Goal( int scorerIndex_, int numPoints_, bool isPanacea_, bool isWinstrat_ )
 	: scorerIndex( scorerIndex_ )
 	, assisterIndex( -1 )
 	, numPoints( numPoints_ )
@@ -103,9 +103,9 @@ Score::Score( int scorerIndex_, int numPoints_, bool isPanacea_, bool isWinstrat
 {
 }
 
-void Score::Fire()
+void Goal::Fire()
 {
-	if ( IGameEvent *pEvent = CreateEvent<Score>() )
+	if ( IGameEvent *pEvent = CreateEvent<Goal>() )
 	{
 		pEvent->SetInt( s_keyScorerIndex, scorerIndex );
 		pEvent->SetInt( s_keyAssisterIndex, assisterIndex );
@@ -158,13 +158,13 @@ void BallFree::Fire()
 }
 
 //-----------------------------------------------------------------------------
-const char *const PassCaught::s_eventName = "pass_pass_caught";
-const char *const PassCaught::s_keyPasserIndex = "passer";
+const char *const PassCaught::s_eventName       = "pass_caught";
+const char *const PassCaught::s_keyPasserIndex  = "passer";
 const char *const PassCaught::s_keyCatcherIndex = "catcher";
-const char *const PassCaught::s_keyDist = "dist";
-const char *const PassCaught::s_keyDuration = "duration";
-const char *const PassCaught::s_keyIsHandoff = "is_handoff";
-const char *const PassCaught::s_keyIsBlock = "is_block";
+const char *const PassCaught::s_keyDist         = "dist";
+const char *const PassCaught::s_keyDuration     = "duration";
+const char *const PassCaught::s_keyIsHandoff    = "is_handoff";
+const char *const PassCaught::s_keyIsBlock      = "is_block";
 
 
 PassCaught::PassCaught( IGameEvent *pEvent )

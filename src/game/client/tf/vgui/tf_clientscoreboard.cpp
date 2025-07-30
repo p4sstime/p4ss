@@ -78,6 +78,7 @@ void cc_scoreboard_convar_changed( IConVar *pConVar, const char *pOldString, flo
 }
 ConVar tf_scoreboard_ping_as_text( "tf_scoreboard_ping_as_text", "0", FCVAR_ARCHIVE, "Show ping values as text in the scoreboard.", cc_scoreboard_convar_changed );
 ConVar tf_scoreboard_alt_class_icons( "tf_scoreboard_alt_class_icons", "0", FCVAR_ARCHIVE, "Show alternate class icons in the scoreboard." );
+ConVar tf_scoreboard_disable_avatars( "tf_scoreboard_disable_avatars", "0", FCVAR_ARCHIVE, "Disable avatars in the scoreboard." );
 
 extern bool IsInCommentaryMode( void );
 extern bool DuelMiniGame_GetStats( C_TFPlayer **ppPlayer, uint32 &unMyScore, uint32 &unOpponentScore );
@@ -166,24 +167,24 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 	SetKeyBoardInputEnabled( false );
 	SetScheme( "ClientScheme" );
 
-	m_pPlayerListBlue = new SectionedListPanel( this, "BluePlayerList" );
-	m_pPlayerListRed = new SectionedListPanel( this, "RedPlayerList" );
-	m_pLabelPlayerName = new CExLabel( this, "PlayerNameLabel", "" );
-	m_pImagePanelHorizLine = new ImagePanel( this, "HorizontalLine" );
-	m_pClassImage = new CTFClassImage( this, "ClassImage" );
-	m_pPlayerModelPanel = new CTFPlayerModelPanel( this, "classmodelpanel" );
-	m_pLocalPlayerStatsPanel = new vgui::EditablePanel( this, "LocalPlayerStatsPanel" );
-	m_pLocalPlayerDuelStatsPanel = new vgui::EditablePanel( this, "LocalPlayerDuelStatsPanel" );
+	m_pPlayerListBlue               = new SectionedListPanel(  this, "BluePlayerList" );
+	m_pPlayerListRed                = new SectionedListPanel(  this, "RedPlayerList" );
+	m_pLabelPlayerName              = new CExLabel(            this, "PlayerNameLabel", "" );
+	m_pImagePanelHorizLine          = new ImagePanel(          this, "HorizontalLine" );
+	m_pClassImage                   = new CTFClassImage(       this, "ClassImage" );
+	m_pPlayerModelPanel             = new CTFPlayerModelPanel( this, "classmodelpanel" );
+	m_pLocalPlayerStatsPanel        = new vgui::EditablePanel( this, "LocalPlayerStatsPanel" );
+	m_pLocalPlayerDuelStatsPanel    = new vgui::EditablePanel( this, "LocalPlayerDuelStatsPanel" );
 	m_duelPanelLocalPlayer.m_pPanel = new vgui::EditablePanel( m_pLocalPlayerDuelStatsPanel, "LocalPlayerData" );
-	m_duelPanelOpponent.m_pPanel = new vgui::EditablePanel( m_pLocalPlayerDuelStatsPanel, "OpponentData" );
-	m_pRedTeamName = new CExLabel( this, "RedTeamLabel", "" );
-	m_pBlueTeamName = new CExLabel( this, "BlueTeamLabel", "" );
-	m_pRedLeaderAvatarImage = new CAvatarImagePanel( this, "RedLeaderAvatar" );
-	m_pRedLeaderAvatarBG = new EditablePanel( this, "RedLeaderAvatarBG" );
-	m_pRedTeamImage = new ImagePanel( this, "RedTeamImage" );
-	m_pBlueLeaderAvatarImage = new CAvatarImagePanel( this, "BlueLeaderAvatar" );
-	m_pBlueLeaderAvatarBG = new EditablePanel( this, "BlueLeaderAvatarBG" );
-	m_pBlueTeamImage = new ImagePanel( this, "BlueTeamImage" );
+	m_duelPanelOpponent.m_pPanel    = new vgui::EditablePanel( m_pLocalPlayerDuelStatsPanel, "OpponentData" );
+	m_pRedTeamName                  = new CExLabel(            this, "RedTeamLabel", "" );
+	m_pBlueTeamName                 = new CExLabel(            this, "BlueTeamLabel", "" );
+	m_pRedLeaderAvatarImage         = new CAvatarImagePanel(   this, "RedLeaderAvatar" );
+	m_pRedLeaderAvatarBG            = new EditablePanel(       this, "RedLeaderAvatarBG" );
+	m_pRedTeamImage                 = new ImagePanel(          this, "RedTeamImage" );
+	m_pBlueLeaderAvatarImage        = new CAvatarImagePanel(   this, "BlueLeaderAvatar" );
+	m_pBlueLeaderAvatarBG           = new EditablePanel(       this, "BlueLeaderAvatarBG" );
+	m_pBlueTeamImage                = new ImagePanel(          this, "BlueTeamImage" );
 
 	m_pServerTimeLeftValue = NULL;
 	m_pFontTimeLeftNumbers = vgui::INVALID_FONT;
@@ -896,8 +897,9 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 
 	// pPlayerList->AddColumnToSection( 0, "medal", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iMedalColumnWidth );
 
+	// P4SS: Allow to toggle avatars in the scoreboard
 	// Avatars are always displayed at 32x32 regardless of resolution
-	if ( ShowAvatars() )
+	if ( !tf_scoreboard_disable_avatars.GetBool() )
 	{
 		pPlayerList->AddColumnToSection( 0, "avatar", "", SectionedListPanel::COLUMN_IMAGE, m_iAvatarWidth );
 		pPlayerList->AddColumnToSection( 0, "spacer", "", 0, m_iSpacerWidth );
@@ -918,14 +920,24 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 	#endif
 
 	pPlayerList->AddColumnToSection( 0, "name", "#TF_Scoreboard_Name", 0, m_iNameWidth + m_nExtraSpace );
-	pPlayerList->AddColumnToSection( 0, "killstreak", "", SectionedListPanel::COLUMN_RIGHT, m_iKillstreakWidth );
-	pPlayerList->AddColumnToSection( 0, "killstreak_image", "", SectionedListPanel::COLUMN_IMAGE, m_iKillstreakImageWidth );
+	// pPlayerList->AddColumnToSection( 0, "killstreak", "", SectionedListPanel::COLUMN_RIGHT, m_iKillstreakWidth );
+	// pPlayerList->AddColumnToSection( 0, "killstreak_image", "", SectionedListPanel::COLUMN_IMAGE, m_iKillstreakImageWidth );
 	pPlayerList->AddColumnToSection( 0, "dominating", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iNemesisWidth );
 	pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iNemesisWidth );
-	pPlayerList->AddColumnToSection( 0, "goals", "#P4SS_Scoreboard_Goals", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "assists", "#P4SS_Scoreboard_Assists", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "intercepts", "#P4SS_Scoreboard_Intercepts", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "saves", "#P4SS_Scoreboard_Saves", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+
+	// P4SS: Change to localized strings once we have them
+	pPlayerList->AddColumnToSection( 0, "goals",      "Goals",      SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "assists",    "Assists",    SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "spacer", "", 0, m_iSpacerWidth );
+	pPlayerList->AddColumnToSection( 0, "saves",      "Saves",      SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "splashes",   "Splashes",   SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "spacer", "", 0, m_iSpacerWidth );
+	pPlayerList->AddColumnToSection( 0, "passes",     "Passes",     SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "handoffs",   "Handoffs",   SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "spacer", "", 0, m_iSpacerWidth );
+	pPlayerList->AddColumnToSection( 0, "intercepts", "Intercepts", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "steals",     "Steals",     SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+
 	pPlayerList->AddColumnToSection( 0, "class", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_RIGHT, m_iClassWidth );
 
 	if ( tf_scoreboard_ping_as_text.GetBool() )
@@ -1388,10 +1400,16 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			pKeyValues->SetInt( "playerIndex", playerIndex );
 			pKeyValues->SetString( "name", g_TF_PR->GetPlayerName( playerIndex ) );
 			pKeyValues->SetInt( "dominating", iDominationIndex );
-			pKeyValues->SetInt( "goals", g_TF_PR->GetP4ssScores( playerIndex ) );
-			pKeyValues->SetInt( "assists", g_TF_PR->GetP4ssAssists( playerIndex ) );
+
+			pKeyValues->SetInt( "goals",      g_TF_PR->GetP4ssGoals(      playerIndex ) );
+			pKeyValues->SetInt( "assists",    g_TF_PR->GetP4ssAssists(    playerIndex ) );
+			pKeyValues->SetInt( "saves",      g_TF_PR->GetP4ssSaves(      playerIndex ) );
 			pKeyValues->SetInt( "intercepts", g_TF_PR->GetP4ssIntercepts( playerIndex ) );
-			pKeyValues->SetInt( "saves", g_TF_PR->GetP4ssSaves( playerIndex ) );
+			pKeyValues->SetInt( "handoffs",   g_TF_PR->GetP4ssHandoffs(   playerIndex ) );
+			pKeyValues->SetInt( "passes",     g_TF_PR->GetP4ssPasses(     playerIndex ) );
+			pKeyValues->SetInt( "splashes",   g_TF_PR->GetP4ssSplashes(   playerIndex ) );
+			pKeyValues->SetInt( "steals",     g_TF_PR->GetP4ssSteals(     playerIndex ) );
+			
 			pKeyValues->SetInt( "connected", 2 );
 
 			C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );

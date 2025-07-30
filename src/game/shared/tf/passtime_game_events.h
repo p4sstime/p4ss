@@ -36,11 +36,11 @@ namespace PasstimeGameEvents
 	};
 	
 	//-----------------------------------------------------------------------------
-	struct Score
+	struct Goal
 	{
-		Score( IGameEvent *pEvent );
-		Score( int scorerIndex, int assisterIndex, int numPoints, bool isDeathBomb, bool isPanacea, bool isWinstrat );
-		Score( int scorerIndex_, int numPoints_, bool isPanacea_, bool isWinstrat_ );
+		Goal( IGameEvent *pEvent );
+		Goal( int scorerIndex, int assisterIndex, int numPoints, bool isDeathBomb, bool isPanacea, bool isWinstrat );
+		Goal( int scorerIndex_, int numPoints_, bool isPanacea_, bool isWinstrat_ );
 		void Fire();
 		
 		static const char *const s_eventName;

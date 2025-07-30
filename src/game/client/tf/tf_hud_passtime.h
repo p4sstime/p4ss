@@ -80,7 +80,7 @@ public:
 	void EnqueueHandoff( C_TFPlayer *pThrower, C_TFPlayer *pCatcher );
 	void EnqueueInterception( C_TFPlayer *pThrower, C_TFPlayer *pCatcher );
 	void EnqueueSave( C_TFPlayer *pThrower, C_TFPlayer *pCatcher );
-	void EnqueueScore( C_TFPlayer *pThrower, C_TFPlayer *pAssister );
+	void EnqueueGoal( C_TFPlayer *pThrower, C_TFPlayer *pAssister );
 	void EnqueueDeathbomb( C_TFPlayer *pThrower, C_TFPlayer *pAssister );
 	void EnqueuePanacea( C_TFPlayer *pThrower );
 	void EnqueueWinstrat( C_TFPlayer *pThrower );
