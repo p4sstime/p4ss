@@ -1184,7 +1184,6 @@ private:
 	CTFPlayerClass		m_PlayerClass;
 	int					m_iLastWeaponFireUsercmd;				// Firing a weapon.  Last usercmd we shot a bullet on.
 	int					m_iLastWeaponSlot;				            // To save last switch between lives
-	int					iLastWeapon;
 	int					m_iLastSkin;
 	float				m_flLastDamageTime;
 	CNetworkVar( float, m_flMvMLastDamageTime );
@@ -1312,6 +1311,7 @@ public:
 	CountdownTimer m_playerMovementStuckTimer;			// for destroying stuck bots in MvM
 
 	QAngle				m_qPreviousChargeEyeAngle;		// Previous EyeAngles to compute deltas for legal mouse movement
+	int					m_nPreviousChargeCommandNumber;	// Previous command number for lag compensation
 private:
 
 	//=============================================================================

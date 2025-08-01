@@ -1090,6 +1090,7 @@ CTFPlayer::CTFPlayer()
 	SetRespawnOverride( -1.f, NULL_STRING );
 
 	m_qPreviousChargeEyeAngle.Init();
+	m_nPreviousChargeCommandNumber = 0;
 
 	m_vHalloweenKartPush.Zero();
 	m_flHalloweenKartPushEventTime = 0.f;
@@ -7134,7 +7135,6 @@ void CTFPlayer::CheckInstantLoadoutRespawn( void )
 		}
 	}
 }
-
 void CTFPlayer::Resupply( void )
 {
 	// Must be alive
@@ -7157,8 +7157,39 @@ void CTFPlayer::Resupply( void )
 	if ( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN && TFGameRules()->GetWinningTeam() != GetTeamNumber() ) 
 		return;
 
-	iLastWeapon = m_iLastWeaponSlot;
+	int iPlayerStreak = m_Shared.GetStreak( CTFPlayerShared::kTFStreak_Kills );
+	int iLastWeapon = m_iLastWeaponSlot;
+	
+	// Save kill streaks for all weapons
+	CUtlVector<int> weaponStreaks;
+	for (int i = 0; i < TF_WEAPON_COUNT; i++)
+	{
+		CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon(i);
+		if (pWeapon)
+		{
+			weaponStreaks.AddToTail(pWeapon->GetKillStreak());
+		}
+		else
+		{
+			weaponStreaks.AddToTail(0);
+		}
+	}
+	
 	ForceRegenerateAndRespawn();
+	
+	// Restore player streak
+	m_Shared.SetStreak( CTFPlayerShared::kTFStreak_Kills, iPlayerStreak );
+	
+	// Restore kill streaks for all weapons
+	for (int i = 0; i < TF_WEAPON_COUNT && i < weaponStreaks.Count(); i++)
+	{
+		CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon(i);
+		if (pWeapon)
+		{
+			pWeapon->SetKillStreak(weaponStreaks[i]);
+		}
+	}
+	
 	m_iLastWeaponSlot = iLastWeapon;
 }
 
