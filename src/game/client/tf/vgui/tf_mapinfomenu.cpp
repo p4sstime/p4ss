@@ -58,6 +58,7 @@ CTFMapInfoMenu::CTFMapInfoMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_MAPI
 
 	// info window about this map
 	m_pMapInfo = new CExRichText( this, "MapInfoText" );
+	m_pMapTagline = new CExRichText( this, "MapInfoTagline" );
 	m_pMapImage = new ImagePanel( this, "MapImage" );
 
 	m_szMapName[0] = 0;
@@ -123,6 +124,7 @@ void CTFMapInfoMenu::ApplySchemeSettings( vgui::IScheme *pScheme )
 #endif
 
 	SetDialogVariable( "gamemode", g_pVGuiLocalize->Find( GetMapType( m_szMapName ) ) );
+
 }
 
 //-----------------------------------------------------------------------------
@@ -346,9 +348,18 @@ void CTFMapInfoMenu::LoadMapPage()
 		return;
 	}
 
+	// get the map name without version number
+	char mapname[ MAX_PATH ];
+	Q_snprintf( mapname, sizeof( mapname ), "%s", m_szMapName );
+	char *lastUnderscore = strrchr(mapname, '_');
+	if (lastUnderscore && lastUnderscore != mapname)
+	{
+		*lastUnderscore = '\0';
+	}
+
 	// load the map image (if it exists for the current map)
 	char szMapImage[ MAX_PATH ];
-	Q_snprintf( szMapImage, sizeof( szMapImage ), "VGUI/maps/menu_photos_%s", m_szMapName );
+	Q_snprintf( szMapImage, sizeof( szMapImage ), "VGUI/maps/menu_photos_%s", mapname );
 	Q_strlower( szMapImage );
 
 	IMaterial *pMapMaterial = materials->FindMaterial( szMapImage, TEXTURE_GROUP_VGUI, false );
@@ -362,7 +373,7 @@ void CTFMapInfoMenu::LoadMapPage()
 			}
 
 			// take off the vgui/ at the beginning when we set the image
-			Q_snprintf( szMapImage, sizeof( szMapImage ), "maps/menu_photos_%s", m_szMapName );
+			Q_snprintf( szMapImage, sizeof( szMapImage ), "maps/menu_photos_%s", mapname );
 			Q_strlower( szMapImage );
 			
 			m_pMapImage->SetImage( szMapImage );
@@ -376,9 +387,31 @@ void CTFMapInfoMenu::LoadMapPage()
 		}
 	}
 
+	// set map taglines
+	char mapTagline[ 64 ];
+	Q_snprintf( mapTagline, sizeof( mapTagline ), "#%s_tagline", mapname );
+	Q_strlower( mapTagline );
+	wchar_t* wszMapTagline = g_pVGuiLocalize->Find( mapTagline );
+	if ( wszMapTagline )
+	{
+		if ( !m_pMapTagline )
+		{
+			m_pMapTagline = new CExRichText( this, "MapInfoTagline" );
+		}
+		m_pMapTagline->SetText( wszMapTagline );
+		m_pMapTagline->SetVisible( true );
+	}
+	else
+	{
+		if ( m_pMapTagline )
+		{
+			m_pMapTagline->SetVisible( false );
+		}
+	}
+
 	// try loading map descriptions from the localization files first
 	char mapDescriptionKey[ 64 ];
-	Q_snprintf( mapDescriptionKey, sizeof( mapDescriptionKey ), "#%s_description", m_szMapName );
+	Q_snprintf( mapDescriptionKey, sizeof( mapDescriptionKey ), "#%s_description", mapname );
 	Q_strlower( mapDescriptionKey );
 	wchar_t* wszMapDescription = g_pVGuiLocalize->Find( mapDescriptionKey );
 	if( wszMapDescription )

@@ -420,6 +420,21 @@ static MapInfo_t s_CommunityMaps[] = {
 	{ "vsh_maul", " Maul", "#GameType_VSH" },
 };
 
+
+static MapInfo_t s_P4SSMaps[] = {
+	{ "pass_amperage",		"Amperage",		"#Gametype_P4SS" },
+	{ "pass_arena2",			"Arena2",		"#Gametype_P4SS" },
+	{ "pass_boutique",			"Boutique",		"#Gametype_P4SS" },
+	{ "pass_greenhouse",		"Greenhouse",	"#Gametype_P4SS" },
+	{ "pass_maple",			"Maple",		"#Gametype_P4SS" },
+	{ "pass_plexiglass",		"Plexiglass",	"#Gametype_P4SS" },
+	{ "pass_ruin",				"Ruin",			"#Gametype_P4SS" },
+	{ "pass_stonework",			"Stonework",	"#Gametype_P4SS" },
+	{ "pass_stadium",			"Stadium",		"#Gametype_P4SS" },
+	{ "pass_torii",				"Torii",		"#Gametype_P4SS" },
+
+};
+
 /*
 
   !! Commented out until we use this data, but we should keep updating it so its current when we need it
@@ -600,6 +615,14 @@ static FeaturedWorkshopMap_t s_FeaturedWorkshopMaps[] = {
 };
 
 */
+static void StripMapVersionSuffix(char* pMapName, size_t bufsize)
+{
+    char *lastUnderscore = strrchr(pMapName, '_');
+    if (lastUnderscore && lastUnderscore != pMapName)
+    {
+        *lastUnderscore = '\0';
+    }
+}
 
 bool IsValveMap( const char *pMapName )
 {
@@ -18972,6 +18995,17 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 		if ( !Q_stricmp( s_CommunityMaps[i].pDiskName, pszSrc ) )
 		{
 			return s_CommunityMaps[i].pDisplayName;
+		}
+	}
+
+	for ( int i = 0; i < ARRAYSIZE( s_P4SSMaps ); ++i )
+	{
+		char cutname[MAX_PATH];
+		Q_strncpy(cutname, mapName, sizeof(cutname));
+		StripMapVersionSuffix(cutname, sizeof(cutname));
+		if ( !Q_stricmp( s_P4SSMaps[i].pDiskName, cutname ) )
+		{
+			return s_P4SSMaps[i].pDisplayName;
 		}
 	}
 

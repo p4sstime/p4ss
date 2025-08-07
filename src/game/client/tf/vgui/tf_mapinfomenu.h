@@ -62,6 +62,7 @@ protected:
 	IViewPort			*m_pViewPort;
 	CExLabel			*m_pTitle;
 	CExRichText			*m_pMapInfo;
+	CExRichText			*m_pMapTagline;
 
 #ifdef _X360
 	CTFFooter			*m_pFooter;

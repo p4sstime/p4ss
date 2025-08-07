@@ -3057,6 +3057,24 @@ Scheme
 				
 			}
 		}
+		"MontserratBlack16"
+		{
+			"1"
+			{
+				"name"	"Montserrat Black"
+				"tall"	"16"
+			}
+		}
+		"MontserratBlack16Italic"
+		{
+			"1"
+			{
+				"name"	"Montserrat Black Italic"
+				"tall"	"16"
+				"dropshadow"	"1"
+
+			}
+		}
 		"MontserratBlack16Shadow"
 		{
 			"1"
@@ -3207,6 +3225,16 @@ Scheme
 				"tall"	"64"
 			}
 		}
+		"MontserratBlack64Shadow"
+		{
+			"1"
+			{
+				"name"	"Montserrat Black"
+				"tall"	"64"
+				"dropshadow"	"1"
+			}
+		}
+
 		"MontserratSemibold12"
 		{
 			"1"
@@ -6340,6 +6368,11 @@ Scheme
 		{
 				"font"	"resource/fonts/Montserrat-Light.ttf"
 				"name"	"Montserrat Light"
+		}
+		"25"
+		{
+				"font"	"resource/fonts/Montserrat-BlackItalic.ttf"
+				"name"	"Montserrat Black Italic"
 		}
 	}
 }
