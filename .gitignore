@@ -9,6 +9,13 @@ steam/*
 steam/
 steam_appid.txt
 
+# CMake artifacts
+build/*
+!build/.gitkeep
+
+# If you get the file below, you ran the cmake command outside of build.
+#CMakeCache.txt
+
 # Ignore build artifacts
 game/p4ss_linux64
 game/p4ss/cfg/*

@@ -1,0 +1,48 @@
+if (${IS_LINUX})
+	set(PLAT_EXE_NAME "linux64" CACHE INTERNAL "")
+elseif (${IS_WINDOWS})
+	set(PLAT_EXE_NAME "win64" CACHE INTERNAL "")
+else()
+	set(PLAT_EXE_NAME "unknown" CACHE INTERNAL "")
+endif()
+
+add_executable(p4ss_launcher
+"${SRCDIR}/launcher_main/main.cpp"
+)
+
+target_include_directories(p4ss_launcher PRIVATE
+	${SRCDIR}/public
+	${SRCDIR}/public/tier0
+	${SRCDIR}/public/tier1
+)
+
+target_link_libraries(p4ss_launcher SDL2)
+
+# Why valve?
+target_link_options(p4ss_launcher PRIVATE
+  "-Wl,--wrap=fopen"
+  "-Wl,--wrap=fopen64"
+)
+set_target_properties(p4ss_launcher PROPERTIES 
+	OUTPUT_NAME "p4ss_${PLAT_EXE_NAME}"
+	RUNTIME_OUTPUT_DIRECTORY "${OUTBINDIR}"
+)
+if (${MOD_LAUNCHER})
+	target_compile_definitions(p4ss_launcher PRIVATE
+	"MOD_APPID=3554290"
+	)
+
+endif()
+
+if (${IS_WINDOWS})
+	if (${MOD_LAUNCHER})
+	target_sources(p4ss_launcher
+	${SRCDIR}/launcher_main/launcher_main_mod_tf.rc
+	)
+	else()
+
+	endif()
+endif()
+target_compile_definitions(p4ss_launcher PRIVATE
+""
+)
