@@ -9,10 +9,10 @@ The original README.md distributed with Source SDK Base 2013 can be located at [
 
 ## Building
 
+Now with CMake!
+
 ### Windows
 Prerequisites:
-
-Requirements:
  - Steam
  - Source SDK 2013 Multiplayer installed via Steam
  - Team Fortress 2
@@ -24,9 +24,9 @@ Requirements:
 
 **If you just installed these components restart your computer!**
 
-**If Python is installed make sure you have a PATH variable!**
+**If Python is installed make sure you have a PATH variable pointing to its directory!**
 
-### 2. Clone the repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/p4sstime/p4ss/
 ```
@@ -41,13 +41,15 @@ C:/My Clones/p4ss   -- Error!
 C:/My_Clones/p4ss   -- Ok!
 ```
 
-### 3. Generate the project files
+### 2. Generate the project files
 Generate the project files by running the `createallprojects.bat` file:
 ```bash
 p4ss/src/createallprojects.bat
+# You will need to run cmake commands after this!
+# lucy: Yell at Alex to come fix these docs!
 ```
 
-### 4. Compile the project
+### 3. Compile the project
 Open the `everything.sln` file:
 ```bash
 p4ss/src/everything.sln
@@ -68,12 +70,16 @@ Clone this repository, then run:
 ```bash
 ./src/buildallprojects debug clean
 # note: `clean` will re-generate the project files. use it whenever you make a change in src/vpc_scripts, to ensure your project files are created correctly.
+./build_container/all.sh
 ```
 This will build all the code and bundle it into a nice little executable.
 
 Alternatively, to build the project for release, run:
 ```bash
 ./src/buildallprojects release clean
+./build_container/all.sh release
+# or, alternatively, if you've already run ./configure.sh:
+./build_container/build.sh release
 ```
 
 Then:

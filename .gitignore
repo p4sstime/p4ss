@@ -12,9 +12,17 @@ steam_appid.txt
 # CMake artifacts
 build/*
 !build/.gitkeep
-
+build_container/*
+!build_container/.gitkeep
 # If you get the file below, you ran the cmake command outside of build.
 #CMakeCache.txt
+
+# Keep our scripts though!
+!build_container/.gitkeep
+!build_container/all.sh
+!build_container/configure.sh
+!build_container/build.sh
+
 
 # Ignore build artifacts
 game/p4ss_linux64

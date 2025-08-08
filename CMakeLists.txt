@@ -43,6 +43,9 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(${IS_LINUX})
+
+	link_libraries("dl")
+
 	add_compile_definitions(
 		stricmp=strcasecmp
     _stricmp=strcasecmp

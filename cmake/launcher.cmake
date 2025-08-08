@@ -1,3 +1,4 @@
+block()
 if (${IS_LINUX})
 	set(PLAT_EXE_NAME "linux64" CACHE INTERNAL "")
 elseif (${IS_WINDOWS})
@@ -5,6 +6,11 @@ elseif (${IS_WINDOWS})
 else()
 	set(PLAT_EXE_NAME "unknown" CACHE INTERNAL "")
 endif()
+
+foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER "${CONFIG_TYPE}" CONFIG_TYPE_UPPER)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG_TYPE_UPPER} "${OUTBINDIR}")
+endforeach()
 
 add_executable(p4ss_launcher
 "${SRCDIR}/launcher_main/main.cpp"
@@ -23,6 +29,7 @@ target_link_options(p4ss_launcher PRIVATE
   "-Wl,--wrap=fopen"
   "-Wl,--wrap=fopen64"
 )
+
 set_target_properties(p4ss_launcher PROPERTIES 
 	OUTPUT_NAME "p4ss_${PLAT_EXE_NAME}"
 	RUNTIME_OUTPUT_DIRECTORY "${OUTBINDIR}"
@@ -46,3 +53,4 @@ endif()
 target_compile_definitions(p4ss_launcher PRIVATE
 ""
 )
+endblock()
