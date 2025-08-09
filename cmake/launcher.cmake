@@ -12,7 +12,7 @@ foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG_TYPE_UPPER} "${OUTBINDIR}")
 endforeach()
 
-add_executable(p4ss_launcher
+add_executable(p4ss_launcher WIN32
 "${SRCDIR}/launcher_main/main.cpp"
 )
 
@@ -22,7 +22,9 @@ target_include_directories(p4ss_launcher PRIVATE
 	${SRCDIR}/public/tier1
 )
 
+if(${IS_LINUX})
 target_link_libraries(p4ss_launcher SDL2)
+endif()
 
 # Why valve?
 target_link_options(p4ss_launcher PRIVATE

@@ -59,5 +59,11 @@ if(${IS_LINUX})
 	)
 endif()
 
+if(${IS_WINDOWS})
+	add_compile_definitions(
+		COMPILER_MSVC
+	)
+
+endif()
 
 include("cmake/launcher.cmake")
