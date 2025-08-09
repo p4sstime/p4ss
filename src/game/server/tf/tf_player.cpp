@@ -7201,6 +7201,46 @@ void CC_Resupply( void )
 }
 static ConCommand resupply( "resupply", CC_Resupply, "Resupply and respawn if inside a spawnroom" );
 
+void CC_SendPing(void)
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+
+	if ( !pPlayer )
+		return;
+
+	CBroadcastRecipientFilter filter;
+	filter.MakeReliable();
+
+	// dont send usermessage to those not on the players team
+	if ( pPlayer->GetTeamNumber() == TF_TEAM_RED ) {
+		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_BLUE) );
+	}
+	else if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE )
+	{
+		filter.RemoveRecipientsByTeam( GetGlobalTeam( TF_TEAM_RED ) );
+	}
+
+	Vector vecStart = pPlayer->EyePosition();
+	Vector vecForward;
+	AngleVectors( pPlayer->EyeAngles(), &vecForward );
+
+	Vector vecEnd = vecStart + vecForward * 2000.0f;
+
+	trace_t tr;
+	UTIL_TraceLine( vecStart, vecEnd, MASK_SOLID, pPlayer, COLLISION_GROUP_DEBRIS,
+					&tr );
+
+
+	if (tr.DidHit()) {
+		UserMessageBegin( filter, "P4SS_SendPing" );
+			WRITE_VEC3COORD( tr.endpos );
+			WRITE_VEC3NORMAL( tr.plane.normal );
+		MessageEnd();
+	}
+
+}
+static ConCommand pf_pinglocation( "pf_pinglocation", CC_SendPing, "Send a locatioanl ping to your teammates" );
+
 class CGC_RespawnPostLoadoutChange : public GCSDK::CGCClientJob
 {
 public:
