@@ -14,4 +14,4 @@ THIS_DIR="${THIS_DIR:-$pwd}"
 source ../src/sdk_container
 run_in_sniper "$@"
 
-cmake -G "Ninja Multi-Config" $@ ..
+cmake -G "Ninja Multi-Config" -DMOD_LAUNCHER=1 $@ ..

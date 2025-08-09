@@ -57,7 +57,12 @@ elseif(${IS_LINUX})
 	set(PLATSUBDIR /linux64)
 endif()
 
+
+set(LIBPUBLIC	"${SRCDIR}/lib/public${PLATSUBDIR}")
+set(LIBCOMMON	"${SRCDIR}/lib/common${PLATSUBDIR}")
+
 set(OUTBINDIR	"${SRCDIR}/../game")
+set(OUTLIBDIR	"${SRCDIR}/lib/public${PLATSUBDIR}")
 option(RETAIL "Build in retail mode" OFF)
 option(STAGING_ONLY "Staging only" OFF)
 

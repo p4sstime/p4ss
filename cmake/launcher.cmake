@@ -7,6 +7,7 @@ else()
 	set(PLAT_EXE_NAME "unknown" CACHE INTERNAL "")
 endif()
 
+# Ensure the output of the executable is `game/`.
 foreach(CONFIG_TYPE ${CMAKE_CONFIGURATION_TYPES})
     string(TOUPPER "${CONFIG_TYPE}" CONFIG_TYPE_UPPER)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG_TYPE_UPPER} "${OUTBINDIR}")
@@ -14,12 +15,6 @@ endforeach()
 
 add_executable(p4ss_launcher WIN32
 "${SRCDIR}/launcher_main/main.cpp"
-)
-
-target_include_directories(p4ss_launcher PRIVATE
-	${SRCDIR}/public
-	${SRCDIR}/public/tier0
-	${SRCDIR}/public/tier1
 )
 
 if(${IS_LINUX})
@@ -38,6 +33,7 @@ set_target_properties(p4ss_launcher PROPERTIES
 )
 if (${MOD_LAUNCHER})
 	target_compile_definitions(p4ss_launcher PRIVATE
+	MOD_LAUNCHER
 	"MOD_APPID=3554290"
 	)
 
@@ -52,7 +48,8 @@ if (${IS_WINDOWS})
 
 	endif()
 endif()
+# For some reason this is included in Valve's VPC script.
 target_compile_definitions(p4ss_launcher PRIVATE
-""
+FRAME_POINTER_OMISSION_DISABLED
 )
 endblock()
