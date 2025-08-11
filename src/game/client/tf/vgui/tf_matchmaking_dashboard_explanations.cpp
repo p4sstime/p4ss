@@ -14,8 +14,15 @@
 using namespace vgui;
 using namespace GCSDK;
 
+static ConVar cl_disable_dashboard_explanations( "cl_disable_dashboard_explanations", "1", FCVAR_ARCHIVE,
+    "Disable matchmaking dashboard explanation popups (client side)." );
+
 CExplanationPopup* ShowDashboardExplanation( const char* pszExplanation )
 {
+	if ( cl_disable_dashboard_explanations.GetBool() )
+		{
+			return nullptr;
+		}
 	return GetDashboardPanel().GetTypedPanel< CExplanationManager >( k_eExplanations )->ShowExplanation( pszExplanation );
 }
 
