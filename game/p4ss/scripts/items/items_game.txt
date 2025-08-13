@@ -35863,11 +35863,6 @@
 					"attribute_class"	"mult_dmgtaken_from_fire"
 					"value"			"0.8"
 				}
-				"dmg taken from blast reduced"
-				{
-					"attribute_class"	"mult_dmgtaken_from_explosions"
-					"value"			"0.8"
-				}
 				"allowed in medieval mode"
 				{
 					"attribute_class"	"allowed_in_medieval_mode"
