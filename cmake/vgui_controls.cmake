@@ -33,7 +33,6 @@ ${SRCDIR}/vgui2/vgui_controls/EditablePanel.cpp
 ${SRCDIR}/vgui2/vgui_controls/ExpandButton.cpp
 ${SRCDIR}/vgui2/vgui_controls/FileOpenDialog.cpp
 ${SRCDIR}/vgui2/vgui_controls/FileOpenStateMachine.cpp
-${SRCDIR}/public/filesystem_helpers.cpp
 ${SRCDIR}/vgui2/vgui_controls/FocusNavGroup.cpp
 ${SRCDIR}/vgui2/vgui_controls/Frame.cpp
 ${SRCDIR}/vgui2/vgui_controls/GraphPanel.cpp
@@ -87,6 +86,9 @@ ${SRCDIR}/vgui2/vgui_controls/TreeViewListControl.cpp
 ${SRCDIR}/vgui2/vgui_controls/URLLabel.cpp
 ${SRCDIR}/vgui2/vgui_controls/WizardPanel.cpp
 ${SRCDIR}/vgui2/vgui_controls/WizardSubPanel.cpp
+# lucy: no clue why this is in here?
+# scared to touch it
+${SRCDIR}/public/filesystem_helpers.cpp
 ${SRCDIR}/vgui2/src/vgui_key_translation.cpp
 )
 set(HEADER_LIST

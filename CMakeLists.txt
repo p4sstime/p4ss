@@ -32,10 +32,13 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_GENERATOR_PLATFORM "x64")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_compile_definitions(
   PLATFORM_64BITS
+  CMAKE
 )
+
 if(${IS_LINUX})
 
   link_libraries("dl")
@@ -62,14 +65,37 @@ include_directories(
   ${SRCDIR}/public
   ${SRCDIR}/public/tier0
   ${SRCDIR}/public/tier1
+  ${SRCDIR}/common
 )
 
 if(${IS_WINDOWS})
   add_compile_definitions(
     COMPILER_MSVC
+    PLATFORM_64BITS
+    WIN64
+    _WIN64
+    COMPILER_MSVC64
   )
 
+  if(MSVC)
+    add_compile_options(
+    # /Gw is a VS 2013 option that puts global and static variables in individual sections so that the
+		# linker can discard unreferenced data. When building @client /dota with linker optimizations this
+		# reduces the client.dll size by about 1.14%. When linker optimizations are disabled this has no
+		# effect. This option does not show up in the IDE so we need to add it in $AdditionalOptions.
+		# http://blogs.msdn.com/b/vcblog/archive/2013/09/11/introducing-gw-compiler-switch.aspx
+    "/Gw"
+    # Compile with multiple processes
+    /MP
+    /Zc:inline
+    /Zc:threadSafeInit-
+    # Sets __cplusplus macro to accurate value
+    # instead of the value for C++98
+    /Zc:__cplusplus
+    )
+  endif()
 endif()
 
 include("cmake/launcher.cmake")
 include("cmake/vgui_controls.cmake")
+include("cmake/tier1.cmake")
