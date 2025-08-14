@@ -6,21 +6,21 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include "cbase.h"
-#include "usermessages.h"
-#include "hud.h"
-#include "hudelement.h"
 #include "c_tf_player.h"
+#include "cbase.h"
+#include "hud.h"
+#include "hud_macros.h"
+#include "hudelement.h"
 #include "iclientmode.h"
 #include "ienginevgui.h"
 #include "tf_gamerules.h"
-#include "hud_macros.h"
+#include "tf_shareddefs.h"
+#include "usermessages.h"
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <vgui/IVGui.h>
 #include <vgui_controls/EditablePanel.h>
 #include <vgui_controls/Label.h>
-#include "tf_shareddefs.h"
 #include <vgui_controls/ImagePanel.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -29,7 +29,7 @@
 using namespace vgui;
 
 ConVar pf_speedo( "pf_speedo", "1", FCVAR_ARCHIVE, "Enable/Disable the speedometer HUD element" );
-ConVar pf_speedo_smoothing( "pf_speedo_smoothing", "0", FCVAR_ARCHIVE, "Enable/disable smoothing for the HUD speedometer." );
+ConVar pf_speedo_smoothing( "pf_speedo_smoothing", "1", FCVAR_ARCHIVE, "Enable/disable smoothing for the HUD speedometer." );
 ConVar pf_speedo_bar( "pf_speedo_bar", "1", FCVAR_ARCHIVE, "Enable/Disable the speedometer bar HUD element" );
 class CHudSpeedo : public CHudElement, public EditablePanel
 {
@@ -156,7 +156,36 @@ void CHudSpeedo::UpdateSpeedBar( float rawSpeed, float smoothedSpeed )
     float maxSpeed = 1500.0f;
 
     float ratio = clamp( smoothedSpeed / maxSpeed, 0.0f, 1.0f );
-    int newWide = (int)( m_nBarFullWidth * ratio + 0.5f );
+    const int kPad = 2;
+    int fillMaxRange = m_nBarFullWidth; // fallback
+
+    if ( m_pSpeedBarBG )
+    {
+        fillMaxRange = m_pSpeedBarBG->GetWide() - ( kPad * 2 );
+        if ( fillMaxRange < 0 ) fillMaxRange = 0;
+    }
+
+    int newWide = (int)( fillMaxRange * ratio + 0.5f );
+
+    if ( m_pSpeedBarBG )
+    {
+        int bgX, bgY, fillX, fillY;
+        m_pSpeedBarBG->GetPos( bgX, bgY );
+        m_pSpeedBarFill->GetPos( fillX, fillY );
+
+        int desiredFillX = bgX + kPad;
+        if ( fillX != desiredFillX )
+        {
+            m_pSpeedBarFill->SetPos( desiredFillX, fillY );
+            fillX = desiredFillX;
+        }
+
+        int maxFillWidth = ( bgX + m_pSpeedBarBG->GetWide() - kPad ) - fillX;
+        if ( maxFillWidth < 0 ) maxFillWidth = 0;
+        if ( newWide > maxFillWidth )
+            newWide = maxFillWidth;
+    }
+
     m_pSpeedBarFill->SetWide( newWide );
 
     Color c;
