@@ -2874,6 +2874,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"14"
+				"custom" "1"
 			}
 		}
 		"Compacta16"
@@ -2882,6 +2883,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"Compacta18"
@@ -2890,6 +2892,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"18"
+				"custom" "1"
 			}
 		}
 		"Compacta20"
@@ -2898,6 +2901,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"20"
+				"custom" "1"
 			}
 		}
 		"Compacta24"
@@ -2906,6 +2910,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"24"
+				"custom" "1"
 			}
 		}
 		"Compacta28"
@@ -2914,6 +2919,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"28"
+				"custom" "1"
 			}
 		}
 		"Compacta32"
@@ -2922,6 +2928,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"32"
+				"custom" "1"
 			}
 		}
 		"Compacta36"
@@ -2930,6 +2937,7 @@ Scheme
 			{
 				"name"	"Compacta BT"
 				"tall"	"36"
+				"custom" "1"
 			}
 		}
 		
@@ -2939,6 +2947,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"14"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack16"
@@ -2947,6 +2956,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack20"
@@ -2955,6 +2965,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"20"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack24"
@@ -2963,6 +2974,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"24"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack28"
@@ -2971,6 +2983,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"28"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack32"
@@ -2979,6 +2992,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"32"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack36"
@@ -2987,6 +3001,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"36"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack40"
@@ -2995,6 +3010,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"40"
+				"custom" "1"
 			}
 		}
 		"CompactaBlack44"
@@ -3003,6 +3019,7 @@ Scheme
 			{
 				"name"	"Compacta BT Black"
 				"tall"	"44"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack10Shadow"
@@ -3012,6 +3029,7 @@ Scheme
 				"name"	"Montserrat Black"
 				"tall"	"10"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack11Shadow"
@@ -3021,6 +3039,7 @@ Scheme
 				"name"	"Montserrat Black"
 				"tall"	"11"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack12"
@@ -3029,6 +3048,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"12"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack12Shadow"
@@ -3038,6 +3058,7 @@ Scheme
 				"name"	"Montserrat Black"
 				"tall"	"12"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack14"
@@ -3046,6 +3067,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"14"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack14Shadow"
@@ -3054,7 +3076,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"14"
-				
+				"custom" "1"				
 			}
 		}
 		"MontserratBlack16Shadow"
@@ -3064,6 +3086,7 @@ Scheme
 				"name"	"Montserrat Black"
 				"tall"	"16"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack20"
@@ -3072,6 +3095,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"20"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack20Shadow"
@@ -3082,6 +3106,7 @@ Scheme
 				"tall"	"20"
 				"dropshadow"	"1"
 				"antialias" 	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack20Add"
@@ -3092,6 +3117,7 @@ Scheme
 				"tall"	"20"
 				"additive"	"1"
 				"antialias" 	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack22"
@@ -3100,6 +3126,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"22"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack24"
@@ -3108,6 +3135,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"24"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack26"
@@ -3116,6 +3144,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"26"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack28"
@@ -3124,6 +3153,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"28"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack32"
@@ -3132,6 +3162,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"32"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack34"
@@ -3140,6 +3171,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"34"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack36"
@@ -3148,6 +3180,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"36"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack40"
@@ -3156,6 +3189,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"40"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack40Shadow"
@@ -3165,6 +3199,7 @@ Scheme
 				"name"	"Montserrat Black"
 				"tall"	"40"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack44"
@@ -3173,6 +3208,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"44"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack48"
@@ -3181,6 +3217,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"48"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack52"
@@ -3189,6 +3226,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"52"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack56"
@@ -3197,6 +3235,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"56"
+				"custom" "1"
 			}
 		}
 		"MontserratBlack64"
@@ -3205,6 +3244,7 @@ Scheme
 			{
 				"name"	"Montserrat Black"
 				"tall"	"64"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold12"
@@ -3213,6 +3253,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"12"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold16"
@@ -3221,6 +3262,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold16Shadow"
@@ -3230,14 +3272,7 @@ Scheme
 				"name"	"Montserrat SemiBold"
 				"tall"	"16"
 				"dropshadow"	"1"
-			}
-		}
-		"MontserratSemibold16SAA"
-		{
-			"1"
-			{
-				"name"	"Montserrat SemiBold"
-				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold20"
@@ -3246,6 +3281,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"20"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold24"
@@ -3254,6 +3290,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"24"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold28"
@@ -3262,6 +3299,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"28"
+				"custom" "1"
 			}
 		}
 		"MontserratSemibold32"
@@ -3270,6 +3308,7 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"32"
+				"custom" "1"
 			}
 		}
 		
@@ -3280,6 +3319,7 @@ Scheme
 				"name"	"Montserrat Light"
 				"tall"	"6"
 				"antialias" "1"
+				"custom" "1"
 			}
 		}
 		"MontserratLight8"
@@ -3289,6 +3329,7 @@ Scheme
 				"name"	"Montserrat Light"
 				"tall"	"8"
 				"antialias" "1"
+				"custom" "1"
 			}
 		}
 		"MontserratLight12"
@@ -3298,6 +3339,7 @@ Scheme
 				"name"	"Montserrat Light"
 				"tall"	"12"
 				"antialias" "1"
+				"custom" "1"
 			}
 		}
 		"MontserratLight16"
@@ -3307,6 +3349,7 @@ Scheme
 				"name"	"Montserrat Light"
 				"tall"	"16"
 				"antialias" "1"
+				"custom" "1"
 			}
 		}
 		"MontserratLight20"
@@ -3316,6 +3359,7 @@ Scheme
 				"name"	"Montserrat Light"
 				"tall"	"20"
 				"antialias" "1"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs12"
@@ -3324,6 +3368,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"12"
+				"custom" "1"
 			}
 		}
 		
@@ -3333,6 +3378,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs20"
@@ -3341,6 +3387,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"20"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs24"
@@ -3349,6 +3396,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"24"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs28"
@@ -3357,6 +3405,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"28"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs32"
@@ -3365,6 +3414,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"32"
+				"custom" "1"
 			}
 		}
 		"MenuGlyphs36"
@@ -3373,6 +3423,7 @@ Scheme
 			{
 				"name"	"Bobby's TF2 Glyphs"
 				"tall"	"36"
+				"custom" "1"
 			}
 		}
 		
@@ -3382,6 +3433,7 @@ Scheme
 			{
 				"name"	"Futura Condensed Demi Regular"
 				"tall"	"8"
+				"custom" "1"
 			}
 		}
 		"FuturaDemiCon10"
@@ -3390,6 +3442,7 @@ Scheme
 			{
 				"name"	"Futura Condensed Demi Regular"
 				"tall"	"10"
+				"custom" "1"
 			}
 		}
 		"FuturaDemiCon12"
@@ -3398,6 +3451,7 @@ Scheme
 			{
 				"name"	"Futura Condensed Demi Regular"
 				"tall"	"12"
+				"custom" "1"
 			}
 		}
 		"FuturaDemiCon14"
@@ -3406,6 +3460,7 @@ Scheme
 			{
 				"name"	"Futura Condensed Demi Regular"
 				"tall"	"14"
+				"custom" "1"
 			}
 		}
 		"FuturaDemiCon16"
@@ -3414,6 +3469,7 @@ Scheme
 			{
 				"name"	"Futura Condensed Demi Regular"
 				"tall"	"16"
+				"custom" "1"
 			}
 		}
 		"NametagSmall"
@@ -3426,6 +3482,7 @@ Scheme
 				"additive"	"1"
 				"antialias" "1"
 				"dropshadow"	"1"
+				"custom" "1"
 			}
 
 		 }	
