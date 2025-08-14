@@ -408,11 +408,12 @@
 				"pinCorner"		"0"
 				"visible"		"1"
 				"visible_minmode" "1"
-				"labelText"		"%shortname%"
+				"labelText"		"%nickname%"
 				"textAlignment"	"center"
 				"fgcolor" 		"PFWhite" 
 				"proportionaltoparent"	"1"
 				"wrap" "0"
+				"allcaps"		"1"
 			}
 			"playernameBG"
 			{

@@ -1374,15 +1374,12 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			{
 				iDominationIndex = ( bDominating ? ( m_iImageDomDead[iActiveDominations] ) : 0 );
 			}
-    		C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );
 			KeyValues *pKeyValues = new KeyValues( "data" );
 			pKeyValues->SetInt( "playerIndex", playerIndex );
-			if ( pf_scoreboard_use_nicks.GetBool() )
+			auto nickname = GetClientNickname( playerIndex );
+			if ( pf_scoreboard_use_nicks.GetBool() && nickname )
 			{
-				if ( !pTFPlayer )
-					return;
-				const char *pszShortName = pTFPlayer->GetShortNick();
-				pKeyValues->SetString( "name", pszShortName );
+				pKeyValues->SetWString( "name", nickname );
 			}
 			else
 			{
@@ -1395,7 +1392,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			pKeyValues->SetInt( "saves", g_TF_PR->GetP4ssSaves( playerIndex ) );
 			pKeyValues->SetInt( "connected", 2 );
 
-
+			C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );
 			if ( pTFPlayer && pTFPlayer->GetActiveTFWeapon() )
 			{
 				int nCount = g_TF_PR->GetStreak( playerIndex, CTFPlayerShared::kTFStreak_Kills );
@@ -1859,12 +1856,13 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 	if ( engine->IsHLTV() )
 #endif
 	{
-    	C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );
-    	const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
-		const char *pszShortName = pTFPlayer->GetShortNick();
+		const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
+		auto nickname = GetClientNickname( playerIndex );
+		if ( !nickname )
+			nickname = L"";
 
-		SetDialogVariable( "shortname", pszShortName );
-    	SetDialogVariable( "playername", pszPlayerName );
+		SetDialogVariable( "playername", pszPlayerName );
+		SetDialogVariable( "nickname", nickname );
 		return;
 	}
 
@@ -1981,16 +1979,15 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 		{
 			m_pDamageLabel->SetFgColor( g_TF_PR->GetDamage( playerIndex ) ? cGreen : cWhite );
 		}
-	}		
+	}
 
-	//SetDialogVariable( "playername", g_TF_PR->GetPlayerName( playerIndex ) );
-    	C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );
-    	const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
-		const char *pszShortName = pTFPlayer->GetShortNick();
+	const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
+	auto nickname = GetClientNickname( playerIndex );
+	if ( !nickname )
+		nickname = L"";
 
-		SetDialogVariable( "shortname", pszShortName );
-    	SetDialogVariable( "playername", pszPlayerName );
-		return;
+	SetDialogVariable( "playername", pszPlayerName );
+	SetDialogVariable( "nickname", nickname );
 
 	Color clr = g_PR->GetTeamColor( g_PR->GetTeam( playerIndex ) );
 	m_pLabelPlayerName->SetFgColor( clr );

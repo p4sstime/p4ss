@@ -171,4 +171,6 @@ extern CSteamID GetSteamIDForPlayerIndex( int iPlayerIndex );
 
 #endif
 
+const wchar_t* GetClientNickname( int iClientIndex );
+
 #endif // CDLL_CLIENT_INT_H

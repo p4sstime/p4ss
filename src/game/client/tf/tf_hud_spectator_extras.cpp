@@ -238,27 +238,25 @@ void CTFHudSpectatorExtras::OnTick()
 
 			// use actual name or disguised name?
 			int nNameIndex = pDisguiseTarget ? pDisguiseTarget->entindex() : i;
-			g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( nNameIndex ), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
 
-
-			if ( pDisguiseTarget )
+			auto nickname = GetClientNickname( nNameIndex );
+			if ( nickname )
 			{
-				int nNameIndex = pDisguiseTarget->entindex();
-				g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( nNameIndex ), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
+				V_wcsncpy( m_vecEntitiesToDraw[nVecIndex].m_wszName, nickname, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
+				auto nicknameLength = wcslen( m_vecEntitiesToDraw[nVecIndex].m_wszName );
+
+				for ( auto i = 0; i < nicknameLength; i++ )
+				{
+					auto upperChar = towupper(m_vecEntitiesToDraw[nVecIndex].m_wszName[i]);
+					if ( upperChar != WEOF )
+						m_vecEntitiesToDraw[nVecIndex].m_wszName[i] = upperChar;
+				}
 			}
 			else
 			{
-				C_TFPlayer *pTFPlayer = ToTFPlayer( pPlayer );
-				if ( pTFPlayer )
-				{
-					g_pVGuiLocalize->ConvertANSIToUnicode( pTFPlayer->GetShortNick(), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
-				}
-				else
-				{
-					// Fallback to regular name if cast fails
-					g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( i ), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
-				}
+				g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( nNameIndex ), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
 			}
+
 			m_vecEntitiesToDraw[nVecIndex].m_nNameWidth = UTIL_ComputeStringWidth( m_hNameFont, m_vecEntitiesToDraw[nVecIndex].m_wszName );
 
 			m_vecEntitiesToDraw[nVecIndex].m_nOffset = ( VEC_HULL_MAX_SCALED( pPlayer ).z );

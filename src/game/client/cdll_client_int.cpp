@@ -289,6 +289,8 @@ INetworkStringTable *g_pStringTableServerPopFiles = NULL;
 INetworkStringTable *g_pStringTableServerMapCycleMvM = NULL;
 #endif
 
+INetworkStringTable *g_pStringTableNicknames = NULL;
+
 static CGlobalVarsBase dummyvars( true );
 // So stuff that might reference gpGlobals during DLL initialization won't have a NULL pointer.
 // Once the engine calls Init on this DLL, this pointer gets assigned to the shared data in the engine
@@ -1800,6 +1802,8 @@ void CHLClient::ResetStringTablePointers()
 	g_pStringTableServerPopFiles = NULL;
 	g_pStringTableServerMapCycleMvM = NULL;
 #endif
+
+    g_pStringTableNicknames = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -2051,6 +2055,10 @@ void CHLClient::InstallStringTableCallback( const char *tableName )
 		g_pStringTableServerMapCycleMvM = networkstringtable->FindTable( tableName );
 	}
 #endif
+	else if ( !Q_strcasecmp( tableName, "Nicknames" ) )
+	{
+		g_pStringTableNicknames = networkstringtable->FindTable( tableName );
+	}
 
 	InstallStringTableCallback_GameRules();
 }
@@ -2785,3 +2793,14 @@ CSteamID GetSteamIDForPlayerIndex( int iPlayerIndex )
 }
 
 #endif
+
+const wchar_t* GetClientNickname( int iClientIndex )
+{
+	auto value = static_cast<const wchar_t*>( g_pStringTableNicknames->GetStringUserData( iClientIndex - 1, NULL ) );
+	Assert( value );
+
+	if ( value && value[0] != 0 )
+	    return value;
+
+	return NULL;
+}
