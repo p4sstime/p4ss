@@ -86,9 +86,13 @@ if(${IS_LINUX})
     -Wno-float-equal -Werror=return-type \
     -Wformat -Wformat-security"
   )
+  # -Wno-mismatched-new-delete excluded since it doesn't work in Sniper container
+  # and adds to the compiler error spew for no tangible benefit.
+  # If we're seriously getting mismatched-new-delete warns on newer compilers,
+  # please fix them instead of killing the warning
   set(NINJA_WARN_FLAGS_CXX 
     "-Wno-overloaded-virtual -Wno-placement-new -Wno-c++20-compat \
-    -Wno-mismatched-new-delete -Wno-class-memaccess -Wno-conversion-null -Wno-invalid-offsetof -Wno-reorder"
+     -Wno-class-memaccess -Wno-conversion-null -Wno-invalid-offsetof -Wno-reorder"
   )
   
   if (${DEVELOPMENT_ONLY})
@@ -105,7 +109,7 @@ if(${IS_LINUX})
   ")
   set(NINJA_CXX_FLAGS "${NINJA_C_FLAGS} ${NINJA_WARN_FLAGS_CXX} -I/usr/include/freetype2")
 
-  set(NINJA_OPTIMIZATION_DEBUG "-O0 -ggdb3 $NINJA_STACK_OPT_DEBUG -fno-delete-null-pointer-checks")
+  set(NINJA_OPTIMIZATION_DEBUG "-Og -ggdb3 $NINJA_STACK_OPT_DEBUG -fno-delete-null-pointer-checks")
   set(NINJA_OPTIMIZATION_RELEASE 
   "-O2 -g $NINJA_STACK_OPT_RELEASE -fno-strict-aliasing -ffast-math \
   -fno-omit-frame-pointer -fno-delete-null-pointer-checks -ftree-vectorize \
