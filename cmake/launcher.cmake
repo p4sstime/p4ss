@@ -21,22 +21,16 @@ if(${IS_LINUX})
 target_link_libraries(p4ss_launcher SDL2)
 endif()
 
-# Why valve?
-target_link_options(p4ss_launcher PRIVATE
-  "-Wl,--wrap=fopen"
-  "-Wl,--wrap=fopen64"
-)
-
 set_target_properties(p4ss_launcher PROPERTIES 
 	OUTPUT_NAME "p4ss_${PLAT_EXE_NAME}"
 	RUNTIME_OUTPUT_DIRECTORY "${OUTBINDIR}"
 )
+
 if (${MOD_LAUNCHER})
 	target_compile_definitions(p4ss_launcher PRIVATE
 	MOD_LAUNCHER
 	"MOD_APPID=3554290"
 	)
-
 endif()
 
 if (${IS_WINDOWS})

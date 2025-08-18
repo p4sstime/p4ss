@@ -6,5 +6,5 @@ pushd "$(dirname -- "$script")" > /dev/null
 pwd="$(pwd)"
 THIS_DIR="${THIS_DIR:-$pwd}"
 
-./configure.sh
+./configure.sh $@
 ./build.sh

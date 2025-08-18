@@ -2,7 +2,6 @@
 # This is CTRL+C CTRL+V'd from https://github.com/Spirrwell/source-sdk-2013-cmake/blob/master/mp/_cmake_scripts/base.cmake
 # Thanks in advance lol
 
-
 # NOTE: We use 0 or 1 so we can use these more easily in generator expressions
 # Initialize them with default values that we then set later
 

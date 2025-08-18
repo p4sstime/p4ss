@@ -22,6 +22,7 @@ build_container/*
 !build_container/all.sh
 !build_container/configure.sh
 !build_container/build.sh
+!build_container/clean.sh
 
 
 # Ignore build artifacts

@@ -15,4 +15,4 @@ THIS_DIR="${THIS_DIR:-$pwd}"
 source ../src/sdk_container
 run_in_sniper "$@"
 
-cmake --build . $@
+cmake --build . --target clean $@
