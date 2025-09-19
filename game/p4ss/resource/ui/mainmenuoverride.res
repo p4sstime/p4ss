@@ -717,7 +717,7 @@
 			"ControlName"	"EditablePanel"
 			"fieldname"		"QuitButton"
 			"xpos"			"38"
-			"ypos"			"318"
+			"ypos"			"335"
 			"zpos"			"15"
 			"wide"			"45"
 			"tall"			"25"
@@ -788,7 +788,7 @@
 			"ControlName"	"EditablePanel"
 			"fieldname"		"DisconnectButton"
 			"xpos"			"38"
-			"ypos"			"318"
+			"ypos"			"335"
 			"zpos"			"15"
 			"wide"			"85"
 			"tall"			"25"
@@ -1047,6 +1047,83 @@
 				"depressedFgColor_override" "PFDarkGreen"	
 			}
 		}
+		
+	"PlayernameBGBorder"
+	{
+		"ControlName"	"EditablePanel"
+		"fieldname"		"PlayernameBGBorder"
+		"xpos"			"r170"
+		"ypos"			"79"
+		"zpos"			"0"
+		"wide"			"200"
+		"tall"			"48"
+		"visible"		"1"
+		"PaintBackgroundType"	"0"
+		"border"		"MainMenuBGBorder"
+	}
+
+	"RankPanel"		//Controls the playername pos
+	{
+		"ControlName"	"CPvPRankPanel"
+		"fieldName"		"RankPanel"
+		"xpos"			"r240"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"320"
+		"tall"			"200"
+		"visible"		"1"
+		"proportionaltoparent"	"1"
+		"mouseinputenabled"	"1"
+
+		"matchgroup"	"MatchGroup_Casual_12v12"
+
+		"show_model"	"0"
+		"show_type"		"0"
+	}
+	
+	"AvataringSlot"
+	{
+		"ControlName"	"CDashboardPartyMember"
+		"fieldName"		"AvataringSlot"
+		"xpos"			"c216"
+		"ypos"			"80"
+		"zpos"			"1"
+		"wide"			"45"
+		"tall"			"45"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"proportionaltoparent"	"0"
+		"mouseinputenabled"	"0"
+		"keyboardinputenabled"	"0"
+
+		"party_slot"	"0"
+	}
+	
+	"WelcomeLabel"
+	{
+		"ControlName"	"CExLabel"
+		"fieldName"		"WelcomeLabel"
+		"font"			"MontserratLight16"
+		"labelText"		"Welcome Back,"
+		"textAlignment"	"west"
+		"xpos"			"265"
+		"ypos"			"0"
+		"zpos"			"5"
+		"wide"			"223"
+		"tall"			"30"
+		"autoResize"	"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"AvataringSlot"
+		"pin_corner_to_sibling" 	"1"
+		"pin_to_sibling_corner" 	"1"
+	}
 
 		"Notifications_ShowButtonPanel"
 		{
@@ -2800,5 +2877,290 @@
 				"angles_z"		"0"
 			}
 		}
+	}
+	
+			//
+		// Beta buttons
+		//
+	
+	
+			"ArenaButton"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"ArenaButton"
+		"xpos"			"c-220"
+		"ypos"			"180"
+		"zpos"			"15"
+		"wide"			"60"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine map pass_arena2_b15"
+		"labeltext"		"Arena"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+			"Arena2Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren2Button"
+		"xpos"			"c1"
+		"ypos"			"210"
+		"zpos"			"15"
+		"wide"			"130"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine mp_tournament 1; mp_restartgame_immediate 1"
+		"labeltext"		"restart round"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+	"Arena6Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren6Button"
+		"xpos"			"c1"
+		"ypos"			"240"
+		"zpos"			"15"
+		"wide"			"140"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+			//This line is so long but it ensures that everyone can use this buttons without installing cfg's.
+		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 120; mp_tournament 1; mp_tournament_restart; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
+		"labeltext"		"practice mode"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena7Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren7Button"
+		"xpos"			"c130"
+		"ypos"			"210"
+		"zpos"			"15"
+		"wide"			"120"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine exec p4ss_pt_2025"
+		"labeltext"		"match mode"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena3Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren3Button"
+		"xpos"			"c60"
+		"ypos"			"180"
+		"zpos"			"15"
+		"wide"			"70"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine sv_cheats 1"
+		"labeltext"		"cheats"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+			"Arena4Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren4Button"
+		"xpos"			"c-70"
+		"ypos"			"180"
+		"zpos"			"15"
+		"wide"			"70"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine cl_hud_minmode 0"
+		"labeltext"		"bighud"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena5Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren5Button"
+		"xpos"			"c-70"
+		"ypos"			"210"
+		"zpos"			"15"
+		"wide"			"80"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine cl_hud_minmode 1"
+		"labeltext"		"smallhudhud"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+			"Arena5Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren5Button"
+		"xpos"			"c130"
+		"ypos"			"150"
+		"zpos"			"15"
+		"wide"			"90"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine tf_bot_add medic"
+		"labeltext"		"Medic Bot"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena6Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren6Button"
+		"xpos"			"c20"
+		"ypos"			"150"
+		"zpos"			"15"
+		"wide"			"110"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine tf_bot_add soldier"
+		"labeltext"		"Soldier Bot"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
+	}
+	
+		"Arena7Button"
+	{
+		"ControlName"	"CExImageButton"
+		"fieldname"		"Aren7Button"
+		"xpos"			"c-70"
+		"ypos"			"150"
+		"zpos"			"15"
+		"wide"			"110"
+		"tall"			"30"
+		"visible"		"1"
+		
+		"font"			"HudFontSmallishBold"
+		"command" 		"engine tf_bot_add demoman"
+		"labeltext"		"Demo Bot"
+		"OnlyInGame"	"1"
+		
+		"border_default"	"storeinnershadowborder"
+		
+		"paintbackground"	"0"
+		"paintborder"		"1"
+			
+		"FgColor" 					"white"
+		"armedFgColor_override" 	"partymember2"
+		
+		"sound_depressed"	"p4ss/jack/jack_lock.wav"
+		"sound_released"	"p4ss/jack/ball_impact.wav"	
 	}
 }

@@ -1,3 +1,10 @@
+#base "classselection_blu.res"
+#base "classselection_red.res"
+
+//Some team specific HUD elements and buttons are in the other two files!
+//Don't get confused wondering why something is missing!
+//Borders and class selection model are team colored (lighting for latter), so they're not here.
+
 "Resource/UI/ClassSelection.res"
 {
 	"class"
@@ -30,36 +37,20 @@
 		"tabPosition"	"0"
 	}
 	
-	"ClassSelectDeny1"
+	"P4SSBG"
 	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"ClassSelectDeny1"
-		"xpos"			"c-272"
-		"ypos"			"35"
-		"zpos"			"3"
-		"wide"			"90"
-		"tall"			"56"
+		"ControlName"	"ImagePanel"
+		"fieldName"		"P4SSBG"
+		"xpos"			"0"
+		"ypos"			"0"
+		"zpos"			"-100"
+		"wide"			"f0"
+		"tall"			"f0"
+		"fillcolor"		"46 43 42 255"
+		"autoResize"	"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
-		"image"			"../hud/class_select_deny"
-		"scaleImage"		"1"	
-		"drawcolor"        "TanDark"    
-	}
-	
-	"ClassSelectDeny2"
-	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"ClassSelectDeny2"
-		"xpos"			"c102"
-		"ypos"			"35"
-		"zpos"			"3"
-		"wide"			"90"
-		"tall"			"56"
-		"visible"		"1"
-		"enabled"		"1"
-		"image"			"../hud/class_select_deny"
-		"scaleImage"		"1"	
-		"drawcolor"        "TanDark"    
 	}
 	
 	"random"
@@ -77,8 +68,8 @@
 		"tall"				"100"
 		"autoResize"		"0"
 		"pinCorner"			"2"
-		"visible"			"1"
-		"enabled"			"1"
+		"visible"			"0"
+		"enabled"			"0"
 		"tabPosition"		"0"
 		"labelText"			""
 		"textAlignment"		"south-west"
@@ -196,8 +187,8 @@
 	{
 		"ControlName"		"CExImageButton"
 		"fieldName"			"soldier"
-		"xpos"				"c-115"
-		"ypos"				"-5"
+		"xpos"				"100"
+		"ypos"				"c-20"
 		"zpos"				"6"
 		"wide"				"50"
 		"tall"				"100"
@@ -211,7 +202,7 @@
 		"textAlignment"		"south-west"
 		"Command"			"select 3"
 		"Default"			"0"
-		"font"				"MenuKeys"
+		"font"				""	//empty to remove the number
 		"scaleImage"		"1"
 		
 		"image_default"		"class_sel_sm_soldier_inactive"
@@ -312,41 +303,12 @@
 		}				
 	}
 	
-	"PassTimeLabel"
-	{
-		"ControlName"	"CExLabel"
-		"fieldName"		"PassTimeLabel"
-		"xpos"			"c-110"
-		"xpos_hidef"			"c-105"
-		"xpos_lodef"	"c-95"
-		"ypos"			"96"
-		"ypos_hidef"			"102"
-		"ypos_lodef"	"116"
-		"zpos"			"2"
-		"wide"			"90"
-		"tall"			"12"
-		"tall_lodef"			"22"
-		"autoResize"	"1"
-		"pinCorner"		"2"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"	"0"
-		"labelText"		"#GameType_Passtime"
-		"textAlignment"	"left"
-		"font"			"MenuClassBuckets"
-		"font_lodef"			"MenuMainTitle"
-		"fgcolor"		"TanDark"
-		"fgcolor_lodef"	"TanLight"
-	}
 	"demoman"
 	{
 		"ControlName"		"CExImageButton"
 		"fieldName"			"demoman"
-		"xpos"				"c-62"
-		"xpos_lodef"		"c-100"
-		"ypos"				"-5"
-		"ypos_lodef"				"9"
-		"ypos_hidef"				"0"
+		"xpos"				"160"
+		"ypos"				"c-20"
 		"zpos"				"6"
 		"wide"				"50"
 		"tall"				"100"
@@ -360,7 +322,7 @@
 		"textAlignment"		"south-west"
 		"Command"			"select 4"
 		"Default"			"0"
-		"font"				"MenuKeys"
+		"font"				""
 		"scaleImage"		"1"
 		
 		"image_default"		"class_sel_sm_demo_inactive"
@@ -549,8 +511,8 @@
 	{
 		"ControlName"		"CExImageButton"
 		"fieldName"			"medic"
-		"xpos"				"c-10"
-		"ypos"				"-5"
+		"xpos"				"220"
+		"ypos"				"c-20"
 		"zpos"				"6"
 		"wide"				"50"
 		"tall"				"100"
@@ -564,7 +526,7 @@
 		"textAlignment"		"south-west"
 		"Command"			"select 5"
 		"Default"			"0"
-		"font"				"MenuKeys"
+		"font"				""
 		"scaleImage"		"1"
 		
 		"image_default"		"class_sel_sm_medic_inactive"
@@ -740,15 +702,22 @@
 		"labelText"		"#TF_ClassMenu_Cancel"
 		"textAlignment"	"center"
 		"Command"		"vguicancel"
-		"font"			"MontserratBlack14"
-		"fgcolor_override" "200 80 60 255"
+		"font"			"HudFontSmallBold"
+		"fgcolor_override" "0 0 0 255"
+		"defaultBgColor_override" 	"TanDarker"
+		"armedBgColor_override" 	"Flavor"
+		"depressedBgColor_override" "TanDarker"
+		
+		"defaultfgColor_override" 	"TanLight"
+		"armedfgColor_override" 	"TanLight"
+		"depressedfgColor_override" "TanLight" //clicked on
 	}
 	
 	"EditLoadoutButton" [$WIN32] 
 	{
 		"ControlName"	"CExButton"
 		"fieldName"		"EditLoadoutButton"
-		"xpos"			"r180"
+		"xpos"			"c-135"
 		"ypos"			"r38"
 		"zpos"			"6"
 		"wide"			"150"
@@ -761,7 +730,15 @@
 		"labelText"		"#EditLoadout"
 		"textAlignment"	"center"
 		"Command"		"openloadout"
-		"font"			"MontserratBlack14"
+		"font"			"HudFontSmallBold"
+		
+		"defaultBgColor_override" 	"TanDarker"
+		"armedBgColor_override" 	"Flavor"
+		"depressedBgColor_override" "TanDarker"
+		
+		"defaultfgColor_override" 	"TanLight"
+		"armedfgColor_override" 	"TanLight"
+		"depressedfgColor_override" "TanLight" //clicked on
 	}
 
 	"ResetButton" [$WIN32] 
@@ -781,10 +758,10 @@
 		"labelText"		"#TF_ClassMenu_Reset"
 		"textAlignment"	"center"
 		"Command"		"resetclass"
-		"font"			"MontserratBlack14"
+		"font"			"HudFontSmallBold"
 	}
 
-	"ClassMenuSelect"
+	"ClassMenuSelect" //appears on first joining the server
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"ClassMenuSelect"
@@ -804,11 +781,11 @@
 		"enabled"		"1"
 		"labelText"		"#TF_SelectAClass"
 		"textAlignment"	"west"
-		"font"			"MenuMainTitle"
-		"fgcolor"		"HudOffWhite"
+		"font"			"HudFontMediumBigBold"
+		"fgcolor"		"TanDarker"
 	}
 	
-	"MenuBG"
+	"MenuBG" //disabled
 	{
 		"ControlName"	"CModelPanel"
 		"fieldName"		"MenuBG"
@@ -819,8 +796,8 @@
 		"tall"			"480"
 		"autoResize"	"0"
 		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
+		"visible"		"0"
+		"enabled"		"0"
 		"fov"			"16"
 		
 		"model"
@@ -860,8 +837,8 @@
 		"labelText"		"%hint%"
 		"textAlignment"	"left"
 		"wrap"			"1"
-		"font"			"MontserratSemibold22"
-		"font_lodef"	"MontserratSemibold22"
+		"font"			"HudFontMediumSmallSecondary"
+		"font_lodef"	"HudFontMediumSmallSecondary"
 		"fgcolor"		"HudTrainingHint"
 		"fgcolor_lodef"	"HudTrainingHint"
 	}
@@ -870,23 +847,8 @@
 	{
 		"ControlName"	"ImagePanel"
 		"fieldName"		"ShadedBar"
-		"xpos"			"0"
-		"ypos"			"r50"
-		"ypos_lodef"			"r74"
-		"ypos_hidef"			"r65"
-		"zpos"			"4"
-		"wide"			"f0"
-		"tall"			"50"
-		"tall_lodef"			"74"
-		"tall_hidef"			"65"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"	"0"	
-		"image"			"loadout_bottom_gradient"
-		"tileImage"		"1"
-		"PaintBackgroundType"	"0"
+		"visible"		"0"
+		"enabled"		"0"
 	}		
 	
 	"Footer" [$X360]
@@ -937,11 +899,11 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"localPlayerImage"
-		"xpos"			"c-30"
-		"ypos"			"330"
+		"xpos"			"100"
+		"ypos"			"375"
 		"zpos"			"9"
-		"wide"			"45"
-		"tall"			"90"
+		"wide"			"30"
+		"tall"			"60"
 		"visible"		"0"
 		"enabled"		"1"
 		"image"			""	
@@ -952,33 +914,33 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"localPlayerBG"
-		"xpos"			"c-35"
-		"ypos"			"345"
+		"xpos"			"c-315"
+		"ypos"			"330"
 		"zpos"			"2"
-		"wide"			"55"
-		"tall"			"80"
+		"wide"			"30"
+		"tall"			"30"
 		"autoResize"	"0"
 		"pinCorner"		"0"
 		"visible"		"0"
 		"enabled"		"1"
-		"image"			"../hud/color_panel_clear"
+		//"image"			"../hud/radar/self_blu"
 		"scaleImage"	"1"	
-		"teambg_2"		"../hud/color_panel_clear"
-		"teambg_3"		"../hud/color_panel_clear"
+		"teambg_2"		"../hud/radar/self_blu"
+		"teambg_3"		"../hud/radar/self_blu"
 			
-		"src_corner_height"		"23"			// pixels inside the image
-		"src_corner_width"		"23"
+		"src_corner_height"		"0"			// pixels inside the image
+		"src_corner_width"		"0"
 				
-		"draw_corner_width"		"5"				// screen size of the corners ( and sides ), proportional
-		"draw_corner_height" 	"5"	
+		"draw_corner_width"		"0"				// screen size of the corners ( and sides ), proportional
+		"draw_corner_height" 	"0"	
 	}
 	
 	"countImage0" [$WIN32]
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage0"
-		"xpos"			"c20"
-		"ypos"			"345"
+		"xpos"			"135"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -992,13 +954,13 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage1"
-		"xpos"			"c45"
-		"ypos"			"345"
+		"xpos"			"170"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
 		"visible"		"0"
-		"enabled"		"1"
+		"enabled"		""
 		"image"			""	
 		"scaleImage"	"1"	
 	}
@@ -1007,8 +969,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage2"
-		"xpos"			"c70"
-		"ypos"			"345"
+		"xpos"			"205"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1022,8 +984,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage3"
-		"xpos"			"c95"
-		"ypos"			"345"
+		"xpos"			"240"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1037,8 +999,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage4"
-		"xpos"			"c120"
-		"ypos"			"345"
+		"xpos"			"275"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1052,8 +1014,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage5"
-		"xpos"			"c145"
-		"ypos"			"345"
+		"xpos"			"310"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1067,8 +1029,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage6"
-		"xpos"			"c170"
-		"ypos"			"345"
+		"xpos"			"345"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1082,8 +1044,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage7"
-		"xpos"			"c195"
-		"ypos"			"345"
+		"xpos"			"380"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1097,8 +1059,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage8"
-		"xpos"			"c220"
-		"ypos"			"345"
+		"xpos"			"315"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1112,8 +1074,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage9"
-		"xpos"			"c245"
-		"ypos"			"345"
+		"xpos"			"350"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1127,8 +1089,8 @@
 	{
 		"ControlName"	"CTFImagePanel"
 		"fieldName"		"countImage10"
-		"xpos"			"c270"
-		"ypos"			"345"
+		"xpos"			"385"
+		"ypos"			"375"
 		"zpos"			"9"
 		"wide"			"30"
 		"tall"			"60"
@@ -1142,8 +1104,8 @@
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"CountLabel"
-		"xpos"			"c35"
-		"ypos"			"402"
+		"xpos"			"100"
+		"ypos"			"380"
 		"zpos"			"10"
 		"wide"			"150"
 		"tall"			"18"
@@ -1154,7 +1116,7 @@
 		"tabPosition"	"0"
 		"labelText"		"#TF_TeamCount"
 		"textAlignment"	"left"
-		"font"			"MontserratSemibold22"
+		"font"			"HudFontSmall"
 		"fgcolor"		"TanLight"
 	}
 	
@@ -1170,8 +1132,8 @@
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"numSoldier"
-		"xpos"			"c-115"
-		"ypos"			"10"
+		"xpos"			"0"
+		"ypos"			"-110"
 		"zpos"			"5"
 		"wide"			"50"
 		"tall"			"12"
@@ -1184,6 +1146,8 @@
 		"textAlignment"	"center"
 		"font"			"MenuClassBuckets"
 		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"soldier"
 	}		
 	
 	"numPyro" [$WIN32]
@@ -1198,8 +1162,8 @@
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"numDemoman"
-		"xpos"			"c-62"
-		"ypos"			"10"
+		"xpos"			"0"
+		"ypos"			"-110"
 		"zpos"			"5"
 		"wide"			"50"
 		"tall"			"12"
@@ -1212,30 +1176,16 @@
 		"textAlignment"	"center"
 		"font"			"MenuClassBuckets"
 		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"demoman"
 	}				
-	
-	"numHeavy" [$WIN32]
-	{
-		"ControlName"	"CExLabel"
-		"fieldName"		"numHeavy"
-		"visible"		"0"
-		"enabled"		"0"
-	}					
-	
-	"numEngineer" [$WIN32]
-	{
-		"ControlName"	"CExLabel"
-		"fieldName"		"numEngineer"
-		"visible"		"0"
-		"enabled"		"0"
-	}						
-	
+					
 	"numMedic" [$WIN32]
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"numMedic"
-		"xpos"			"c-10"
-		"ypos"			"10"
+		"xpos"			"0"
+		"ypos"			"-110"
 		"zpos"			"5"
 		"wide"			"50"
 		"tall"			"12"
@@ -1248,6 +1198,8 @@
 		"textAlignment"	"center"
 		"font"			"MenuClassBuckets"
 		"fgcolor"		"TanLight"
+		
+		"pin_to_sibling" 			"medic"
 	}							
 	
 	"numSniper" [$WIN32]
@@ -1266,141 +1218,6 @@
 		"enabled"		"0"
 	}								
 	
-	"MvMUpgradeImageScout"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageScout"
-		"xpos"			"c-270"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageSolider"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageSolider"
-		"xpos"			"c-220"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImagePyro" 
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImagePyro" 
-		"xpos"			"c-170"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageDemoman" 
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageDemoman" 
-		"xpos"			"c-80"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageHeavy"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageHeavy" 
-		"xpos"			"c-30"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageEngineer"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageEngineer"
-		"xpos"			"c20"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageMedic"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageMedic"
-		"xpos"			"c108"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageSniper"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageSniper"
-		"xpos"			"c158"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-	
-	"MvMUpgradeImageSpy"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"MvMUpgradeImageSpy"
-		"xpos"			"c208"
-		"ypos"			"30"
-		"zpos"			"10"
-		"wide"			"10"
-		"tall"			"10"
-		"visible"		"0"
-		"enabled"		"1"
-		"image"			"mvm/class_upgraded"
-		"scaleImage"	"1"
-	}
-
 	"StartExplanation"
 	{
 		"ControlName"	"CExplanationPopup"
@@ -1428,7 +1245,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"TitleLabel"
-			"font"			"MontserratBlack14"
+			"font"			"HudFontSmallBold"
 			"labelText"		"#TF_MvM_UpgradeExplanation_Title"
 			"textAlignment"	"north"
 			"xpos"			"20"
@@ -1447,7 +1264,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"TextLabel"
-			"font"			"MontserratSemibold16"
+			"font"			"HudFontSmall"
 			"labelText"		"#TF_MvM_UpgradeExplanation_Text"
 			"textAlignment"	"north-west"
 			"xpos"			"20"
@@ -1477,7 +1294,7 @@
 			"enabled"		"1"
 			"tabPosition"	"0"
 			"labeltext"		""
-			"font"			"MontserratBlack14"
+			"font"			"HudFontSmallBold"
 			"textAlignment"	"center"
 			"dulltext"		"0"
 			"brighttext"	"0"
@@ -1516,10 +1333,10 @@
 		"ControlName"	"CTFPlayerModelPanel"
 		"fieldName"		"TFPlayerModel"
 		
-		"xpos"			"0"
+		"xpos"			"r700"
 		"ypos"			"0"
-		"zpos"			"6"		
-		"wide"			"480"
+		"zpos"			"2"		
+		"wide"			"700"
 		"tall"			"480"
 		
 		"autoResize"	"0"
@@ -1540,27 +1357,43 @@
 			"force_pos"	"1"
 
 			"angles_x" "0"
-			"angles_y" "180"
+			"angles_y" "160"
 			"angles_z" "0"
-			"origin_x" "320"
-			"origin_y" "10"
+			"origin_x" "270" //forward-back, lower is closer
+			"origin_y" "-30" //right-left, higher is lefter
 			"origin_z" "-49"
 			"frame_origin_x"	"0"
 			"frame_origin_y"	"0"
 			"frame_origin_z"	"0"
 			"spotlight" "1"
+			"surpressenginelighting"	"1"
 		
 			"modelname"		""
 			"vcd"		"class_select.vcd"
 		}
+		"lights"
+        {
+            "spotlight"
+            {
+                "name"                    "spot"
+                "color"                 "0.35 0.35 0.85" //slightly blue
+                "attenuation"            "0.9"
+                "origin"                "0 0 200"
+                "direction"                "320 10 0"
+                "inner_cone_angle"        "5"
+                "outer_cone_angle"        "200"
+                "maxDistance"            "0"
+                "exponent"                "5"
+            }
+        }
 	}
 	
-	"ClassTipsPanel"
+	"ClassTipsPanel"	//Cannot be given a font?
 	{
 		"ControlName"	"CTFClassTipsPanel"
 		"fieldName"		"ClassTipsPanel"
-		"xpos"			"c28"
-		"ypos"			"c-84"
+		"xpos"			"80"
+		"ypos"			"60"
 		"zpos"			"7"
 		"wide"			"235"
 		"tall"			"165"
@@ -1600,7 +1433,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"TitleLabel"
-			"font"			"MontserratBlack14"
+			"font"			"HudFontSmallBold"
 			"labelText"		"#CMenu_ClassHighlightPanel_Title"
 			"textAlignment"	"north-west"
 			"xpos"			"10"
@@ -1619,7 +1452,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"ClassHighlightText"
-			"font"			"MontserratSemibold16"
+			"font"			"HudFontSmall"
 			"labelText"		"%ClassHighlightText%"
 			"textAlignment"	"north-west"
 			"xpos"			"20"
@@ -1649,7 +1482,7 @@
 			"enabled"		"1"
 			"tabPosition"	"0"
 			"labeltext"		""
-			"font"			"MontserratBlack14"
+			"font"			"HudFontSmallBold"
 			"textAlignment"	"center"
 			"dulltext"		"0"
 			"brighttext"	"0"
