@@ -2952,7 +2952,7 @@
 		
 		"font"			"HudFontSmallishBold"
 			//This line is so long but it ensures that everyone can use this buttons without installing cfg's.
-		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; ent_fire team_round_timer SetSetupTime 1; wait 120; mp_tournament 1; mp_tournament_restart; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
+		"command" 		"engine sv_cheats 1; tf_player_movement_restart_freeze 0; mp_restartgame_immediate 1; wait 300; mp_restartgame_immediate 1; wait 360; ent_fire team_round_timer SetSetupTime 1; wait 1200; mp_tournament_restart; tf_passtime_scores_per_round 9999; tf_tournament_classlimit_medic 5; tf_tournament_classlimit_demoman 5; tf_tournament_classlimit_soldier 5"
 		"labeltext"		"practice mode"
 		"OnlyInGame"	"1"
 		
