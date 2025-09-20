@@ -65,7 +65,7 @@ class CBoundedCvar_InterpRatio : public ConVar_ServerBounded
 public:
 	CBoundedCvar_InterpRatio() :
 	  ConVar_ServerBounded( "cl_interp_ratio", 
-		  "2.0", 
+		  "0", 
 		  FCVAR_USERINFO | FCVAR_NOT_CONNECTED | FCVAR_ARCHIVE, 
 		  "Sets the interpolation amount (final amount is cl_interp_ratio / cl_updaterate)." )
 	  {
@@ -99,7 +99,7 @@ class CBoundedCvar_Interp : public ConVar_ServerBounded
 public:
 	CBoundedCvar_Interp() :
 	  ConVar_ServerBounded( "cl_interp", 
-		  "0.1", 
+		  "0", 
 		  FCVAR_USERINFO | FCVAR_NOT_CONNECTED | FCVAR_ARCHIVE, 
 		  "Sets the interpolation amount (bounded on low side by server interp ratio settings).", true, 0.0f, true, 0.5f )
 	  {
