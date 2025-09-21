@@ -133,9 +133,31 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "0" }
 	}
+	
+	"category3"
+	{
+		"#TF_OptionCategory_Nick"
+		{ CATEGORY }
+	}
+
+	"p4ss_nick"
+	{
+		"#p4ss_nick"
+		"#Tooltip_p4ss_nick"
+		{ STRING }
+		{ "" }
+	}
+
+	"pf_scoreboard_use_nicks"
+	{
+		"#pf_scoreboard_use_nicks"
+		"#Tooltip_pf_scoreboard_use_nicks"
+		{ BOOL }
+		{ "0" }
+	}
 
 		//Weapon options
-	"category3"
+	"category4"
 	{
 		"#TF_OptionCategory_Combat"
 		{ CATEGORY }
@@ -205,8 +227,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 	
-		
-	"category4"
+	"category5"
 	{
 		"#TF_OptionCategory_ClassSpecific"
 		{ CATEGORY }
@@ -245,7 +266,7 @@ DESCRIPTION INFO_OPTIONS
 	}
 	
 		//Hitsounds
-	"category5"
+	"category6"
 	{
 		"#TF_OptionCategory_Hitsounds"
 		{ CATEGORY }
@@ -397,7 +418,7 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}
 		
-	"category6"
+	"category7"
 	{
 		"#TF_OptionCategory_HUD"
 		{ CATEGORY }
@@ -426,15 +447,6 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
-	
-	"cl_hud_killstreak_display_time"
-	{
-		"#cl_hud_killstreak_display_time"
-		"#Tooltip_cl_hud_killstreak_display_time"
-		{ BOOL }
-		{ "1" }
-	}
-	
 	
 	"cl_use_tournament_specgui"
 	{
@@ -554,6 +566,14 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}	
 
+	"r_3dsky"
+	{
+		"#r_3dsky"
+		"#Tooltip_r_3dsky"
+		{ BOOL }
+		{ "0" }
+	}
+	
 	"mp_decals"
 	{
 		"#Valve_Multiplayer_Decal_Limit"
