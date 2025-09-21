@@ -8,7 +8,8 @@
 		"enabled" 		"1"
 		"xpos"			"6"	[$WIN32]
 		"xpos"			"42"	[$X360]
-		"ypos"			"275"
+		"ypos"			"250"
+		"ypos_minmode"			"350"
 		"ypos_hidef"		"245"
 		"wide"	 		"266"
 		"tall"	 		"120"
