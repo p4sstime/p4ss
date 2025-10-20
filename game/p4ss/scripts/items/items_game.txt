@@ -20490,13 +20490,13 @@
 				"can_deal_long_distance_damage"	"1"
 			}
 			"base_item_name"	"TF_WEAPON_SHOTGUN_PRIMARY"
-			"enabled"	"1"
+			"enabled"	"0"
 			"item_class"	"tf_weapon_shotgun"
 			"craft_class"	"weapon"
 			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Shotgun"
 			"item_name"	"#TF_Weapon_Shotgun"
-			"item_quality"	"normal"
+			"item_quality"	"unique"
 			"baseitem" "0"
 			"min_ilevel"	"1"
 			"max_ilevel"	"1"
@@ -25082,7 +25082,7 @@
 			"item_slot"		"secondary"
 			"equip_region"	"feet"
 			"anim_slot"		"FORCE_NOT_USED"
-			"item_quality"		"normal"
+			"item_quality"		"unique"
 			"baseitem"	"1"
 			"propername"	"1"
 			"min_ilevel"		"10"
@@ -62804,9 +62804,56 @@
 			"drop_sound" 		"ui/item_paper_pickup.wav"
 		}
 
-
-
-
+		"1199"
+		{
+			"name"			"jumping shoe"
+			"prefab"	"valve"
+			"enabled"	"1"
+			"first_sale_date"	"2025/09/29"
+			"item_class"		"tf_wearable"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"loadondemand" "1"
+			"capabilities"
+			{
+				"nameable"		"0"
+			}
+			"item_type_name" 	"#TF_Wearable_Boots"
+			"item_name"		"#P4SS_Blast_Resist"
+			"item_slot"		"secondary"
+			"equip_region"	"feet"
+			"anim_slot"		"FORCE_NOT_USED"
+			"item_quality"		"normal"
+			"baseitem"	"1"
+			"propername"	"0"
+			"min_ilevel"		"10"
+			"max_ilevel"		"10"
+			"image_inventory"	"backpack/blast"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"128"
+			//"model_player"		"models/weapons/c_models/c_rocketboots_soldier.mdl"
+			"model_player"		""
+			"act_as_wearable" "0"
+			"used_by_classes"
+			{
+				"soldier"	"secondary"
+			}
+			"attributes"
+			{
+				"rocket jump damage reduction"
+				{
+					"attribute_class"	"rocket_jump_dmg_reduction"
+					"value" "0.4"
+				}
+				"allowed in medieval mode"
+				{
+					"attribute_class"	"allowed_in_medieval_mode"
+					"value"	"1"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
 
 		"15000"
 		{

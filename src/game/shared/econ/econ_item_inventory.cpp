@@ -1694,6 +1694,11 @@ void CPlayerInventory::SOCacheSubscribed( const CSteamID & steamIDOwner, GCSDK::
 	CSharedObjectTypeCache *pTypeCache = m_pSOCache->FindTypeCache( CEconItem::k_nTypeID );
 	if( pTypeCache )
 	{
+		CEconItem* nItem = (CEconItem*)pTypeCache->GetObject(0);
+		nItem->SetItemID(1199);
+		nItem->SetDefinitionIndex(1199);
+		m_pSOCache->AddObject((CSharedObject*)nItem);
+		pTypeCache->AddObject(nItem);
 		for( uint32 unItem = 0; unItem < pTypeCache->GetCount(); unItem++ )
 		{
 			CEconItem *pItem = (CEconItem *)pTypeCache->GetObject( unItem );
