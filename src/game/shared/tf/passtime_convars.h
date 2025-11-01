@@ -31,6 +31,7 @@ extern ConVar
 	tf_passtime_flinch_boost,
 	tf_passtime_mode_homing_lock_sec,
 	tf_passtime_mode_homing_speed,
+	tf_passtime_lock_angle,
 	tf_passtime_overtime_idle_sec,
 	tf_passtime_player_reticles_enemies,
 	tf_passtime_player_reticles_friends,
