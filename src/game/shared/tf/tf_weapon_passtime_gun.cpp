@@ -427,7 +427,13 @@ void CPasstimeGun::ItemPostFrame()
 	//
 	// Update pass target
 	//
-	if ( pOwner->m_Shared.HasPasstimeBall() && !pf_nolock.GetBool() )
+#ifdef GAME_DLL
+	bool bShouldUpdateTarget = pOwner->IsBot();
+#else
+	bool bShouldUpdateTarget = true;
+#endif
+	
+	if ( bShouldUpdateTarget && pOwner->m_Shared.HasPasstimeBall() && !pf_nolock.GetBool() )
 	{
 		Vector vecEyePos, vecEyeDir;
 		pOwner->EyePositionAndVectors( &vecEyePos, &vecEyeDir, 0, 0 );
