@@ -10216,7 +10216,7 @@ void SetupPlayerShortName( wchar_t ( &buffer )[len] )
 
 	// Trim leading space
 	int skip = 0;
-	while ( skip < len && iswspace( buffer[skip] ) )
+	while ( skip < length && iswspace( buffer[skip] ) )
 		++skip;
 
 	if ( skip > 0 )
