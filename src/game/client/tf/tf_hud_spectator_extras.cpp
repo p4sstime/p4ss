@@ -239,18 +239,10 @@ void CTFHudSpectatorExtras::OnTick()
 			// use actual name or disguised name?
 			int nNameIndex = pDisguiseTarget ? pDisguiseTarget->entindex() : i;
 
-			auto nickname = GetClientNickname( nNameIndex );
-			if ( nickname )
+			const wchar_t *pwszShortName = GetPlayerShortName( nNameIndex );
+			if ( pwszShortName )
 			{
-				V_wcsncpy( m_vecEntitiesToDraw[nVecIndex].m_wszName, nickname, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
-				auto nicknameLength = wcslen( m_vecEntitiesToDraw[nVecIndex].m_wszName );
-
-				for ( auto i = 0; i < nicknameLength; i++ )
-				{
-					auto upperChar = towupper(m_vecEntitiesToDraw[nVecIndex].m_wszName[i]);
-					if ( upperChar != WEOF )
-						m_vecEntitiesToDraw[nVecIndex].m_wszName[i] = upperChar;
-				}
+				V_wcsncpy( m_vecEntitiesToDraw[nVecIndex].m_wszName, pwszShortName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
 			}
 			else
 			{

@@ -884,8 +884,8 @@ ConVar tf_mvm_respec_credit_goal( "tf_mvm_respec_credit_goal", "2000", FCVAR_CHE
 ConVar tf_mvm_buybacks_method( "tf_mvm_buybacks_method", "0", FCVAR_REPLICATED | FCVAR_HIDDEN, "When set to 0, use the traditional, currency-based system.  When set to 1, use finite, charge-based system.", true, 0.0, true, 1.0 );
 ConVar tf_mvm_buybacks_per_wave( "tf_mvm_buybacks_per_wave", "3", FCVAR_REPLICATED | FCVAR_HIDDEN, "The fixed number of buybacks players can use per-wave." );
 
-#define P4SS_NICKNAME_MAX_CHARS 4
-ConVar pf_nickname( "pf_nickname", "", FCVAR_ARCHIVE | FCVAR_USERINFO, "Shortened user name" );
+#define P4SS_SHORTNAME_MAX_CHARS 4
+ConVar pf_shortname( "pf_shortname", "", FCVAR_ARCHIVE | FCVAR_USERINFO, "Shortened user name" );
 
 #ifdef GAME_DLL
 enum { kMVM_CurrencyPackMinSize = 1, };
@@ -10206,38 +10206,31 @@ void CTFGameRules::ChangePlayerName( CTFPlayer *pPlayer, const char *pszNewName 
 	pPlayer->SetPlayerName( pszNewName );
 }
 
-wchar_t* TrimNickname( wchar_t* buffer, int* length )
+void SetupPlayerShortName( wchar_t *buffer, int length )
 {
-	// Trim leading space
-	for ( auto i = 0; i < *length - 2; i++ )
-	{
-		if ( buffer[i] == L' ' )
-		{
-			buffer++;
-			--(*length);
-			--i;
-		}
-		else
-		{
-			break;
-		}
-	}
+	if ( !buffer || length <= 0 )
+		return;
 
 	// Trim trailing space
-	for ( auto i = *length - 2; i >= 0; --i )
+	while ( length > 0 && iswspace( buffer[length - 1] ) )
+		buffer[ --length ] = L'\0';
+
+	// Trim leading space
+	int skip = 0;
+	while ( skip < length && iswspace( buffer[skip] ) )
+		++skip;
+
+	if ( skip > 0 )
 	{
-		if ( buffer[i] == L' ' )
-		{
-			buffer[i] = 0;
-			--(*length);
-		}
-		else
-		{
-			break;
-		}
+		wchar_t *pDst = buffer;
+		wchar_t *pSrc = buffer + skip;
+
+		while ( ( *pDst++ = *pSrc++ ) != L'\0' );
 	}
 
-	return buffer;
+	// Convert to Uppercase
+    for ( ; *buffer; ++buffer )
+		*buffer = towupper( *buffer );
 }
 
 //-----------------------------------------------------------------------------
@@ -10286,12 +10279,15 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 	pTFPlayer->SetUseLegacyPasstimeGunControls( Q_atoi( engine->GetClientConVarValue( pPlayer->entindex(), "pf_legacy_throw_controls" ) ) > 0 );
 	pTFPlayer->SetUseReversedPasstimeGunControls( Q_atoi( engine->GetClientConVarValue( pPlayer->entindex(), "pf_reverse_throw_controls" ) ) > 0);
 
-	wchar_t nicknameBuffer[P4SS_NICKNAME_MAX_CHARS + 1];
+	const char *pszPlayerShortName = engine->GetClientConVarValue( pPlayer->entindex(), "pf_shortname" );
+	if ( !pszPlayerShortName || !pszPlayerShortName[0] )
+		pszPlayerShortName = pPlayer->GetPlayerName();
 
-	auto nicknameLength = g_pVGuiLocalize->ConvertANSIToUnicode( engine->GetClientConVarValue( pPlayer->entindex(), "pf_nickname" ), nicknameBuffer, sizeof( nicknameBuffer ) );
-	auto nickname = TrimNickname( nicknameBuffer, &nicknameLength );
+	wchar_t wszPlayerShortname[P4SS_SHORTNAME_MAX_CHARS + 1] = { 0 };
+	g_pVGuiLocalize->ConvertANSIToUnicode( pszPlayerShortName, wszPlayerShortname, sizeof( wszPlayerShortname ) );
+	SetupPlayerShortName( wszPlayerShortname, sizeof( wszPlayerShortname ) );
 
-	g_pStringTableNicknames->SetStringUserData( pPlayer->entindex() - 1, nicknameLength * sizeof( wchar_t ), nickname );
+	g_pStringTablePlayerShortNames->SetStringUserData( pPlayer->entindex() - 1, sizeof( wszPlayerShortname), wszPlayerShortname );
 }
 
 //-----------------------------------------------------------------------------

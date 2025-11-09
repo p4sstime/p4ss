@@ -79,7 +79,7 @@ void cc_scoreboard_convar_changed( IConVar *pConVar, const char *pOldString, flo
 ConVar tf_scoreboard_ping_as_text( "tf_scoreboard_ping_as_text", "0", FCVAR_ARCHIVE, "Show ping values as text in the scoreboard.", cc_scoreboard_convar_changed );
 ConVar tf_scoreboard_alt_class_icons( "tf_scoreboard_alt_class_icons", "0", FCVAR_ARCHIVE, "Show alternate class icons in the scoreboard." );
 
-ConVar pf_scoreboard_use_nicknames( "pf_scoreboard_use_nicknames", "0", FCVAR_ARCHIVE, "Use nicknames in place of player names in the scoreboard." );
+ConVar pf_scoreboard_use_shortnames( "pf_scoreboard_use_shortnames", "0", FCVAR_ARCHIVE, "Use shortnames in place of player names in the scoreboard." );
 
 extern bool IsInCommentaryMode( void );
 extern bool DuelMiniGame_GetStats( C_TFPlayer **ppPlayer, uint32 &unMyScore, uint32 &unOpponentScore );
@@ -1376,15 +1376,16 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			}
 			KeyValues *pKeyValues = new KeyValues( "data" );
 			pKeyValues->SetInt( "playerIndex", playerIndex );
-			auto nickname = GetClientNickname( playerIndex );
-			if ( pf_scoreboard_use_nicknames.GetBool() && nickname )
+
+			if ( pf_scoreboard_use_shortnames.GetBool() )
 			{
-				pKeyValues->SetWString( "name", nickname );
+				pKeyValues->SetWString( "name", GetPlayerShortName( playerIndex ) );
 			}
 			else
 			{
 				pKeyValues->SetString( "name", g_TF_PR->GetPlayerName( playerIndex ) );
 			}
+
 			pKeyValues->SetInt( "dominating", iDominationIndex );
 			pKeyValues->SetInt( "goals", g_TF_PR->GetP4ssScores( playerIndex ) );
 			pKeyValues->SetInt( "assists", g_TF_PR->GetP4ssAssists( playerIndex ) );
@@ -1857,12 +1858,10 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 #endif
 	{
 		const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
-		auto nickname = GetClientNickname( playerIndex );
-		if ( !nickname )
-			nickname = L"";
+		const wchar_t *pwszShortName = GetPlayerShortName( playerIndex );
 
 		SetDialogVariable( "playername", pszPlayerName );
-		SetDialogVariable( "nickname", nickname );
+		SetDialogVariable( "shortname", pwszShortName );
 		return;
 	}
 
@@ -1982,12 +1981,10 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 	}
 
 	const char *pszPlayerName = g_TF_PR->GetPlayerName( playerIndex );
-	auto nickname = GetClientNickname( playerIndex );
-	if ( !nickname )
-		nickname = L"";
+	const wchar_t *pwszShortName = GetPlayerShortName( playerIndex );
 
 	SetDialogVariable( "playername", pszPlayerName );
-	SetDialogVariable( "nickname", nickname );
+	SetDialogVariable( "shortname", pwszShortName );
 
 	Color clr = g_PR->GetTeamColor( g_PR->GetTeam( playerIndex ) );
 	m_pLabelPlayerName->SetFgColor( clr );

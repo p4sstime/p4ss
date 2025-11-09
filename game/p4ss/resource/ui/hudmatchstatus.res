@@ -408,7 +408,7 @@
 				"pinCorner"		"0"
 				"visible"		"1"
 				"visible_minmode" "1"
-				"labelText"		"%nickname%"
+				"labelText"		"%shortname%"
 				"textAlignment"	"center"
 				"fgcolor" 		"PFWhite" 
 				"proportionaltoparent"	"1"

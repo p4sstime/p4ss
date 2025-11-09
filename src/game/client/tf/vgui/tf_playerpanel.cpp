@@ -54,18 +54,12 @@ CTFPlayerPanel::CTFPlayerPanel( vgui::Panel *parent, const char *name ) : vgui::
 	m_bPlayerReadyModeActive = false;
 	m_pReadyBG = new ScalableImagePanel( this , "ReadyBG" );
 	m_pReadyImage = new ImagePanel( this, "ReadyImage" );
-	m_pwszNickname = NULL;
 
 	SetDialogVariable( "chargeamount", "" );
 }
 
 CTFPlayerPanel::~CTFPlayerPanel()
 {
-    if( m_pwszNickname )
-    {
-        delete[] m_pwszNickname;
-        m_pwszNickname = NULL;
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -83,12 +77,6 @@ void CTFPlayerPanel::Reset( void )
 	m_iPrevState = GR_STATE_PREGAME;
 	m_bPlayerReadyModeActive = false;
 	m_nGCTeam = TEAM_INVALID;
-
-	if ( m_pwszNickname )
-	{
-		delete[] m_pwszNickname;
-		m_pwszNickname = NULL;
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -343,26 +331,25 @@ void CTFPlayerPanel::SetPlayerIndex( int iIndex )
 	}
 	else
 	{
-		Setup( iIndex, GetSteamIDForPlayerIndex( iIndex ), g_TF_PR->GetPlayerName( iIndex ), TEAM_INVALID, GetClientNickname( iIndex ) );
+		Setup( iIndex, GetSteamIDForPlayerIndex( iIndex ), g_TF_PR->GetPlayerName( iIndex ), TEAM_INVALID, GetPlayerShortName( iIndex ) );
 	}
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFPlayerPanel::Setup( int iPlayerIndex, CSteamID steamID, const char *pszPlayerName, int nLobbyTeam /*= TEAM_INVALID*/, const wchar_t* pwszNickname /*=NULL*/ )
+void CTFPlayerPanel::Setup( int iPlayerIndex, CSteamID steamID, const char *pszPlayerName, int nLobbyTeam /*= TEAM_INVALID*/, const wchar_t* pwszShortName /*=NULL*/ )
 {
 	if ( pszPlayerName == NULL )
 		pszPlayerName = "";
-
-	auto nicknameChanged = ( m_pwszNickname && !pwszNickname )
-						|| ( !m_pwszNickname && pwszNickname )
-						|| ( m_pwszNickname && pwszNickname && V_wcscmp( m_pwszNickname, pwszNickname ) );
+	
+	if ( pwszShortName == NULL )
+		pwszShortName = L"";
 
 	if ( m_iPlayerIndex != iPlayerIndex
 		|| m_steamID != steamID
-		|| Q_strcmp( m_sPlayerName, pszPlayerName )
-		|| nicknameChanged )
+		|| m_sPlayerName != pszPlayerName
+		|| m_wszPlayerShortName != pwszShortName )
 	{
 		Reset();
 		m_iPlayerIndex = iPlayerIndex;
@@ -370,17 +357,8 @@ void CTFPlayerPanel::Setup( int iPlayerIndex, CSteamID steamID, const char *pszP
 		m_sPlayerName = pszPlayerName;
 		SetDialogVariable( "playername", m_sPlayerName );
 
-		if ( nicknameChanged && pwszNickname )
-		{
-			auto length = wcslen( pwszNickname ) + 1;
-			m_pwszNickname = new wchar_t[length];
-			V_wcsncpy( m_pwszNickname, pwszNickname, length * sizeof( wchar_t ) );
-		}
-
-		if ( m_pwszNickname )
-			SetDialogVariable( "nickname", m_pwszNickname );
-		else
-			SetDialogVariable( "nickname", "" );
+		m_wszPlayerShortName = pwszShortName;
+		SetDialogVariable( "shortname", m_wszPlayerShortName );
 
 		m_nGCTeam = nLobbyTeam;
 	}

@@ -289,7 +289,7 @@ INetworkStringTable *g_pStringTableServerPopFiles = NULL;
 INetworkStringTable *g_pStringTableServerMapCycleMvM = NULL;
 #endif
 
-INetworkStringTable *g_pStringTableNicknames = NULL;
+INetworkStringTable *g_pStringTablePlayerShortNames = NULL;
 
 static CGlobalVarsBase dummyvars( true );
 // So stuff that might reference gpGlobals during DLL initialization won't have a NULL pointer.
@@ -1803,7 +1803,7 @@ void CHLClient::ResetStringTablePointers()
 	g_pStringTableServerMapCycleMvM = NULL;
 #endif
 
-    g_pStringTableNicknames = NULL;
+    g_pStringTablePlayerShortNames = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -2055,9 +2055,9 @@ void CHLClient::InstallStringTableCallback( const char *tableName )
 		g_pStringTableServerMapCycleMvM = networkstringtable->FindTable( tableName );
 	}
 #endif
-	else if ( !Q_strcasecmp( tableName, "Nicknames" ) )
+	else if ( !Q_strcasecmp( tableName, "PlayerShortNames" ) )
 	{
-		g_pStringTableNicknames = networkstringtable->FindTable( tableName );
+		g_pStringTablePlayerShortNames = networkstringtable->FindTable( tableName );
 	}
 
 	InstallStringTableCallback_GameRules();
@@ -2794,13 +2794,11 @@ CSteamID GetSteamIDForPlayerIndex( int iPlayerIndex )
 
 #endif
 
-const wchar_t* GetClientNickname( int iClientIndex )
+const wchar_t* GetPlayerShortName( int iPlayerIndex )
 {
-	auto value = static_cast<const wchar_t*>( g_pStringTableNicknames->GetStringUserData( iClientIndex - 1, NULL ) );
-	Assert( value );
+	const wchar_t *value = static_cast<const wchar_t*>( g_pStringTablePlayerShortNames->GetStringUserData( iPlayerIndex - 1, NULL ) );
+	if ( !value || !value[0] )
+		return L"";
 
-	if ( value && value[0] != 0 )
-	    return value;
-
-	return NULL;
+	return value;
 }

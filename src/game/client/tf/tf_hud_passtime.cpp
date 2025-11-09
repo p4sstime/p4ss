@@ -1634,19 +1634,19 @@ void CTFHudPasstimeBallStatus::OnBallGet( int getterIndex )
 		pwszFormatString = L"%s1";
 	}
 
-	auto name = L"";
+	const wchar_t *pwszName = L"";
 	if ( getterIndex > 0 )
 	{
-		name = GetClientNickname( getterIndex );
+		pwszName = GetPlayerShortName( getterIndex );
 
-		if( !name )
+		if ( !pwszName )
 		{
-			name = wszPlayerName;
+			pwszName = wszPlayerName;
 			g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( getterIndex ), wszPlayerName, sizeof( wszPlayerName ) );
 		}
 	}
 
-	g_pVGuiLocalize->ConstructString_safe( wszFinalText, pwszFormatString, 1, name );
+	g_pVGuiLocalize->ConstructString_safe( wszFinalText, pwszFormatString, 1, pwszName );
 
 	m_pProgressBallCarrierName->SetText( wszFinalText );
 	m_pProgressBallCarrierName->SetVisible( true );
