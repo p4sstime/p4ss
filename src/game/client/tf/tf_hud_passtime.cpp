@@ -1627,7 +1627,6 @@ void CTFHudPasstimeBallStatus::OnBallGet( int getterIndex )
 		return;
 
 	wchar_t wszFinalText[128];
-	wchar_t wszPlayerName[MAX_PLAYER_NAME_LENGTH];
 	wchar_t *pwszFormatString = g_pVGuiLocalize->Find( "#TF_Passtime_CarrierName" );
 	if ( !pwszFormatString )
 	{
@@ -1638,7 +1637,6 @@ void CTFHudPasstimeBallStatus::OnBallGet( int getterIndex )
 	if ( getterIndex > 0 )
 	{
 		pwszName = GetPlayerShortName( getterIndex );
-		g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( getterIndex ), wszPlayerName, sizeof( wszPlayerName ) );
 	}
 
 	g_pVGuiLocalize->ConstructString_safe( wszFinalText, pwszFormatString, 1, pwszName );
