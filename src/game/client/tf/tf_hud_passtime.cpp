@@ -1638,12 +1638,7 @@ void CTFHudPasstimeBallStatus::OnBallGet( int getterIndex )
 	if ( getterIndex > 0 )
 	{
 		pwszName = GetPlayerShortName( getterIndex );
-
-		if ( !pwszName )
-		{
-			pwszName = wszPlayerName;
-			g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( getterIndex ), wszPlayerName, sizeof( wszPlayerName ) );
-		}
+		g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( getterIndex ), wszPlayerName, sizeof( wszPlayerName ) );
 	}
 
 	g_pVGuiLocalize->ConstructString_safe( wszFinalText, pwszFormatString, 1, pwszName );

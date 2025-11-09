@@ -240,14 +240,7 @@ void CTFHudSpectatorExtras::OnTick()
 			int nNameIndex = pDisguiseTarget ? pDisguiseTarget->entindex() : i;
 
 			const wchar_t *pwszShortName = GetPlayerShortName( nNameIndex );
-			if ( pwszShortName )
-			{
-				V_wcsncpy( m_vecEntitiesToDraw[nVecIndex].m_wszName, pwszShortName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
-			}
-			else
-			{
-				g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( nNameIndex ), m_vecEntitiesToDraw[nVecIndex].m_wszName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
-			}
+			V_wcsncpy( m_vecEntitiesToDraw[nVecIndex].m_wszName, pwszShortName, sizeof( m_vecEntitiesToDraw[nVecIndex].m_wszName ) );
 
 			m_vecEntitiesToDraw[nVecIndex].m_nNameWidth = UTIL_ComputeStringWidth( m_hNameFont, m_vecEntitiesToDraw[nVecIndex].m_wszName );
 

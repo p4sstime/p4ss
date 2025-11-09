@@ -36,7 +36,7 @@ class CTFPlayerPanel : public vgui::EditablePanel
 	DECLARE_CLASS_SIMPLE( CTFPlayerPanel, vgui::EditablePanel );
 public:
 	CTFPlayerPanel( vgui::Panel *parent, const char *name );
-	virtual ~CTFPlayerPanel();
+	virtual ~CTFPlayerPanel() = default;
 
 	virtual void	Reset( void );
 	virtual void	ApplySchemeSettings( vgui::IScheme *pScheme );

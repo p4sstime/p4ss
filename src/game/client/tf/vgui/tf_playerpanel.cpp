@@ -58,10 +58,6 @@ CTFPlayerPanel::CTFPlayerPanel( vgui::Panel *parent, const char *name ) : vgui::
 	SetDialogVariable( "chargeamount", "" );
 }
 
-CTFPlayerPanel::~CTFPlayerPanel()
-{
-}
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -342,7 +338,7 @@ void CTFPlayerPanel::Setup( int iPlayerIndex, CSteamID steamID, const char *pszP
 {
 	if ( pszPlayerName == NULL )
 		pszPlayerName = "";
-	
+
 	if ( pwszShortName == NULL )
 		pwszShortName = L"";
 

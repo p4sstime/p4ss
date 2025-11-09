@@ -2797,6 +2797,7 @@ CSteamID GetSteamIDForPlayerIndex( int iPlayerIndex )
 const wchar_t* GetPlayerShortName( int iPlayerIndex )
 {
 	const wchar_t *value = static_cast<const wchar_t*>( g_pStringTablePlayerShortNames->GetStringUserData( iPlayerIndex - 1, NULL ) );
+	Assert(value);
 	if ( !value || !value[0] )
 		return L"";
 
