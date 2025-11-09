@@ -10206,18 +10206,17 @@ void CTFGameRules::ChangePlayerName( CTFPlayer *pPlayer, const char *pszNewName 
 	pPlayer->SetPlayerName( pszNewName );
 }
 
-void SetupPlayerShortName( wchar_t *buffer, int length )
+template <size_t len>
+void SetupPlayerShortName( wchar_t ( &buffer )[len] )
 {
-	if ( !buffer || length <= 0 )
-		return;
-
 	// Trim trailing space
-	while ( length > 0 && iswspace( buffer[length - 1] ) )
+	size_t length = len;
+	while ( length > 0  && ( buffer[length - 1] == L'\0' || iswspace( buffer[length - 1] ) ) )
 		buffer[ --length ] = L'\0';
 
 	// Trim leading space
 	int skip = 0;
-	while ( skip < length && iswspace( buffer[skip] ) )
+	while ( skip < len && iswspace( buffer[skip] ) )
 		++skip;
 
 	if ( skip > 0 )
@@ -10229,8 +10228,8 @@ void SetupPlayerShortName( wchar_t *buffer, int length )
 	}
 
 	// Convert to Uppercase
-    for ( ; *buffer; ++buffer )
-		*buffer = towupper( *buffer );
+	for ( wchar_t *p = buffer; *p; ++p )
+		*p = towupper( *p );
 }
 
 //-----------------------------------------------------------------------------
@@ -10285,8 +10284,8 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 
 	wchar_t wszPlayerShortname[P4SS_SHORTNAME_MAX_CHARS + 1] = { 0 };
 	g_pVGuiLocalize->ConvertANSIToUnicode( pszPlayerShortName, wszPlayerShortname, sizeof( wszPlayerShortname ) );
-	SetupPlayerShortName( wszPlayerShortname, sizeof( wszPlayerShortname ) );
-
+	SetupPlayerShortName( wszPlayerShortname );
+	
 	g_pStringTablePlayerShortNames->SetStringUserData( pPlayer->entindex() - 1, sizeof( wszPlayerShortname), wszPlayerShortname );
 }
 
