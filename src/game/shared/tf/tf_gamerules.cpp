@@ -13362,6 +13362,8 @@ void CTFGameRules::ClientDisconnected( edict_t *pClient )
 			}
 		}
 	}
+
+	g_pStringTablePlayerShortNames->SetStringUserData( engine->IndexOfEdict( pClient ) - 1, 0, NULL );
 }
 
 // Falling damage stuff.
