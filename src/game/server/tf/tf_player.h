@@ -1190,6 +1190,9 @@ private:
 	float				m_flLastDamageDoneTime;
 	CHandle< CBaseEntity > m_hLastDamageDoneEntity;
 	float				m_flLastHealedTime;
+	float				m_flGoalieZoneAccumulatedHeal;	// Fractional heal accumulator for goalie zones
+	float				m_flGoalieZoneLastEventTime;		// Last time we fired a heal event
+	int					m_iGoalieZoneHealSinceLastEvent;	// Accumulated healing since last event
 	float				m_flNextPainSoundTime;
 	int					m_LastDamageType;
 	int					m_iDeathFlags;				// TF_DEATH_* flags with additional death info

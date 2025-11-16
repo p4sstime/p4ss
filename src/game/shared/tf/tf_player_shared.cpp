@@ -101,6 +101,7 @@
 
 #include "tf_wearable_weapons.h"
 #include "tf_weapon_bonesaw.h"
+#include "passtime_convars.h"
 
 ConVar tf_halloween_kart_boost_recharge( "tf_halloween_kart_boost_recharge", "5.0f", FCVAR_REPLICATED | FCVAR_CHEAT );
 ConVar tf_halloween_kart_boost_duration( "tf_halloween_kart_boost_duration", "1.5f", FCVAR_REPLICATED | FCVAR_CHEAT );

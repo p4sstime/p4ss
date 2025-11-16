@@ -109,6 +109,7 @@
 #include "tf_dropped_weapon.h"
 #include "tf_passtime_logic.h"
 #include "tf_weapon_passtime_gun.h"
+#include "func_passtime_goalie_zone.h"
 #include "player_resource.h"
 #include "tf_player_resource.h"
 #include "gcsdk/gcclient_sharedobjectcache.h"
@@ -2250,6 +2251,52 @@ void CTFPlayer::PreThink()
 {
 	// Update timers.
 	UpdateTimers();
+	// Handle goalie zone healing every tick
+	if ( IsAlive() )
+	{
+		float flHealRate = CFuncPasstimeGoalieZone::GetPlayerHealRate( this );
+		if ( flHealRate > 0.0f && GetHealth() < GetMaxHealth() )
+		{			
+			// Calculate healing for this tick
+			float flHealAmount = flHealRate * gpGlobals->frametime;
+			
+			// Accumulate fractional healing
+			m_flGoalieZoneAccumulatedHeal += flHealAmount;
+			
+			int nHealthToAdd = (int)m_flGoalieZoneAccumulatedHeal;
+			if ( nHealthToAdd > 0 )
+			{
+				m_flGoalieZoneAccumulatedHeal -= nHealthToAdd;
+				int nActualHeal = TakeHealth( nHealthToAdd, DMG_GENERIC );
+				
+				if ( nActualHeal > 0 )
+				{
+					// Batch healing to once per second
+					m_iGoalieZoneHealSinceLastEvent += nActualHeal;
+					
+					if ( gpGlobals->curtime - m_flGoalieZoneLastEventTime >= 1.0f && m_iGoalieZoneHealSinceLastEvent > 0 )
+					{
+						IGameEvent *pEvent = gameeventmanager->CreateEvent( "player_healonhit" );
+						if ( pEvent )
+						{
+							pEvent->SetInt( "amount", m_iGoalieZoneHealSinceLastEvent );
+							pEvent->SetInt( "entindex", entindex() );
+							gameeventmanager->FireEvent( pEvent );
+						}
+						
+						m_flGoalieZoneLastEventTime = gpGlobals->curtime;
+						m_iGoalieZoneHealSinceLastEvent = 0;
+					}
+				}
+			}
+		}
+		else
+		{
+			// Reset accumulator & event tracking
+			m_flGoalieZoneAccumulatedHeal = 0.0f;
+			m_iGoalieZoneHealSinceLastEvent = 0;
+		}
+	}
 
 	// Pass through to the base class think.
 	BaseClass::PreThink();
@@ -3730,9 +3777,12 @@ void CTFPlayer::Spawn()
 	m_Shared.ClearDamageEvents();
 	m_AchievementData.ClearHistories();
 
-	m_flLastDamageTime = 0.f;
+	m_flLastDamageTime = gpGlobals->curtime;
 	m_flMvMLastDamageTime = 0.f;
 	m_flLastDamageDoneTime = 0.f;
+	m_flGoalieZoneAccumulatedHeal = 0.f;
+	m_flGoalieZoneLastEventTime = 0.f;
+	m_iGoalieZoneHealSinceLastEvent = 0;
 	m_iMaxSentryKills = 0;
 
 	m_flNextVoiceCommandTime = gpGlobals->curtime;
