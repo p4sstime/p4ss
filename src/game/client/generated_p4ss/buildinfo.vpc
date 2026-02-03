@@ -1,0 +1,12 @@
+/// buildinfo.vpc
+/// Purpose: Dynamically generate a string at build time corresponding to 
+/// build properties and details.
+
+$Project {
+  $Folder "Generated Files" {
+    $DynamicFile "$SRCDIR\game\client\generated_p4ss\buildinfo.gen.h"
+  }
+  $PreBuildEvent {
+    $CommandLine "$SRCDIR/game/client/generated_p4ss/genbuildinfo > $SRCDIR/game/client/generated_p4ss/buildinfo.gen.h"
+  }
+}
