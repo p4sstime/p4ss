@@ -2,7 +2,7 @@
 import datetime, sys, subprocess, platform
 
 def main():
-  date = datetime.datetime.now()
+  date = datetime.datetime.now().isoformat(timespec="seconds")
   git_subproc = subprocess.run("git describe --always --dirty=\" (modified)\"", encoding="UTF-8", shell=True, check=True, capture_output=True)
   info = git_subproc.stdout.removesuffix("\n")
   uname = platform.uname()
