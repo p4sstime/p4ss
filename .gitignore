@@ -25,7 +25,7 @@ src/.ninja*
 src/compile_commands.json
 src/game/client/generated_p4ss/*
 !src/game/client/generated_p4ss/buildinfo.vpc
-!src/game/client/generated_p4ss/genbuildinfo
+!src/game/client/generated_p4ss/buildinfo.h
 steam_appid.txt
 game/p4ss/trainingprogress.txt
 
