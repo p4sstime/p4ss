@@ -23,7 +23,6 @@ game/p4ss/videoconfig_linux.cfg
 game/p4ss/ServerConfig.vdf
 src/.ninja*
 src/compile_commands.json
-src/buildinfo/dummy.dummy
 src/buildinfo/dummy.cpp
 src/buildinfo/buildinfo.gen.cpp
 !src/public/buildinfo/buildinfo.h
