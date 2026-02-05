@@ -23,9 +23,8 @@ game/p4ss/videoconfig_linux.cfg
 game/p4ss/ServerConfig.vdf
 src/.ninja*
 src/compile_commands.json
-src/game/client/generated_p4ss/*
-!src/game/client/generated_p4ss/buildinfo.vpc
-!src/game/client/generated_p4ss/buildinfo.h
+src/buildinfo/dummy.cpp
+src/public/buildinfo/buildinfo.h
 steam_appid.txt
 game/p4ss/trainingprogress.txt
 

@@ -1,0 +1,74 @@
+/// buildinfo.vpc
+/// Purpose: Dynamically generate a string at build time corresponding to 
+/// build properties and details.
+
+$Macro SRCDIR		".."
+$include "$SRCDIR\vpc_scripts\source_lib_base.vpc"
+
+$Configuration
+{
+    $Compiler
+	{
+        $AdditionalIncludeDirectories "$BASE;$SRCDIR\game\client\generated_p4ss"
+    }
+    $PreBuildEvent [$WINDOWS]
+	{
+		$CommandLine		"python $SRCDIR/devtools/genbuildinfo.py > $SRCDIR/public/buildinfo/buildinfo.h" "\n" \
+                            "python $SRCDIR/devtools/dummyfile.py > $SRCDIR/buildinfo/dummy.cpp"
+        $Description        "Generating buildinfo..."
+	}
+    $PostBuildEvent [$WINDOWS]
+    {
+        $CommandLine        "python $SRCDIR/devtools/dummyfile.py > $SRCDIR/buildinfo/dummy.cpp"
+        $Description        "Creating dummyfile for next build."
+    }
+}
+
+
+$Project "Build Info"
+{
+    $Folder "Public Header Files"
+    {
+        $DynamicFile "$SRCDIR\public\buildinfo\buildinfo.h"
+    }
+    $Folder "Source Files"
+    {
+        $File "$SRCDIR\devtools\genbuildinfo.py"
+        $File "$SRCDIR\devtools\dummyfile.py"
+    }
+    $Folder "Windows Codegen" [$WINDOWS]
+    {
+        $DynamicFile "$SRCDIR\buildinfo\dummy.cpp" // Fake file. Included to make VS rebuild.
+        {
+            $Configuration
+			{
+				$Compiler 
+				{
+					$Create/UsePrecompiledHeader	"Not Using Precompiled Headers" [$WINDOWS]
+				}
+			}
+        }
+    }
+
+    $Folder "Linux Codegen" [$POSIX]
+    {
+        // lucy: This is the most evil line in the entire
+        // codebase
+        // This file is always modified, so ninja will always
+        // recompile it
+        $File "/proc/self/environ"
+        {
+            $Configuration 
+            {
+                $CustomBuildStep
+                {
+	                $CommandLine "python $SRCDIR/devtools/genbuildinfo.py > $SRCDIR/game/client/generated_p4ss/buildinfo.gen.cpp"
+                    $Outputs "$SRCDIR\game\client\generated_p4ss\buildinfo.gen.cpp"
+	                $Description   "Generating build info..."
+                }
+            }
+        }
+    }
+}
+
+

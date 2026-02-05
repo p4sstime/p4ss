@@ -10,13 +10,14 @@
 
 #include "vgui_controls/Panel.h"
 #include "iclientmode.h"
-#include "buildinfo.h"
+#include "buildinfo/buildinfo.h"
 
 DECLARE_HUDELEMENT( CHudBuildInfo );
 
 CHudBuildInfo::CHudBuildInfo( const char *pElementName ) 
 : CHudElement( pElementName )
 , BaseClass( NULL, "HudBuildInfo" )
+, m_pBuildTextLabel( NULL )
 {
     Panel *pParent = g_pClientMode->GetViewport();
 	SetParent( pParent );
