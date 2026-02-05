@@ -1256,7 +1256,7 @@ $Project
 	$Folder	"Link Libraries"
 	{
 		$Lib		bitmap
-		$Lib		buildinfo // Fake dependency. Signifies to rebuild this when buildinfo changes.
+		$Lib		buildinfo // REAL dependency.
 		$Lib		choreoobjects
 		$Lib		dmxloader
 		$Lib		mathlib
