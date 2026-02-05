@@ -34,7 +34,7 @@ $Project "Build Info"
     }
     $Folder "Codegen"
     {
-        $DynamicFile "$SRCDIR\buildinfo\dummy.cpp" // Otherwise VS doesn't rebuild on Windows.
+        $DynamicFile "$SRCDIR\buildinfo\dummy.cpp" [$WINDOWS] // Otherwise VS doesn't rebuild on Windows.
         $File "$SRCDIR\buildinfo\dummy.dummy" // Fake file. Included to make a rebuild.
         {
             $Configuration
