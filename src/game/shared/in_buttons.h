@@ -39,4 +39,7 @@
 #define	IN_ATTACK3		(1 << 25)
 #define IN_TYPING		(1 << 26)
 
+// P4SS Button Flags
+#define IN_PING			(1 << 27)
+
 #endif // IN_BUTTONS_H
