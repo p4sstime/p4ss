@@ -7,6 +7,7 @@
 
 #ifdef CLIENT_DLL
 #include "c_user_message_register.h"
+#include "c_tf_passtime_ping.h"
 #endif
 
 #include "tier0/memdbgon.h"
@@ -26,22 +27,10 @@ bool CPingSystem::Init()
 
 void CPingSystem::LevelInitPreEntity()
 {
-	// destroy pings
-	m_Pings.Purge();
 }
 
 void CPingSystem::Update( float frametime )
 {
-	if (m_Pings.IsEmpty())
-		return;
-
-	for ( int i = m_Pings.Count() - 1; i >= 0; --i )
-	{
-		if ( gpGlobals->curtime >= m_Pings[i].m_flExpireTime )
-		{
-			m_Pings.Remove( i );
-		}
-	}
 }
 
 CPingSystem* Passtime_PingSystem()
@@ -63,7 +52,7 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 	if ( iIndex != m_flLastPingTimes.InvalidIndex() )
 	{
 		float flLastTime = m_flLastPingTimes[iIndex];
-		if ( gpGlobals->curtime < flLastTime + 3.0f )
+		if ( gpGlobals->curtime < flLastTime + 1.0f )
 			return;
 	}
 
@@ -99,18 +88,15 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 
 #ifdef CLIENT_DLL
 
-void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, float flExpireTime, int iOwnerIndex )
+void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, int iOwnerIndex )
 {
-	PingData_t ping{};
-	ping.m_vecOrigin = vecOrigin;
-	ping.m_vecNormal = vecNormal;
-	ping.m_flExpireTime = flExpireTime;
-	ping.m_iOwnerIndex = iOwnerIndex;
-
 	DevMsg( "Received ping at position: %f, %f, %f from player index %d\n",
 			vecOrigin.x, vecOrigin.y, vecOrigin.z, iOwnerIndex  );
 
-	m_Pings.AddToTail( ping );
+	C_TFPasstimePing *pPing = new C_TFPasstimePing();
+	pPing->InitializeAsClientEntity( NULL, RENDER_GROUP_TRANSLUCENT_ENTITY );
+	pPing->Spawn();
+	pPing->CreatePing( vecOrigin, vecNormal, iOwnerIndex );
 }
 
 // recieve usermessage
@@ -126,7 +112,7 @@ void __MsgFunc_P4ssPing( bf_read &msg )
 	float flExpireTime = msg.ReadFloat();
 	int iOwnerIndex = msg.ReadShort();
 	
-	Passtime_PingSystem()->CreatePing( vecOrigin, vecNormal, flExpireTime, iOwnerIndex );
+	Passtime_PingSystem()->CreatePing( vecOrigin, vecNormal, iOwnerIndex );
 }
 
 USER_MESSAGE_REGISTER( P4ssPing );
