@@ -72,7 +72,7 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 				trace_result.endpos.y, trace_result.endpos.z );
 
 		// broadcast ping
-		CBroadcastRecipientFilter filter;
+		CRecipientFilter filter;
 		filter.AddRecipientsByTeam( pPlayer->GetTeam() );
 		filter.MakeReliable();
 
