@@ -14,6 +14,13 @@
 #include "igamesystem.h"
 #include "utlvector.h"
 
+struct PingData_t
+{
+	Vector m_vecOrigin;
+	float m_flExpireTime;
+	int m_iOwnerIndex;
+};
+
 class CPingSystem : public CAutoGameSystem
 {
 
@@ -31,9 +38,12 @@ public:
 
 	// client methods
 	#ifdef CLIENT_DLL
-
+	void CreatePing( const Vector &vecOrigin, float flExpireTime, int iOwnerIndex );
+	const CUtlVector<PingData_t> &GetPings() const { return m_Pings; }
 	#endif
 
+private:
+	CUtlVector<PingData_t> m_Pings;
 };
 
 // global

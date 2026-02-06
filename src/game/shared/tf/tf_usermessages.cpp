@@ -129,6 +129,7 @@ void RegisterUserMessages()
 
 	// P4SS User Messages
 	usermessages->Register( "P4SS_Countdown", -1 );
+	usermessages->Register( "P4ssPing", -1 );
 
 	// NVNT register haptic user messages
 	RegisterHapticMessages();
