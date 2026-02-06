@@ -50,6 +50,7 @@ private:
 };
 
 // global
-CPingSystem *P4SSPings();
+CPingSystem *Passtime_PingSystem();
+
 
 #endif

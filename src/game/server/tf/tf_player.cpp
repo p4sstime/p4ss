@@ -114,7 +114,7 @@
 #include "gcsdk/gcclient_sharedobjectcache.h"
 #include "passtime_convars.h"
 
-#include "p4ss_pings.h"
+#include "passtime_pingsystem.h"
 
 #ifdef TF_RAID_MODE
 #include "bot_npc/bot_npc_decoy.h"
@@ -3069,7 +3069,7 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 	// P4SS: Pinging system user command
 	if ( m_afButtonPressed & IN_PING )
 	{
-		P4SSPings()->PlayerAttemptPing( this );
+		Passtime_PingSystem()->PlayerAttemptPing( this );
 	}
 
 	// try to play taunt remap on input after updating user command

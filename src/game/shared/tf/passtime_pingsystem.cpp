@@ -1,5 +1,5 @@
 #include "cbase.h"
-#include "p4ss_pings.h"
+#include "passtime_pingsystem.h"
 
 #ifdef GAME_DLL
 #include "../../server/enginecallback.h"
@@ -44,7 +44,7 @@ void CPingSystem::Update( float frametime )
 	}
 }
 
-CPingSystem* P4SSPings()
+CPingSystem* Passtime_PingSystem()
 {
 	return g_pPingSystem; 
 }
@@ -98,6 +98,7 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 #endif // GAME_DLL
 
 #ifdef CLIENT_DLL
+
 void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, float flExpireTime, int iOwnerIndex )
 {
 	PingData_t ping{};
@@ -115,7 +116,7 @@ void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, 
 // recieve usermessage
 void __MsgFunc_P4ssPing( bf_read &msg )
 {	
-	if ( !P4SSPings() )
+	if ( !Passtime_PingSystem() )
 		return;
 
 	Vector vecOrigin;
@@ -125,7 +126,7 @@ void __MsgFunc_P4ssPing( bf_read &msg )
 	float flExpireTime = msg.ReadFloat();
 	int iOwnerIndex = msg.ReadShort();
 	
-	P4SSPings()->CreatePing( vecOrigin, vecNormal, flExpireTime, iOwnerIndex );
+	Passtime_PingSystem()->CreatePing( vecOrigin, vecNormal, flExpireTime, iOwnerIndex );
 }
 
 USER_MESSAGE_REGISTER( P4ssPing );
