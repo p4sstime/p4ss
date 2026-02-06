@@ -3067,8 +3067,7 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 	BaseClass::PlayerRunCommand( ucmd, moveHelper );
 
 	// P4SS: Pinging system user command
-
-	if ((ucmd->buttons & IN_PING))
+	if ( m_afButtonPressed & IN_PING )
 	{
 		P4SSPings()->PlayerAttemptPing( this );
 	}
