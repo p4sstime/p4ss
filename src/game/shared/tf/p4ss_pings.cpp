@@ -78,19 +78,20 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 
 		UserMessageBegin( filter, "P4ssPing" );
 			WRITE_VEC3COORD( trace_result.endpos );
+			WRITE_VEC3COORD( trace_result.plane.normal ); // Send normal
 			WRITE_FLOAT( gpGlobals->curtime + 5.0f ); // TODO: make expire time configure by client
 			WRITE_SHORT( pPlayer->entindex() );
 		MessageEnd();
 	}
-
 }
 #endif // GAME_DLL
 
 #ifdef CLIENT_DLL
-void CPingSystem::CreatePing( const Vector &vecOrigin, float flExpireTime, int iOwnerIndex )
+void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, float flExpireTime, int iOwnerIndex )
 {
-	PingData_t ping{};
+	PingData_t ping;
 	ping.m_vecOrigin = vecOrigin;
+	ping.m_vecNormal = vecNormal;
 	ping.m_flExpireTime = flExpireTime;
 	ping.m_iOwnerIndex = iOwnerIndex;
 
@@ -109,13 +110,12 @@ void __MsgFunc_P4ssPing( bf_read &msg )
 
 	Vector vecOrigin;
 	msg.ReadBitVec3Coord( vecOrigin );
+	Vector vecNormal;
+	msg.ReadBitVec3Coord( vecNormal );
 	float flExpireTime = msg.ReadFloat();
 	int iOwnerIndex = msg.ReadShort();
-
-	if ( !vecOrigin.IsValid() || !flExpireTime || !iOwnerIndex)
-		return;
-
-	P4SSPings()->CreatePing( vecOrigin, flExpireTime, iOwnerIndex );
+	
+	P4SSPings()->CreatePing( vecOrigin, vecNormal, flExpireTime, iOwnerIndex );
 }
 
 USER_MESSAGE_REGISTER( P4ssPing );

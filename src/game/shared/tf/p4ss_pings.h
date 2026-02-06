@@ -17,6 +17,7 @@
 struct PingData_t
 {
 	Vector m_vecOrigin;
+	Vector m_vecNormal;
 	float m_flExpireTime;
 	int m_iOwnerIndex;
 };
@@ -38,7 +39,7 @@ public:
 
 	// client methods
 	#ifdef CLIENT_DLL
-	void CreatePing( const Vector &vecOrigin, float flExpireTime, int iOwnerIndex );
+	void CreatePing( const Vector &vecOrigin, const Vector &vecNormal, float flExpireTime, int iOwnerIndex );
 	const CUtlVector<PingData_t> &GetPings() const { return m_Pings; }
 	#endif
 
