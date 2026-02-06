@@ -40,7 +40,6 @@ public:
 	// client methods
 	#ifdef CLIENT_DLL
 	void CreatePing( const Vector &vecOrigin, const Vector &vecNormal, int iOwnerIndex );
-	const CUtlVector<PingData_t> &GetPings() const { return m_Pings; }
 	#endif
 
 private:
