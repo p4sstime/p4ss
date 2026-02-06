@@ -26,12 +26,22 @@ bool CPingSystem::Init()
 
 void CPingSystem::LevelInitPreEntity()
 {
-
+	// destroy pings
+	m_Pings.Purge();
 }
 
 void CPingSystem::Update( float frametime )
 {
+	if (m_Pings.IsEmpty())
+		return;
 
+	for ( int i = m_Pings.Count() - 1; i >= 0; --i )
+	{
+		if ( gpGlobals->curtime >= m_Pings[i].m_flExpireTime )
+		{
+			m_Pings.Remove( i );
+		}
+	}
 }
 
 CPingSystem* P4SSPings()
@@ -84,7 +94,6 @@ void CPingSystem::CreatePing( const Vector &vecOrigin, float flExpireTime, int i
 	ping.m_flExpireTime = flExpireTime;
 	ping.m_iOwnerIndex = iOwnerIndex;
 
-
 	DevMsg( "Received ping at position: %f, %f, %f from player index %d\n",
 			vecOrigin.x, vecOrigin.y, vecOrigin.z, iOwnerIndex  );
 
@@ -96,10 +105,7 @@ void CPingSystem::CreatePing( const Vector &vecOrigin, float flExpireTime, int i
 void __MsgFunc_P4ssPing( bf_read &msg )
 {	
 	if ( !P4SSPings() )
-	{
-		Msg( "P4ssPing: Ping system not initialized!\n" );
 		return;
-	}
 
 	Vector vecOrigin;
 	msg.ReadBitVec3Coord( vecOrigin );
@@ -107,9 +113,7 @@ void __MsgFunc_P4ssPing( bf_read &msg )
 	int iOwnerIndex = msg.ReadShort();
 
 	if ( !vecOrigin.IsValid() || !flExpireTime || !iOwnerIndex)
-	{
 		return;
-	}
 
 	P4SSPings()->CreatePing( vecOrigin, flExpireTime, iOwnerIndex );
 }
