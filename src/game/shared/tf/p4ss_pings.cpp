@@ -14,7 +14,7 @@
 CPingSystem *g_pPingSystem = NULL;
 static CPingSystem g_PingSystem;
 
-CPingSystem::CPingSystem() : CAutoGameSystem( "CPingSystem" )
+CPingSystem::CPingSystem() : CAutoGameSystem( "CPingSystem" ), m_flLastPingTimes( DefLessFunc( int ) )
 {
 	g_pPingSystem = this;
 }
@@ -58,6 +58,17 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 	if ( !pPlayer->IsPlayer() )
 		return;
 
+	int iPlayerIndex = pPlayer->entindex();
+	int iIndex = m_flLastPingTimes.Find( iPlayerIndex );
+	if ( iIndex != m_flLastPingTimes.InvalidIndex() )
+	{
+		float flLastTime = m_flLastPingTimes[iIndex];
+		if ( gpGlobals->curtime < flLastTime + 3.0f )
+			return;
+	}
+
+	m_flLastPingTimes.InsertOrReplace( iPlayerIndex, gpGlobals->curtime );
+
 	Vector vecOrigin = pPlayer->EyePosition();
 	Vector vecForward;
 	pPlayer->EyeVectors( &vecForward );
@@ -89,7 +100,7 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 #ifdef CLIENT_DLL
 void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, float flExpireTime, int iOwnerIndex )
 {
-	PingData_t ping;
+	PingData_t ping{};
 	ping.m_vecOrigin = vecOrigin;
 	ping.m_vecNormal = vecNormal;
 	ping.m_flExpireTime = flExpireTime;
@@ -102,7 +113,6 @@ void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, 
 }
 
 // recieve usermessage
-
 void __MsgFunc_P4ssPing( bf_read &msg )
 {	
 	if ( !P4SSPings() )

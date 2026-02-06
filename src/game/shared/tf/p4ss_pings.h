@@ -13,6 +13,7 @@
 
 #include "igamesystem.h"
 #include "utlvector.h"
+#include "utlmap.h"
 
 struct PingData_t
 {
@@ -45,6 +46,7 @@ public:
 
 private:
 	CUtlVector<PingData_t> m_Pings;
+	CUtlMap<int, float> m_flLastPingTimes;
 };
 
 // global
