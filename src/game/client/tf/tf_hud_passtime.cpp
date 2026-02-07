@@ -11,6 +11,7 @@
 #include "c_tf_passtime_logic.h"
 #include "tf_hud_passtime.h"
 #include "tf_hud_passtime_ball_offscreen_arrow.h"
+#include "tf_hud_passtime_ping_offscreen_arrow.h"
 #include "tf_weapon_passtime_gun.h"
 #include "passtime_convars.h"
 #include "passtime_game_events.h"
@@ -836,7 +837,7 @@ void CTFHudPasstimeEventText::Enqueue( C_TFPlayer *pSource, C_TFPlayer *pSubject
 	SetPlayerName( pSubject, HudPasstimeEventText::pKeySubject );
 	SetPlayerName( pSource, HudPasstimeEventText::pKeySource );
 
-	auto *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
+
 	auto bShowBonus = false;
 	// auto bShowBonus = (pSubject == pLocalPlayer)
 	// 	|| (pLocalPlayer->IsObserver() && pLocalPlayer->GetObserverTarget() == pLocalPlayer);
@@ -1810,6 +1811,11 @@ CTFHudPasstime::CTFHudPasstime( Panel *pParent )
 	for ( int i = 0; i < MAX_PLAYERS; ++i )
 	{
 		m_pPlayerArrows[i] = new CTFHudPasstimePlayerOffscreenArrow( this, i );
+	}
+
+	for ( int i = 0; i < MAX_PASSTIME_PING_ARROWS; ++i )
+	{
+		m_pPingOffscreenArrows[i] = new CTFHudPasstimePingOffscreenArrow( this, i );
 	}
 }
 

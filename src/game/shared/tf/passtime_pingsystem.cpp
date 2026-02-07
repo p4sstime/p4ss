@@ -8,6 +8,7 @@
 #ifdef CLIENT_DLL
 #include "c_user_message_register.h"
 #include "c_tf_passtime_ping.h"
+#include "c_tf_player.h"
 #endif
 
 #include "tier0/memdbgon.h"
@@ -45,6 +46,9 @@ void CPingSystem::PlayerAttemptPing( CBasePlayer *pPlayer )
 		return;
 
 	if ( !pPlayer->IsPlayer() )
+		return;
+
+	if ( !pPlayer->IsAlive() || pPlayer->IsObserver() )
 		return;
 
 	int iPlayerIndex = pPlayer->entindex();
@@ -92,6 +96,8 @@ void CPingSystem::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, 
 {
 	DevMsg( "Received ping at position: %f, %f, %f from player index %d\n",
 			vecOrigin.x, vecOrigin.y, vecOrigin.z, iOwnerIndex  );
+
+	C_TFPasstimePing::RemovePingForOwner( iOwnerIndex );
 
 	C_TFPasstimePing *pPing = new C_TFPasstimePing();
 	pPing->InitializeAsClientEntity( NULL, RENDER_GROUP_TRANSLUCENT_ENTITY );

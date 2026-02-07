@@ -17,6 +17,7 @@
 
 namespace vgui { class ContinuousProgressBar; }
 class CTFHudPasstimePlayerOffscreenArrow;
+class CTFHudPasstimePingOffscreenArrow;
 
 //-----------------------------------------------------------------------------
 class CTFHudPasstimePanel : public vgui::EditablePanel
@@ -201,6 +202,9 @@ private:
 	CTFHudPasstimeBallStatus *m_pBallStatus;
 	CTFHudTeamScore *m_pTeamScore;
 	CTFHudPasstimeOffscreenArrow *m_pBallOffscreenArrow;
+
+	enum { MAX_PASSTIME_PING_ARROWS = 8 };
+	CTFHudPasstimePingOffscreenArrow *m_pPingOffscreenArrows[MAX_PASSTIME_PING_ARROWS];
 	CTFHudPasstimePassNotify *m_pPassNotify;
 	CTFHudPasstimePlayerOffscreenArrow *m_pPlayerArrows[MAX_PLAYERS_ARRAY_SAFE];
 };

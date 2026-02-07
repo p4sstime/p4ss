@@ -20,6 +20,10 @@ public:
 
 	virtual RenderGroup_t GetRenderGroup() OVERRIDE { return RENDER_GROUP_TRANSLUCENT_ENTITY; };
 
+	static CUtlVector<C_TFPasstimePing*> s_vecPings;
+	static const CUtlVector<C_TFPasstimePing*>& GetPings() { return s_vecPings; }
+	static void RemovePingForOwner( int iOwnerIndex );
+
 	CFXQuad *CreateReticleSprite( const char *pMaterialName, float flScale, float flSpinSpeed );
 	CUtlVector<CFXQuad*> m_pSprites;
 
@@ -30,6 +34,7 @@ private:
 
 	float m_flCreationTime;
 	float m_flExpireTime;
+	int m_iOwnerIndex;
 	Vector m_vecNormal;
 };
 

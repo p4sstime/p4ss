@@ -1,10 +1,13 @@
 #include "cbase.h"
 #include "c_tf_passtime_ping.h"
 #include "view.h"
+#include "c_tf_player.h"
 
 #include "tier0/memdbgon.h"
 
-ConVar tf_passtime_icon_duration( "tf_passtime_icon_duration", "5", FCVAR_CLIENTDLL, "Duration of the passtime ping icon.", true, 0.0f, true, 10.0f );
+CUtlVector<C_TFPasstimePing*> C_TFPasstimePing::s_vecPings;
+
+ConVar tf_passtime_icon_duration( "tf_passtime_ping_duration", "6", FCVAR_CLIENTDLL, "Duration of player pings", true, 0.0f, true, 10.0f );
 
 C_TFPasstimePing::C_TFPasstimePing()
 {
@@ -17,6 +20,7 @@ C_TFPasstimePing::C_TFPasstimePing()
 C_TFPasstimePing::~C_TFPasstimePing()
 {
 	DestroySprites();
+	s_vecPings.FindAndRemove( this );
 }
 
 void C_TFPasstimePing::Spawn()
@@ -25,12 +29,26 @@ void C_TFPasstimePing::Spawn()
 
 	m_flCreationTime = 0;
 	m_flExpireTime = 0;
+	s_vecPings.AddToTail( this );
+}
+
+void C_TFPasstimePing::RemovePingForOwner( int iOwnerIndex )
+{
+	for ( int i = s_vecPings.Count() - 1; i >= 0; --i )
+	{
+		C_TFPasstimePing *pPing = s_vecPings[i];
+		if ( pPing && ( pPing->m_iOwnerIndex == iOwnerIndex ) )
+		{
+			pPing->Release();
+		}
+	}
 }
 
 void C_TFPasstimePing::CreatePing( const Vector &vecOrigin, const Vector &vecNormal, int iOwnerIndex )
 {
 	SetAbsOrigin( vecOrigin );
 	m_vecNormal = vecNormal;
+	m_iOwnerIndex = iOwnerIndex;
 
 		DevMsg( "Spawning ping at position: %f, %f, %f\n", GetAbsOrigin().x,
 			GetAbsOrigin().y, GetAbsOrigin().z );
@@ -41,17 +59,44 @@ void C_TFPasstimePing::CreatePing( const Vector &vecOrigin, const Vector &vecNor
 	m_flCreationTime = gpGlobals->curtime;
 	m_flExpireTime = gpGlobals->curtime + tf_passtime_icon_duration.GetFloat();
 
+	// Determine color based on team
+	float r = 1.0f, g = 1.0f, b = 1.0f;
+	C_TFPlayer *pOwner = ToTFPlayer( UTIL_PlayerByIndex( iOwnerIndex ) );
+	if ( pOwner )
+	{
+		if ( pOwner->GetTeamNumber() == TF_TEAM_RED )
+		{
+			r = 1.0f;
+			g = 0.39f;
+			b = 0.39f;
+		}
+		else if ( pOwner->GetTeamNumber() == TF_TEAM_BLUE )
+		{
+			r = 0.65f;
+			g = 0.87f;
+			b = 1.0f;
+		}
+	}
+
+	for ( int i = 0; i < m_pSprites.Count(); ++i )
+	{
+		m_pSprites[i]->m_FXData.SetColor( r, g, b );
+	}
+
 	UpdateVisibility();
 }
 
 void C_TFPasstimePing::InitializeSprites()
 {
+	PrecacheScriptSound( "Halloween.Duck" );
+
 	CFXQuad *pQuad = CreateReticleSprite( "reticles/b4o", 64.0f, 0.0f );
 	m_pSprites.AddToTail( pQuad );
-	
-	// arrow
-	pQuad = CreateReticleSprite( "reticles/a2o", 48.0f, 0.0f );
+	pQuad->m_FXData.SetAlpha( 0.0f, 0.0f );
+
+	pQuad = CreateReticleSprite( "reticles/a6o", 48.0f, 0.0f );
 	m_pSprites.AddToTail( pQuad );
+	pQuad->m_FXData.SetAlpha( 0.0f, 0.0f );
 }
 
 void C_TFPasstimePing::ReloadSprites()
@@ -96,11 +141,20 @@ void C_TFPasstimePing::ClientThink()
 {
 	if ( gpGlobals->curtime > m_flExpireTime )
 	{
-		DestroySprites();
+		Release();
 		return;
 	}
 
 	UpdateVisibility();
+
+	// Fade in
+	float flAge = gpGlobals->curtime - m_flCreationTime;
+	float flAlpha = RemapValClamped( flAge, 0.0f, 0.25f, 0.0f, 1.0f );
+	
+	for ( int i = 0; i < m_pSprites.Count(); ++i )
+	{
+		m_pSprites[i]->m_FXData.SetAlpha( flAlpha, flAlpha );
+	}
 
 	if ( m_pSprites.Count() >= 1 )
 	{
@@ -110,25 +164,22 @@ void C_TFPasstimePing::ClientThink()
 
 	if ( m_pSprites.Count() >= 2 )
 	{
-		float flBobHeight = 20.0f;
-		float flBobSpeed = 2.0f;
-		float flOffset = 32.0f + ( sin( gpGlobals->curtime * flBobSpeed ) * flBobHeight );
-		
-		Vector vecOrigin = GetAbsOrigin() + ( m_vecNormal * flOffset );
-		m_pSprites[1]->m_FXData.SetOrigin( vecOrigin );
+		Vector vecTarget = GetAbsOrigin() + ( m_vecNormal * 32.0f );
 
-		Vector vecToCamera = MainViewOrigin() - vecOrigin;
-		Vector vecProjected = vecToCamera - ( m_vecNormal * vecToCamera.Dot( m_vecNormal ) );
-		vecProjected.NormalizeInPlace();
-		
-		if ( vecProjected.IsZero() )
-		{
-			Vector vecRight, vecUp;
-			VectorVectors( m_vecNormal, vecRight, vecUp );
-			vecProjected = vecRight;
-		}
+		Vector vecToCamera = MainViewOrigin() - vecTarget;
+		float flDist = vecToCamera.NormalizeInPlace();
 
-		m_pSprites[1]->m_FXData.SetNormal( vecProjected );
+		float flBob = sin( gpGlobals->curtime * 5.0f ) * 2.0f;
+		Vector vecBobOffset = m_vecNormal * flBob;
+
+		m_pSprites[1]->m_FXData.SetOrigin( vecTarget + (vecToCamera * 24.0f) + vecBobOffset );
+
+		m_pSprites[1]->m_FXData.SetNormal( vecToCamera ); 
+
+		float flScale = RemapValClamped( flDist, 512.0f, 4096.0f, 64.0f, 256.0f );
+		m_pSprites[1]->m_FXData.SetScale( flScale, flScale );
+		
+		m_pSprites[1]->m_FXData.m_flYaw = 0.0f;
 	}
 }
 
