@@ -380,7 +380,7 @@ void CTFDroppedWeapon::UpdateGlowEffect( void )
 	// create a new effect if we have a cart
 	if ( m_bShouldGlowForLocalPlayer )
 	{
-		Vector color = Vector( 0.745f, 0.773f, 0.157f );
+		Vector color = Vector( 0.596f, 0.749f, 0.396f ); //PASS FORTRESS - change dropped weapon color to green
 		m_pGlowEffect = new CGlowObject( this, color, 1.0, true );
 	}
 }
@@ -411,8 +411,8 @@ bool CTFDroppedWeapon::IsVisibleToTargetID( void ) const
 //-----------------------------------------------------------------------------
 CTFDroppedWeapon *CTFDroppedWeapon::Create( CTFPlayer *pLastOwner, const Vector &vecOrigin, const QAngle &vecAngles, const char *pszModelName, const CEconItemView *pItem )
 {
-	// don't drop weapon in MVM
-	if ( TFGameRules()->IsMannVsMachineMode() )
+	// don't drop weapon in MVM and passtime
+	if ( TFGameRules()->IsMannVsMachineMode() || TFGameRules()->IsPasstimeMode() )
 		return NULL;
 
 	int nNumRemoved = 0;
