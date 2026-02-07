@@ -1,5 +1,16 @@
-"Resource/HudLayout.res"
+"resource/hudlayout.res"
 {
+	HudBuildInfo
+	{
+		"fieldName" "HudBuildInfo"
+		"visible" "1"
+		"enabled" "1"
+		"xpos" "0"
+		"ypos" "0"
+		"wide" "f0"
+		"tall" "24"
+	}
+	
 	HudPlayerStatus
 	{
 		"fieldName" "HudPlayerStatus"
@@ -1166,12 +1177,11 @@
 		"fieldName"				"HudStopWatch"
 		"visible"				"1"
 		"enabled"				"1"
-		"xpos"					"c-160"
-		"ypos"					"5"
-		"ypos_minmode"				"15"
-		"ypos_lodef"				"75"
+		"xpos"					"cs-0.5"
+		"ypos"					"r55"
 		"wide"					"125"
 		"tall"					"70"
+		"proportionaltoparent"	"1"
 	}
 	
 	NotificationPanel
