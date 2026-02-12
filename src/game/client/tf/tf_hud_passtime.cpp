@@ -415,9 +415,9 @@ void CTFHudPasstimePassNotify::OnTick()
 			m_pTextBox->SetVisible( false );
 		}
 
-		// If p4ss_whistle_more = 0, don't show the speech indicator of
+		// If pf_whistle_more = 0, don't show the speech indicator of
 		// carrier or observer
-		if ( !p4ss_whistle_more.GetBool() 
+		if ( !pf_whistle_more.GetBool() 
 			|| pLocalPlayer->IsObserver() 
 			|| (pBallCarrier == pLocalPlayer) )
 		{

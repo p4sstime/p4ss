@@ -14948,7 +14948,7 @@ bool CTFPlayer::SayAskForBall()
 	}
 
 	CTFPlayer *pBallCarrier = pBall->GetCarrier();
-	if ( !pBallCarrier && !p4ss_whistle_more.GetBool())
+	if ( !pBallCarrier && !pf_whistle_more.GetBool())
 	{
 		return false;
 	}

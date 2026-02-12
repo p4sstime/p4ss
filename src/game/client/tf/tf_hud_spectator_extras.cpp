@@ -31,7 +31,7 @@ ConVar pf_tag_bgalpha( "pf_tag_bgalpha", "160", FCVAR_ARCHIVE, "Set the alpha va
 ConVar pf_tag_healthbars_bgalpha( "pf_tag_healthbars_bgalpha", "160", FCVAR_ARCHIVE, "Set the alpha value for the health bar background." );
 ConVar pf_tag_healthbars_size( "pf_tag_healthbars_size", "6", FCVAR_ARCHIVE, "Set the size of the health bar." );
 ConVar pf_tag_arrow_healthcolor( "pf_tag_arrow_healthcolor", "0", FCVAR_ARCHIVE, "Use health-based coloring for the health bar arrow." );
-ConVar p4ss_xray_enemy( "p4ss_xray_enemy", "0", FCVAR_NOTIFY, "Enable seeing enemy nametags." );
+ConVar pf_xray_enemy( "pf_xray_enemy", "0", FCVAR_NOTIFY, "Enable seeing enemy nametags." );
 DECLARE_HUDELEMENT( CTFHudSpectatorExtras );
 
 //-----------------------------------------------------------------------------
@@ -478,7 +478,7 @@ void CTFHudSpectatorExtras::Paint()
         bool bIsEnemy = (nLocalPlayerTeam >= FIRST_GAME_TEAM) && (nEntityTeam >= FIRST_GAME_TEAM) && (nEntityTeam != nLocalPlayerTeam);
 
         // settings for enemy nametags (ball holder only)
-		if ( !p4ss_xray_enemy.GetBool() && bIsEnemy )
+		if ( !pf_xray_enemy.GetBool() && bIsEnemy )
 			continue;
 
 		bool bDrawHealthBar = pf_tag_healthbars.GetBool() && !bIsEnemy;

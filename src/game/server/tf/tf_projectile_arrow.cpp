@@ -314,7 +314,7 @@ bool CTFProjectile_Arrow::CanHeadshot()
 //-----------------------------------------------------------------------------
 bool CTFProjectile_HealingBolt::CanHeadshot() 
 { 
-	return p4ss_med_canheadshot.GetBool();
+	return pf_med_canheadshot.GetBool();
 }
 
 //-----------------------------------------------------------------------------
@@ -327,7 +327,7 @@ float CTFProjectile_Arrow::GetDamage()
 	) {
 		float lifeTimeScale;
 		// Negative falloff is the default value. (case -1)
-		switch ( p4ss_med_crossbow_damagefalloff.GetInt() )
+		switch ( pf_med_crossbow_damagefalloff.GetInt() )
 		{
 			case -1:
 				 lifeTimeScale = RemapValClamped( gpGlobals->curtime - m_flInitTime, 0.0f, 0.6f, 0.5f, 1.0f );	
@@ -768,7 +768,7 @@ void CTFProjectile_Arrow::ArrowTouch( CBaseEntity *pOther )
 
 	// P4SS: neutral and push the jack
 
-	if ( p4ss_med_cansplash.GetBool() )
+	if ( pf_med_cansplash.GetBool() )
 	{
 	
 		if ( !Q_strcmp( pOther->GetClassname(), "passtime_ball" ) )
@@ -787,7 +787,7 @@ void CTFProjectile_Arrow::ArrowTouch( CBaseEntity *pOther )
 			}
 
 
-			if ( p4ss_med_canpushball.GetBool() )
+			if ( pf_med_canpushball.GetBool() )
 			{
 				CTakeDamageInfo info( this, pAttacker, m_hLauncher, vecVelocity, vecOrigin, crossbowDamage, DMG_GENERIC );
 				pOther->TakeDamage( info );		
@@ -1266,7 +1266,7 @@ void CTFProjectile_HealingBolt::ImpactTeamPlayer( CTFPlayer *pOther, bool bHeads
 			return;
 	}
 
-	float flHealth = GetDamage() * p4ss_med_crossbow_heal_mult.GetFloat();
+	float flHealth = GetDamage() * pf_med_crossbow_heal_mult.GetFloat();
 	if (bHeadshot) flHealth *= 2;
 
 

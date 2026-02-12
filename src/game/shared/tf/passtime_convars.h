@@ -76,18 +76,18 @@ extern ConVar
 	tf_passtime_pack_speed,
 	tf_passtime_pack_hp_per_sec,
 
-	p4ss_med_cansplash,
-	p4ss_med_canpushball,
-	p4ss_med_canheadshot,
-	p4ss_med_crossbow_damagefalloff,
-	p4ss_med_crossbow_heal_mult,
+	pf_med_cansplash,
+	pf_med_canpushball,
+	pf_med_canheadshot,
+	pf_med_crossbow_damagefalloff,
+	pf_med_crossbow_heal_mult,
 
-	p4ss_golden_goal,
-	p4ss_lock_eye_to_eye_los,
-	p4ss_whistle_more,
-	p4ss_heal_on_pass,
-	p4ss_heal_on_pass_flight_time,
-	p4ss_minicrit_protection_time;
+	pf_golden_goal,
+	pf_lock_eye_to_eye_los,
+	pf_whistle_more,
+	pf_heal_on_pass,
+	pf_heal_on_pass_flight_time,
+	pf_minicrit_protection_time;
 
 enum class EPasstimeExperiment_Telepass { 
 	None,

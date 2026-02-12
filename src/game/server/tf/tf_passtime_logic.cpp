@@ -477,7 +477,7 @@ void CTFPasstimeLogic::BallPower_PackThink()
 	}
 
 	// Mini-crit conditions
-	if ( m_flBallLastReceived + p4ss_minicrit_protection_time.GetFloat() < gpGlobals->curtime || 
+	if ( m_flBallLastReceived + pf_minicrit_protection_time.GetFloat() < gpGlobals->curtime || 
 		( pCarrier->InAirDueToExplosion() && ( m_flBallLastReceived + 0.15f < gpGlobals->curtime ) ) )
 	{
 		m_bProtActive = false;
@@ -1369,7 +1369,7 @@ void CTFPasstimeLogic::EjectBall( CTFPlayer *pPlayer, CTFPlayer *pAttacker )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::LaunchBall( CTFPlayer *pPlayer, const Vector &vecPos, const Vector &vecVel )
 {
-	if ( !p4ss_whistle_more.GetBool() )
+	if ( !pf_whistle_more.GetBool() )
 	{
 		StopAskForBallEffects();
 	}
@@ -1872,7 +1872,7 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::OnBallGet() 
 {	
-	if ( p4ss_whistle_more.GetBool() )
+	if ( pf_whistle_more.GetBool() )
 	{
 		StopAskForBallEffectsOnOpposingTeam(m_hBall->GetCarrier());
 	}
@@ -1965,7 +1965,7 @@ void CTFPasstimeLogic::ThinkExpiredTimer()
 	if ( bBallUnassigned && !bCountdownRunning )
 	{
 		// start the countdown when the ball turns neutral
-		if ( p4ss_golden_goal.GetBool() )
+		if ( pf_golden_goal.GetBool() )
 		{
 			// keeps respawn ball timer as normal
 			m_pRespawnCountdown->Start( m_iBallSpawnCountdownSec );
@@ -2052,7 +2052,7 @@ void CTFPasstimeLogic::EndRoundExpiredTimer()
 
 	if ( bTeamsAreDrawn )
 	{
-		if ( p4ss_golden_goal.GetBool() )
+		if ( pf_golden_goal.GetBool() )
 		{	
 			//"tf_passtime_overtime_idle_sec" as argument would make it 5 seconds by default and
 			// customizeable while golden goal is enabled.

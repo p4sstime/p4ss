@@ -707,9 +707,9 @@ void CPasstimeBall::SetStateCarried( CTFPlayer *pCarrier )
 
 		// Limit points by time so we can't just throw back and forth a ton for points.
 		// FIXME awarding points here and also in passtime_logic?
-		if ( fPassTimeLength > p4ss_heal_on_pass_flight_time.GetFloat() ) // FIXME literal balance value
+		if ( fPassTimeLength > pf_heal_on_pass_flight_time.GetFloat() ) // FIXME literal balance value
 		{
-			pCarrier->SetHealth(pCarrier->GetHealth() + p4ss_heal_on_pass.GetFloat());
+			pCarrier->SetHealth(pCarrier->GetHealth() + pf_heal_on_pass.GetFloat());
 			if ( fPassTimeLength > 6.0f ) // FIXME literal balance value
 			{
 				CTF_GameStats.Event_PlayerAwardBonusPoints(pCarrier, 0, 5 ); // FIXME literal balance value

@@ -519,7 +519,7 @@ void CPasstimeGun::ItemPostFrame()
 
 				// check for line of sight
 				Vector vTargetPosForLineOfSight;
-				if ( p4ss_lock_eye_to_eye_los.GetBool() )
+				if ( pf_lock_eye_to_eye_los.GetBool() )
 				{
 					VMatrix mWorldToView( SetupMatrixIdentity() );
 					Vector vecEyePos;
