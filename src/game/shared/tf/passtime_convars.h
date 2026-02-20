@@ -31,7 +31,6 @@ extern ConVar
 	tf_passtime_flinch_boost,
 	tf_passtime_mode_homing_lock_sec,
 	tf_passtime_mode_homing_speed,
-	tf_passtime_lock_angle,
 	tf_passtime_overtime_idle_sec,
 	tf_passtime_player_reticles_enemies,
 	tf_passtime_player_reticles_friends,
@@ -59,12 +58,12 @@ extern ConVar
 	tf_passtime_throwspeed_engineer,
 	tf_passtime_throwspeed_velocity_scale,
 	tf_passtime_save_stats,
-
+    
 	tf_passtime_experiment_telepass,
 	tf_passtime_experiment_autopass,
 	tf_passtime_experiment_instapass_charge,
 	tf_passtime_experiment_instapass,
-
+    
 	tf_passtime_powerball_decayamount,
 	tf_passtime_powerball_decaysec,
 	tf_passtime_powerball_decaysec_neutral,
@@ -76,25 +75,26 @@ extern ConVar
 	tf_passtime_pack_range,
 	tf_passtime_pack_speed,
 	tf_passtime_pack_hp_per_sec,
-
+    
 	p4ss_med_cansplash,
 	p4ss_med_canpushball,
 	p4ss_med_canheadshot,
 	p4ss_med_crossbow_damagefalloff,
 	p4ss_med_crossbow_heal_mult,
-
+    
 	p4ss_golden_goal,
 	p4ss_lock_eye_to_eye_los,
 	p4ss_whistle_more,
 	p4ss_heal_on_pass,
 	p4ss_heal_on_pass_flight_time,
 	p4ss_minicrit_protection_time,
-	p4ss_lock_max_turn_angle;
-
+	p4ss_lock_max_turn_angle,
+	p4ss_passtime_lock_angle,
+    
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time;
-
-enum class EPasstimeExperiment_Telepass { 
+    
+    enum class EPasstimeExperiment_Telepass { 
 	None,
 	TeleportToCatcher,
 	SwapWithCatcher,

@@ -484,7 +484,7 @@ void CPasstimeGun::ItemPostFrame()
 		// Look for a pass target
 		//
 		auto bAutoPassing = tf_passtime_experiment_autopass.GetBool() && m_attack2.Is( EButtonState::BUTTONSTATE_DOWN );
-		float flMaxConeAngle = clamp( tf_passtime_lock_angle.GetFloat(), 5.0f, 30.0f );
+		float flMaxConeAngle = clamp( p4ss_passtime_lock_angle.GetFloat(), 5.0f, 30.0f );
 		float flMaxConeCos = cos( DEG2RAD( flMaxConeAngle ) );
 		float flBestTargetAngleCos = bAutoPassing ? -1.0f : flMaxConeCos; // closest to aim
 		CTFPlayer *pNewTarget = nullptr;
@@ -572,9 +572,15 @@ void CPasstimeGun::ItemPostFrame()
 
 #ifdef CLIENT_DLL
 				// play the lock-on sound for the player
-				pOwner->EmitSound( kTargetHightlightSound );
-				// play it for the target
-				pCurrentTarget->EmitSound( kTargetHightlightSound );
+				if ( prediction->IsFirstTimePredicted() )
+				{
+					pOwner->EmitSound( kTargetHightlightSound );
+				}
+				// now play it for the target
+				CPASFilter filter;
+				filter.RemoveAllRecipients();
+				filter.AddRecipient( pCurrentTarget );
+				EmitSound( filter, pCurrentTarget->entindex(), kTargetHightlightSound );
 #endif
 			}
 		}
