@@ -159,6 +159,8 @@ extern ConVar	sk_player_stomach;
 extern ConVar	sk_player_arm;
 extern ConVar	sk_player_leg;
 
+extern ConVar	sv_suppress_viewpunch;
+
 extern ConVar	tf_spy_invis_time;
 extern ConVar	tf_spy_invis_unstealth_time;
 extern ConVar	tf_stalematechangeclasstime;
@@ -276,6 +278,8 @@ ConVar tf_maxhealth_drain_deploy_cost( "tf_maxhealth_drain_deploy_cost", "20", F
 extern ConVar sv_vote_allow_spectators;
 ConVar sv_vote_late_join_time( "sv_vote_late_join_time", "90", FCVAR_NONE, "Grace period after the match starts before players who join the match receive a vote-creation cooldown" );
 ConVar sv_vote_late_join_cooldown( "sv_vote_late_join_cooldown", "300", FCVAR_NONE, "Length of the vote-creation cooldown when joining the server after the grace period has expired" );
+
+ConVar	pf_mute_rocket_jump_groan	( "pf_mute_rocket_jump_groan","1", FCVAR_USERINFO, "Mutes rocket jump pain groan on client side." );
 
 extern ConVar tf_feign_death_duration;
 extern ConVar spec_freeze_time;
@@ -885,7 +889,8 @@ CTFPlayer::CTFPlayer()
 	m_iLastSkin = -1;
 
 	m_bHudClassAutoKill = false;
-	m_bMedigunAutoHeal = false;
+	m_bMedigunAutoHeal  = false;
+	m_bWantsResupply    = false;
 
 	m_vecLastDeathPosition = Vector( FLT_MAX, FLT_MAX, FLT_MAX );
 
@@ -2228,7 +2233,8 @@ void CTFPlayer::CheckForIdle( void )
 
 		m_bIsAFK = false;
 
-		if ( !cbMoving && PointInRespawnRoom( this, WorldSpaceCenter() ) )
+		bool bInRespawnRoom = PointInRespawnRoom( this, WorldSpaceCenter() );
+		if ( !cbMoving && bInRespawnRoom )
 		{
 			m_flTimeInSpawn += TICK_INTERVAL;
 		}
@@ -3283,6 +3289,12 @@ void CTFPlayer::ApplyGenericPushbackImpulse( const Vector &vecImpulse, CTFPlayer
 //-----------------------------------------------------------------------------
 bool CTFPlayer::ApplyPunchImpulseX ( float flImpulse ) 
 {
+	// Check if view punch is suppressed
+	if ( sv_suppress_viewpunch.GetBool() )
+	{
+		return false;
+	}
+
 	// Check for No Aim Flinch
 	bool bFlinch = true;
 	if ( IsPlayerClass( TF_CLASS_SNIPER ) && m_Shared.InCond( TF_COND_AIMING ) )
@@ -6816,13 +6828,25 @@ void CTFPlayer::Resupply( void )
 	m_iLastWeaponSlot = iLastWeapon;
 }
 
-void CC_Resupply( void )
+void CC_StartResupply( void )
 {
 	CTFPlayer *pPlayer = ToTFPlayer( UTIL_GetCommandClient() );
-
-	pPlayer->Resupply();
+	if ( pPlayer )
+	{
+		pPlayer->m_bWantsResupply = true;
+	}
 }
-static ConCommand resupply( "resupply", CC_Resupply, "Resupply and respawn if inside a spawnroom" );
+static ConCommand start_resupply( "+resupply", CC_StartResupply, "Hold to resupply when entering a respawn room" );
+
+void CC_EndResupply( void )
+{
+	CTFPlayer *pPlayer = ToTFPlayer( UTIL_GetCommandClient() );
+	if ( pPlayer )
+	{
+		pPlayer->m_bWantsResupply = false;
+	}
+}
+static ConCommand end_resupply( "-resupply", CC_EndResupply );
 
 class CGC_RespawnPostLoadoutChange : public GCSDK::CGCClientJob
 {
@@ -14154,6 +14178,7 @@ void CTFPlayer::PainSound( const CTakeDamageInfo &info )
 	float flPainLength = 0;
 
 	bool bAttackerIsPlayer = ( info.GetAttacker() && info.GetAttacker()->IsPlayer() );
+	bool bIsSoldierRocketJumping = ( IsPlayerClass( TF_CLASS_SOLDIER ) && ( info.GetAttacker() == this ) && !( GetFlags() & FL_ONGROUND ) && !( GetFlags() & FL_INWATER ) ) && ( info.GetDamageType() & DMG_BLAST );
 
 	CMultiplayer_Expresser *pExpresser = GetMultiplayerExpresser();
 	Assert( pExpresser );
@@ -14185,7 +14210,7 @@ void CTFPlayer::PainSound( const CTakeDamageInfo &info )
 	}
 
 	// speak a louder pain concept to just the attacker
-	if ( bAttackerIsPlayer )
+	if ( bAttackerIsPlayer && !( pf_mute_rocket_jump_groan.GetBool() && bIsSoldierRocketJumping ) )
 	{
 		CSingleUserRecipientFilter attackerFilter( ToBasePlayer( info.GetAttacker() ) );
 		SpeakConceptIfAllowed( MP_CONCEPT_PLAYER_ATTACKER_PAIN, "damagecritical:1", szResponse, AI_Response::MAX_RESPONSE_NAME, &attackerFilter );
