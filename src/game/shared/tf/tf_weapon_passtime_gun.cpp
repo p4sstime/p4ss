@@ -459,7 +459,7 @@ void CPasstimeGun::ItemPostFrame()
 		auto *pCurrentTarget = ToTFPlayer( pOwner->m_Shared.GetPasstimePassTarget() );
 		if ( pCurrentTarget )
 		{
-			float flMaxAngle = p4ss_lock_max_turn_angle.GetFloat();
+			float flMaxAngle = pf_lock_max_turn_angle.GetFloat();
 			if ( flMaxAngle > 0.0f )
 			{
 				Vector vecEyePos, vecEyeDir;
