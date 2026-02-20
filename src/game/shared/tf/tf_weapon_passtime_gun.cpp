@@ -472,10 +472,20 @@ void CPasstimeGun::ItemPostFrame()
 					pOwner->m_Shared.SetPasstimePassTarget( 0 );
 					m_flTargetResetTime = 0;
 					
-					// Play unlock sound
+
+#ifdef CLIENT_DLL
+					if ( prediction->IsFirstTimePredicted() )
+					{
+						pOwner->EmitSound( kTargetUnlockSound );
+					}
+#endif
+
+#ifdef GAME_DLL
 					CRecipientFilter filter;
-					filter.AddRecipient( pOwner );
-					EmitSound( filter, pOwner->entindex(), kTargetUnlockSound );
+					filter.AddRecipient( pCurrentTarget );
+					filter.MakeReliable();
+					EmitSound( filter, pCurrentTarget->entindex(), kTargetUnlockSound );
+#endif
 				}
 			}
 		}
@@ -571,15 +581,16 @@ void CPasstimeGun::ItemPostFrame()
 				pCurrentTarget = pNewTarget;
 
 #ifdef CLIENT_DLL
-				// play the lock-on sound for the player
 				if ( prediction->IsFirstTimePredicted() )
 				{
 					pOwner->EmitSound( kTargetHightlightSound );
 				}
-				// now play it for the target
-				CPASFilter filter;
-				filter.RemoveAllRecipients();
+#endif
+
+#ifdef GAME_DLL
+				CRecipientFilter filter;
 				filter.AddRecipient( pCurrentTarget );
+				filter.MakeReliable();
 				EmitSound( filter, pCurrentTarget->entindex(), kTargetHightlightSound );
 #endif
 			}
