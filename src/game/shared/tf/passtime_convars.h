@@ -89,7 +89,7 @@ extern ConVar
 	pf_heal_on_pass_flight_time,
 	pf_minicrit_protection_time;
 	pf_lock_max_turn_angle,
-	p4ss_passtime_lock_angle,
+	pf_passtime_lock_angle,
 
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time;
