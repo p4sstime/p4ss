@@ -1534,7 +1534,7 @@ public:
 
 
 public:
-	const char *GetShortNick();
+	const char *GetPlayerShortName();
 
 	CNetworkString( m_sPlayerShortNick, 5 );
 	
