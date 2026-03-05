@@ -58,12 +58,12 @@ extern ConVar
 	tf_passtime_throwspeed_engineer,
 	tf_passtime_throwspeed_velocity_scale,
 	tf_passtime_save_stats,
-
+    
 	tf_passtime_experiment_telepass,
 	tf_passtime_experiment_autopass,
 	tf_passtime_experiment_instapass_charge,
 	tf_passtime_experiment_instapass,
-
+    
 	tf_passtime_powerball_decayamount,
 	tf_passtime_powerball_decaysec,
 	tf_passtime_powerball_decaysec_neutral,
@@ -89,11 +89,12 @@ extern ConVar
 	pf_heal_on_pass_flight_time,
 	pf_minicrit_protection_time;
 	pf_lock_max_turn_angle,
+	p4ss_passtime_lock_angle,
 
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time;
-
-enum class EPasstimeExperiment_Telepass { 
+    
+    enum class EPasstimeExperiment_Telepass { 
 	None,
 	TeleportToCatcher,
 	SwapWithCatcher,
