@@ -54,6 +54,19 @@ ConVar cl_hud_killstreak_display_time( "cl_hud_killstreak_display_time", "3", FC
 ConVar cl_hud_killstreak_display_fontsize( "cl_hud_killstreak_display_fontsize", "0", FCVAR_ARCHIVE, "Adjusts font size of killstreak notices.  Range is from 0 to 2 (default is 1)." );
 ConVar cl_hud_killstreak_display_alpha( "cl_hud_killstreak_display_alpha", "120", FCVAR_ARCHIVE, "Adjusts font alpha value of killstreak notices.  Range is from 0 to 255 (default is 200)." );
 
+ConVar pf_killfeed_use_nicks( "pf_killfeed_use_nicks", "0", FCVAR_ARCHIVE, "Use short nicknames in the killfeed instead of full names." );
+
+const char* GetPlayerDeathNoticeName( int iPlayerIndex )
+{
+	if ( pf_killfeed_use_nicks.GetBool() )
+	{
+		C_TFPlayer *pPlayer = ToTFPlayer( UTIL_PlayerByIndex( iPlayerIndex ) );
+		if ( pPlayer )
+			return pPlayer->GetShortNick();
+	}
+	return g_PR->GetPlayerName( iPlayerIndex );
+}
+
 const int STREAK_MIN = 5;
 const int STREAK_MIN_MVM = 20;
 const int STREAK_MIN_DUCKS = 10;
@@ -61,14 +74,6 @@ const int STREAK_MIN_DUCKS = 10;
 static int MinStreakForType( CTFPlayerShared::ETFStreak eStreakType )
 {
 	bool bIsMvM = TFGameRules() && TFGameRules()->IsMannVsMachineMode();
-	if ( eStreakType == CTFPlayerShared::kTFStreak_Ducks )
-	{
-		return STREAK_MIN_DUCKS;
-	}
-	if ( eStreakType == CTFPlayerShared::kTFStreak_Duck_levelup )
-	{
-		return 1;
-	}
 	if ( bIsMvM )
 	{
 		return STREAK_MIN_MVM;
@@ -107,7 +112,6 @@ private:
 	int m_nLabelYPos;
 
 	CHudTexture *m_iconKillStreak;
-	CHudTexture *m_iconDuckStreak;
 };
 
 //-----------------------------------------------------------------------------
@@ -123,7 +127,6 @@ CTFStreakNotice::CTFStreakNotice( const char *pName ) : CHudElement( pName ), vg
 	m_nCurrStreakType = (CTFPlayerShared::ETFStreak)0;
 
 	m_iconKillStreak = gHUD.GetIcon( "leaderboard_streak" );
-	m_iconDuckStreak = gHUD.GetIcon( "eotl_duck" );
 }
 
 //-----------------------------------------------------------------------------
@@ -182,7 +185,7 @@ void CTFStreakNotice::Paint( void )
 
 	// Move labels down when in spectator
 	C_TFPlayer *pPlayer = CTFPlayer::GetLocalTFPlayer();
-	CHudTexture *pIcon = ( m_nCurrStreakType == CTFPlayerShared::kTFStreak_Ducks || m_nCurrStreakType == CTFPlayerShared::kTFStreak_Duck_levelup ) ? m_iconDuckStreak : m_iconKillStreak;
+	CHudTexture *pIcon = m_iconKillStreak;
 	if ( pPlayer && pIcon )
 	{
 		int nYOffset = ( pPlayer->GetObserverMode() > OBS_MODE_FREEZECAM ? YRES(40) : 0 );
@@ -223,12 +226,12 @@ void CTFStreakNotice::StreakEnded( CTFPlayerShared::ETFStreak eStreakType, int i
 	bool bSelfKill = false;
 	if ( iKillerID == iVictimID )
 	{
-		wzMsg = g_pVGuiLocalize->Find( ( eStreakType == CTFPlayerShared::kTFStreak_Ducks ) ? "#Msg_DuckStreakEndSelf" : "#Msg_KillStreakEndSelf" );
+		wzMsg = g_pVGuiLocalize->Find( "#Msg_KillStreakEndSelf" );
 		bSelfKill = true;
 	}
 	else
 	{
-		wzMsg = g_pVGuiLocalize->Find( ( eStreakType == CTFPlayerShared::kTFStreak_Ducks ) ? "#Msg_DuckStreakEnd" : "#Msg_KillStreakEnd" );
+		wzMsg = g_pVGuiLocalize->Find( "#Msg_KillStreakEnd" );
 	}
 	
 	if ( !wzMsg )
@@ -238,11 +241,11 @@ void CTFStreakNotice::StreakEnded( CTFPlayerShared::ETFStreak eStreakType, int i
 
 	// Killer Name
 	wchar_t wszKillerName[MAX_PLAYER_NAME_LENGTH / 2];
-	g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( iKillerID ), wszKillerName, sizeof(wszKillerName) );
+	g_pVGuiLocalize->ConvertANSIToUnicode( GetPlayerDeathNoticeName( iKillerID ), wszKillerName, sizeof(wszKillerName) );
 
 	// Victim Name
 	wchar_t wszVictimName[MAX_PLAYER_NAME_LENGTH / 2];
-	g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( iVictimID ), wszVictimName, sizeof(wszVictimName) );
+	g_pVGuiLocalize->ConvertANSIToUnicode( GetPlayerDeathNoticeName( iVictimID ), wszVictimName, sizeof(wszVictimName) );
 
 	// Count
 	wchar_t wzCount[10];
@@ -330,34 +333,7 @@ void CTFStreakNotice::StreakUpdated( CTFPlayerShared::ETFStreak eStreakType, int
 
 	// Is this message worth responding to
 	int iStreakTier = 0;
-	if ( eStreakType == CTFPlayerShared::kTFStreak_Ducks)
-	{
-		// Notices at 15, 30, then increments of 50. We may increment by multiple ducks per kill, so check if we passed over a milestone.
-		if ( iStreak >= 15 && ( iStreak - iStreakIncrement < 15 ) )
-		{
-			iStreakTier = 1;
-			iStreak = 15;
-		}
-		else if ( iStreak >= 30 && ( iStreak - iStreakIncrement <30 ) )
-		{
-			iStreakTier = 2;
-			iStreak = 30;
-		}
-		else if ( iStreak > 50 && iStreak % 50 < iStreakIncrement )
-		{
-			iStreakTier = Min( 2 + ( iStreak / 50 ), 5 );
-			iStreak -= iStreak % 50;
-		}
-		else
-		{
-			return;
-		}
-	}
-	else if ( eStreakType == CTFPlayerShared::kTFStreak_Duck_levelup )
-	{
-		iStreakTier = 5;
-	}
-	else if ( bIsMvM )
+	if ( bIsMvM )
 	{
 		if ( iStreak % iStreakMin != 0 )
 			return;
@@ -398,50 +374,7 @@ void CTFStreakNotice::StreakUpdated( CTFPlayerShared::ETFStreak eStreakType, int
 	const wchar_t *wzMsg = NULL;
 	const char *pszSoundName = "Game.KillStreak";
 	Color cCustomColor(235, 226, 202, 255);
-	if ( eStreakType == CTFPlayerShared::kTFStreak_Ducks )
-	{
-		// Duckstreak tiers
-		switch ( iStreakTier )
-		{
-		case 1:
-			// TODO duckier colors?
-			cCustomColor = Color( 112, 176, 74, 255);		// Green
-			wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckStreak1" );
-			//pszSoundName = "Announcer.DuckStreak_Level1";
-			break;
-		case 2:
-			cCustomColor = Color( 207, 106, 50, 255);		// Orange
-			wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckStreak2" );
-			//pszSoundName = "Announcer.DuckStreak_Level2";
-			break;
-		case 3:
-			cCustomColor = Color( 134, 80, 172, 255);		// Purple
-			wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckStreak3" );
-			//pszSoundName = "Announcer.DuckStreak_Level3";
-			break;
-		case 4:
-			cCustomColor = Color(255, 215, 0, 255);			// Gold
-			wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckStreak4" );
-			//pszSoundName = "Announcer.DuckStreak_Level4";
-			break;
-		default:
-			cCustomColor = Color(255, 215, 0, 255);			// Still Gold
-			wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckStreak5" );
-			//pszSoundName = "Announcer.DuckStreak_Level4";
-			break;
-		}
-	}
-	else if ( eStreakType == CTFPlayerShared::kTFStreak_Duck_levelup )
-	{
-		cCustomColor = Color( 255, 215, 0, 255 );			// Gold
-		switch ( RandomInt( 1, 3 ) )
-		{
-			case 1:		wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckLevelup1" );	break;
-			case 2:		wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckLevelup2" );	break;
-			default:	wzMsg = g_pVGuiLocalize->Find( "#Msg_DuckLevelup3" );	break;
-		}
-	}
-	else
+
 	{
 		// Killstreak tiers
 		switch ( iStreakTier )
@@ -495,7 +428,7 @@ void CTFStreakNotice::StreakUpdated( CTFPlayerShared::ETFStreak eStreakType, int
 
 	// Name
 	wchar_t wszPlayerName[MAX_PLAYER_NAME_LENGTH / 2];
-	g_pVGuiLocalize->ConvertANSIToUnicode( g_PR->GetPlayerName( iKillerID ), wszPlayerName, sizeof(wszPlayerName) );
+	g_pVGuiLocalize->ConvertANSIToUnicode( GetPlayerDeathNoticeName( iKillerID ), wszPlayerName, sizeof(wszPlayerName) );
 
 	wchar_t	wTemp[256];
 	g_pVGuiLocalize->ConstructString_safe( wTemp, wzMsg, 2, wszPlayerName, wzCount );
@@ -549,19 +482,7 @@ void CTFStreakNotice::StreakUpdated( CTFPlayerShared::ETFStreak eStreakType, int
 //-----------------------------------------------------------------------------
 bool CTFStreakNotice::IsCurrentStreakHigherPriority( CTFPlayerShared::ETFStreak eStreakType, int iStreak )
 {
-	// duck level ups are highest priority
-	if ( eStreakType == CTFPlayerShared::kTFStreak_Duck_levelup )
-		return false;
-
 	if ( !m_nCurrStreakCount )
-		return false;
-
-	// Ducks never override kills
-	if ( m_nCurrStreakType == CTFPlayerShared::kTFStreak_Kills && eStreakType == CTFPlayerShared::kTFStreak_Ducks )
-		return true;
-
-	// But kills always override ducks
-	if ( m_nCurrStreakType == CTFPlayerShared::kTFStreak_Ducks && eStreakType == CTFPlayerShared::kTFStreak_Kills )
 		return false;
 
 	// Don't stomp a higher streak with a lower, unless it's been around long enough
@@ -627,8 +548,6 @@ private:
 
 	CHudTexture		*m_iconDomination;
 	CHudTexture		*m_iconKillStreak;
-	CHudTexture		*m_iconDuckStreak;
-	CHudTexture		*m_iconDuckStreakDNeg;
 	CHudTexture		*m_iconKillStreakDNeg;
 
 	CPanelAnimationVar( Color, m_clrBlueText, "TeamBlue", "153 204 255 255" );
@@ -674,8 +593,6 @@ void CTFHudDeathNotice::ApplySchemeSettings( vgui::IScheme *scheme )
 	
 	m_iconKillStreak = gHUD.GetIcon( "leaderboard_streak" );
 	m_iconKillStreakDNeg = gHUD.GetIcon( "leaderboard_streak_dneg" );
-	m_iconDuckStreak = gHUD.GetIcon( "eotl_duck" );
-	m_iconDuckStreakDNeg = gHUD.GetIcon( "eotl_duck_dneg" );
 	m_pStreakNotice = new CTFStreakNotice( "KillStreakNotice" );
 }
 
@@ -759,14 +676,6 @@ void CTFHudDeathNotice::PlayRivalrySounds( int iKillerIndex, int iVictimIndex, i
 //-----------------------------------------------------------------------------
 void CTFHudDeathNotice::FireGameEvent( IGameEvent *event )
 {
-	const char * pszEventName = event->GetName();
-	if ( FStrEq( "duck_xp_level_up", pszEventName ) )
-	{
-		int level = event->GetInt( "level" );
-		AddStreakMsg( CTFPlayerShared::kTFStreak_Duck_levelup, GetLocalPlayerIndex(), level, 1, -1, 0 );
-		return;
-	}
-
 	BaseClass::FireGameEvent( event );
 }
 
@@ -801,12 +710,21 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		
 		const int iKillerID = engine->GetPlayerForUserID( event->GetInt( "attacker" ) );
 		const int iVictimID = engine->GetPlayerForUserID( event->GetInt( "userid" ) );
+		
+		if ( iKillerID > 0 && iKillerID != iVictimID )
+		{
+			Q_strncpy( m_DeathNotices[iDeathNoticeMsg].Killer.szName, GetPlayerDeathNoticeName( iKillerID ), ARRAYSIZE( m_DeathNotices[iDeathNoticeMsg].Killer.szName ) );
+		}
+		if ( iVictimID > 0 )
+		{
+			Q_strncpy( m_DeathNotices[iDeathNoticeMsg].Victim.szName, GetPlayerDeathNoticeName( iVictimID ), ARRAYSIZE( m_DeathNotices[iDeathNoticeMsg].Victim.szName ) );
+		}
 		// if there was an assister, put both the killer's and assister's names in the death message
 		int iAssisterID = engine->GetPlayerForUserID( event->GetInt( "assister" ) );
 
 		EHorriblePyroVisionHack ePyroVisionHack = kHorriblePyroVisionHack_KillAssisterType_Default;
 		CUtlConstString sAssisterNameScratch;
-		const char *assister_name = ( iAssisterID > 0 ? g_PR->GetPlayerName( iAssisterID ) : NULL );
+		const char *assister_name = ( iAssisterID > 0 ? GetPlayerDeathNoticeName( iAssisterID ) : NULL );
 		
 		// If we don't have a real assister (would have been passed in to us as a player index) and
 		// we're in crazy pyrovision mode and we got a dummy assister, than fall back and display
@@ -1175,8 +1093,6 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		int iKillStreakTotal = event->GetInt( "kill_streak_total" );
 		int iKillStreakWep = event->GetInt( "kill_streak_wep" );
-		int iDuckStreakTotal = event->GetInt( "duck_streak_total" );
-		int iDucksThisKill = event->GetInt( "ducks_streaked" );
 
 		// if the active weapon is kill streak
 		C_TFPlayer* pKiller = ToTFPlayer( UTIL_PlayerByIndex( iKillerID ) );
@@ -1209,14 +1125,6 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 				msg.iconPostKillerName = m_iconKillStreak;
 			}
 		}
-		else if ( iDuckStreakTotal > 0 && iDucksThisKill )
-		{
-			// Duckstreak icon (always lower priority)
-			wchar_t wzCount[10];
-			_snwprintf( wzCount, ARRAYSIZE( wzCount ), L"%d", iDuckStreakTotal );
-			g_pVGuiLocalize->ConstructString_safe( msg.wzPreKillerText, g_pVGuiLocalize->Find("#Duck_Streak"), 1, wzCount );
-			msg.iconPostKillerName = msg.bLocalPlayerInvolved ? m_iconDuckStreakDNeg : m_iconDuckStreak;
-		}
 
 		// Check to see if we want a extra notification
 		// Attempt to display these in order of descending priority
@@ -1236,23 +1144,6 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		{
 			AddStreakEndedMsg( CTFPlayerShared::kTFStreak_Kills, iKillerID, iVictimID, iKillStreakVictim, iDeathNoticeMsg );
 		}
-
-		// Ducks
-		int iDuckStreakAssist = event->GetInt( "duck_streak_assist" );
-		int iDuckStreakVictim = event->GetInt( "duck_streak_victim" );
-		int iDuckStreakIncrement = event->GetInt( "ducks_streaked" );
-
-		AddStreakMsg( CTFPlayerShared::kTFStreak_Ducks, iKillerID, iDuckStreakTotal, iDuckStreakIncrement, iVictimID, iDeathNoticeMsg );
-		if ( pAssister && iDuckStreakAssist > 0 && iDucksThisKill )
-		{
-			AddStreakMsg( CTFPlayerShared::kTFStreak_Ducks, iAssisterID, iDuckStreakAssist, iDuckStreakIncrement, iVictimID, iDeathNoticeMsg );
-		}
-
-		if ( pVictim && iDuckStreakVictim > 2 )
-		{
-			AddStreakEndedMsg( CTFPlayerShared::kTFStreak_Ducks, iKillerID, iVictimID, iDuckStreakVictim, iDeathNoticeMsg );
-		}
-
 		// STAGING ONLY test
 		// If Local Player killed someone and they have an item waiting, let them know
 	} 
@@ -1306,7 +1197,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		// if there was an assister, put both the killer's and assister's names in the death message
 		int iAssisterID = engine->GetPlayerForUserID( event->GetInt( "assister" ) );
-		const char *assister_name = ( iAssisterID > 0 ? g_PR->GetPlayerName( iAssisterID ) : NULL );
+		const char *assister_name = ( iAssisterID > 0 ? GetPlayerDeathNoticeName( iAssisterID ) : NULL );
 		if ( assister_name )
 		{
 			char szKillerBuf[MAX_PLAYER_NAME_LENGTH*2];
@@ -1336,7 +1227,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 	//	// if there was an assister, put both the killer's and assister's names in the death message
 	//	int iAssisterID = engine->GetPlayerForUserID( event->GetInt( "assister" ) );
-	//	const char *assister_name = ( iAssisterID > 0 ? g_PR->GetPlayerName( iAssisterID ) : NULL );
+	//	const char *assister_name = ( iAssisterID > 0 ? GetPlayerDeathNoticeName( iAssisterID ) : NULL );
 	//	if ( assister_name )
 	//	{
 	//		char szKillerBuf[MAX_PLAYER_NAME_LENGTH*2];
@@ -1356,7 +1247,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 			msg.bLocalPlayerInvolved = true;
 
 		msg.Killer.iTeam = g_PR->GetTeam( killer );
-		Q_strncpy( msg.Killer.szName, g_PR->GetPlayerName( killer ), ARRAYSIZE( msg.Killer.szName ) );
+		Q_strncpy( msg.Killer.szName, GetPlayerDeathNoticeName( killer ), ARRAYSIZE( msg.Killer.szName ) );
 
 		Q_strncpy( msg.Victim.szName, g_PR->GetTeam( killer ) == TF_TEAM_RED ? "BLUE ROBOT" : "RED ROBOT", ARRAYSIZE( msg.Victim.szName ) );
 		msg.Victim.iTeam = g_PR->GetTeam( killer ) == TF_TEAM_RED ? TF_TEAM_BLUE : TF_TEAM_RED;
@@ -1368,7 +1259,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		PasstimeGameEvents::BallSplashed ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[iDeathNoticeMsg];
 
-		const char *szPlayerName = g_PR->GetPlayerName( ev.attackerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.attackerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName,
 				   ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = g_PR->GetTeam( ev.attackerIndex );
@@ -1393,7 +1284,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		PasstimeGameEvents::BallDirected ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[iDeathNoticeMsg];
 
-		const char *szPlayerName = g_PR->GetPlayerName( ev.attackerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.attackerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName,
 				   ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = g_PR->GetTeam( ev.attackerIndex );
@@ -1421,7 +1312,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		V_wcsncpy( msg.wzInfoText, g_pVGuiLocalize->Find("#Msg_PasstimeBallGet"), sizeof( msg.wzInfoText ) );
 
 		// killer
-		const char *szPlayerName = g_PR->GetPlayerName( ev.ownerIndex);
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.ownerIndex);
 		Q_strncpy( msg.Killer.szName, szPlayerName, ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = g_PR->GetTeam( ev.ownerIndex );
 
@@ -1442,12 +1333,12 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		int victimTeam = g_PR->GetTeam( ev.victimIndex );
 
 		// attacker
-		const char *szPlayerName = g_PR->GetPlayerName( ev.attackerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.attackerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName, ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = attackerTeam;
 
 		// victim
-		szPlayerName = g_PR->GetPlayerName( ev.victimIndex );
+		szPlayerName = GetPlayerDeathNoticeName( ev.victimIndex );
 		Q_strncpy( msg.Victim.szName, szPlayerName, ARRAYSIZE( msg.Victim.szName ) );
 		msg.Victim.iTeam = victimTeam;
 
@@ -1479,7 +1370,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		}
 		
 		// killer
-		const char *szPlayerName = g_PR->GetPlayerName( ev.scorerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.scorerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName, ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = g_PR->GetTeam( ev.scorerIndex );
 
@@ -1528,12 +1419,12 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		}
 
 		// killer
-		const char *szPlayerName = g_PR->GetPlayerName( killerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( killerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName, ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = killerTeam;
 
 		// victim
-		szPlayerName = g_PR->GetPlayerName( victimIndex );
+		szPlayerName = GetPlayerDeathNoticeName( victimIndex );
 		Q_strncpy( msg.Victim.szName, szPlayerName, ARRAYSIZE( msg.Victim.szName ) );
 		msg.Victim.iTeam = victimTeam;
 
@@ -1550,12 +1441,12 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 
 		// blocker
-		const char *szPlayerName = g_PR->GetPlayerName( ev.blockerIndex );
+		const char *szPlayerName = GetPlayerDeathNoticeName( ev.blockerIndex );
 		Q_strncpy( msg.Killer.szName, szPlayerName, ARRAYSIZE( msg.Killer.szName ) );
 		msg.Killer.iTeam = g_PR->GetTeam( ev.blockerIndex );
 
 		// owner
-		szPlayerName = g_PR->GetPlayerName( ev.ownerIndex );
+		szPlayerName = GetPlayerDeathNoticeName( ev.ownerIndex );
 		Q_strncpy( msg.Victim.szName, szPlayerName, ARRAYSIZE( msg.Victim.szName ) );
 		msg.Victim.iTeam = g_PR->GetTeam( ev.ownerIndex );
 
@@ -1577,9 +1468,9 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 void CTFHudDeathNotice::AddAdditionalMsg( int iKillerID, int iVictimID, const char *pMsgKey )
 {
 	DeathNoticeItem &msg2 = m_DeathNotices[AddDeathNoticeItem()];
-	Q_strncpy( msg2.Killer.szName, g_PR->GetPlayerName( iKillerID ), ARRAYSIZE( msg2.Killer.szName ) );
+	Q_strncpy( msg2.Killer.szName, GetPlayerDeathNoticeName( iKillerID ), ARRAYSIZE( msg2.Killer.szName ) );
 	msg2.Killer.iTeam = g_PR->GetTeam( iKillerID );
-	Q_strncpy( msg2.Victim.szName, g_PR->GetPlayerName( iVictimID ), ARRAYSIZE( msg2.Victim.szName ) );
+	Q_strncpy( msg2.Victim.szName, GetPlayerDeathNoticeName( iVictimID ), ARRAYSIZE( msg2.Victim.szName ) );
 	msg2.Victim.iTeam = g_PR->GetTeam( iVictimID );
 	const wchar_t *wzMsg =  g_pVGuiLocalize->Find( pMsgKey );
 	if ( wzMsg )

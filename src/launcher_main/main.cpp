@@ -660,10 +660,15 @@ int main( int argc, char *argv[] )
 
 	new_argv.push_back(NULL);
 
-	// Lucy: For compatibility with SDL3's SDL2 compat layer.
-	// Otherwise, it will try to use the Wayland video driver
-	// which is not supported by the game.
-	setenv("SDL_VIDEODRIVER", "x11", 1);
+	// lucy: To stop me from accidentally
+	// updating my SDL version.
+	// ...The reason we don't support this is because
+	// at the engine level (at least on Linux), there are texture/model bugs
+	// introduced since SDL3 makes breaking changes, and we
+	// don't have the engine code to Fix it.
+	#if SDL_MAJOR_VERSION >= 3
+	#error "This mod does not support SDL version >= 3. Please recompile the mod with the correct SDL version installed."
+	#endif
 
 	execvp( szExecutable, new_argv.data() );
 

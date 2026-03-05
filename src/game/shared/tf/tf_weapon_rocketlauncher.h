@@ -83,7 +83,6 @@ private:
 	int		m_nReloadPitchStep;
 
 #ifdef GAME_DLL
-	int		m_iConsecutiveCrits;
 	bool	m_bIsOverloading;
 #endif
 
