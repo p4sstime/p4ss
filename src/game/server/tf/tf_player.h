@@ -37,6 +37,10 @@ class CTFDroppedWeapon;
 
 extern const float tf_afterburn_max_duration;
 
+extern float flPRunCmdHostInitCurTime;
+extern float flPRunCmdHostInitFrameTime;
+extern int   iPRunCmdHostInitTickCount;
+
 #define MAX_FIRE_WEAPON_SCENES 4
 
 //=============================================================================
@@ -1530,7 +1534,7 @@ public:
 
 
 public:
-	const char *GetShortNick();
+	const char *GetPlayerShortName();
 
 	CNetworkString( m_sPlayerShortNick, 5 );
 	
