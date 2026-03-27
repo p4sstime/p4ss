@@ -2891,24 +2891,24 @@ void CTFGameStats::Event_PlayerEarnedKillStreak( CTFPlayer *pAttacker )
 	}
 }
 
-void CTFGameStats::Event_PlayerP4ssGoal( CTFPlayer *pPlayer )
+void CTFGameStats::Event_PlayerPFGoal( CTFPlayer *pPlayer )
 {
-	IncrementStat( pPlayer, TFSTAT_P4SS_SCORES, 1 );
+	IncrementStat( pPlayer, TFSTAT_PF_SCORES, 1 );
 }
 
-void CTFGameStats::Event_PlayerP4ssSave( CTFPlayer *pPlayer )
+void CTFGameStats::Event_PlayerPFSave( CTFPlayer *pPlayer )
 {
-	IncrementStat( pPlayer, TFSTAT_P4SS_SAVES, 1 );
+	IncrementStat( pPlayer, TFSTAT_PF_SAVES, 1 );
 }
 
-void CTFGameStats::Event_PlayerP4ssAssist( CTFPlayer *pPlayer )
+void CTFGameStats::Event_PlayerPFAssist( CTFPlayer *pPlayer )
 {
-	IncrementStat( pPlayer, TFSTAT_P4SS_ASSISTS, 1 );
+	IncrementStat( pPlayer, TFSTAT_PF_ASSISTS, 1 );
 }
 
-void CTFGameStats::Event_PlayerP4ssIntercept( CTFPlayer *pPlayer )
+void CTFGameStats::Event_PlayerPFIntercept( CTFPlayer *pPlayer )
 {
-	IncrementStat( pPlayer, TFSTAT_P4SS_INTERCEPTS, 1 );
+	IncrementStat( pPlayer, TFSTAT_PF_INTERCEPTS, 1 );
 }
 
 //-----------------------------------------------------------------------------

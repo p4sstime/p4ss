@@ -695,7 +695,7 @@ CBaseEntity *CTFWeaponBaseGun::FirePipeBomb( CTFPlayer *pPlayer, int iPipeBombTy
 			( random->RandomFloat( -10.0f, 10.0f ) * vecRight ) + 
 			( random->RandomFloat( -10.0f, 10.0f ) * vecUp );*/
 
-	//P4SS: removed pipe random trajectory
+	//PF: removed pipe random trajectory
 	Vector vecVelocity = ( vecForward * flLaunchSpeed ) + 
 			( vecUp * 200.0f ) + 
 			( vecRight ) + 
@@ -707,7 +707,7 @@ CBaseEntity *CTFWeaponBaseGun::FirePipeBomb( CTFPlayer *pPlayer, int iPipeBombTy
 	// no spin for loch-n-load
 	Vector angImpulse = AngularImpulse( 600, random->RandomInt( -1200, 1200 ), 0 );
 
-	// Remove pipe spinning for P4SS
+	// Remove pipe spinning for PF
 	// int iNoSpin = 0;
 	// CALL_ATTRIB_HOOK_INT( iNoSpin, grenade_no_spin );
 	// if ( iNoSpin )

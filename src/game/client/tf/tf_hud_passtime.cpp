@@ -26,7 +26,7 @@
 #include "vgui/ISurface.h"
 #include <algorithm>
 #include <cstdio>
-#include "p4ssutils.h"
+#include "pf_utils.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -682,19 +682,19 @@ void CTFHudPasstimeEventText::Tick()
 			if ( m_pTitleLabel && m_pTitleLabelShadow )
 			{
 				SetLabelText( m_pTitleLabel, msg.title );
-				P4ss::ColorTextP4ss( m_pTitleLabel->GetTextImage(), msg.title, msg.team);
+				PF::ColorTextPF( m_pTitleLabel->GetTextImage(), msg.title, msg.team);
 				SetLabelText( m_pTitleLabelShadow, msg.title );
 			}
 			if ( m_pDetailLabel && m_pDetailLabelShadow)
 			{
 				SetLabelText( m_pDetailLabel, msg.detail );
-				P4ss::ColorTextP4ss( m_pDetailLabel->GetTextImage(), msg.detail, msg.team );
+				PF::ColorTextPF( m_pDetailLabel->GetTextImage(), msg.detail, msg.team );
 				SetLabelText( m_pDetailLabelShadow, msg.detail );
 			}
 			if ( m_pBonusLabel && m_pBonusLabelShadow )
 			{
 				SetLabelText( m_pBonusLabel, msg.bonus );
-				P4ss::ColorTextP4ss( m_pBonusLabel->GetTextImage(), msg.bonus, msg.team );
+				PF::ColorTextPF( m_pBonusLabel->GetTextImage(), msg.bonus, msg.team );
 				SetLabelText( m_pBonusLabelShadow, msg.bonus );
 			}
 			EnterState( State::In, HudPasstimeEventText::flInSec );
@@ -1653,7 +1653,7 @@ void CTFHudPasstimeBallStatus::FireGameEvent( IGameEvent *pEvent )
 		return;
 	}
 
-	// P4SS: Event code for later
+	// PF: Event code for later
 	const char *pszEventName = pEvent->GetName();
 	if ( FStrEq( pszEventName, PasstimeGameEvents::BallFree::s_eventName ) )
 	{
@@ -1691,7 +1691,7 @@ void CTFHudPasstimeBallStatus::FireGameEvent( IGameEvent *pEvent )
 		bool isHandoff = passCaughtEvent.isHandoff;
 		bool isBlock = passCaughtEvent.isBlock;
 
-		Msg("P4SS CLIENT: isHandoff: %s\n", isHandoff ? "true" : "false");
+		Msg("PF CLIENT: isHandoff: %s\n", isHandoff ? "true" : "false");
 		auto *pCatcher = ToTFPlayer( UTIL_PlayerByIndex( passCaughtEvent.catcherIndex ) );
 		auto *pThrower = ToTFPlayer( UTIL_PlayerByIndex( passCaughtEvent.passerIndex ) );
 		if ( pCatcher && pThrower ) 

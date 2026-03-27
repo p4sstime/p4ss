@@ -35,22 +35,22 @@ git clone https://github.com/p4sstime/p4ss/
 Example:
 
 ```
-C:/My Clones/p4ss   -- Error!
+C:/My Clones/pf   -- Error!
 ```
 ```
-C:/My_Clones/p4ss   -- Ok!
+C:/My_Clones/pf   -- Ok!
 ```
 
 ### 3. Generate the project files
 Generate the project files by running the `createallprojects.bat` file:
 ```bash
-p4ss/src/createallprojects.bat
+pf/src/createallprojects.bat
 ```
 
 ### 4. Compile the project
 Open the `everything.sln` file:
 ```bash
-p4ss/src/everything.sln
+pf/src/everything.sln
 ```
 Switch from Debug to **Release**.
 
@@ -78,7 +78,7 @@ Alternatively, to build the project for release, run:
 
 Then:
 ```bash
-./game/p4ss_linux64
+./game/pf_linux64
 ```
 and you're up and running!
 

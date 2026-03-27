@@ -876,10 +876,10 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 	pPlayerList->AddColumnToSection( 0, "killstreak_image", "", SectionedListPanel::COLUMN_IMAGE, m_iKillstreakImageWidth );
 	pPlayerList->AddColumnToSection( 0, "dominating", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iNemesisWidth );
 	pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iNemesisWidth );
-	pPlayerList->AddColumnToSection( 0, "goals", "#P4SS_Scoreboard_Goals", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "assists", "#P4SS_Scoreboard_Assists", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "intercepts", "#P4SS_Scoreboard_Intercepts", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "saves", "#P4SS_Scoreboard_Saves", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "goals", "#PF_Scoreboard_Goals", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "assists", "#PF_Scoreboard_Assists", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "intercepts", "#PF_Scoreboard_Intercepts", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "saves", "#PF_Scoreboard_Saves", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
 	pPlayerList->AddColumnToSection( 0, "class", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_RIGHT, m_iClassWidth );
 
 	if ( tf_scoreboard_ping_as_text.GetBool() )
@@ -1167,10 +1167,10 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			}
 
 			pKeyValues->SetInt( "dominating", iDominationIndex );
-			pKeyValues->SetInt( "goals", g_TF_PR->GetP4ssScores( playerIndex ) );
-			pKeyValues->SetInt( "assists", g_TF_PR->GetP4ssAssists( playerIndex ) );
-			pKeyValues->SetInt( "intercepts", g_TF_PR->GetP4ssIntercepts( playerIndex ) );
-			pKeyValues->SetInt( "saves", g_TF_PR->GetP4ssSaves( playerIndex ) );
+			pKeyValues->SetInt( "goals", g_TF_PR->GetPFScores( playerIndex ) );
+			pKeyValues->SetInt( "assists", g_TF_PR->GetPFAssists( playerIndex ) );
+			pKeyValues->SetInt( "intercepts", g_TF_PR->GetPFIntercepts( playerIndex ) );
+			pKeyValues->SetInt( "saves", g_TF_PR->GetPFSaves( playerIndex ) );
 			pKeyValues->SetInt( "connected", 2 );
 
 			C_TFPlayer *pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( playerIndex ) );

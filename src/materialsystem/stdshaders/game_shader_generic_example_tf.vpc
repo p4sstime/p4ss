@@ -6,7 +6,7 @@
 
 $Macro SRCDIR		"..\.."
 $Macro OUTBINNAME "game_shader_generic_example"
-$Macro GAMENAME "p4ss"
+$Macro GAMENAME "pf"
 $Include "$SRCDIR\materialsystem\stdshaders\game_shader_generic_example_base.vpc"
 
 $Project "Game Shaders (TF)"
@@ -33,8 +33,8 @@ $Project "Game Shaders (TF)"
 			$File	"pbr_common_ps2_3_x.h"
 		}
 
-		//$File	"p4ss_dx9_30.txt"
-		//$File	"p4ss_dx9_20b.txt"
+		//$File	"pf_dx9_30.txt"
+		//$File	"pf_dx9_20b.txt"
 	}
 
 	$Folder "Source Files"

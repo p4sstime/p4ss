@@ -179,7 +179,7 @@ static bool LoadSteam( const char *pRootDir )
 
 	if ( !pfnSAPIInit() )
 	{
-		MessageBox( 0, "SteamAPI_Init failed!\nEnsure Steam is running, and that you are allowed to play P4SS.", "Launcher Error", MB_OK );
+		MessageBox( 0, "SteamAPI_Init failed!\nEnsure Steam is running, and that you are allowed to play PF.", "Launcher Error", MB_OK );
 		UnloadSteam();
 		return false;
 	}

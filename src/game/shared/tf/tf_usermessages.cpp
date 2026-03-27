@@ -127,8 +127,8 @@ void RegisterUserMessages()
 
 	usermessages->Register( "BuiltObject", 3 ); // object type, object mode (entrance vs. exit), index
 
-	// P4SS User Messages
-	usermessages->Register( "P4SS_Countdown", -1 );
+	// PF User Messages
+	usermessages->Register( "PF_Countdown", -1 );
 
 	// NVNT register haptic user messages
 	RegisterHapticMessages();

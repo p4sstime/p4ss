@@ -766,7 +766,7 @@ void CTFProjectile_Arrow::ArrowTouch( CBaseEntity *pOther )
 	// test against combat characters, which include players, engineer buildings, and NPCs
 	CBaseCombatCharacter *pOtherCombatCharacter = dynamic_cast< CBaseCombatCharacter * >( pOther );
 
-	// P4SS: neutral and push the jack
+	// PF: neutral and push the jack
 
 	if ( pf_med_cansplash.GetBool() )
 	{
@@ -794,7 +794,7 @@ void CTFProjectile_Arrow::ArrowTouch( CBaseEntity *pOther )
 			}
 			else
 			{
-				// P4SS: fix me, this is not a good solution to making the ball neutral because splash/direct calculations do not work without the ball taking damage
+				// PF: fix me, this is not a good solution to making the ball neutral because splash/direct calculations do not work without the ball taking damage
 				((CPasstimeBall *) pOther)->ChangeTeam( 0 );
 			}
 		}

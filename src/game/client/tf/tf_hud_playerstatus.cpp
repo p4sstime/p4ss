@@ -965,7 +965,7 @@ static void SetPlayerHealthImagePanelVisibility( CTFPlayer *pPlayer, ETFCond eCo
 		pImagePanel->GetPos( x, y );
 		pImagePanel->SetPos( nXOffset, y );
 		nXOffset += 100.f;*/ 
-		// p4ss: removed to allow status icon positioning in HudPlayerHealth.res
+		// pf: removed to allow status icon positioning in HudPlayerHealth.res
 	}
 }
 

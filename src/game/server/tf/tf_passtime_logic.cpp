@@ -1025,11 +1025,11 @@ void CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink()
 
 	if ( (int)m_pRespawnCountdown->GetTimeRemain() == 11 )
 	{
-		// P4SS: hud show countdown timer
+		// PF: hud show countdown timer
 		CBroadcastRecipientFilter filter;
 		filter.MakeReliable();
 
-		UserMessageBegin( filter, "P4SS_Countdown" );
+		UserMessageBegin( filter, "PF_Countdown" );
 		WRITE_FLOAT( gpGlobals->curtime );
 		WRITE_FLOAT( m_pRespawnCountdown->GetTimeRemain() + 1.0f );
 		MessageEnd();
@@ -1484,8 +1484,8 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 
 				auto pScorer = pBall->GetLastHomingTarget();
 				auto pAssister = pPlayer;
-				CTF_GameStats.Event_PlayerP4ssGoal( pScorer );
-				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
+				CTF_GameStats.Event_PlayerPFGoal( pScorer );
+				CTF_GameStats.Event_PlayerPFAssist( pAssister );
 				PasstimeGameEvents::Score( pScorer->entindex(), pAssister->entindex(), iPoints, true, false, false ) // dont care that panacea exists BECAUSE WE JUST HIT THE DEATHBOMB.
 				.Fire();
 				
@@ -1521,14 +1521,14 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 			{
 				CTF_GameStats.Event_PlayerAwardBonusPoints( pAssister, 0, 10 );
 				PasstimeGameEvents::Score( pPlayer->entindex(), pAssister->entindex(), iPoints, false, isPanacea, isWinstrat ).Fire();
-				CTF_GameStats.Event_PlayerP4ssAssist( pAssister );
+				CTF_GameStats.Event_PlayerPFAssist( pAssister );
 			}
 			else
 			{
 				PasstimeGameEvents::Score( pPlayer->entindex(), iPoints, isPanacea, isWinstrat )
 				.Fire();
 			}
-			CTF_GameStats.Event_PlayerP4ssGoal( pPlayer );
+			CTF_GameStats.Event_PlayerPFGoal( pPlayer );
 
 		}
 	}
@@ -1709,8 +1709,8 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 			else
 			{
 				// toss was caught by teammate
-				DevMsg("P4SS Tossed ball caught by teammates\n");
-				// P4SS: handoff detection
+				DevMsg("PF Tossed ball caught by teammates\n");
+				// PF: handoff detection
 
 				// Code from Sourcemod: 
 				// https://github.com/p4sstime/p4sstime-server-resources/blob/f661e2e0f3e02c2d0ca2fc052df1c399454161b6/scripting/p4sstime.sp#L542
@@ -1727,14 +1727,14 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 				UTIL_TraceRay(ray, MASK_PLAYERSOLID, pCatcher, COLLISION_GROUP_PLAYER_MOVEMENT, &result, &TraceEntityFilterPlayer);
 
 				if ( result.DidHit() ) {
-					DevMsg("P4SS Trace hit\n");
+					DevMsg("PF Trace hit\n");
 					float distance = catcher_origin.DistTo(result.endpos);
-					DevMsg("P4SS Catcher origin: x %f y %f z %f\n", catcher_origin.x, catcher_origin.y, catcher_origin.z);
-					DevMsg("P4SS Trace hit origin: x %f y %f z %f\n", result.endpos.x, result.endpos.y, result.endpos.z);
+					DevMsg("PF Catcher origin: x %f y %f z %f\n", catcher_origin.x, catcher_origin.y, catcher_origin.z);
+					DevMsg("PF Trace hit origin: x %f y %f z %f\n", result.endpos.x, result.endpos.y, result.endpos.z);
 
-					DevMsg("P4SS distance of trace: %.3f\n", distance);
+					DevMsg("PF distance of trace: %.3f\n", distance);
 					if ( distance > 200.0f ) {
-						DevMsg("P4SS isHandoff = true\n");
+						DevMsg("PF isHandoff = true\n");
 						isHandoff = true;
 						TFGameRules()->BroadcastSound( 255, "TFPlayer.StunImpactRange" );
 					}
@@ -1829,11 +1829,11 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 
 			if ( isBlock )
 			{
-				CTF_GameStats.Event_PlayerP4ssSave( pCatcher );
+				CTF_GameStats.Event_PlayerPFSave( pCatcher );
 			}
 			else
 			{
-				CTF_GameStats.Event_PlayerP4ssIntercept( pCatcher );
+				CTF_GameStats.Event_PlayerPFIntercept( pCatcher );
 			}
 
 			// award bonus effects for interception

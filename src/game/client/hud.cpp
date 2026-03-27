@@ -435,7 +435,7 @@ void CHud::Init( void )
 				}
 
 				KeyValues *key = kv->FindKey( pPanel->GetName(), false );
-				// P4SS: ugly strcmp here to ensure no assert fail
+				// PF: ugly strcmp here to ensure no assert fail
 				if ( !key && V_strcmp(pPanel->GetName(), "HudPasstimeCountdown") )
 				{
 					AssertMsg( false, "Hud element '%s' doesn't have an entry '%s' in scripts/HudLayout.res\n", m_HudList[i]->GetName(), pPanel->GetName() );

@@ -5653,7 +5653,7 @@ void CTFPlayerShared::OnAddPasstimeInterception( void )
 	}
 
 		
-	// P4SS disable obnoxious warp effect
+	// PF disable obnoxious warp effect
 
 	//if ( m_pOuter->IsLocalPlayer() )
 	//{

@@ -1,4 +1,4 @@
-$Macro OUTBINNAME "p4ss"
+$Macro OUTBINNAME "pf"
 
 $Conditional "MOD_LAUNCHER" "1"
 
@@ -20,6 +20,6 @@ $Project "Launcher Main (Mod TF)"
     $Folder "Resource Files" [$WINDOWS]
     {
         $File   "launcher_main_mod_tf.rc"
-        $File   "res\p4ss.ico"
+        $File   "res\pf.ico"
     }
 }

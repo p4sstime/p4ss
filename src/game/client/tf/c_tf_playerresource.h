@@ -27,10 +27,10 @@ public:
 	virtual int	GetTeam( int index ) OVERRIDE;
 
 	int	GetTotalScore( int iIndex ) { return GetArrayValue( iIndex, m_iTotalScore, 0 ); }
-	int	GetP4ssScores( int iIndex ) { return GetArrayValue( iIndex, m_iP4ssScores, 0 ); }
-	int	GetP4ssAssists( int iIndex ) { return GetArrayValue( iIndex, m_iP4ssAssists, 0 ); }
-	int	GetP4ssSaves( int iIndex ) { return GetArrayValue( iIndex, m_iP4ssSaves, 0 ); }
-	int	GetP4ssIntercepts( int iIndex ) { return GetArrayValue( iIndex, m_iP4ssIntercepts, 0 ); }
+	int	GetPFScores( int iIndex ) { return GetArrayValue( iIndex, m_iPFScores, 0 ); }
+	int	GetPFAssists( int iIndex ) { return GetArrayValue( iIndex, m_iPFAssists, 0 ); }
+	int	GetPFSaves( int iIndex ) { return GetArrayValue( iIndex, m_iPFSaves, 0 ); }
+	int	GetPFIntercepts( int iIndex ) { return GetArrayValue( iIndex, m_iPFIntercepts, 0 ); }
 	int GetMaxHealth( int iIndex )   { return GetArrayValue( iIndex, m_iMaxHealth, TF_HEALTH_UNDEFINED ); }
 	int GetMaxHealthForBuffing( int iIndex )   { return GetArrayValue( iIndex, m_iMaxBuffedHealth, TF_HEALTH_UNDEFINED ); }
 	int GetPlayerClass( int iIndex ) { return GetArrayValue( iIndex, m_iPlayerClass, TF_CLASS_UNDEFINED ); }
@@ -79,10 +79,10 @@ protected:
 	int GetArrayValue( int iIndex, int *pArray, int defaultVal );
 
 	int		m_iTotalScore[MAX_PLAYERS_ARRAY_SAFE];
-	int		m_iP4ssScores[MAX_PLAYERS_ARRAY_SAFE];
-	int		m_iP4ssAssists[MAX_PLAYERS_ARRAY_SAFE];
-	int		m_iP4ssSaves[MAX_PLAYERS_ARRAY_SAFE];
-	int		m_iP4ssIntercepts[MAX_PLAYERS_ARRAY_SAFE];
+	int		m_iPFScores[MAX_PLAYERS_ARRAY_SAFE];
+	int		m_iPFAssists[MAX_PLAYERS_ARRAY_SAFE];
+	int		m_iPFSaves[MAX_PLAYERS_ARRAY_SAFE];
+	int		m_iPFIntercepts[MAX_PLAYERS_ARRAY_SAFE];
 
 	int		m_iMaxHealth[MAX_PLAYERS_ARRAY_SAFE];
 	// !! This is actually m_iMaxHealthForBuffing, but we can't fix it now because of demos :-/

@@ -186,7 +186,7 @@ PassCaught::PassCaught()
 	, isHandoff( false )
 	, isBlock( false )
 {
-	Msg("P4SS Overload without isHandoff called.\n");
+	Msg("PF Overload without isHandoff called.\n");
 }
 
 PassCaught::PassCaught( int passerIndex_, int catcherIndex_, float dist_, float duration_ )
@@ -197,7 +197,7 @@ PassCaught::PassCaught( int passerIndex_, int catcherIndex_, float dist_, float 
 	, isHandoff( false )
 	, isBlock(false)
 {
-	Msg("P4SS Overload without isHandoff called.\n");
+	Msg("PF Overload without isHandoff called.\n");
 }
 
 PassCaught::PassCaught( int passerIndex_, int catcherIndex_, float dist_, float duration_, bool isHandoff_, bool isBlock_ )
@@ -208,7 +208,7 @@ PassCaught::PassCaught( int passerIndex_, int catcherIndex_, float dist_, float 
 	, isHandoff( isHandoff_ )
 	, isBlock( isBlock_ )
 {
-	Msg("P4SS Overload with isHandoff called. isHandoff_: %s\n", isHandoff_ ? "true" : "false");
+	Msg("PF Overload with isHandoff called. isHandoff_: %s\n", isHandoff_ ? "true" : "false");
 }
 void PassCaught::Fire()
 {

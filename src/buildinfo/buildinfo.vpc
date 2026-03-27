@@ -85,7 +85,7 @@ $Project "Build Info"
     //        {
     //            $CustomBuildStep
     //            {
-	//                $CommandLine "python $SRCDIR/devtools/genbuildinfo.py > $SRCDIR/game/client/generated_p4ss/buildinfo.gen.cpp"
+	//                $CommandLine "python $SRCDIR/devtools/genbuildinfo.py > $SRCDIR/game/client/generated_pf/buildinfo.gen.cpp"
     //                $Outputs    "$SRCDIR\public\buildinfo\buildinfo.h"
 	//                $Description   "Generating build info..."
     //            }

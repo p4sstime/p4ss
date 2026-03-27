@@ -865,7 +865,7 @@ ConVar tf_mvm_respec_credit_goal( "tf_mvm_respec_credit_goal", "2000", FCVAR_CHE
 ConVar tf_mvm_buybacks_method( "tf_mvm_buybacks_method", "0", FCVAR_REPLICATED | FCVAR_HIDDEN, "When set to 0, use the traditional, currency-based system.  When set to 1, use finite, charge-based system.", true, 0.0, true, 1.0 );
 ConVar tf_mvm_buybacks_per_wave( "tf_mvm_buybacks_per_wave", "3", FCVAR_REPLICATED | FCVAR_HIDDEN, "The fixed number of buybacks players can use per-wave." );
 
-#define P4SS_SHORTNAME_MAX_CHARS 4
+#define PF_SHORTNAME_MAX_CHARS 4
 ConVar pf_shortname( "pf_shortname", "", FCVAR_ARCHIVE | FCVAR_USERINFO, "Shortened user name" );
 
 #ifdef GAME_DLL
@@ -8790,7 +8790,7 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 	if ( !pszPlayerShortName || !pszPlayerShortName[0] )
 		pszPlayerShortName = pPlayer->GetPlayerName();
 
-	wchar_t wszPlayerShortname[P4SS_SHORTNAME_MAX_CHARS + 1] = { 0 };
+	wchar_t wszPlayerShortname[PF_SHORTNAME_MAX_CHARS + 1] = { 0 };
 	g_pVGuiLocalize->ConvertANSIToUnicode( pszPlayerShortName, wszPlayerShortname, sizeof( wszPlayerShortname ) );
 	SetupPlayerShortName( wszPlayerShortname );
 	

@@ -1279,7 +1279,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 		Q_snprintf( msg.szIcon, sizeof( msg.szIcon ), "d_%s", ev.inflictorName );
 	}
-	// P4SS: add killfeed notifications here
+	// PF: add killfeed notifications here
 	else if ( FStrEq( PasstimeGameEvents::BallDirected::s_eventName, pszEventName ) )
 	{
 		PasstimeGameEvents::BallDirected ev( event );
@@ -1304,7 +1304,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 	}
 	else if ( FStrEq( PasstimeGameEvents::BallGet::s_eventName, pszEventName ) ) // passtime ball get
 	{
-		// P4SS: add killfeed notifications here
+		// PF: add killfeed notifications here
 
 		PasstimeGameEvents::BallGet ev( event );
 		DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];

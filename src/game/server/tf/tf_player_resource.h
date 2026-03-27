@@ -42,10 +42,10 @@ protected:
 
 	CNetworkArray( int,	m_iTotalScore, MAX_PLAYERS_ARRAY_SAFE );
 
-	CNetworkArray( int, m_iP4ssScores, MAX_PLAYERS_ARRAY_SAFE );
-	CNetworkArray( int, m_iP4ssAssists, MAX_PLAYERS_ARRAY_SAFE );
-	CNetworkArray( int, m_iP4ssSaves, MAX_PLAYERS_ARRAY_SAFE );
-	CNetworkArray( int, m_iP4ssIntercepts, MAX_PLAYERS_ARRAY_SAFE );
+	CNetworkArray( int, m_iPFScores, MAX_PLAYERS_ARRAY_SAFE );
+	CNetworkArray( int, m_iPFAssists, MAX_PLAYERS_ARRAY_SAFE );
+	CNetworkArray( int, m_iPFSaves, MAX_PLAYERS_ARRAY_SAFE );
+	CNetworkArray( int, m_iPFIntercepts, MAX_PLAYERS_ARRAY_SAFE );
 	CNetworkArray( int, m_iPlayerClass, MAX_PLAYERS_ARRAY_SAFE );
 	CNetworkArray( int, m_iMaxHealth, MAX_PLAYERS_ARRAY_SAFE );
 	CNetworkArray( int, m_iMaxBuffedHealth, MAX_PLAYERS_ARRAY_SAFE );

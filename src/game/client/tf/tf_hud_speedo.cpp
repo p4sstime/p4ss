@@ -43,7 +43,7 @@ class CHudSpeedo : public CHudElement, public EditablePanel
 	virtual void OnTick( void );
 	virtual void Init( void );
 
-	void MsgFunc_P4SS_Speed( bf_read &msg );
+	void MsgFunc_PF_Speed( bf_read &msg );
 
 	private:
 		vgui::Label *m_pSpeedLabel;
@@ -58,7 +58,7 @@ class CHudSpeedo : public CHudElement, public EditablePanel
 };
 
 DECLARE_HUDELEMENT( CHudSpeedo );
-DECLARE_HUD_MESSAGE( CHudSpeedo, P4SS_Speed );
+DECLARE_HUD_MESSAGE( CHudSpeedo, PF_Speed );
 
 CHudSpeedo::CHudSpeedo( const char *pElementName ) : CHudElement( pElementName ), BaseClass( NULL, "HudSpeedo" ) {
 
@@ -91,10 +91,10 @@ CHudSpeedo::CHudSpeedo( const char *pElementName ) : CHudElement( pElementName )
 
 void CHudSpeedo::Init( void )
 {
-	HOOK_HUD_MESSAGE( CHudSpeedo, P4SS_Speed );
+	HOOK_HUD_MESSAGE( CHudSpeedo, PF_Speed );
 };
 
-void CHudSpeedo::MsgFunc_P4SS_Speed( bf_read &msg ) {
+void CHudSpeedo::MsgFunc_PF_Speed( bf_read &msg ) {
 	m_fSpeed = msg.ReadFloat();
 }
 

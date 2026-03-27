@@ -139,7 +139,7 @@ bool CTFTeamStatusPlayerPanel::Update( void )
 			/*if ( !bSameTeamAsLocalPlayer )
 			{
 				iClass = TF_CLASS_UNDEFINED;
-			}*/ //p4ss - removed
+			}*/ //pf - removed
 		}
 
 		if ( m_iTeam != GetTeam() )

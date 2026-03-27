@@ -10,17 +10,17 @@ steam/
 steam_appid.txt
 
 # Ignore build artifacts
-game/p4ss_linux64
-game/p4ss/cfg/*
-game/p4ss/custom
-game/p4ss/GameState.txt
-game/p4ss/tf2_playerstats.dmx
-game/p4ss/stats.txt
-game/p4ss/voice_ban.dt
-game/p4ss/maps/graphs/*
-game/p4ss/media/*
-game/p4ss/videoconfig_linux.cfg
-game/p4ss/ServerConfig.vdf
+game/pf_linux64
+game/pf/cfg/*
+game/pf/custom
+game/pf/GameState.txt
+game/pf/tf2_playerstats.dmx
+game/pf/stats.txt
+game/pf/voice_ban.dt
+game/pf/maps/graphs/*
+game/pf/media/*
+game/pf/videoconfig_linux.cfg
+game/pf/ServerConfig.vdf
 src/.ninja*
 src/compile_commands.json
 src/buildinfo/dummy.dummy
@@ -28,7 +28,7 @@ src/buildinfo/dummy.cpp
 src/buildinfo/buildinfo.gen.cpp
 !src/public/buildinfo/buildinfo.h
 steam_appid.txt
-game/p4ss/trainingprogress.txt
+game/pf/trainingprogress.txt
 
 
 # Visual Studio
@@ -168,7 +168,7 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
-!game/p4ss/bin/
+!game/pf/bin/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -539,16 +539,16 @@ FodyWeavers.xsd
 *.sln.iml
 
 !src/lib/public/x64/
-game/p4ss_win64.exe
+game/pf_win64.exe
 
 src/lib/public/x64/*.lib
 
-game/p4ss/bin/x64/game_shader_generic_example.dll
-game/p4ss/downloadlists/
+game/pf/bin/x64/game_shader_generic_example.dll
+game/pf/downloadlists/
 game/platform
 
-p4ss-build/
-p4ss-build/*
+pf-build/
+pf-build/*
 *.steambuild.*/
 
 # These libs are generated at compile time, don't keep them in tree
@@ -559,21 +559,21 @@ src/lib/public/linux64/raytrace.a
 src/lib/public/linux64/buildinfo.a
 
 
-game/p4ss/bin/linux64/game_shader_generic_example.so
+game/pf/bin/linux64/game_shader_generic_example.so
 
-!game/p4ss/cfg/settings_default.scr
-!game/p4ss/cfg/user_default.scr
-!game/p4ss/cfg/p4ss_*.cfg
+!game/pf/cfg/settings_default.scr
+!game/pf/cfg/user_default.scr
+!game/pf/cfg/pf_*.cfg
 
-!game/p4ss/media/Valve_Intro.webm
-!game/p4ss/media/movie_readme.txt
-!game/p4ss/media/startupvids.txt
-game/p4ss/cfg/user.scr
-game/p4ss/cfg/settings.scr
-game/p4ss/screenshots/
-game/p4ss/screenshots/*
+!game/pf/media/Valve_Intro.webm
+!game/pf/media/movie_readme.txt
+!game/pf/media/startupvids.txt
+game/pf/cfg/user.scr
+game/pf/cfg/settings.scr
+game/pf/screenshots/
+game/pf/screenshots/*
 .vscode/tasks.json
 jumpqol.sp
 jumpqol.inc
 .windsurf
-game/p4ss/glshaders.cfg
+game/pf/glshaders.cfg

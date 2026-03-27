@@ -87,7 +87,7 @@ extern ConVar
 	pf_whistle_more,
 	pf_heal_on_pass,
 	pf_heal_on_pass_flight_time,
-	pf_minicrit_protection_time;
+	pf_minicrit_protection_time,
 	pf_lock_max_turn_angle,
 	pf_passtime_lock_angle,
 

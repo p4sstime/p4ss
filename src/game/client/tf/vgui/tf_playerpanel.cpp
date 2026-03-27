@@ -138,7 +138,7 @@ bool CTFPlayerPanel::Update( void )
 					 GetTeam() != g_TF_PR->GetTeam( pLocalPlayer->entindex() ) )
 				{
 					iClass = TF_CLASS_UNDEFINED;
-				}*/ //p4ss - removed
+				}*/ //pf - removed
 			}
 
 			// Update live state

@@ -41,7 +41,7 @@ class CHudPasstimeHudCountdown : public CHudElement, public EditablePanel
 	virtual void OnTick( void );
 	virtual void Init( void );
 
-	void MsgFunc_P4SS_Countdown( bf_read &msg );
+	void MsgFunc_PF_Countdown( bf_read &msg );
 
 	private:
 		vgui::Label *m_pCountdownLabel;
@@ -50,7 +50,7 @@ class CHudPasstimeHudCountdown : public CHudElement, public EditablePanel
 };
 
 DECLARE_HUDELEMENT( CHudPasstimeHudCountdown );
-DECLARE_HUD_MESSAGE( CHudPasstimeHudCountdown, P4SS_Countdown );
+DECLARE_HUD_MESSAGE( CHudPasstimeHudCountdown, PF_Countdown );
 
 CHudPasstimeHudCountdown::CHudPasstimeHudCountdown( const char *pElementName ) : CHudElement( pElementName ), BaseClass( NULL, "HudPasstimeCountdown" ) {
 
@@ -74,10 +74,10 @@ CHudPasstimeHudCountdown::CHudPasstimeHudCountdown( const char *pElementName ) :
 
 void CHudPasstimeHudCountdown::Init( void )
 {
-	HOOK_HUD_MESSAGE( CHudPasstimeHudCountdown, P4SS_Countdown );
+	HOOK_HUD_MESSAGE( CHudPasstimeHudCountdown, PF_Countdown );
 };
 
-void CHudPasstimeHudCountdown::MsgFunc_P4SS_Countdown( bf_read &msg ) {
+void CHudPasstimeHudCountdown::MsgFunc_PF_Countdown( bf_read &msg ) {
 	m_fCountdownTime = msg.ReadFloat();
 	m_fCountdownLength = msg.ReadFloat();
 }

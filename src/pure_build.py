@@ -60,7 +60,7 @@ def main(args: argparse.Namespace):
 
   if not os.path.exists(args.rootdir):
     error(f"rootdir path invalid: {args.rootdir}\n\
-      by default, the script expects to be placed in p4ss/p4ss-build/ContentBuilder\n\
+      by default, the script expects to be placed in pf/pf-build/ContentBuilder\n\
       if this is not the case, manually specify rootdir via command line args", 
       2
     )
@@ -123,7 +123,7 @@ if __name__ == "__main__":
   # Short linux flag, short cmd flag, long linux flag, long cmd flag
   parser.add_argument("-h", "/?", "--help", action="help", help="show this help message and exit")
   parser.add_argument("-R", "/R", "--rootdir", default=DEFAULT_ROOTDIR,
-    help="the root of the repository, containing src/ and game/ (e.g. `/home/lucy/code/p4ss`) \
+    help="the root of the repository, containing src/ and game/ (e.g. `/home/lucy/code/pf`) \
       (default: %(default)s)"
   )
   parser.add_argument("-C", "/C", "--contentdir", default=DEFAULT_CONTENTDIR,

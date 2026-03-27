@@ -1294,7 +1294,7 @@ static bool IsGroundCollision( int index, const gamevcollisionevent_t *pEvent )
 		return false; // paranoia
 	}
 
- 	// --- P4SS: Check for surfaceprop that makes the ball not go neutral ---
+ 	// --- PF: Check for surfaceprop that makes the ball not go neutral ---
     static int s_pfNoneutralIndex = -1;
     if (s_pfNoneutralIndex == -1)
     {
@@ -1452,7 +1452,7 @@ COLLISION_GROUP_WEAPON, &result );
 				}
 			}
 
-			// P4SS: this may cause issues later for things like pipes but we will try it out and see
+			// PF: this may cause issues later for things like pipes but we will try it out and see
 			if ( distance < 10.0f || info.GetDamageType() & DMG_MELEE )
 			{
 				if ( didSplashGoal && attackerPlayer && ballThrower && attackerPlayer->GetTeamNumber() != ballThrower->GetTeamNumber() )

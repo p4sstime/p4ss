@@ -87,7 +87,7 @@ bool CPasstimeBallControllerPlayerSeek::Seek( CPasstimeBall *ball, CTFPlayer *pT
 	if ( !pTarget )
 		return false;
 
-	// P4SS: detect if ball is close to player during a pass and make a different sound
+	// PF: detect if ball is close to player during a pass and make a different sound
 	ball->CreateMagnetSound();
 
 	// taken from ballcontroller_homing
