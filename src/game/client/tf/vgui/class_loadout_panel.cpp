@@ -1229,6 +1229,15 @@ void CClassLoadoutPanel::OnCommand( const char *command )
 			return;
 		}
 	}
+	//P4SS - Let's add the zoom function from the Mann Co. Store to the loadout screen. Why not. (Solar)
+	else if ( !Q_strnicmp( command, "zoom_toggle", 11 ) )
+	{
+		if ( m_pPlayerModelPanel )
+		{
+			m_pPlayerModelPanel->ToggleZoom();
+		}
+		return;
+	}
 	BaseClass::OnCommand( command );
 }
 
