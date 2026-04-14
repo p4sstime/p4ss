@@ -150,6 +150,7 @@ private:
 		DEFAULT = 0, ARMED, DEPRESSED
 	};
 	Color					m_aDefaultColors[2][2][3];	// [LOADED|NOTLOADED][FG|BG][DEFAULT|ARMED|DEPRESSED]
+	int m_iTeamPreference; // P4SS - Store the team that the user has toggled to, so that when they equip a new item the color does not change back to RED (Solar)
 };
 
 extern CClassLoadoutPanel *g_pClassLoadoutPanel;

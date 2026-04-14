@@ -200,6 +200,26 @@
 		"sound_released"     "UI/buttonclickrelease.wav"
 	}
 	
+	"TeamToggleButton"
+	{
+		"ControlName"    "CExButton"
+		"fieldName"      "TeamToggleButton"
+		"xpos"               "20"
+		"ypos"               "80"
+		"wide"               "30"
+		"tall"               "30"
+		"autoResize"     "0"
+		"pinCorner"      "0"
+		"visible"        "1"
+		"enabled"        "1"
+		"tabPosition"    "0"
+		"labelText"      "T"
+		"textAlignment"  "center"
+		"Command"        "team_toggle"
+		"sound_depressed" "UI/buttonclick.wav"
+		"sound_released" "UI/buttonclickrelease.wav"
+	}
+	
 	"classmodelpanel"
 	{
 		"ControlName"	"CTFPlayerModelPanel"

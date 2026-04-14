@@ -437,6 +437,7 @@ CClassLoadoutPanel::CClassLoadoutPanel( vgui::Panel *parent )
 	g_pClassLoadoutPanel = this;
 
 	m_pItemOptionPanel = new CLoadoutItemOptionsPanel( this, "ItemOptionsPanel" );
+	m_iTeamPreference = TF_TEAM_RED; //P4SS - Initialize team color preference to RED
 }
 
 CClassLoadoutPanel::~CClassLoadoutPanel()
@@ -901,6 +902,13 @@ void CClassLoadoutPanel::UpdateModelPanels( void )
 
 	UpdatePassiveAttributes();
 
+	// P4SS - Restore the user's team preference if they toggled it
+	if ( m_pPlayerModelPanel && m_iTeamPreference != TF_TEAM_RED )
+	{
+		m_pPlayerModelPanel->SetTeam( m_iTeamPreference );
+	}
+
+	InvalidateLayout();
 	// Now layout again to position our item buttons 
 	InvalidateLayout();
 
@@ -1235,6 +1243,18 @@ void CClassLoadoutPanel::OnCommand( const char *command )
 		if ( m_pPlayerModelPanel )
 		{
 			m_pPlayerModelPanel->ToggleZoom();
+		}
+		return;
+	}
+	//P4SS - Let's add a team toggle button.
+	else if ( FStrEq( command, "team_toggle" ) )
+	{
+		if ( m_pPlayerModelPanel )
+		{
+			int iCurrentTeam = m_pPlayerModelPanel->GetTeam();
+			int iNewTeam = iCurrentTeam == TF_TEAM_RED ? TF_TEAM_BLUE : TF_TEAM_RED;
+			m_pPlayerModelPanel->SetTeam( iNewTeam );
+			m_iTeamPreference = iNewTeam; // Remember the preference
 		}
 		return;
 	}
