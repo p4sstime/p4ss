@@ -3887,6 +3887,21 @@ void CTFPlayer::Regenerate( bool bRefillHealthAndAmmo /*= true*/ )
 
 	if ( bRefillHealthAndAmmo )
 	{
+		//P4SS - Remove more debuffs and reset crit heals, for more
+		//parity with the resup bind
+
+		m_flLastDamageTime = 0.f;
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH );
+		}
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH_SILENT ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH_SILENT );
+		}
+
 		if ( m_Shared.InCond( TF_COND_BURNING ) )
 		{
 			m_Shared.RemoveCond( TF_COND_BURNING );
