@@ -15,18 +15,6 @@
 		"enabled"		"1"
 	}
 	
-	"CustomShaderOverlay" //REQUIRES COLOR CORRECTION TO BE ENABLED. OTHERWISE WE GET A BLACKSCREEN. Someone get a coder! Force the setting on for all players?
-	{
-		"ControlName"	"ImagePanel"
-		"xpos"		    "0"
-		"ypos"		    "0"
-		"zpos"		    "-10000"
-		"wide"		    "f0"
-		"tall"		    "480"
-		"scaleimage"	"1"
-		"image"			"../shaders/sepia"
-	}
-	
 	"BGDarken"
 	{
 		"ControlName"	"ImagePanel"
@@ -46,26 +34,6 @@
 		"PaintBackgroundType"	"0"
 		"fillcolor"		"0 0 0 50"
 	}	
-	
-	"Modulate"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"Modulate"
-		"xpos"			"0"
-		"ypos"			"0"
-		"zpos"			"-12"
-		"wide"			"f0"
-		"tall"			"f0"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"	"0"	
-		"image"			"../hud/blank"
-		"tileImage"		"1"
-		"PaintBackgroundType"	"0"
-		"drawcolor"		"100 140 70 255"
-	}
 	
  	"MainBG"
 	{
@@ -108,7 +76,7 @@
 		"fieldName"		"MapInfoType"
 		"xpos"			"0"
 		"ypos"			"-33"
-		"zpos"			"1"
+		"zpos"			"2"
 		"wide"			"440"
 		"tall"			"16"
 		"autoResize"	"0"
@@ -218,18 +186,15 @@
 		"ControlName"	"CExButton"
 		"fieldName"		"MapInfoBack"
 		"xpos"			"40"
-		"xpos_hidef"			"50"
-		"ypos"			"r40"
-		"ypos_lodef"			"r64"
-		"ypos_hidef"			"r54"
+		"ypos"			"9999"
 		"zpos"			"6"
 		"wide"			"150"
 		"tall"			"30"
 		"autoResize"	"0"
 		"pinCorner"		"2"
-		"visible"		"1"
-		"enabled"		"1"
-		"labelText"		"BACK (&Q)"
+		"visible"		"0"
+		"enabled"		"0"
+		"labelText"		"BACK"
 		"textAlignment"	"center"
 		"dulltext"		"0"
 		"brighttext"	"0"

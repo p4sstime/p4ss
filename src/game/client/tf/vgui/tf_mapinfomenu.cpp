@@ -104,6 +104,11 @@ void CTFMapInfoMenu::ApplySchemeSettings( vgui::IScheme *pScheme )
 	Q_strncpy( m_szMapName, mapname, sizeof( m_szMapName ) );
 	Q_strupr( m_szMapName );
 
+	// P4SS: Delay map page loading to ensure controls are initialized
+	PostMessage( this, new KeyValues( "LoadMapData" ) );
+
+	SetMapTitle();
+
 #ifdef _X360
 	char *pExt = Q_stristr( m_szMapName, ".360" );
 	if ( pExt )
@@ -571,6 +576,13 @@ void CTFMapInfoMenu::LoadMapPage()
 		}
 	}
 }
+
+//-----------------------------------------------------------------------------
+// Purpose: We are loading this menu so quickly that the map info
+// text is not displaying. We need to delay!
+//-----------------------------------------------------------------------------
+void CTFMapInfoMenu::OnLoadMapData() { LoadMapPage(); }
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
