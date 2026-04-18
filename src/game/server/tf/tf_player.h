@@ -136,6 +136,9 @@ public:
 
 	virtual void		CommitSuicide( bool bExplode = false, bool bForce = false );
 
+	//P4SS: Custom killbinds
+	virtual void CommitSuicideWithCustomRagdoll( int m_iCustomRagdoll = 0 );
+
 	// Combats
 	virtual void		TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr, CDmgAccumulator *pAccumulator );
 	virtual int			TakeHealth( float flHealth, int bitsDamageType );
