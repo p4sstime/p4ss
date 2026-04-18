@@ -43,9 +43,9 @@ const char *g_pszTipsClassImages[] =
 	"",								// TF_CLASS_UNDEFINED = 0,
 	"class_portraits/scout",		// TF_CLASS_SCOUT,			
 	"class_portraits/sniper",		// TF_CLASS_SNIPER,
-	"class_portraits/soldier",		// TF_CLASS_SOLDIER,
-	"class_portraits/demoman",		// TF_CLASS_DEMOMAN,
-	"class_portraits/medic",		// TF_CLASS_MEDIC,
+	"class_portraits/soldier_model",		// TF_CLASS_SOLDIER,
+	"class_portraits/demoman_model",		// TF_CLASS_DEMOMAN,
+	"class_portraits/medic_model",		// TF_CLASS_MEDIC,
 	"class_portraits/heavy",		// TF_CLASS_HEAVYWEAPONS,
 	"class_portraits/pyro",			// TF_CLASS_PYRO,
 	"class_portraits/spy",			// TF_CLASS_SPY,
@@ -160,6 +160,10 @@ void CTFStatsSummaryPanel::Init( void )
 	m_pTipText = new vgui::Label( this, "TipText", "" );
 	m_pMapInfoPanel = NULL;
 	m_pMainBackground = NULL;
+	
+	//P4SS: Partial reintroduction of leaderboard stuff in an attempt to fix broken map localization
+	m_pLeaderboardTitle = NULL;
+	m_pContributedPanel = NULL;
 
 #ifdef _X360
 	m_pFooter = new CTFFooter( this, "Footer" );
@@ -386,6 +390,9 @@ void CTFStatsSummaryPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 	// set the background image
 	UpdateMainBackground();
 
+	//P4SS: Someone broke MapInfo and made it stop loading... Fix.
+	m_pMapInfoPanel = dynamic_cast<EditablePanel *>( FindChildByName( "MapInfo" ) );
+
 	// get the dimensions and position of a left-hand bar and a right-hand bar so we can do bar sizing later
 	Panel *pLHBar = m_pPlayerData->FindChildByName( "ClassBar1A" );
 	Panel *pRHBar = m_pPlayerData->FindChildByName( "ClassBar1B" );
@@ -475,6 +482,13 @@ void CTFStatsSummaryPanel::ClearMapLabel()
 	{
 		pLabel->SetVisible( false );
 	}
+
+	// P4SS: Add shadow label
+	pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -506,7 +520,8 @@ void CTFStatsSummaryPanel::ShowMapInfo( bool bShowMapInfo, bool bIsMVM /*= false
 //-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 {
-	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() || engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
+	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() ||
+		 engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
 		return;
 
 	bool bWidescreenBackground = false;
@@ -514,42 +529,70 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 	bool bIsMVM = ( pMapName && !Q_strncmp( pMapName, "mvm_", 4 ) );
 	bool bIsMVMBackground = false;
 	const char *pszBackgroundOverride = NULL;
-	
+
 	if ( bIsMVM && !pszBackgroundOverride )
 	{
-		// this will preserve the current behavior for non-matchmaking servers
 		pszBackgroundOverride = "mvm_background_map";
 		bIsMVMBackground = true;
 	}
 
 	bool bIsCommunityMap = false;
 	const char *pAuthors = NULL;
-	
-	const MapDef_t *pMapInfo = GetItemSchema()->GetMasterMapDefByName( pMapName );
+	const char *pMapDisplayName = NULL;
+
+	const MapDef_t *pMapInfo =
+	GetItemSchema()->GetMasterMapDefByName( pMapName );
 	if ( pMapInfo )
 	{
 		bIsCommunityMap = pMapInfo->IsCommunityMap();
 		pAuthors = pMapInfo->pszAuthorsLocKey;
+		pMapDisplayName = pMapInfo->pszMapNameLocKey;
 	}
-	
+
 	ShowMapInfo( true, bIsMVM, ( pszBackgroundOverride != NULL ) );
 
-	// If we're loading a background map, don't display anything
-	// HACK: Client doesn't get gpGlobals->eLoadType, so just do string compare for now.
-	if ( Q_stristr( pMapName, "background") )
+	if ( Q_stristr( pMapName, "background" ) )
 	{
 		ClearMapLabel();
 	}
 	else
 	{
 		// set the map name in the UI
-		wchar_t wzMapName[255]=L"";
-		g_pVGuiLocalize->ConvertANSIToUnicode( GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+		wchar_t wzMapName[255] = L"";
+		if ( pMapDisplayName )
+		{
+			const wchar_t *pLocalizedMapName =
+			g_pVGuiLocalize->Find( pMapDisplayName );
+			if ( pLocalizedMapName )
+			{
+				wcsncpy( wzMapName, pLocalizedMapName,
+						 sizeof( wzMapName ) / sizeof( wchar_t ) - 1 );
+			}
+			else
+			{
+				g_pVGuiLocalize->ConvertANSIToUnicode(
+				GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+			}
+		}
+		else
+		{
+			g_pVGuiLocalize->ConvertANSIToUnicode(
+			GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+		}
 
 		SetDialogVariable( "maplabel", wzMapName );
-		SetDialogVariable( "maptype", g_pVGuiLocalize->Find( GetMapType( pMapName ) ) );
+		SetDialogVariable( "maptype",
+						   g_pVGuiLocalize->Find( GetMapType( pMapName ) ) );
 
-		vgui::Label *pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+		vgui::Label *pLabel =
+		dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+		if ( pLabel && !pLabel->IsVisible() )
+		{
+			pLabel->SetVisible( true );
+		}
+
+		pLabel =
+		dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
 		if ( pLabel && !pLabel->IsVisible() )
 		{
 			pLabel->SetVisible( true );
@@ -561,19 +604,24 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 			pLabel->SetVisible( true );
 		}
 
-		ImagePanel *pMapImage = m_pMapInfoPanel ? dynamic_cast< ImagePanel *>( m_pMapInfoPanel->FindChildByName( "MapImage" ) ) : NULL;
+		ImagePanel *pMapImage =
+		m_pMapInfoPanel ? dynamic_cast<ImagePanel *>(
+						  m_pMapInfoPanel->FindChildByName( "MapImage" ) )
+						: NULL;
 		if ( pMapImage )
 		{
-			// load the map image (if it exists for the current map)
-			char szMapImage[ MAX_PATH ];
-			Q_snprintf( szMapImage, sizeof( szMapImage ), "VGUI/maps/menu_photos_%s", pMapName );
+			char szMapImage[MAX_PATH];
+			Q_snprintf( szMapImage, sizeof( szMapImage ),
+						"VGUI/maps/menu_photos_%s", pMapName );
 			Q_strlower( szMapImage );
 
-			IMaterial *pMapMaterial = materials->FindMaterial( szMapImage, TEXTURE_GROUP_VGUI, false );
-			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) && ( !pszBackgroundOverride || bIsMVMBackground ) )
+			IMaterial *pMapMaterial =
+			materials->FindMaterial( szMapImage, TEXTURE_GROUP_VGUI, false );
+			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) &&
+				 ( !pszBackgroundOverride || bIsMVMBackground ) )
 			{
-				// take off the vgui/ at the beginning when we set the image
-				Q_snprintf( szMapImage, sizeof( szMapImage ), "maps/menu_photos_%s", pMapName );
+				Q_snprintf( szMapImage, sizeof( szMapImage ),
+							"maps/menu_photos_%s", pMapName );
 				Q_strlower( szMapImage );
 				pMapImage->SetImage( szMapImage );
 				pMapImage->SetVisible( true );
@@ -584,23 +632,55 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 			}
 		}
 
-		ImagePanel *pBackgroundImage = m_pMapInfoPanel ? dynamic_cast< ImagePanel *>( m_pMapInfoPanel->FindChildByName( "Background" ) ) : NULL;
+		ImagePanel *pMapFullScreenImage =
+		m_pMapInfoPanel
+		? dynamic_cast<ImagePanel *>(
+		  m_pMapInfoPanel->FindChildByName( "MapFullScreenImage" ) )
+		: NULL;
+		if ( pMapFullScreenImage )
+		{
+			char szMapFullScreenImage[MAX_PATH];
+			Q_snprintf( szMapFullScreenImage, sizeof( szMapFullScreenImage ),
+						"VGUI/maps/menu_fullscreenbg_%s", pMapName );
+			Q_strlower( szMapFullScreenImage );
+
+			IMaterial *pMapMaterial = materials->FindMaterial(
+			szMapFullScreenImage, TEXTURE_GROUP_VGUI, false );
+			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) &&
+				 ( !pszBackgroundOverride || bIsMVMBackground ) )
+			{
+				Q_snprintf( szMapFullScreenImage,
+							sizeof( szMapFullScreenImage ),
+							"maps/menu_fullscreenbg_%s", pMapName );
+				Q_strlower( szMapFullScreenImage );
+				pMapFullScreenImage->SetImage( szMapFullScreenImage );
+				pMapFullScreenImage->SetVisible( true );
+			}
+			else
+			{
+				pMapFullScreenImage->SetVisible( false );
+			}
+		}
+
+		ImagePanel *pBackgroundImage =
+		m_pMapInfoPanel ? dynamic_cast<ImagePanel *>(
+						  m_pMapInfoPanel->FindChildByName( "Background" ) )
+						: NULL;
 		if ( pBackgroundImage )
 		{
-			const char* pszBackgroundImage = pszBackgroundOverride ? pszBackgroundOverride : "stamp_background_map";
-
+			const char *pszBackgroundImage = pszBackgroundOverride
+											 ? pszBackgroundOverride
+											 : "stamp_background_map";
 			pBackgroundImage->SetImage( pszBackgroundImage );
 
-			// Resize to accomodate the background image coming in
 			if ( bWidescreenBackground )
 			{
 				pBackgroundImage->SetWide( GetWide() );
 			}
-			else 
+			else
 			{
 				pBackgroundImage->SetWide( GetTall() * ( 4.f / 3.f ) );
 			}
-
 		}
 
 		if ( bIsMVM )
@@ -612,20 +692,46 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 		}
 		else
 		{
-			// add authors
+			m_pLeaderboardTitle = NULL;
 			if ( m_pMapInfoPanel )
 			{
 				if ( bIsCommunityMap )
 				{
-					m_pMapInfoPanel->SetDialogVariable( "title", g_pVGuiLocalize->Find( "#TF_MapAuthors_Community_Title" ) );
-					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title", "" );
-					m_pMapInfoPanel->SetDialogVariable( "authors", g_pVGuiLocalize->Find( pAuthors ) ); 
+					m_pMapInfoPanel->SetDialogVariable(
+					"title",
+					g_pVGuiLocalize->Find( "#TF_MapAuthors_Community_Title" ) );
+					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title",
+														"" );
+
+					const wchar_t *pAuthorsLocalized =
+					g_pVGuiLocalize->Find( pAuthors );
+					if ( pAuthorsLocalized )
+					{
+						m_pMapInfoPanel->SetDialogVariable( "authors",
+															pAuthorsLocalized );
+					}
+					else
+					{
+						m_pMapInfoPanel->SetDialogVariable( "authors",
+															pAuthors );
+					}
+
+					m_pLeaderboardTitle =
+					m_pMapInfoPanel->FindChildByName( "MapLeaderboardTitle" );
 				}
 				else
 				{
-					m_pMapInfoPanel->SetDialogVariable( "title", g_pVGuiLocalize->Find( "#TF_DuelLeaderboard_Title" ) );
-					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title", "" );
+					m_pMapInfoPanel->SetDialogVariable( "title", "" );
+					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title",
+														"" );
 					m_pMapInfoPanel->SetDialogVariable( "authors", "" );
+
+					vgui::Panel *pInfoBG =
+					m_pMapInfoPanel->FindChildByName( "InfoBG" );
+					if ( pInfoBG )
+					{
+						pInfoBG->SetVisible( false );
+					}
 				}
 			}
 
@@ -868,8 +974,11 @@ void CTFStatsSummaryPanel::UpdateTip()
 	SetDialogVariable( "tiptext", g_TFTips.GetRandomTip( iTipClass ) );
 
 	if ( m_pTipImage )
-	{	//This + 1 on the end of ENGINEER is the only thing propping up the JACK tip class.
-		if ( iTipClass > TF_CLASS_UNDEFINED && iTipClass <= (TF_CLASS_ENGINEER + 1))
+	{
+		// P4SS - Only allow Soldier, Demoman, Medic, and JACK tips. "Engineer + 1" is the JACK.
+		if ( iTipClass == TF_CLASS_SOLDIER || iTipClass == TF_CLASS_DEMOMAN ||
+			 iTipClass == TF_CLASS_MEDIC ||
+			 iTipClass == ( TF_CLASS_ENGINEER + 1 ) )
 		{
 			m_pTipImage->SetVisible( true );
 			m_pTipImage->SetImage( g_pszTipsClassImages[iTipClass] );
@@ -888,7 +997,7 @@ void CTFStatsSummaryPanel::UpdateControls()
 {
 	// show or hide controls depending on what mode we're in
 #ifndef _X360
-	bool bShowPlayerData = ( m_bInteractive || m_iTotalSpawns > 0 );
+	bool bShowPlayerData = ( m_bInteractive || m_iTotalSpawns > 0 || !m_bEmbedded ); //P4SS - Adding !m_bEmbedded seemingly fixed an issue where player stats were not displaying on the first instance of a load screen
 #else
 	bool bShowPlayerData = ( m_bInteractive || m_bShowBackButton || m_iTotalSpawns > 0 );
 #endif
@@ -1267,6 +1376,8 @@ void CTFStatsSummaryPanel::OnActivate()
 	ClearMapLabel();
 
 	m_bLoadingCommunityMap = false;
+
+	//P4SS. Idk why Bender Bending Rodriguez wants this here
 	ShowMapInfo( false );
 
 #ifdef _X360

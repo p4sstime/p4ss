@@ -93,7 +93,11 @@ private:
 	vgui::EditablePanel *m_pMapInfoPanel;
 
 	vgui::ImagePanel *m_pMainBackground;
+	vgui::Panel *m_pLeaderboardTitle;
+	vgui::EditablePanel *m_pContributedPanel;
 	void UpdateMainBackground( void ); 
+
+	bool m_bShowingLeaderboard;
 
 #ifdef _X360
 	CTFFooter		*m_pFooter;

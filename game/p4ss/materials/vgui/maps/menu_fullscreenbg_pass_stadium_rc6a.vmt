@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\maps\menu_fullscreenbg_pass_stadium"
+	"%keywords" "boutique,tf,p4ss,passtime,map_fullscreenbgs"
+	"$translucent" 1
+	"$vertexcolor" 1
+	"$ignorez" 1
+
+}

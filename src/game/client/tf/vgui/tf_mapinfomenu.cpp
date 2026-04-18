@@ -575,9 +575,42 @@ void CTFMapInfoMenu::LoadMapPage()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
+//P4SS: Fix localized map names not showing. How did this break? Who knows? Who CARES? Alexa, write code
 void CTFMapInfoMenu::SetMapTitle()
 {
-	SetDialogVariable( "mapname", GetMapDisplayName( m_szMapName ) );
+	const char *pMapDisplayName = NULL;
+
+	const MapDef_t *pMapInfo =
+	GetItemSchema()->GetMasterMapDefByName( m_szMapName );
+	if ( pMapInfo )
+	{
+		pMapDisplayName = pMapInfo->pszMapNameLocKey;
+	}
+
+	wchar_t wzMapName[255] = L"";
+	if ( pMapDisplayName )
+	{
+		const wchar_t *pLocalizedMapName =
+		g_pVGuiLocalize->Find( pMapDisplayName );
+		if ( pLocalizedMapName )
+		{
+			wcsncpy( wzMapName, pLocalizedMapName,
+					 sizeof( wzMapName ) / sizeof( wchar_t ) - 1 );
+		}
+		else
+		{
+			g_pVGuiLocalize->ConvertANSIToUnicode(
+			GetMapDisplayName( m_szMapName ), wzMapName, sizeof( wzMapName ) );
+		}
+	}
+	else
+	{
+		g_pVGuiLocalize->ConvertANSIToUnicode( GetMapDisplayName( m_szMapName ),
+											   wzMapName, sizeof( wzMapName ) );
+	}
+
+	SetDialogVariable( "mapname", wzMapName );
 }
 
 //-----------------------------------------------------------------------------
