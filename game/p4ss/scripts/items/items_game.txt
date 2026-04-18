@@ -14034,7 +14034,7 @@
 	}
 	"8"
 	{			//Authors: DropKnock, Sean 'Heyo' Cutino, EArkham, Aeon 'Void' Bollig
-		"name"				"pass_ruin_a14"
+		"name"				"pass_ruin_rc1"
 		"localizedname"		"#P4SS_Map_Ruin"
 		"authors"			"#P4SS_Authors_Ruin"
 		"rolling_match_tags"
@@ -14048,7 +14048,7 @@
 	}
 	"9"
 	{			//Authors: nikeshoe92
-		"name"				"pass_stadium_rc5"
+		"name"				"pass_stadium_rc6a"
 		"localizedname"		"#P4SS_Map_Stadium"
 		"authors"			"#P4SS_Authors_Stadium"
 		"rolling_match_tags"
@@ -14062,7 +14062,7 @@
 	}
 	"10"
 	{			//Authors: nikeshoe92
-		"name"				"pass_stonework_rc4"
+		"name"				"pass_stonework_rc5b"
 		"localizedname"		"#P4SS_Map_Stonework"
 		"authors"			"#P4SS_Authors_Stonework"
 		"rolling_match_tags"

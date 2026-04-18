@@ -1440,8 +1440,6 @@ Scheme
 			{
 				"name"		"Montserrat SemiBold"
 				"tall"		"12"
-				"tall_hidef"	"12"
-				"tall_lodef"	"12"
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"

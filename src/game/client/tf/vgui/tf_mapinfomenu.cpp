@@ -568,11 +568,12 @@ void CTFMapInfoMenu::LoadMapPage()
 	}
 
 	// we haven't loaded a valid map image for the current map
+	// P4SS: Reduced multiplication of mapimage width here because the text width was massive
 	if ( m_pMapImage && !m_pMapImage->IsVisible() )
 	{
 		if ( m_pMapInfo )
 		{
-			m_pMapInfo->SetWide( m_pMapInfo->GetWide() + ( m_pMapImage->GetWide() * 0.75 ) ); // add in the extra space the images would have taken 
+			m_pMapInfo->SetWide( m_pMapInfo->GetWide() + ( m_pMapImage->GetWide() * 0.06 ) ); // add in the extra space the images would have taken 
 		}
 	}
 }
