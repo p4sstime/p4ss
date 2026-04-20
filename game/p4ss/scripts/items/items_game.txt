@@ -14090,7 +14090,7 @@
 	}
 	"12"
 	{			//Authors: nikeshoe92
-		"name" "pass_amperage_a27"
+		"name" "pass_amperage_a28"
 		"localizedname" "#P4SS_Map_Amperage"
 		"authors" "#P4SS_Authors_Amperage"
 			"rolling_match_tags"
@@ -14115,6 +14115,216 @@
 			{
 				"passtime"		"1"
 			}
+	}
+	"14"
+	{			//Authors: nikeshoe92
+		"name" "pass_park_b27"
+		"localizedname" "#P4SS_Map_Park"
+		"authors" "#P4SS_Authors_Park"
+			"rolling_match_tags"
+			{
+				"passtime"		"1"
+			}
+			"rolling_match_target_tags"
+			{
+				"passtime"		"1"
+			}
+	}
+	"15"
+	{
+		"name"				"pass_aquarium_a16"
+		"localizedname"		"#P4SS_Map_Aquarium"
+		"authors"			"#P4SS_Authors_Aquarium"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"16"
+	{
+		"name"				"pass_arena2_b17"
+		"localizedname"		"#P4SS_Map_Arena2"
+		"authors"			"#P4SS_Authors_Arena2"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"17"
+	{
+		"name"				"pass_coastal_rc6"
+		"localizedname"		"#P4SS_Map_Coastal"
+		"authors"			"#P4SS_Authors_Coastal"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"18"
+	{
+		"name"				"pass_colosseum2_a16"
+		"localizedname"		"#P4SS_Map_Colosseum2"
+		"authors"			"#P4SS_Authors_Colosseum2"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"19"
+	{
+		"name"				"pass_forgotten_a9"
+		"localizedname"		"#P4SS_Map_Forgotten"
+		"authors"			"#P4SS_Authors_Forgotten"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"20"
+	{
+		"name"				"pass_khobar"
+		"localizedname"		"#P4SS_Map_Khobar"
+		"authors"			"#P4SS_Authors_Khobar"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"21"
+	{
+		"name"				"pass_manndamm_a17"
+		"localizedname"		"#P4SS_Map_Manndamm"
+		"authors"			"#P4SS_Authors_Manndamm"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"22"
+	{
+		"name"				"pass_obelisk_a1"
+		"localizedname"		"#P4SS_Map_Obelisk"
+		"authors"			"#P4SS_Authors_Obelisk"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"23"
+	{
+		"name"				"pass_ore_a5"
+		"localizedname"		"#P4SS_Map_Ore"
+		"authors"			"#P4SS_Authors_Ore"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"24"
+	{
+		"name"				"pass_pibble_a3"
+		"localizedname"		"#P4SS_Map_Pibble"
+		"authors"			"#P4SS_Authors_Pibble"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"25"
+	{
+		"name"				"pass_soho_a7"
+		"localizedname"		"#P4SS_Map_Soho"
+		"authors"			"#P4SS_Authors_Soho"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"26"
+	{
+		"name"				"pass_thesis_a7"
+		"localizedname"		"#P4SS_Map_Thesis"
+		"authors"			"#P4SS_Authors_Thesis"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"27"
+	{
+		"name"				"pass_ufo_a18b"
+		"localizedname"		"#P4SS_Map_UFO"
+		"authors"			"#P4SS_Authors_UFO"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"28"
+	{
+		"name"				"pass_yard_b1"
+		"localizedname"		"#P4SS_Map_Yard"
+		"authors"			"#P4SS_Authors_Yard"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
 	}
 }
 
