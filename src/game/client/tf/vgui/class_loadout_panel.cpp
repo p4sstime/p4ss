@@ -437,7 +437,7 @@ CClassLoadoutPanel::CClassLoadoutPanel( vgui::Panel *parent )
 	g_pClassLoadoutPanel = this;
 
 	m_pItemOptionPanel = new CLoadoutItemOptionsPanel( this, "ItemOptionsPanel" );
-	m_iTeamPreference = TF_TEAM_RED; //P4SS - Initialize team color preference to RED
+	m_iTeamPreference = TF_TEAM_BLUE; //P4SS - Initialize team color preference to BLU
 }
 
 CClassLoadoutPanel::~CClassLoadoutPanel()
