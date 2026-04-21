@@ -414,13 +414,21 @@ void CTFStatsSummaryPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 	KeyValues *pKeyValues = new KeyValues( "data" );
 	pKeyValues->SetInt( "class", TF_CLASS_UNDEFINED );
 	m_pClassComboBox->AddItem( "#StatSummary_Label_AsAnyClass", pKeyValues );
-	for ( int iClass = TF_FIRST_NORMAL_CLASS; iClass <= TF_LAST_NORMAL_CLASS; iClass++ )
+
+	// P4SS: Only add Soldier, Demoman, and Medic
+	if ( 1 )
 	{
-		if ( iClass == TF_CLASS_CIVILIAN )
-			continue;
 		pKeyValues = new KeyValues( "data" );
-		pKeyValues->SetInt( "class", iClass );
-		m_pClassComboBox->AddItem( g_aPlayerClassNames[iClass], pKeyValues );
+		pKeyValues->SetInt( "class", TF_CLASS_SOLDIER );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_SOLDIER], pKeyValues );
+
+		pKeyValues = new KeyValues( "data" );
+		pKeyValues->SetInt( "class", TF_CLASS_DEMOMAN );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_DEMOMAN], pKeyValues );
+
+		pKeyValues = new KeyValues( "data" );
+		pKeyValues->SetInt( "class", TF_CLASS_MEDIC );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_MEDIC], pKeyValues );
 	}
 	m_pClassComboBox->ActivateItemByRow( 0 );
 
@@ -454,40 +462,26 @@ void CTFStatsSummaryPanel::OnKeyCodePressed( KeyCode code )
 //-----------------------------------------------------------------------------
 // Purpose: Sets stats to use
 //-----------------------------------------------------------------------------
-void CTFStatsSummaryPanel::SetStats( CUtlVector<ClassStats_t> &vecClassStats ) 
+void CTFStatsSummaryPanel::SetStats( CUtlVector<ClassStats_t> &vecClassStats )
 {
-	m_aClassStats = vecClassStats; 
+	m_aClassStats.RemoveAll();
+
+	// P4SS: Only track Soldier, Demoman, and Medic
+	for ( int i = 0; i < vecClassStats.Count(); i++ )
+	{
+		int iClass = vecClassStats[i].iPlayerClass;
+
+		// Only add playable classes
+		if ( iClass == TF_CLASS_SOLDIER || iClass == TF_CLASS_DEMOMAN ||
+			 iClass == TF_CLASS_MEDIC )
+		{
+			m_aClassStats.AddToTail( vecClassStats[i] );
+		}
+	}
+
 	if ( m_bControlsLoaded )
 	{
 		UpdateDialog();
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Updates the dialog
-//-----------------------------------------------------------------------------
-void CTFStatsSummaryPanel::ClearMapLabel()
-{
-	SetDialogVariable( "maplabel", "" );
-	SetDialogVariable( "maptype", "" );
-
-	vgui::Label *pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
-	if ( pLabel && pLabel->IsVisible() )
-	{
-		pLabel->SetVisible( false );
-	}
-
-	pLabel = dynamic_cast<Label *>( FindChildByName( "MapType" ) );
-	if ( pLabel && pLabel->IsVisible() )
-	{
-		pLabel->SetVisible( false );
-	}
-
-	// P4SS: Add shadow label
-	pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
-	if ( pLabel && pLabel->IsVisible() )
-	{
-		pLabel->SetVisible( false );
 	}
 }
 
@@ -743,11 +737,41 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 //-----------------------------------------------------------------------------
 // Purpose: Updates the dialog
 //-----------------------------------------------------------------------------
+void CTFStatsSummaryPanel::ClearMapLabel()
+{
+	SetDialogVariable( "maplabel", "" );
+	SetDialogVariable( "maptype", "" );
+
+	vgui::Label *pLabel =
+	dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+
+	pLabel = dynamic_cast<Label *>( FindChildByName( "MapType" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+
+	// P4SS: Add shadow label
+	pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Updates the dialog
+//-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::UpdateDialog()
 {
 	UpdateMainBackground();
 
-	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() || engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
+	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() ||
+		 engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
 	{
 		// hide all of the various panels for the other loadscreen modes
 		if ( IsPC() )
@@ -766,7 +790,8 @@ void CTFStatsSummaryPanel::UpdateDialog()
 			{
 				m_pMapInfoPanel->SetVisible( false );
 
-				vgui::Panel* pInfoBG = m_pMapInfoPanel->FindChildByName( "InfoBG" );
+				vgui::Panel *pInfoBG =
+				m_pMapInfoPanel->FindChildByName( "InfoBG" );
 				if ( pInfoBG )
 				{
 					pInfoBG->SetVisible( false );
@@ -781,26 +806,33 @@ void CTFStatsSummaryPanel::UpdateDialog()
 
 	m_iTotalSpawns = 0;
 
-	// if we don't have stats for any class, add empty stat entries for them 
-	for ( int iClass = TF_FIRST_NORMAL_CLASS; iClass <= TF_LAST_NORMAL_CLASS; iClass++ )
+	// P4SS: Only track Soldier, Demoman, and Medic
+	// if we don't have stats for any playable class, add empty stat entries for
+	// them
+	if ( 1 )
 	{
-		if ( iClass == TF_CLASS_CIVILIAN )
-			continue; // Ignore the civilian.
+		int nPlayableClasses[] = { TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN,
+								   TF_CLASS_MEDIC };
 
-		int j;
-		for ( j = 0; j < m_aClassStats.Count(); j++ )
+		for ( int i = 0; i < ARRAYSIZE( nPlayableClasses ); i++ )
 		{
-			if ( m_aClassStats[j].iPlayerClass == iClass )
+			int iClass = nPlayableClasses[i];
+
+			int j;
+			for ( j = 0; j < m_aClassStats.Count(); j++ )
 			{
-				m_iTotalSpawns += m_aClassStats[j].iNumberOfRounds;
-				break;
+				if ( m_aClassStats[j].iPlayerClass == iClass )
+				{
+					m_iTotalSpawns += m_aClassStats[j].iNumberOfRounds;
+					break;
+				}
 			}
-		}
-		if ( j == m_aClassStats.Count() )
-		{
-			ClassStats_t stats;
-			stats.iPlayerClass = iClass;
-			m_aClassStats.AddToTail( stats );
+			if ( j == m_aClassStats.Count() )
+			{
+				ClassStats_t stats;
+				stats.iPlayerClass = iClass;
+				m_aClassStats.AddToTail( stats );
+			}
 		}
 	}
 
@@ -821,7 +853,7 @@ void CTFStatsSummaryPanel::UpdateDialog()
 	// update the tip
 	UpdateTip();
 	// show or hide controls depending on if we're interactive or not
-	UpdateControls();		
+	UpdateControls();
 }
 
 //-----------------------------------------------------------------------------
@@ -838,28 +870,32 @@ void CTFStatsSummaryPanel::UpdateBarCharts()
 		float flMax = 0;
 		for ( int i = 0; i < m_aClassStats.Count(); i++ )
 		{
-			// get max value of stat being charted so we know how to scale the graph
-			float flVal = GetDisplayValue( m_aClassStats[i], m_statBarGraph[iChart], m_displayBarGraph[iChart] );
+			// get max value of stat being charted so we know how to scale the
+			// graph
+			float flVal =
+			GetDisplayValue( m_aClassStats[i], m_statBarGraph[iChart],
+							 m_displayBarGraph[iChart] );
 			flMax = MAX( flVal, flMax );
 		}
 
 		// draw the bar chart value for each player class
-		// TODO: Fix up after the civilian becomes playable.
 		int iChartBar = 0;
 		for ( int i = 0; i < m_aClassStats.Count(); i++ )
-		{	
+		{
 			int iClass = m_aClassStats[i].iPlayerClass;
-			if ( iClass == TF_CLASS_CIVILIAN )
-			{
-				continue;
-			}
+
 			if ( 0 == iChart )
 			{
-				// if this is the first chart, set the class label for each class
-				m_pPlayerData->SetDialogVariable( CFmtStr( "class%d", iChartBar+1 ), g_pVGuiLocalize->Find( g_aPlayerClassNames[iClass] ) );
+				// if this is the first chart, set the class label for each
+				// class
+				m_pPlayerData->SetDialogVariable(
+				CFmtStr( "class%d", iChartBar + 1 ),
+				g_pVGuiLocalize->Find( g_aPlayerClassNames[iClass] ) );
 			}
 			// draw the bar for this class
-			DisplayBarValue( iChart, iChartBar++, m_aClassStats[i], m_statBarGraph[iChart], m_displayBarGraph[iChart], flMax );
+			DisplayBarValue( iChart, iChartBar++, m_aClassStats[i],
+							 m_statBarGraph[iChart], m_displayBarGraph[iChart],
+							 flMax );
 		}
 	}
 }
@@ -976,7 +1012,8 @@ void CTFStatsSummaryPanel::UpdateTip()
 	if ( m_pTipImage )
 	{
 		// P4SS - Only allow Soldier, Demoman, Medic, and JACK tips. "Engineer + 1" is the JACK.
-		if ( iTipClass == TF_CLASS_SOLDIER || iTipClass == TF_CLASS_DEMOMAN ||
+		if ( iTipClass == TF_CLASS_SOLDIER || 
+			 iTipClass == TF_CLASS_DEMOMAN ||
 			 iTipClass == TF_CLASS_MEDIC ||
 			 iTipClass == ( TF_CLASS_ENGINEER + 1 ) )
 		{
@@ -1377,7 +1414,7 @@ void CTFStatsSummaryPanel::OnActivate()
 
 	m_bLoadingCommunityMap = false;
 
-	//P4SS. Idk why Bender Bending Rodriguez wants this here
+	// P4SS. Idk why Bender Bending Rodriguez wants this here
 	ShowMapInfo( false );
 
 #ifdef _X360
