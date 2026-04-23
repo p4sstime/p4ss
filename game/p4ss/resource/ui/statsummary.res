@@ -66,14 +66,24 @@
 		{
 			"ControlName"	"ImagePanel"
 			"fieldName"		"Background"
-			"xpos"			"0"
+			"visible"		"0"
+			"enabled"		"0"
+		}
+		
+		"BackgroundPF"
+		{
+			"ControlName"	"ImagePanel"
+			"fieldName"		"BackgroundPF"
+			"xpos"			"cs-0.5" //Image always centered
 			"ypos"			"0"
-			"wide"			"640"
+			"zpos"			"1"
+			"wide"			"854" //We do not set this to f0. Some people might be playing on 4:3 or Ultrawide.
 			"tall"			"480"
 			"visible"		"1"
 			"enabled"		"1"
-			"image"			"stamp_background_map"
+			"image"			"maps/loading_image_nomap"
 			"scaleImage"		"1"
+			"proportionaltoparent"	"1"
 		}
 
 		"MapImage"
@@ -82,11 +92,11 @@
 			"fieldName"		"MapImage"
 			"xpos"			"c-300"
 			"ypos"			"120"
-			"zpos"			"2"
+			"zpos"			"3"
 			"wide"			"200"
 			"tall"			"200"
-			"visible"		"1"
-			"enabled"		"1"
+			"visible"		"0"
+			"enabled"		"0"
 			"image"			""
 			"scaleImage"	"1"		
 		}
@@ -258,7 +268,7 @@
 		"xpos"			"c-300"
 		"ypos"			"50"
 		"zpos"			"50"
-		"wide"			"350"
+		"wide"			"550"
 		"tall"			"58"
 		"autoResize"	"0"
 		"pinCorner"		"0"
@@ -276,7 +286,7 @@
 		"xpos"			"c-298"
 		"ypos"			"52"
 		"zpos"			"49"
-		"wide"			"350"
+		"wide"			"550"
 		"tall"			"58"
 		"autoResize"	"0"
 		"pinCorner"		"0"
