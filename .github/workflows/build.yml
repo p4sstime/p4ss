@@ -1,0 +1,42 @@
+name: Build P4SS
+
+on:
+  pull_request:
+    branches: [ "development" ]
+
+env:
+  SOLUTION_FILE_PATH: everything.sln
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Generate solution
+      run: .\generateallprojects.bat
+      
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}/src
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}/src
+      run: |
+        .\createallprojects.bat
+        msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
+    
+    - name: Publish game binaries
+      uses: actions/upload-artifact@v7.0.1
+      with:
+        name: 'windows'
+        path: |
+          /game/p4ss/bin/x64/*.dll
+        if-no-files-found: error
