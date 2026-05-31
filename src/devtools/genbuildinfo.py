@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import datetime, sys, subprocess, platform
+import datetime, sys, subprocess, platform, os
 
 def get_git_info():
     gh_sha = os.environ.get("GITHUB_SHA")
