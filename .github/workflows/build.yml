@@ -19,18 +19,12 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Generate solution
-      working-directory: ${{env.GITHUB_WORKSPACE}}/src
-      run: .\generateallprojects.bat
-      
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}/src
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-
-    - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}/src
+    - name: Build game
+      working-directory: ${{ github.workspace }}/src
+      shell: cmd
       run: |
-        .\createallprojects.bat
+        .\generateallprojects.bat
+        nuget restore ${{env.SOLUTION_FILE_PATH}}
         msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
     
     - name: Publish game binaries
