@@ -30,7 +30,42 @@ jobs:
     - name: Publish game binaries
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: 'windows'
+        name: 'bin-windows'
         path: |
           game/p4ss/bin/x64/*.dll
+        if-no-files-found: error
+
+  build-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk:latest
+
+    steps:
+    - uses: actions/checkout@v4
+        
+    - name: setup ccache
+      uses: actions/cache@v4
+      with:
+        path: ~/.ccache
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
+
+    - name: Build game
+      working-directory: ${{ github.workspace }}/src
+      shell: bash
+      env:
+        CCACHE_DIR: ~/.ccache
+        VPC_NINJA_BUILD_MODE: release
+      run: |
+        solution_out="_vpc_/ninja/sdk_p4ss_${VPC_NINJA_BUILD_MODE}"
+        devtools/bin/vpc /hl2mp /tf /linux64 /ninja /define:SOURCESDK +game /mksln "$solution_out"
+        ninja -f "${solution_out}.ninja" -j $(nproc)
+
+    - name: Publish game binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'bin-linux'
+        path: |
+          game/p4ss/bin/linux64/*.so
         if-no-files-found: error
