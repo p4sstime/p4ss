@@ -23,7 +23,7 @@ jobs:
       working-directory: ${{ github.workspace }}/src
       shell: cmd
       run: |
-        generateallprojects.bat
+        createallprojects.bat
         nuget restore ${{env.SOLUTION_FILE_PATH}}
         msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
     
