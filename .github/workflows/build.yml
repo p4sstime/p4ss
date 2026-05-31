@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
 
 env:
-  SOLUTION_FILE_PATH: everything.sln
+  SOLUTION_FILE_PATH: p4ss.sln
 
 permissions:
   contents: read
@@ -23,14 +23,14 @@ jobs:
       working-directory: ${{ github.workspace }}/src
       shell: cmd
       run: |
-        call createallprojects.bat
+        call createp4ssproject.bat
         nuget restore ${{env.SOLUTION_FILE_PATH}}
-        msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
+        msbuild /m /v:m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
     
     - name: Publish game binaries
       uses: actions/upload-artifact@v7.0.1
       with:
         name: 'windows'
         path: |
-          /game/p4ss/bin/x64/*.dll
+          game/p4ss/bin/x64/*.dll
         if-no-files-found: error
