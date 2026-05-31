@@ -1,8 +1,7 @@
 name: Build P4SS
 
 on:
-  pull_request:
-    branches: [ "development" ]
+  workflow_dispatch: 
 
 env:
   SOLUTION_FILE_PATH: everything.sln
