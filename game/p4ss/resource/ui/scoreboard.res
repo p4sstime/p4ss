@@ -1447,7 +1447,7 @@
 			"ControlName"		"CExLabel"
 			"fieldName"		"CapturesLabel"
 			"font"			"MontserratSemibold20"
-			"labelText"		"Goals:"
+			"labelText"		"#P4SS_ScoreboardStats_Goals"
 			"textAlignment"	"center"
 			"xpos"			"cs-0.5"
 			"ypos"			"r45"
