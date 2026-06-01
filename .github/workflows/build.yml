@@ -33,6 +33,7 @@ jobs:
         name: 'bin-windows'
         path: |
           game/p4ss/bin/x64/*.dll
+          game/p4ss_win64.exe
         if-no-files-found: error
 
   build-linux:
@@ -58,6 +59,7 @@ jobs:
         CCACHE_DIR: ~/.ccache
         VPC_NINJA_BUILD_MODE: release
       run: |
+        mkdir ~/.ccache
         solution_out="_vpc_/ninja/sdk_p4ss_${VPC_NINJA_BUILD_MODE}"
         devtools/bin/vpc /tf /linux64 /ninja /define:SOURCESDK +game /mksln "$solution_out"
         ninja -f "${solution_out}.ninja" -j $(nproc)
@@ -68,4 +70,5 @@ jobs:
         name: 'bin-linux'
         path: |
           game/p4ss/bin/linux64/*.so
+          game/p4ss_linux64
         if-no-files-found: error
