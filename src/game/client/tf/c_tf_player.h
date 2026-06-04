@@ -919,10 +919,6 @@ public:
 	bool CanPickupDroppedWeapon( const C_TFDroppedWeapon *pWeapon );
 	C_TFDroppedWeapon* GetDroppedWeaponInRange();
 
-	bool HasCampaignMedal( int iMedal );
-	CampaignMedalDisplayType_t GetCampaignMedalType( void );
-	const char *GetCampaignMedalImage( void );
-
 	void SetInspectTime( float flInspectTime ) { m_flInspectTime = flInspectTime; }
 	bool IsInspecting() const;
 	void HandleInspectHint();

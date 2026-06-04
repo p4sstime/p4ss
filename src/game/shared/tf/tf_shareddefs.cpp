@@ -1151,48 +1151,6 @@ const char *g_pszArrowModels[] =
 };
 COMPILE_TIME_ASSERT( ARRAYSIZE( g_pszArrowModels ) == TF_ARROW_MODEL_COUNT );
 
-const char *g_pszCampaignMedalIcons[] =
-{
-	"",
-	// Gun Mettle Campaign
-	"../hud/coin_summer2015_gravel",
-	"../hud/coin_summer2015_bronze",
-	"../hud/coin_summer2015_silver",
-	"../hud/coin_summer2015_gold",
-
-	// Invasion Community Update
-	"../HUD/scoreboard_invasion",
-
-	// Halloween
-	"../HUD/coin_halloween2015_gravel",
-	"../HUD/coin_halloween2015_bronze",
-	"../HUD/coin_halloween2015_silver",
-	"../HUD/coin_halloween2015_gold",
-
-	// Tough Break Campaign
-	"../HUD/stamp_winter2016_gravel1",
-	"../HUD/stamp_winter2016_bronze1",
-	"../HUD/stamp_winter2016_silver1",
-	"../HUD/stamp_winter2016_gold1",
-
-	"../HUD/stamp_winter2016_gravel2",
-	"../HUD/stamp_winter2016_bronze2",
-	"../HUD/stamp_winter2016_silver2",
-	"../HUD/stamp_winter2016_gold2",
-};
-COMPILE_TIME_ASSERT( ARRAYSIZE( g_pszCampaignMedalIcons ) == CAMPAIGN_MEDAL_DISPLAY_TYPE_COUNT );
-
-//-----------------------------------------------------------------------------
-// Dead Calling Cards
-const char *g_pszDeathCallingCardModels[] =
-{
-	"",			// Empty at zero
-	"models/props_gameplay/tombstone_specialdelivery.mdl",		// Scout PolyCount Set
-	"models/props_gameplay/tombstone_crocostyle.mdl",		// Sniper PolyCount Set
-	"models/props_gameplay/tombstone_tankbuster.mdl",		// Solider PolyCount Set
-	"models/props_gameplay/tombstone_gasjockey.mdl",		// Pyro PolyCount Set
-};
-
 const char *GetWeaponIDName( int iWeaponID )
 {
 	return ClampedArrayElement( g_aWeaponNames, iWeaponID );
@@ -1460,7 +1418,7 @@ void LoadObjectInfos( IBaseFileSystem *pFileSystem )
 			// Does it make sense to call the below Steam API so it'll force a validation next startup time?
 			// Need to verify it's real corruption and not someone dorking around with their objects.txt file...
 			//
-			// From Martin Otten: If you have a file on disc and you’re 100% sure it’s
+			// From Martin Otten: If you have a file on disc and you're 100% sure it's
 			//  corrupt, call ISteamApps::MarkContentCorrupt( false ), before you shutdown
 			//  the game. This will cause a content validation in Steam.
 

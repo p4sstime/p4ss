@@ -2787,17 +2787,7 @@ void CTFPlayer::PrecachePlayerModels( void )
 		{
 			PrecacheScriptSound( pData->m_szDeathSound[ i ] ); 
 		}
-	}
-
-
-	COMPILE_TIME_ASSERT( TF_CALLING_CARD_MODEL_COUNT == ARRAYSIZE( g_pszDeathCallingCardModels ) );
-	// Precache, Deliberatly skipping zero
-	for ( i = 1; i < TF_CALLING_CARD_MODEL_COUNT; i++ )		
-	{
-		PrecacheModel( g_pszDeathCallingCardModels[i] );
-	}
-
-	
+	}	
 }
 
 //-----------------------------------------------------------------------------
@@ -7755,27 +7745,6 @@ void CTFPlayer::MerasmusPlayerBombExplode( bool bExcludeMe /*= true */ )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFPlayer::DropDeathCallingCard( CTFPlayer* pTFAttacker, CTFPlayer* pTFVictim )
-{
-	int iCallingCard = 0;
-	CALL_ATTRIB_HOOK_INT_ON_OTHER( pTFAttacker, iCallingCard, calling_card_on_kill );
-	if ( iCallingCard )
-	{
-		CEffectData	data;
-
-		data.m_vOrigin = pTFVictim->GetAbsOrigin();
-		data.m_vAngles = pTFVictim->GetAbsAngles();
-		data.m_nAttachmentIndex = pTFVictim->entindex();	// Victim
-		data.m_nHitBox = entindex();						// iShooter
-		data.m_fFlags = iCallingCard;						// Index to the Calling card
-
-		DispatchEffect( "TFDeathCallingCard", data );
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CTFPlayer::PlayGesture( const char *pGestureName )
 {
 	Activity nActivity = (Activity)LookupActivity( pGestureName );
@@ -10782,11 +10751,6 @@ void CTFPlayer::Event_KilledOther( CBaseEntity *pVictim, const CTakeDamageInfo &
 			IncrementSentryGunKillCount();
 		}
 
-		// Check for Halloween Death Ghosts
-		CheckSpellHalloweenDeathGhosts( info, pTFVictim );
-
-		DropDeathCallingCard( this, pTFVictim );
-
 		if ( pTFVictim != this )
 		{
 			for ( int i=0; i<GetNumWearables(); ++i )
@@ -10839,45 +10803,6 @@ void CTFPlayer::Event_KilledOther( CBaseEntity *pVictim, const CTakeDamageInfo &
 		{
 			CBaseObject *pObject = dynamic_cast<CBaseObject *>( pVictim );
 			SpeakConceptIfAllowed( MP_CONCEPT_KILLED_OBJECT, pObject->GetResponseRulesModifier() );
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CTFPlayer::CheckSpellHalloweenDeathGhosts( const CTakeDamageInfo &info, CTFPlayer *pTFVictim )
-{
-	if ( !pTFVictim )
-		return;
-
-	// Check the weapon I used to kill with this player and if it has my desired attribute
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		int iHalloweenDeathGhosts = 0;
-		CTFWeaponBase *pWeapon = dynamic_cast<CTFWeaponBase *>( info.GetWeapon() );
-
-		// was this a wrangler kill?
-		if ( info.GetDamageCustom() == TF_DMG_CUSTOM_PLAYER_SENTRY )
-		{
-			CTFLaserPointer* pLaserPointer = dynamic_cast<CTFLaserPointer *>( GetEntityForLoadoutSlot( LOADOUT_POSITION_SECONDARY ) );
-			if ( pLaserPointer )
-			{
-				pWeapon = pLaserPointer;
-			}
-		}
-
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iHalloweenDeathGhosts, halloween_death_ghosts );
-		if ( iHalloweenDeathGhosts > 0 )
-		{
-			if ( pTFVictim->GetTeam()->GetTeamNumber() == TF_TEAM_BLUE )
-			{
-				DispatchParticleEffect( "halloween_player_death_blue", pTFVictim->GetAbsOrigin() + Vector( 0, 0, 32 ), vec3_angle );
-			}
-			else if ( pTFVictim->GetTeam()->GetTeamNumber() == TF_TEAM_RED )
-			{
-				DispatchParticleEffect( "halloween_player_death", pTFVictim->GetAbsOrigin() + Vector( 0, 0, 32 ), vec3_angle );
-			}
 		}
 	}
 }
@@ -14724,15 +14649,6 @@ void CTFPlayer::FeignDeath( const CTakeDamageInfo& info, bool bDeathnotice )
 			// force the attacker to laugh!
 			pTFPlayer->Taunt( TAUNT_MISC_ITEM, MP_CONCEPT_TAUNT_LAUGH );
 		}
-
-		CTFWeaponInvis *pWpn = (CTFWeaponInvis *)Weapon_OwnsThisID( TF_WEAPON_INVIS );
-		if ( pWpn && pWpn->HasFeignDeath() )
-		{
-			DropDeathCallingCard( pTFPlayer, this );
-		}
-
-		// Check for Halloween Death Ghosts
-		pTFPlayer->CheckSpellHalloweenDeathGhosts( info, this );
 	}
 
 	// Create a ragdoll.

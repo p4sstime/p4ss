@@ -613,21 +613,6 @@ enum arrow_models
 
 extern const char *g_pszArrowModels[];
 
-//-----------------------------------------------------------------------------
-// Dead Calling Cards
-//-----------------------------------------------------------------------------
-enum death_calling_card_models
-{
-	CALLING_CARD_NONE = 0,			// Empty at zero
-	CALLING_CARD_MILKMAN = 1,	// Scout PolyCount Set
-	CALLING_CARD_CROC,			// Sniper PolyCount Set
-	CALLING_CARD_TANKBUSTER,	// Solider PolyCount Set
-	CALLING_CARD_GASJOCKEY,		// Pyro PolyCount Set 
-
-	TF_CALLING_CARD_MODEL_COUNT
-};
-extern const char *g_pszDeathCallingCardModels[TF_CALLING_CARD_MODEL_COUNT];
-
 #ifdef TF_CLIENT_DLL
 extern const char *g_pszInvasionMaps[];
 bool IsPlayingInvasionMap( void );
@@ -2143,49 +2128,6 @@ const char *GetPowerupIconName( RuneTypes_t type, int iTeam );
 #define TOURNAMENT_NOCANCEL_TIME 10
 
 #define TF_WEAPON_PICKUP_RANGE 150
-
-enum CampaignMedalDisplayType_t
-{
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_NONE = 0,
-
-	// Gun Mettle Campaign
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_SUMMER2015_GRAVEL,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_SUMMER2015_BRONZE,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_SUMMER2015_SILVER,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_SUMMER2015_GOLD,
-
-	// Invasion Community Update
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_INVASION,
-
-	// Halloween
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_HALLOWEEN_GRAVEL,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_HALLOWEEN_BRONZE,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_HALLOWEEN_SILVER,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_HALLOWEEN_GOLD,
-
-	// Tough Break Campaign
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_GRAVEL1,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_BRONZE1,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_SILVER1,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_GOLD1,
-
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_GRAVEL2,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_BRONZE2,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_SILVER2,
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_WINTER2016_GOLD2,
-
-	CAMPAIGN_MEDAL_DISPLAY_TYPE_COUNT,
-};
-
-enum CampaignMedalBaseType_t
-{
-	CAMPAIGN_MEDAL_SUMMER2015		= 0x001,
-	CAMPAIGN_MEDAL_INVASION			= 0x002,
-	CAMPAIGN_MEDAL_HALLOWEEN		= 0x004,
-	CAMPAIGN_MEDAL_WINTER2016		= 0x008,
-};
-
-extern const char *g_pszCampaignMedalIcons[];
 
 // Rage buffs - how is rage generated with respect to a buff ID?
 enum

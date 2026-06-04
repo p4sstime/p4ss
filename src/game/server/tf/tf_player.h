@@ -160,7 +160,6 @@ public:
 	}
 	virtual int			GetNumberofDominations( void ) { return m_iNumberofDominations; }
 	void				OnKilledOther_Effects( CBaseEntity *pVictim, const CTakeDamageInfo &info );
-	void				CheckSpellHalloweenDeathGhosts( const CTakeDamageInfo &info, CTFPlayer *pTFVictim );
 
 	virtual int			OnTakeDamage( const CTakeDamageInfo &inputInfo );
 	void				AddConnectedPlayers( CUtlVector<CTFPlayer*> &vecPlayers, CTFPlayer *pPlayerToConsider );
@@ -1020,9 +1019,6 @@ public:
 	float				GetWaterExitTime( void ){ return m_flWaterExitTime; }
 
 	void				MerasmusPlayerBombExplode( bool bExcludeMe = true );
-
-	void				DropDeathCallingCard( CTFPlayer* pTFAttacker, CTFPlayer* pTFVictim );
-
 
 	//---------------------------------
 	// support entity IO for forcing speech concepts
