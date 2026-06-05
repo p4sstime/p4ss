@@ -664,16 +664,6 @@ bool CRopeManager::IsHolidayLightMode( void )
 
 	bDrawHolidayLights = m_bDrawHolidayLights;
 	m_nHolidayLightsStyle = 0;
-
-#ifdef TF_CLIENT_DLL
-	// Turn them on in Pyro-vision too
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		bDrawHolidayLights = true;
-		m_nHolidayLightsStyle = 1;
-	}
-#endif // TF_CLIENT_DLL
-
 #endif // USES_ECON_ITEMS
 
 	return bDrawHolidayLights;

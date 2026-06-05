@@ -162,11 +162,6 @@ void TFExplosionCallback( const Vector &vecOrigin, const Vector &vecNormal, int 
 	CLocalPlayerFilter filter;
 	C_BaseEntity::EmitSound( filter, SOUND_FROM_WORLD, pszSound, &vecOrigin );
 
-	if ( GameRules() )
-	{
-		pszEffect = GameRules()->TranslateEffectForVisionFilter( "particles", pszEffect );
-	}
-
 	DispatchParticleEffect( pszEffect, vecOrigin, angExplosion );
 }
 

@@ -2346,12 +2346,6 @@ const char* CBaseEntity::GetTracerType()
 
 void CBaseEntity::ModifyEmitSoundParams( EmitSound_t &params )
 {
-#ifdef CLIENT_DLL
-	if ( GameRules() )
-	{
-		params.m_pSoundName = GameRules()->TranslateEffectForVisionFilter( "sounds", params.m_pSoundName );
-	}
-#endif
 }
 
 //-----------------------------------------------------------------------------

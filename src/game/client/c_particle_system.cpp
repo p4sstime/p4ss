@@ -225,11 +225,6 @@ void ParticleEffectCallback( const CEffectData &data )
 	}	
 	else
 	{
-		if ( GameRules() )
-		{
-			pszName = GameRules()->TranslateEffectForVisionFilter( "particles", pszName );
-		}
-
 		pEffect = CNewParticleEffect::Create( NULL, pszName );
 		if ( pEffect->IsValid() )
 		{

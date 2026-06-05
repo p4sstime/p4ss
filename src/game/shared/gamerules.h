@@ -196,9 +196,6 @@ public:
 
 	virtual bool AllowWeatherParticles( void ) { return true; }
 
-	virtual bool AllowMapVisionFilterShaders( void ) { return false; }
-	virtual const char* TranslateEffectForVisionFilter( const char *pchEffectType, const char *pchEffectName ) { return pchEffectName; }
-
 	virtual bool IsLocalPlayer( int nEntIndex );
 
 	virtual void ModifySentChat( char *pBuf, int iBufSize ) { return; }

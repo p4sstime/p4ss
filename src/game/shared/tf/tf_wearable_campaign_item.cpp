@@ -22,10 +22,6 @@ END_NETWORK_TABLE()
 BEGIN_DATADESC( CTFWearableCampaignItem )
 END_DATADESC()
 
-
-#define WEARABLE_PARTICLE_SCORE					"pyrovision_explosion"				
-#define WEARABLE_PARTICLE_COMPLETED				"pyrovision_explosion"
-
 struct wearable_campaign_item_state_info_t
 {
 	wearable_state_t m_nState;

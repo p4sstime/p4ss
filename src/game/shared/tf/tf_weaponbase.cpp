@@ -812,16 +812,6 @@ void CTFWeaponBase::Equip( CBaseCombatCharacter *pOwner )
 	{
 		m_bFlipViewModel = pItem->GetStaticData()->ShouldFlipViewmodels();
 
-		// Also precache the vision filtered display models here.
-		if ( pItem->GetVisionFilteredDisplayModel() )
-		{
-			if ( modelinfo->GetModelIndex( pItem->GetVisionFilteredDisplayModel() ) == -1 ) 
-			{
-				tmZone( TELEMETRY_LEVEL0, TMZF_NONE, "%s - Vision Filtered Display Model Late Precache", __FUNCTION__ );
-				CBaseEntity::PrecacheModel( pItem->GetVisionFilteredDisplayModel() );
-			}
-		}
-
 #ifdef GAME_DLL
 		UpdateExtraWearables();
 		CTFPlayer *pTFPlayer = ToTFPlayer( pOwner );

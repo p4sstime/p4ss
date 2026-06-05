@@ -749,7 +749,6 @@ public:
 	int			GetInventoryImagePosition( int iIndex ) const	{ Assert( iIndex >= 0 && iIndex < 2); return m_iInventoryImagePosition[iIndex]; }
 	int			GetInventoryImageSize( int iIndex ) const	{ Assert( iIndex >= 0 && iIndex < 2); return m_iInventoryImageSize[iIndex]; }
 	int			GetDropType( void ) const			{ return m_iDropType; }
-	int			GetVisionFilterFlags( void ) const	{ return m_nVisionFilterFlags; }
 	int			GetSubType( void ) const	{ return m_iSubType; }
 	item_capabilities_t GetCapabilities( void ) const { return m_iCapabilities; }
 	const char	*GetBaseFunctionalItemName() const	{ return m_pszBaseFunctionalItemName; }
@@ -781,7 +780,6 @@ public:
 
 	const char	*GetExtraWearableModel( void ) const			{ return m_pszWorldExtraWearableModel; }
 	const char	*GetExtraWearableViewModel( void ) const		{ return m_pszWorldExtraWearableViewModel; }
-	const char  *GetVisionFilteredDisplayModel() const			{ return m_pszVisionFilteredDisplayModel; }
 	const char	*GetItemDesc( void ) const						{ return m_pszItemDesc; }
 	bool		IsActingAsAWearable( void ) const				{ return m_bActAsWearable; }
 	bool		IsActingAsAWeapon( void ) const					{ return m_bActAsWeapon; }
@@ -935,7 +933,6 @@ private:
 	const char		*m_pszWorldDisplayModel;
 	const char		*m_pszWorldExtraWearableModel;		// Some weapons attach an extra wearable item to the player
 	const char		*m_pszWorldExtraWearableViewModel;	// Some weapons attach an extra wearable view model item to the player
-	const char		*m_pszVisionFilteredDisplayModel;	// Some weapons display differently depending on the viewer's filters
 
 	// If set, we use the base hands model for a viewmodel, and bonemerge the above player model
 	bool			m_bAttachToHands;
@@ -993,9 +990,6 @@ private:
 	// ---------------------------------------------
 	// How to behave when the player wearing the item dies.
 	int				m_iDropType;
-
-	// Meet the pyro makes some items invisible unless you're wearing Pyro Goggles
-	int				m_nVisionFilterFlags;
 
 	// Temporary. Revisit this in the engineer update. Enables an additional buildable.
 	int				m_iSubType;

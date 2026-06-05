@@ -699,8 +699,6 @@ bool CTFHudDeathNotice::EventIsPlayerDeath( const char* eventName )
 //-----------------------------------------------------------------------------
 void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 {
-	const bool bIsSillyPyroVision = IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO );
-
 	const char *pszEventName = event->GetName();
 
 	if ( FStrEq( pszEventName, "player_death" ) || FStrEq( pszEventName, "object_destroyed" ) )
@@ -723,57 +721,9 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 		// if there was an assister, put both the killer's and assister's names in the death message
 		int iAssisterID = engine->GetPlayerForUserID( event->GetInt( "assister" ) );
 
-		EHorriblePyroVisionHack ePyroVisionHack = kHorriblePyroVisionHack_KillAssisterType_Default;
 		CUtlConstString sAssisterNameScratch;
 		const char *assister_name = ( iAssisterID > 0 ? GetPlayerDeathNoticeName( iAssisterID ) : NULL );
 		
-		// If we don't have a real assister (would have been passed in to us as a player index) and
-		// we're in crazy pyrovision mode and we got a dummy assister, than fall back and display
-		// that just for giggles. We use this so the Balloonicorn and friends can get the assist
-		// credit they so rightly deserve.
-		if ( !assister_name && bIsSillyPyroVision )
-		{
-			// Ignore this for self-kills.
-			if ( bIsObjectDestroyed || (iKillerID != iVictimID) )
-			{
-				const char *pszMaybeFallbackAssisterName = event->GetString( "assister_fallback" );
-				if ( pszMaybeFallbackAssisterName && pszMaybeFallbackAssisterName[0] )
-				{
-					// We store the type of silly assist in the first byte of the string because we
-					// are terrible people.
-					ePyroVisionHack = (EHorriblePyroVisionHack)pszMaybeFallbackAssisterName[0];
-					Assert( ePyroVisionHack != kHorriblePyroVisionHack_KillAssisterType_Default );
-					pszMaybeFallbackAssisterName = &pszMaybeFallbackAssisterName[1];
-
-					// If we pass in a localization string, we need to convert it back to ANSI temporarily.
-					// This won't localize "The" Balloonicorn because we don't have a real item with a real
-					// quality, etc., just a single localization token.
-					switch ( ePyroVisionHack )
-					{
-						case kHorriblePyroVisionHack_KillAssisterType_LocalizationString:
-						case kHorriblePyroVisionHack_KillAssisterType_LocalizationString_First:
-						{
-							wchar_t *wszLocalizedItemName = GLocalizationProvider()->Find( pszMaybeFallbackAssisterName );
-							char szANSIConvertedItemName[ MAX_PLAYER_NAME_LENGTH ];
-							g_pVGuiLocalize->ConvertUnicodeToANSI( wszLocalizedItemName, szANSIConvertedItemName, MAX_PLAYER_NAME_LENGTH );
-							sAssisterNameScratch = szANSIConvertedItemName;
-							assister_name = sAssisterNameScratch.Get();
-							break;
-						}
-						case kHorriblePyroVisionHack_KillAssisterType_CustomName:
-						case kHorriblePyroVisionHack_KillAssisterType_CustomName_First:
-						{
-							sAssisterNameScratch = pszMaybeFallbackAssisterName;
-							assister_name = sAssisterNameScratch.Get();
-							break;
-						}
-						default:
-							assert( !"Unknown pyro item hack type! Something has gone horribly, horribly worse." );
-					}
-				}
-			}
-		}
-
 		bool bMultipleKillers = false;
 
 		if ( assister_name )
@@ -781,14 +731,6 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 			DeathNoticeItem &msg = m_DeathNotices[ iDeathNoticeMsg ];
 			const char *pszKillerName = msg.Killer.szName;
 			const char *pszAssisterName = assister_name;
-
-			// Check to see if we're swapping the killer and the assister. We use this so the brain slug can get the kill
-			// credit for the HUD death notices, with the player being the assister.
-			if ( pszAssisterName && (ePyroVisionHack == kHorriblePyroVisionHack_KillAssisterType_CustomName_First ||
-									 ePyroVisionHack == kHorriblePyroVisionHack_KillAssisterType_LocalizationString_First) )
-			{
-				std::swap( pszKillerName, pszAssisterName );
-			}
 
 			char szKillerBuf[MAX_PLAYER_NAME_LENGTH*2];
 			Q_snprintf( szKillerBuf, ARRAYSIZE(szKillerBuf), "%s + %s", pszKillerName, pszAssisterName );
@@ -831,22 +773,22 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, int iDeathNoticeMsg )
 
 			if ( deathFlags & TF_DEATH_DOMINATION )
 			{
-				AddAdditionalMsg( iKillerID, iVictimID, bIsSillyPyroVision ? "#Msg_Dominating_What" : "#Msg_Dominating" );
+				AddAdditionalMsg( iKillerID, iVictimID, "#Msg_Dominating" );
 				PlayRivalrySounds( iKillerID, iVictimID, TF_DEATH_DOMINATION );
 			}
 			if ( deathFlags & TF_DEATH_ASSISTER_DOMINATION && ( iAssisterID > 0 ) )
 			{
-				AddAdditionalMsg( iAssisterID, iVictimID, bIsSillyPyroVision ? "#Msg_Dominating_What" : "#Msg_Dominating" );
+				AddAdditionalMsg( iAssisterID, iVictimID, "#Msg_Dominating" );
 				PlayRivalrySounds( iAssisterID, iVictimID, TF_DEATH_DOMINATION );
 			}
 			if ( deathFlags & TF_DEATH_REVENGE ) 
 			{
-				AddAdditionalMsg( iKillerID, iVictimID, bIsSillyPyroVision ? "#Msg_Revenge_What" : "#Msg_Revenge" );
+				AddAdditionalMsg( iKillerID, iVictimID, "#Msg_Revenge" );
 				PlayRivalrySounds( iKillerID, iVictimID, TF_DEATH_REVENGE );
 			}
 			if ( deathFlags & TF_DEATH_ASSISTER_REVENGE && ( iAssisterID > 0 ) ) 
 			{
-				AddAdditionalMsg( iAssisterID, iVictimID, bIsSillyPyroVision ? "#Msg_Revenge_What" : "#Msg_Revenge" );
+				AddAdditionalMsg( iAssisterID, iVictimID, "#Msg_Revenge" );
 				PlayRivalrySounds( iAssisterID, iVictimID, TF_DEATH_REVENGE );
 			}
 		}

@@ -827,14 +827,6 @@ bool UTIL_IsLowViolence( void )
 	if ( !violence_hblood.GetBool() || !violence_ablood.GetBool() || !violence_hgibs.GetBool() || !violence_agibs.GetBool() )
 		return true;
 
-#ifdef TF_CLIENT_DLL
-	// Use low violence if the local player has an item that allows them to see it (Pyro Goggles)
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		return true;
-	}
-#endif
-
 	return engine->IsLowViolence();
 }
 

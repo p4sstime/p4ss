@@ -926,15 +926,6 @@ const char *CEconItemView::GetExtraWearableViewModel() const
 	return pData->GetExtraWearableViewModel();
 }
 
-const char *CEconItemView::GetVisionFilteredDisplayModel() const
-{
-	CEconItemDefinition *pData = GetStaticData();
-	if ( !pData )
-		return NULL;
-
-	return pData->GetVisionFilteredDisplayModel();
-}
-
 //-----------------------------------------------------------------------------
 // Purpose: Return the animation set that this item wants the player to use (ie., melee, item1, pda)
 //-----------------------------------------------------------------------------

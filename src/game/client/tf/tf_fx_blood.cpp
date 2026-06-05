@@ -38,23 +38,10 @@ void TFBloodSprayCallback( Vector vecOrigin, Vector vecNormal, ClientEntityHandl
 	{
 		bUnderwater = true;
 	}
-
-	bool bPyroVision = false;
-#ifdef CLIENT_DLL
-	// Use birthday fun if the local player has an item that allows them to see it (Pyro Goggles)
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		bPyroVision = true;
-	}
-#endif
 	 
 	if ( !bUnderwater && TFGameRules() && TFGameRules()->IsBirthday() && RandomFloat(0,1) < 0.2 )
 	{
 		DispatchParticleEffect( "bday_blood", vecOrigin, vecAngles, pPlayer );
-	}
-	else if ( TFGameRules() && bPyroVision )
-	{
-		DispatchParticleEffect( "pyrovision_blood", vecOrigin, vecAngles, pPlayer );
 	}
 	else if ( UTIL_IsLowViolence() )
 	{

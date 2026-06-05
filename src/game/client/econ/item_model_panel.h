@@ -312,7 +312,6 @@ private:
 	vgui::Label			*m_pItemAttribLabel;
 	vgui::Label			*m_pItemEquippedLabel;
 	vgui::Label			*m_pItemQuantityLabel;
-	vgui::ImagePanel	*m_pVisionRestrictionImage;
 	vgui::ImagePanel	*m_pIsUnusualImage;
 	vgui::Label			*m_pSeriesLabel;
 	vgui::Label			*m_pMatchesLabel;

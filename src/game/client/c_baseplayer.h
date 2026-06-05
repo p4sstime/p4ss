@@ -220,9 +220,6 @@ public:
 	static C_BasePlayer			*GetLocalPlayer( void );
 	int							GetUserID( void );
 	virtual bool				CanSetSoundMixer( void );
-	virtual int					GetVisionFilterFlags( bool bWeaponsCheck = false ) { return 0x00; }
-	bool						HasVisionFilterFlags( int nFlags, bool bWeaponsCheck = false ) { return ( GetVisionFilterFlags( bWeaponsCheck ) & nFlags ) == nFlags; }
-	virtual void				CalculateVisionUsingCurrentFlags( void ) {}
 	void						BuildFirstPersonMeathookTransformations( CStudioHdr *hdr, Vector *pos, Quaternion q[], const matrix3x4_t& cameraTransform, int boneMask, CBoneBitList &boneComputed, const char *pchHeadBoneName );
 
 	// Specific queries about this player.
@@ -613,9 +610,6 @@ protected:
 	float			m_flFreezeZOffset;
 
 	float			m_flNextAchievementAnnounceTime;
-
-	int				m_nForceVisionFilterFlags; // Force our vision filter to a specific setting
-	int				m_nLocalPlayerVisionFlags;
 
 #if defined USES_ECON_ITEMS
 	// Wearables

@@ -305,10 +305,6 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE( CBaseEntity, DT_BaseEntity )
 	SendPropInt		(SENDINFO(m_bAnimatedEveryTick),		1, SPROP_UNSIGNED ),
 	SendPropBool( SENDINFO( m_bAlternateSorting )),
 
-#ifdef TF_DLL
-	SendPropArray3( SENDINFO_ARRAY3(m_nModelIndexOverrides), SendPropInt( SENDINFO_ARRAY(m_nModelIndexOverrides), SP_MODEL_INDEX_BITS, 0 ) ),
-#endif
-
 END_SEND_TABLE()
 
 
@@ -737,29 +733,6 @@ void CBaseEntity::SetModelIndex( int index )
 		}
 	}
 	DispatchUpdateTransmitState();
-}
-
-void CBaseEntity::ClearModelIndexOverrides( void )
-{
-#ifdef TF_DLL
-	for ( int index = 0 ; index < MAX_VISION_MODES ; index++ )
-	{
-		m_nModelIndexOverrides.Set( index, 0 );
-	}
-#endif
-}
-
-void CBaseEntity::SetModelIndexOverride( int index, int nValue )
-{
-#ifdef TF_DLL
-	if ( ( index >= VISION_MODE_NONE ) && ( index < MAX_VISION_MODES ) )
-	{
-		if ( nValue != m_nModelIndexOverrides[index] )
-		{
-			m_nModelIndexOverrides.Set( index, nValue );
-		}	
-	}
-#endif
 }
 	  
 // position to shoot at
@@ -2221,10 +2194,6 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 
 	//DEFINE_FIELD( m_DamageModifiers, FIELD_?? ), // can't save?
 	// DEFINE_FIELD( m_fDataObjectTypes, FIELD_INTEGER ),
-
-#ifdef TF_DLL
-	DEFINE_ARRAY( m_nModelIndexOverrides, FIELD_INTEGER, MAX_VISION_MODES ),
-#endif
 
 END_DATADESC()
 

@@ -1268,7 +1268,6 @@ CItemModelPanel::CItemModelPanel( vgui::Panel *parent, const char *name ) : vgui
 	m_pItemAttribLabel = NULL;
 	m_pItemEquippedLabel = NULL;
 	m_pItemQuantityLabel = NULL;
-	m_pVisionRestrictionImage = NULL;
 	m_pIsUnusualImage = NULL;
 	m_pSeriesLabel = NULL;
 	m_pMainContentContainer = NULL;
@@ -1335,7 +1334,6 @@ void CItemModelPanel::ApplySchemeSettings( vgui::IScheme *pScheme )
 	m_pItemAttribLabel = NULL;
 	m_pItemEquippedLabel = NULL;
 	m_pItemQuantityLabel = NULL;
-	m_pVisionRestrictionImage = NULL;
 	m_pIsUnusualImage = NULL;
 	m_pSeriesLabel = NULL;
 	m_pMatchesLabel = NULL;
@@ -1421,7 +1419,6 @@ void CItemModelPanel::LoadResFileForCurrentItem( bool bForceLoad )
 	m_pItemAttribLabel = dynamic_cast<vgui::Label*>( FindChildByName( "attriblabel", true ) );
 	m_pItemEquippedLabel = dynamic_cast<vgui::Label*>( FindChildByName( "equippedlabel", true ) );
 	m_pItemQuantityLabel = dynamic_cast<vgui::Label*>( FindChildByName( "quantitylabel", true ) );
-	m_pVisionRestrictionImage = dynamic_cast<vgui::ImagePanel*>( FindChildByName( "vision_restriction_icon", true ) );
 
 	m_pIsUnusualImage = dynamic_cast<vgui::ImagePanel*>( FindChildByName( "is_unusual_icon", true ) );
 
@@ -1439,11 +1436,6 @@ void CItemModelPanel::LoadResFileForCurrentItem( bool bForceLoad )
 	{
 		m_pItemQuantityLabel->SetKeyBoardInputEnabled( false );
 		m_pItemQuantityLabel->SetMouseInputEnabled( false );
-	}
-	if ( m_pVisionRestrictionImage )
-	{
-		m_pVisionRestrictionImage->SetKeyBoardInputEnabled( false );
-		m_pVisionRestrictionImage->SetMouseInputEnabled( false );
 	}
 	if ( m_pIsUnusualImage )
 	{
@@ -1696,11 +1688,6 @@ void CItemModelPanel::PerformLayout( void )
 	{
 		m_pTF2Icon->SetPos( xpos - m_pTF2Icon->GetWide() + m_iTF2IconOffsetX, ypos + m_iTF2IconOffsetY );
 		ypos += m_pTF2Icon->GetTall() * 0.9;
-	}
-	if ( m_pVisionRestrictionImage && m_pVisionRestrictionImage->IsVisible() )
-	{
-		m_pVisionRestrictionImage->SetPos( xpos - m_pVisionRestrictionImage->GetWide(), ypos );
-		ypos += m_pVisionRestrictionImage->GetTall() * 0.9;
 	}
 	if ( m_pIsUnusualImage && m_pIsUnusualImage->IsVisible() )
 	{
@@ -2375,10 +2362,6 @@ void CItemModelPanel::HideAllModifierIcons()
 	{
 		m_pItemQuantityLabel->SetVisible( false );
 	}
-	if ( m_pVisionRestrictionImage )
-	{
-		m_pVisionRestrictionImage->SetVisible( false );
-	}
 	if ( m_pIsUnusualImage )
 	{
 		m_pIsUnusualImage->SetVisible( false );
@@ -2630,46 +2613,6 @@ void CItemModelPanel::UpdatePanels( void )
 		if ( !UpdateSeriesLabel() )
 		{
 			UpdateQuantityLabel();
-		}
-	}
-
-	if ( m_pVisionRestrictionImage )
-	{
-		int nVisionFilterFlags = 0;
-		const CEconItemDefinition *pData = m_ItemData.GetItemDefinition();
-		if ( !m_bModelOnly && pData )
-		{
-			nVisionFilterFlags = pData->GetVisionFilterFlags();
-		}
-
-		switch ( nVisionFilterFlags )
-		{
-			default:
-				AssertMsg1( false, "Unexpected vision restriction flags %d", nVisionFilterFlags );
-			case 0:
-				m_pVisionRestrictionImage->SetVisible( false );
-				break;
-#ifdef TF_CLIENT_DLL
-			case 1:
-				m_pVisionRestrictionImage->SetImage( "viewmode_pyrovision" );
-				m_pVisionRestrictionImage->SetVisible( true );
-				break;
-			case 2:
-				// Check if most players who have not specifically opted in will see the item.
-				if ( TFGameRules() ? TFGameRules()->IsHolidayActive( kHoliday_HalloweenOrFullMoon ) : TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-				{
-					m_pVisionRestrictionImage->SetImage( "viewmode_spooky" );
-				}
-				else
-				{
-					m_pVisionRestrictionImage->SetImage( "viewmode_spooky_off" );
-				}
-				m_pVisionRestrictionImage->SetVisible( true );
-				break;
-			case 4:
-				m_pVisionRestrictionImage->SetVisible( false );
-				break;
-#endif
 		}
 	}
 	

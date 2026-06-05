@@ -87,11 +87,6 @@ void CEconWearable::InternalSetPlayerDisplayModel( void )
 			if ( pItem->GetStaticData()->IsContentStreamable() )
 			{
 				modelinfo->RegisterDynamicModel( pszPlayerDisplayModel, IsClient() );
-
-				if ( pItem->GetVisionFilteredDisplayModel() && pItem->GetVisionFilteredDisplayModel()[ 0 ] != '\0' )
-				{
-					modelinfo->RegisterDynamicModel( pItem->GetVisionFilteredDisplayModel(), IsClient() );
-				}
 			}
 			SetModel( pszPlayerDisplayModel );
 		}
@@ -314,15 +309,6 @@ void CEconWearable::UpdateWearableBodyGroups( CBasePlayer* pPlayer )
 #endif
 
 		int nVisibleState = 1;
-#ifdef TF_CLIENT_DLL
-		if ( pItem->ShouldHideForVisionFilterFlags() )
-		{
-			// Items that shouldn't draw (pyro-vision filtered) shouldn't change any body group states
-			// unless they have no model (hatless hats)
-			nVisibleState = 0;
-		}
-#endif
-
 		pItem->UpdateBodygroups( pPlayer, nVisibleState );
 	}
 }

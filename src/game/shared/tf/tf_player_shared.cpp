@@ -7270,7 +7270,7 @@ void CTFPlayerShared::OnAddBurning( void )
 	// Start the burning effect
 	if ( !m_pOuter->m_pBurningEffect )
 	{
-		if ( !( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) && m_pOuter->IsLocalPlayer() ) )
+		if ( !m_pOuter->IsLocalPlayer() )
 		{
 			const char *pEffectName = ( m_pOuter->GetTeamNumber() == TF_TEAM_RED ) ? "burningplayer_red" : "burningplayer_blue";
 			m_pOuter->m_pBurningEffect = m_pOuter->ParticleProp()->Create( pEffectName, PATTACH_ABSORIGIN_FOLLOW );

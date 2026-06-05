@@ -275,9 +275,6 @@ void CTFLunchBox::SecondaryAttack( void )
 			pMedKit->SetModel( LUNCHBOX_DROP_MODEL );
 		}
 
-		// clear out the overrides so the thrown sandvich/steak look correct in either vision mode
-		pMedKit->ClearModelIndexOverrides();
-
 		pMedKit->SetAbsAngles( vec3_angle );
 		pMedKit->SetSize( LUNCHBOX_DROPPED_MINS, LUNCHBOX_DROPPED_MAXS );
 

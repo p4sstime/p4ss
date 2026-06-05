@@ -46,8 +46,6 @@ void CAmmoPack::Precache( void )
 	PrecacheModel( TF_AMMOPACK_LARGE_BDAY ); // always precache this for PyroVision
 
 	BaseClass::Precache();
-
-	UpdateModelIndexOverrides();
 }
 
 //-----------------------------------------------------------------------------

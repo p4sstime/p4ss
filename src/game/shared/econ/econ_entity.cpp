@@ -423,11 +423,6 @@ void CEconEntity::UpdateModelToClass( void )
 				{
 					modelinfo->RegisterDynamicModel( pszModelAlt, IsClient() );
 				}
-
-				if ( pItem->GetVisionFilteredDisplayModel() && pItem->GetVisionFilteredDisplayModel()[ 0 ] != '\0' )
-				{
-					modelinfo->RegisterDynamicModel( pItem->GetVisionFilteredDisplayModel(), IsClient() );
-				}
 			}
 
 			SetModel( pszModel );
@@ -754,15 +749,7 @@ bool CEconEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 			const char *pszScriptModelAlt = pScriptItem->GetStaticData()->GetPlayerDisplayModelAlt( iClass );
 			if ( !pszScriptModelAlt || !pszScriptModelAlt[0] || ( FStrEq( pszClientModel, pszScriptModelAlt ) == false ) )
 			{
-				// The Alt model didn't work... let's try the vision filtered display model if it happens to exist
-				pszScriptModel = pScriptItem->GetVisionFilteredDisplayModel();
-				if ( !pszScriptModel || !pszScriptModel[0] )
-					return false;
-
-				if ( FStrEq( pszClientModel, pszScriptModel ) == false )
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 	}
@@ -1789,36 +1776,7 @@ IMaterial* CEconEntity::GetEconWeaponMaterialOverride( int iTeam )
 
 bool CEconEntity::ShouldDraw()
 {
-	if ( ShouldHideForVisionFilterFlags() )
-	{
-		return false;
-	}
-
 	return BaseClass::ShouldDraw();
-}
-
-bool CEconEntity::ShouldHideForVisionFilterFlags( void )
-{
-	CEconItemView *pItem = GetAttributeContainer()->GetItem();
-	if ( pItem && pItem->IsValid() )
-	{
-		CEconItemDefinition *pData = pItem->GetStaticData();
-		if ( pData )
-		{
-			int nVisionFilterFlags = pData->GetVisionFilterFlags();
-			if ( nVisionFilterFlags != 0 )
-			{
-				// Only visible if the local player has an item that allows them to see it (Pyro Goggles)
-				if ( !IsLocalPlayerUsingVisionFilterFlags( nVisionFilterFlags, true ) )
-				{
-					// They didn't have the correct vision flags
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
 }
 
 bool CEconEntity::IsTransparent( void )

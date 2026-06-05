@@ -96,17 +96,6 @@ int C_TFAmmoPack::GetWorldModelIndex( void )
 	if ( m_nWorldModelIndex == 0 )
 		return m_nModelIndex;
 
-	if ( GameRules() )
-	{
-		const char *pBaseName = modelinfo->GetModelName( modelinfo->GetModel( m_nWorldModelIndex ) );
-		const char *pTranslatedName = GameRules()->TranslateEffectForVisionFilter( "weapons", pBaseName );
-
-		if ( pTranslatedName != pBaseName )
-		{
-			return modelinfo->GetModelIndex( pTranslatedName );
-		}
-	}
-
 	return m_nWorldModelIndex;
 }
 

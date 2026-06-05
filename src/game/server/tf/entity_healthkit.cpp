@@ -56,8 +56,6 @@ void CHealthKit::Precache( void )
 	PrecacheModel( TF_MEDKIT_LARGE_HALLOWEEN ); // always precache this for Halloween
 
 	BaseClass::Precache();
-
-	UpdateModelIndexOverrides();
 }
 
 //-----------------------------------------------------------------------------

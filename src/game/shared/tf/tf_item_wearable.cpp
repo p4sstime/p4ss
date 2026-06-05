@@ -467,17 +467,6 @@ int CTFWearable::GetWorldModelIndex( void )
 		}
 	}
 
-	if ( GameRules() )
-	{
-		const char *pBaseName = modelinfo->GetModelName( modelinfo->GetModel( m_nWorldModelIndex ) );
-		const char *pTranslatedName = GameRules()->TranslateEffectForVisionFilter( "weapons", pBaseName );
-
-		if ( pTranslatedName != pBaseName )
-		{
-			return modelinfo->GetModelIndex( pTranslatedName );
-		}
-	}
-
 	return m_nWorldModelIndex;
 }
 

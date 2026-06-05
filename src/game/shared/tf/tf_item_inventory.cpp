@@ -22,7 +22,6 @@
 #include "baseachievement.h"
 #include "achievements_tf.h"
 #include "econ/econ_item_preset.h"
-#include "tf_shared_content_manager.h"
 #include "c_playerresource.h"
 #include "materialsystem/itexture.h"
 

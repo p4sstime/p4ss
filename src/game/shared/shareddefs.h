@@ -968,28 +968,6 @@ enum
 	kActivityLookup_Missing = -1,			// has been searched for but wasn't found
 };
 
-#if defined(TF_DLL) || defined(TF_CLIENT_DLL)
-//-----------------------------------------------------------------------------
-// Vision Filters.
-//-----------------------------------------------------------------------------
-// Also used in the item schema to define vision filter or vision mode opt in
-#define TF_VISION_FILTER_NONE			0
-#define TF_VISION_FILTER_PYRO			(1<<0)		// 1
-#define TF_VISION_FILTER_HALLOWEEN		(1<<1)		// 2
-#define TF_VISION_FILTER_ROME			(1<<2)		// 4
-
-// THIS ENUM SHOULD MATCH THE ORDER OF THE FLAGS ABOVE
-enum
-{
-	VISION_MODE_NONE = 0,
-	VISION_MODE_PYRO,
-	VISION_MODE_HALLOWEEN,
-	VISION_MODE_ROME,
-
-	MAX_VISION_MODES
-};
-#endif // TF_DLL || TF_CLIENT_DLL
-
 class CPhysCollide;
 struct collidelist_t
 {

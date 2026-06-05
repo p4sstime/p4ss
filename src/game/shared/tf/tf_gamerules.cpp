@@ -2618,10 +2618,6 @@ CTFGameRules::CTFGameRules()
 	m_bStopWatchWinner.Set( false );
 
 #else // GAME_DLL
-
-	// Vision Filter Translations for swapping out particle effects and models
-	SetUpVisionFilterKeyValues();
-
 	m_bSillyGibs = CommandLine()->FindParm( "-sillygibs" ) ? true : false;
 	if ( m_bSillyGibs )
 	{
@@ -10337,34 +10333,6 @@ void CTFGameRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &inf
 		m_bArenaFirstBlood = true;
 	}
 
-	// Awesome hack for pyroland silliness: if there was no other assister, and the person that got
-	// the kill has some sort of "pet" item (balloonicorn, brainslug, etc.), we send the name of
-	// that item down as the assister. We'll use a custom name if available and fall back to the
-	// localization token (localized on the client) if not.
-	CUtlConstString sAssisterOverrideDesc;
-
-	if ( pScorer && !pAssister )
-	{
-		// Find out whether the killer has at least one item that will ask for kill assist credit.
-		int iKillerHasPetItem = 0;
-		CUtlVector<CBaseEntity *> vecItems;
-		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER_WITH_ITEMS( pScorer, iKillerHasPetItem, &vecItems, counts_as_assister );
-
-		FOR_EACH_VEC( vecItems, i )
-		{
-			CEconEntity *pEconEntity = dynamic_cast<CEconEntity *>( vecItems[i] );
-			if ( !pEconEntity )
-				continue;
-
-			CEconItemView *pEconItemView = pEconEntity->GetAttributeContainer()->GetItem();
-			if ( !pEconItemView )
-				continue;
-
-			sAssisterOverrideDesc = CFmtStr( "%c%s", iKillerHasPetItem == 2 ? kHorriblePyroVisionHack_KillAssisterType_LocalizationString_First : kHorriblePyroVisionHack_KillAssisterType_LocalizationString, pEconItemView->GetItemDefinition()->GetItemBaseName() ).Get();
-			break;
-		}
-	}
-
 	IGameEvent * event = gameeventmanager->CreateEvent( eventName /* "player_death" */ );
 
 	//if ( event && FStrEq( eventName, "throwable_hit" ) )
@@ -10396,11 +10364,6 @@ void CTFGameRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &inf
 		if ( info.GetPlayerPenetrationCount() > 0 )
 		{
 			event->SetInt( "playerpenetratecount", info.GetPlayerPenetrationCount() );
-		}
-
-		if ( !sAssisterOverrideDesc.IsEmpty() )
-		{
-			event->SetString( "assister_fallback", sAssisterOverrideDesc.Get() );
 		}
 
 		event->SetBool( "silent_kill", bSilentKill );
@@ -14184,23 +14147,6 @@ bool CTFGameRules::IsBirthday( void ) const
 	return tf_birthday.GetBool() || IsHolidayActive( kHoliday_TFBirthday );
 }
 
-bool CTFGameRules::IsBirthdayOrPyroVision( void ) const
-{
-	if ( IsBirthday() )
-		return true;
-
-#ifdef CLIENT_DLL
-	// Use birthday fun if the local player has an item that allows them to see it (Pyro Goggles)
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		return true;
-	}
-#endif
-
-	return false;
-}
-
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -14213,326 +14159,11 @@ bool CTFGameRules::IsHolidayActive( /*EHoliday*/ int eHoliday ) const
 }
 
 #ifndef GAME_DLL
-void CTFGameRules::SetUpVisionFilterKeyValues( void )
-{
-	m_pkvVisionFilterShadersMapWhitelist = new KeyValues( "VisionFilterShadersMapWhitelist" );
-	m_pkvVisionFilterShadersMapWhitelist->LoadFromFile( g_pFullFileSystem, "cfg/mtp.cfg", "MOD" );
-
-	m_pkvVisionFilterTranslations = new KeyValues( "VisionFilterTranslations" );
-
-	// **************************************************************************************************
-	// PARTICLES
-	KeyValues *pKVBlock = new KeyValues( "particles" );
-	m_pkvVisionFilterTranslations->AddSubKey( pKVBlock );
-
-	// No special vision
-	KeyValues *pKVFlag = new KeyValues( "0" );
-	pKVFlag->SetString( "flamethrower_rainbow_new_flame", "new_flame" );						
-	//pKVFlag->SetString( "flamethrower_rainbow_FP", "flamethrower" );
-	pKVBlock->AddSubKey( pKVFlag );
-
-	// Pyrovision
-	pKVFlag = new KeyValues( "1" );		//TF_VISION_FILTER_PYRO
-	pKVFlag->SetString( "new_flame", "flamethrower_rainbow_new_flame");							// We weren't changing the default flamethrower previously; let's do that going forward
-	pKVFlag->SetString( "flamethrower_rainbow_new_flame", "flamethrower_rainbow_new_flame" );	// Rainblower defaults to rainbows and we want to ensure that we use it
-	//pKVFlag->SetString( "flamethrower_rainbow_FP", "flamethrower_rainbow_FP" );
-	pKVFlag->SetString( "projectile_fireball", "projectile_fireball_pyrovision" );
-	pKVFlag->SetString( "taunt_pyro_gasblast_fireblast", "taunt_pyro_gasblast_rainbow" );
-	pKVFlag->SetString( "burningplayer_blue", "burningplayer_rainbow_blue" );
-	pKVFlag->SetString( "burningplayer_red", "burningplayer_rainbow_red" );
-	pKVFlag->SetString( "burningplayer_corpse", "burningplayer_corpse_rainbow" );
-	pKVFlag->SetString( "water_blood_impact_red_01", "pyrovision_blood" );
-	pKVFlag->SetString( "blood_impact_red_01", "pyrovision_blood" );
-	pKVFlag->SetString( "blood_spray_red_01", "pyrovision_blood" );
-	pKVFlag->SetString( "blood_spray_red_01_far", "pyrovision_blood" );
-	pKVFlag->SetString( "ExplosionCore_wall", "pyrovision_explosion" );
-	pKVFlag->SetString( "ExplosionCore_buildings", "pyrovision_explosion" );
-	pKVFlag->SetString( "ExplosionCore_MidAir", "pyrovision_explosion" );
-	pKVFlag->SetString( "rockettrail", "pyrovision_rockettrail" );
-	pKVFlag->SetString( "rockettrail_!", "pyrovision_rockettrail" );
-	pKVFlag->SetString( "sentry_rocket", "pyrovision_rockettrail" );
-	pKVFlag->SetString( "flaregun_trail_blue", "pyrovision_flaregun_trail_blue" );
-	pKVFlag->SetString( "flaregun_trail_red", "pyrovision_flaregun_trail_red" );
-	pKVFlag->SetString( "flaregun_trail_crit_blue", "pyrovision_flaregun_trail_crit_blue" );
-	pKVFlag->SetString( "flaregun_trail_crit_red", "pyrovision_flaregun_trail_crit_red" );
-	pKVFlag->SetString( "flaregun_destroyed", "pyrovision_flaregun_destroyed" );
-	pKVFlag->SetString( "scorchshot_trail_blue", "pyrovision_scorchshot_trail_blue" );
-	pKVFlag->SetString( "scorchshot_trail_red", "pyrovision_scorchshot_trail_red" );
-	pKVFlag->SetString( "scorchshot_trail_crit_blue", "pyrovision_scorchshot_trail_crit_blue" );
-	pKVFlag->SetString( "scorchshot_trail_crit_red", "pyrovision_scorchshot_trail_crit_red" );
-	pKVFlag->SetString( "ExplosionCore_MidAir_Flare", "pyrovision_flaregun_destroyed" );
-	pKVFlag->SetString( "pyrotaunt_rainbow_norainbow", "pyrotaunt_rainbow" );
-	pKVFlag->SetString( "pyrotaunt_rainbow_bubbles_flame", "pyrotaunt_rainbow_bubbles" );
-	pKVFlag->SetString( "v_flaming_arrow", "pyrovision_v_flaming_arrow" );
-	pKVFlag->SetString( "flaming_arrow", "pyrovision_flaming_arrow" );
-	pKVFlag->SetString( "flying_flaming_arrow", "pyrovision_flying_flaming_arrow" );
-	pKVFlag->SetString( "taunt_pyro_balloon", "taunt_pyro_balloon_vision" );
-	pKVFlag->SetString( "taunt_pyro_balloon_explosion", "taunt_pyro_balloon_explosion_vision" );
-
-	pKVBlock->AddSubKey( pKVFlag );
-
-	//// Spooky Vision
-	//pKVFlag = new KeyValues( "2" );	//TF_VISION_FILTER_HALLOWEEN
-	//pKVBlock->AddSubKey( pKVFlag );
-
-	// **************************************************************************************************
-	// SOUNDS
-	pKVBlock = new KeyValues( "sounds" );
-	m_pkvVisionFilterTranslations->AddSubKey( pKVBlock );
-
-	// No special vision
-	pKVFlag = new KeyValues( "0" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_start.wav", "weapons/flame_thrower_start.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_loop.wav", "weapons/flame_thrower_loop.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_end.wav", "weapons/flame_thrower_end.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_hit.wav", "weapons/flame_thrower_fire_hit.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_pilot.wav", "weapons/flame_thrower_pilot.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_start.wav", ")weapons/flame_thrower_start.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_loop.wav", ")weapons/flame_thrower_loop.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_end.wav", ")weapons/flame_thrower_end.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_hit.wav", ")weapons/flame_thrower_fire_hit.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_pilot.wav", "weapons/flame_thrower_pilot.wav" );
-	pKVFlag->SetString( "Weapon_Rainblower.Fire", "Weapon_FlameThrower.Fire" );
-	pKVFlag->SetString( "Weapon_Rainblower.FireLoop", "Weapon_FlameThrower.FireLoop" );
-	pKVFlag->SetString( "Weapon_Rainblower.WindDown", "Weapon_FlameThrower.WindDown" );
-	pKVFlag->SetString( "Weapon_Rainblower.FireHit", "Weapon_FlameThrower.FireHit" );
-	pKVFlag->SetString( "Weapon_Rainblower.PilotLoop", "Weapon_FlameThrower.PilotLoop" );
-	pKVFlag->SetString( "Taunt.PyroBalloonicorn", "Taunt.PyroHellicorn" );
-	pKVFlag->SetString( ")items/pyro_music_tube.wav", "common/null.wav" );
-	pKVBlock->AddSubKey( pKVFlag );
-
-	// Pyrovision
-	pKVFlag = new KeyValues( "1" ); //TF_VISION_FILTER_PYRO
-	pKVFlag->SetString( "weapons/rainblower/rainblower_start.wav", "weapons/rainblower/rainblower_start.wav" );		// If we're in PyroVision, explicitly set to ensure this is saved
-	pKVFlag->SetString( "weapons/rainblower/rainblower_loop.wav", "weapons/rainblower/rainblower_loop.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_end.wav", "weapons/rainblower/rainblower_end.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_hit.wav", "weapons/rainblower/rainblower_hit.wav" );
-	pKVFlag->SetString( "weapons/rainblower/rainblower_pilot.wav", "weapons/rainblower/rainblower_pilot.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_start.wav", ")weapons/rainblower/rainblower_start.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_loop.wav", ")weapons/rainblower/rainblower_loop.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_end.wav", ")weapons/rainblower/rainblower_end.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_hit.wav", ")weapons/rainblower/rainblower_hit.wav" );
-	pKVFlag->SetString( ")weapons/rainblower/rainblower_pilot.wav", ")weapons/rainblower/rainblower_pilot.wav" );
-	pKVFlag->SetString( "Weapon_Rainblower.Fire", "Weapon_Rainblower.Fire" );
-	pKVFlag->SetString( "Weapon_Rainblower.FireLoop", "Weapon_Rainblower.FireLoop" );
-	pKVFlag->SetString( "Weapon_Rainblower.WindDown", "Weapon_Rainblower.WindDown" );
-	pKVFlag->SetString( "Weapon_Rainblower.FireHit", "Weapon_Rainblower.FireHit" );
-	pKVFlag->SetString( "Weapon_Rainblower.PilotLoop", "Weapon_Rainblower.PilotLoop" );
-	pKVFlag->SetString( "Taunt.PyroBalloonicorn", "Taunt.PyroBalloonicorn" );
-	pKVFlag->SetString( ")items/pyro_music_tube.wav", ")items/pyro_music_tube.wav" );
-	pKVFlag->SetString( "Taunt.Party_Trick", "Taunt.Party_Trick_Pyro_Vision" );
-	pKVFlag->SetString( "Taunt.GasBlast", "Taunt.GasBlastPyrovision" );
-
-	pKVFlag->SetString( "vo/demoman_PainCrticialDeath01.mp3", "vo/demoman_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainCrticialDeath02.mp3", "vo/demoman_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainCrticialDeath03.mp3", "vo/demoman_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainCrticialDeath04.mp3", "vo/demoman_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainCrticialDeath05.mp3", "vo/demoman_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSevere01.mp3", "vo/demoman_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSevere02.mp3", "vo/demoman_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSevere03.mp3", "vo/demoman_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSevere04.mp3", "vo/demoman_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp01.mp3", "vo/demoman_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp02.mp3", "vo/demoman_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp03.mp3", "vo/demoman_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp04.mp3", "vo/demoman_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp05.mp3", "vo/demoman_LaughShort05.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp06.mp3", "vo/demoman_LaughShort06.mp3" );
-	pKVFlag->SetString( "vo/demoman_PainSharp07.mp3", "vo/demoman_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/demoman_AutoOnFire01.mp3", "vo/demoman_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/demoman_AutoOnFire02.mp3", "vo/demoman_PositiveVocalization03.mp3" );
-	pKVFlag->SetString( "vo/demoman_AutoOnFire03.mp3", "vo/demoman_PositiveVocalization04.mp3" );
-
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath01.mp3", "vo/engineer_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath02.mp3", "vo/engineer_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath03.mp3", "vo/engineer_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath04.mp3", "vo/engineer_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath05.mp3", "vo/engineer_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainCrticialDeath06.mp3", "vo/engineer_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere01.mp3", "vo/engineer_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere02.mp3", "vo/engineer_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere03.mp3", "vo/engineer_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere04.mp3", "vo/engineer_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere05.mp3", "vo/engineer_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere06.mp3", "vo/engineer_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSevere07.mp3", "vo/engineer_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp01.mp3", "vo/engineer_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp02.mp3", "vo/engineer_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp03.mp3", "vo/engineer_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp04.mp3", "vo/engineer_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp05.mp3", "vo/engineer_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp06.mp3", "vo/engineer_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp07.mp3", "vo/engineer_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/engineer_PainSharp08.mp3", "vo/engineer_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/engineer_AutoOnFire01.mp3", "vo/engineer_PositiveVocalization01.mp3" );
-	pKVFlag->SetString( "vo/engineer_AutoOnFire02.mp3", "vo/engineer_Cheers01.mp3" );
-	pKVFlag->SetString( "vo/engineer_AutoOnFire03.mp3", "vo/engineer_Cheers02.mp3" );
-
-	pKVFlag->SetString( "vo/heavy_PainCrticialDeath01.mp3", "vo/heavy_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainCrticialDeath02.mp3", "vo/heavy_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainCrticialDeath03.mp3", "vo/heavy_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSevere01.mp3", "vo/heavy_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSevere02.mp3", "vo/heavy_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSevere03.mp3", "vo/heavy_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSharp01.mp3", "vo/heavy_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSharp02.mp3", "vo/heavy_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSharp03.mp3", "vo/heavy_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSharp04.mp3", "vo/heavy_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/heavy_PainSharp05.mp3", "vo/heavy_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/heavy_AutoOnFire01.mp3", "vo/heavy_PositiveVocalization01.mp3" );
-	pKVFlag->SetString( "vo/heavy_AutoOnFire02.mp3", "vo/heavy_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/heavy_AutoOnFire03.mp3", "vo/heavy_PositiveVocalization03.mp3" );
-	pKVFlag->SetString( "vo/heavy_AutoOnFire04.mp3", "vo/heavy_PositiveVocalization04.mp3" );
-	pKVFlag->SetString( "vo/heavy_AutoOnFire05.mp3", "vo/heavy_PositiveVocalization05.mp3" );
-
-	pKVFlag->SetString( "vo/medic_PainCrticialDeath01.mp3", "vo/medic_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainCrticialDeath02.mp3", "vo/medic_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/medic_PainCrticialDeath03.mp3", "vo/medic_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainCrticialDeath04.mp3", "vo/medic_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSevere01.mp3", "vo/medic_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSevere02.mp3", "vo/medic_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSevere03.mp3", "vo/medic_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSevere04.mp3", "vo/medic_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp01.mp3", "vo/medic_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp02.mp3", "vo/medic_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp03.mp3", "vo/medic_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp04.mp3", "vo/medic_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp05.mp3", "vo/medic_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp06.mp3", "vo/medic_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp07.mp3", "vo/medic_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/medic_PainSharp08.mp3", "vo/medic_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/medic_AutoOnFire01.mp3", "vo/medic_PositiveVocalization01.mp3" );
-	pKVFlag->SetString( "vo/medic_AutoOnFire02.mp3", "vo/medic_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/medic_AutoOnFire03.mp3", "vo/medic_PositiveVocalization03.mp3" );
-	pKVFlag->SetString( "vo/medic_AutoOnFire04.mp3", "vo/medic_PositiveVocalization04.mp3" );
-	pKVFlag->SetString( "vo/medic_AutoOnFire05.mp3", "vo/medic_PositiveVocalization05.mp3" );
-
-	pKVFlag->SetString( "vo/pyro_PainCrticialDeath01.mp3", "vo/pyro_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainCrticialDeath02.mp3", "vo/pyro_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainCrticialDeath03.mp3", "vo/pyro_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere01.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere02.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere03.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere04.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere05.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_PainSevere06.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_AutoOnFire01.mp3", "vo/pyro_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/pyro_AutoOnFire02.mp3", "vo/pyro_LaughHappy01.mp3" );
-
-	pKVFlag->SetString( "vo/scout_PainCrticialDeath01.mp3", "vo/scout_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainCrticialDeath02.mp3", "vo/scout_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/scout_PainCrticialDeath03.mp3", "vo/scout_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere01.mp3", "vo/scout_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere02.mp3", "vo/scout_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere03.mp3", "vo/scout_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere04.mp3", "vo/scout_LaughHappy04.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere05.mp3", "vo/scout_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSevere06.mp3", "vo/scout_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp01.mp3", "vo/scout_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp02.mp3", "vo/scout_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp03.mp3", "vo/scout_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp04.mp3", "vo/scout_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp05.mp3", "vo/scout_LaughShort05.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp06.mp3", "vo/scout_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp07.mp3", "vo/scout_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/scout_PainSharp08.mp3", "vo/scout_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/scout_AutoOnFire01.mp3", "vo/scout_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/scout_AutoOnFire02.mp3", "vo/scout_PositiveVocalization03.mp3" );
-
-	pKVFlag->SetString( "vo/sniper_PainCrticialDeath01.mp3", "vo/sniper_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainCrticialDeath02.mp3", "vo/sniper_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainCrticialDeath03.mp3", "vo/sniper_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainCrticialDeath04.mp3", "vo/sniper_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSevere01.mp3", "vo/sniper_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSevere02.mp3", "vo/sniper_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSevere03.mp3", "vo/sniper_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSevere04.mp3", "vo/sniper_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSharp01.mp3", "vo/sniper_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSharp02.mp3", "vo/sniper_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSharp03.mp3", "vo/sniper_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/sniper_PainSharp04.mp3", "vo/sniper_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/sniper_AutoOnFire01.mp3", "vo/sniper_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/sniper_AutoOnFire02.mp3", "vo/sniper_PositiveVocalization03.mp3" );
-	pKVFlag->SetString( "vo/sniper_AutoOnFire03.mp3", "vo/sniper_PositiveVocalization05.mp3" );
-
-	pKVFlag->SetString( "vo/soldier_PainCrticialDeath01.mp3", "vo/soldier_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainCrticialDeath02.mp3", "vo/soldier_LaughLong02.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainCrticialDeath03.mp3", "vo/soldier_LaughLong03.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainCrticialDeath04.mp3", "vo/soldier_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere01.mp3", "vo/soldier_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere02.mp3", "vo/soldier_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere03.mp3", "vo/soldier_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere04.mp3", "vo/soldier_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere05.mp3", "vo/soldier_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSevere06.mp3", "vo/soldier_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp01.mp3", "vo/soldier_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp02.mp3", "vo/soldier_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp03.mp3", "vo/soldier_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp04.mp3", "vo/soldier_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp05.mp3", "vo/soldier_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp06.mp3", "vo/soldier_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp07.mp3", "vo/soldier_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/soldier_PainSharp08.mp3", "vo/soldier_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/soldier_AutoOnFire01.mp3", "vo/soldier_PositiveVocalization01.mp3" );
-	pKVFlag->SetString( "vo/soldier_AutoOnFire02.mp3", "vo/soldier_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/soldier_AutoOnFire03.mp3", "vo/soldier_PositiveVocalization03.mp3" );
-
-	pKVFlag->SetString( "vo/spy_PainCrticialDeath01.mp3", "vo/spy_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainCrticialDeath02.mp3", "vo/spy_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainCrticialDeath03.mp3", "vo/spy_LaughLong01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSevere01.mp3", "vo/spy_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSevere02.mp3", "vo/spy_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSevere03.mp3", "vo/spy_LaughHappy03.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSevere04.mp3", "vo/spy_LaughHappy01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSevere05.mp3", "vo/spy_LaughHappy02.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSharp01.mp3", "vo/spy_LaughShort01.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSharp02.mp3", "vo/spy_LaughShort02.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSharp03.mp3", "vo/spy_LaughShort03.mp3" );
-	pKVFlag->SetString( "vo/spy_PainSharp04.mp3", "vo/spy_LaughShort04.mp3" );
-	pKVFlag->SetString( "vo/spy_AutoOnFire01.mp3", "vo/spy_PositiveVocalization02.mp3" );
-	pKVFlag->SetString( "vo/spy_AutoOnFire02.mp3", "vo/spy_PositiveVocalization04.mp3" );
-	pKVFlag->SetString( "vo/spy_AutoOnFire03.mp3", "vo/spy_PositiveVocalization05.mp3" );
-
-	pKVBlock->AddSubKey( pKVFlag );
-
-	// Spooky Vision
-	//pKVFlag = new KeyValues( "2" ); // TF_VISION_FILTER_HALLOWEEN
-	//pKVBlock->AddSubKey( pKVFlag );
-
-	// **************************************************************************************************
-	// WEAPONS
-	pKVBlock = new KeyValues( "weapons" );
-	m_pkvVisionFilterTranslations->AddSubKey( pKVBlock );
-
-	// No special vision
-	pKVFlag = new KeyValues( "0" );
-	pKVFlag->SetString( "models/weapons/c_models/c_rainblower/c_rainblower.mdl", "models/weapons/c_models/c_flamethrower/c_flamethrower.mdl" );
-	pKVFlag->SetString( "models/weapons/c_models/c_lollichop/c_lollichop.mdl", "models/weapons/w_models/w_fireaxe.mdl" );
-	pKVBlock->AddSubKey( pKVFlag );
-
-	// Pyrovision
-	pKVFlag = new KeyValues( "1" );
-	pKVFlag->SetString( "models/weapons/c_models/c_rainblower/c_rainblower.mdl", "models/weapons/c_models/c_rainblower/c_rainblower.mdl" );		//explicit set for pyrovision
-	pKVFlag->SetString( "models/weapons/c_models/c_lollichop/c_lollichop.mdl", "models/weapons/c_models/c_lollichop/c_lollichop.mdl" );
-
-	pKVFlag->SetString( "models/player/items/demo/demo_bombs.mdl", "models/player/items/all_class/mtp_bottle_demo.mdl" );
-	pKVFlag->SetString( "models/player/items/pyro/xms_pyro_bells.mdl", "models/player/items/all_class/mtp_bottle_pyro.mdl" );
-	pKVFlag->SetString( "models/player/items/soldier/ds_can_grenades.mdl", "models/player/items/all_class/mtp_bottle_soldier.mdl" );
-	pKVBlock->AddSubKey( pKVFlag );
-
-	// Spooky Vision
-	//pKVFlag = new KeyValues( "2" );
-	//pKVBlock->AddSubKey( pKVFlag );
-}
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 bool CTFGameRules::UseSillyGibs( void )
 {
-	// Use silly gibs if the local player has an item that allows them to see it (Pyro Goggles)
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-		return true;
 	if ( UTIL_IsLowViolence() )
 		return true;
 
@@ -14545,68 +14176,6 @@ bool CTFGameRules::UseSillyGibs( void )
 bool CTFGameRules::AllowWeatherParticles( void )
 {
 	return ( tf_particles_disable_weather.GetBool() == false );
-}
-
-bool CTFGameRules::AllowMapVisionFilterShaders( void )
-{
-	if ( !m_pkvVisionFilterShadersMapWhitelist )
-		return false;
-
-	const char *pMapName = engine->GetLevelName();
-	while ( pMapName && pMapName[ 0 ] != '\\' && pMapName[ 0 ] != '/' )
-	{
-		pMapName++;
-	}
-
-	if ( !pMapName )
-		return false;
-
-	pMapName++;
-
-	return  m_pkvVisionFilterShadersMapWhitelist->GetInt( pMapName, 0 ) != 0;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char* CTFGameRules::TranslateEffectForVisionFilter( const char *pchEffectType, const char *pchEffectName )
-{
-	if ( !pchEffectType || !pchEffectName )
-	{
-		return pchEffectName;
-	}
-
-	CUtlVector<const char *> vecNames;
-	vecNames.AddToTail( pchEffectName );
-
-	// Swap the effect if the local player has an item that allows them to see it (Pyro Goggles)
-	bool bWeaponsOnly = FStrEq( pchEffectType, "weapons" );
-	int nVisionOptInFlags = GetLocalPlayerVisionFilterFlags( bWeaponsOnly );
-
-	KeyValues *pkvParticles = m_pkvVisionFilterTranslations->FindKey( pchEffectType );
-	if ( pkvParticles )
-	{
-		for ( KeyValues *pkvFlag = pkvParticles->GetFirstTrueSubKey(); pkvFlag != NULL; pkvFlag = pkvFlag->GetNextTrueSubKey() )
-		{
-			int nFlag = atoi( pkvFlag->GetName() );
-
-			// Grab any potential translations for this item
-			// Always grab default (No vision) names if they exist
-			if ( ( nVisionOptInFlags & nFlag ) != 0 || nFlag == 0 )
-			{
-				// We either have this vision flag or we have no flags and this is the no flag block
-				const char *pchTranslatedString = pkvFlag->GetString( pchEffectName, NULL );
-
-				if ( pchTranslatedString )
-				{
-					vecNames.AddToHead( pchTranslatedString );
-				}
-			}
-		}
-	}
-
-	// Return the top item in the list.  Currently Halloween replacements would out prioritize Pyrovision if there is any overlap
-	return vecNames.Head();
 }
 
 //-----------------------------------------------------------------------------
@@ -15549,17 +15118,6 @@ const char *CTFGameRules::GetTeamGoalString( int iTeam )
 
 CTFGameRules::~CTFGameRules()
 {
-	if ( m_pkvVisionFilterTranslations )
-	{
-		m_pkvVisionFilterTranslations->deleteThis();
-		m_pkvVisionFilterTranslations = NULL;
-	}
-
-	if ( m_pkvVisionFilterShadersMapWhitelist )
-	{
-		m_pkvVisionFilterShadersMapWhitelist->deleteThis();
-		m_pkvVisionFilterShadersMapWhitelist = NULL;
-	}
 }
 
 //-----------------------------------------------------------------------------

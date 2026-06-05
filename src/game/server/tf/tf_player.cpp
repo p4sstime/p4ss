@@ -2891,7 +2891,6 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheParticleSystem( "burningplayer_rainbow" );
 	PrecacheParticleSystem( "blood_spray_red_01" );
 	PrecacheParticleSystem( "blood_spray_red_01_far" );
-	PrecacheParticleSystem( "pyrovision_blood" );
 
 	PrecacheParticleSystem( "water_blood_impact_red_01" );
 	PrecacheParticleSystem( "blood_impact_red_01" );

@@ -424,9 +424,6 @@ public:
  	virtual string_t		GetModelName( void ) const;
 	const char				*ScriptGetModelName( void ) const;
 
-	void					ClearModelIndexOverrides( void );
-	virtual void			SetModelIndexOverride( int index, int nValue );
-
 public:
 	// virtual methods for derived classes to override
 	virtual bool			TestCollision( const Ray_t& ray, unsigned int mask, trace_t& trace );
@@ -855,10 +852,6 @@ public:
 	// was pev->rendermode
 	CNetworkVar( unsigned char, m_nRenderMode );
 	CNetworkVar( short, m_nModelIndex );
-	
-#ifdef TF_DLL
-	CNetworkArray( int, m_nModelIndexOverrides, MAX_VISION_MODES ); // used to override the base model index on the client if necessary
-#endif
 
 	// was pev->rendercolor
 	CNetworkColor32( m_clrRender );

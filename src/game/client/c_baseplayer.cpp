@@ -451,9 +451,6 @@ C_BasePlayer::C_BasePlayer() : m_iv_vecViewOffset( "C_BasePlayer::m_iv_vecViewOf
 
 	m_bFiredWeapon = false;
 
-	m_nForceVisionFilterFlags = 0;
-	m_nLocalPlayerVisionFlags = 0;
-
 	ListenForGameEvent( "base_player_teleported" );
 }
 
@@ -888,18 +885,8 @@ void C_BasePlayer::PostDataUpdate( DataUpdateType_t updateType )
 			m_flFreezeFrameDistance = RandomFloat( spec_freeze_distance_min.GetFloat(), spec_freeze_distance_max.GetFloat() );
 			m_flFreezeZOffset = RandomFloat( -30, 20 );
 			m_bSentFreezeFrame = false;
-			m_nForceVisionFilterFlags = 0;
 
 			C_BaseEntity *target = GetObserverTarget();
-			if ( target && target->IsPlayer() )
-			{
-				C_BasePlayer *player = ToBasePlayer( target );
-				if ( player )
-				{
-					m_nForceVisionFilterFlags = player->GetVisionFilterFlags();
-					CalculateVisionUsingCurrentFlags();
-				}
-			}
 
 			IGameEvent *pEvent = gameeventmanager->CreateEvent( "show_freezepanel" );
 			if ( pEvent )
@@ -928,17 +915,6 @@ void C_BasePlayer::PostDataUpdate( DataUpdateType_t updateType )
 
 			ConVar *pVar = (ConVar *)cvar->FindVar( "snd_soundmixer" );
 			pVar->Revert();
-
-			m_nForceVisionFilterFlags = 0;
-			CalculateVisionUsingCurrentFlags();
-		}
-		
-		// force calculate vision when the local vision flags changed
-		int nCurrentLocalPlayerVisionFlags = GetLocalPlayerVisionFilterFlags();
-		if ( m_nLocalPlayerVisionFlags != nCurrentLocalPlayerVisionFlags )
-		{
-			CalculateVisionUsingCurrentFlags();
-			m_nLocalPlayerVisionFlags = nCurrentLocalPlayerVisionFlags;
 		}
 
 		if ( m_Local.m_bPrevForceLocalPlayerDraw != m_Local.m_bForceLocalPlayerDraw )

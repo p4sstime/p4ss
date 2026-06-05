@@ -331,7 +331,6 @@ public:
 	static int		CalcPlayerSupportScore( RoundStats_t *pRoundStats, int iPlayerIdx );
 
 	bool			IsBirthday( void ) const;
-	bool			IsBirthdayOrPyroVision( void ) const;
 	virtual bool	IsHolidayActive( /*EHoliday*/ int eHoliday ) const;
 
 	virtual const unsigned char *GetEncryptionKey( void ) { return GetTFEncryptionKey(); }
@@ -735,16 +734,11 @@ bool IsCreepWaveMode( void ) const;
 
 	const char *FormatVideoName( const char *videoName, bool bWithExtension = true );
 
-	void			SetUpVisionFilterKeyValues( void );
-
 	bool			UseSillyGibs( void );
 
 	virtual bool	AllowMapParticleEffect( const char *pszParticleEffect );
 
 	virtual bool	AllowWeatherParticles( void );
-
-	virtual bool AllowMapVisionFilterShaders( void );
-	virtual const char* TranslateEffectForVisionFilter( const char *pchEffectType, const char *pchEffectName );
 
 	virtual void	ModifySentChat( char *pBuf, int iBufSize );
 
@@ -1055,9 +1049,6 @@ private:
 	bool m_bMapForcedTruceDuringBossFight;
 	float m_flNextHalloweenGiftUpdateTime;
 #else
-
-	KeyValues *m_pkvVisionFilterTranslations;
-	KeyValues *m_pkvVisionFilterShadersMapWhitelist;
 
 	bool	m_bSillyGibs;
 

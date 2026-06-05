@@ -115,7 +115,6 @@
 #if defined( TF_CLIENT_DLL )
 #include "rtime.h"
 #include "../engine/audio/public/sound.h"
-#include "tf_shared_content_manager.h"
 #include "tf_gamerules.h"
 #endif
 #include "clientsteamcontext.h"
@@ -1073,10 +1072,6 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	IGameSystem::Add( PerfVisualBenchmark() );
 	IGameSystem::Add( MumbleSystem() );
 	IGameSystem::Add( SteamShareSystem() );
-
-	#if defined( TF_CLIENT_DLL )
-	IGameSystem::Add( TFSharedContentManager() );
-	#endif
 
 #if defined( TF_CLIENT_DLL )
 	if ( g_AbuseReportMgr != NULL )
@@ -2261,7 +2256,6 @@ void OnRenderStart()
 	C_BaseEntity::SetAbsQueriesValid( false );
 
 	Rope_ResetCounters();
-	UpdateLocalPlayerVisionFlags();
 
 	// Interpolate server entities and move aiments.
 	{
@@ -2720,10 +2714,7 @@ void CHLClient::ClientAdjustStartSoundParams( StartSoundParams_t& params )
 
 const char* CHLClient::TranslateEffectForVisionFilter( const char *pchEffectType, const char *pchEffectName )
 {
-	if ( !GameRules() )
-		return pchEffectName;
-
-	return GameRules()->TranslateEffectForVisionFilter( pchEffectType, pchEffectName );
+	return pchEffectName;
 }
 
 bool CHLClient::DisconnectAttempt( void )

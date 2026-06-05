@@ -777,7 +777,6 @@ m_iDefaultSkin( -1 ),
 m_pszWorldDisplayModel( NULL ),
 m_pszWorldExtraWearableModel( NULL ),
 m_pszWorldExtraWearableViewModel( NULL ),
-m_pszVisionFilteredDisplayModel( NULL ),
 m_pszBrassModelOverride( NULL ),
 m_bHideBodyGroupsDeployedOnly( false ),
 m_bAttachToHands( false ),
@@ -843,7 +842,6 @@ bool CEconItemDefinition::BInitFromTestItemKVs( int iNewDefIndex, KeyValues *pKV
 #endif
 
 		m_pszBaseDisplayModel = pKVItem->GetString( "model_player", NULL );
-		m_pszVisionFilteredDisplayModel = pKVItem->GetString( "model_vision_filtered", NULL );
 		m_bAttachToHands = pKVItem->GetInt( "attach_to_hands", 0 ) != 0;
 
 		BInitVisualBlockFromKV( pKVItem );
@@ -1225,11 +1223,6 @@ void CEconItemDefinition::GeneratePrecacheModelStrings( bool bDynamicLoad, CUtlV
 		out_pVecModelStrings->AddToTail( GetExtraWearableViewModel() );
 	}
 
-	if ( GetVisionFilteredDisplayModel() )
-	{
-		out_pVecModelStrings->AddToTail( GetVisionFilteredDisplayModel() );
-	}
-
 	// We don't need to cache the inventory model, because it's never loaded by the game
 }
 
@@ -1561,14 +1554,12 @@ bool CEconItemDefinition::BInitFromKV( KeyValues *pKVItem, CUtlVector<CUtlString
 	m_iInventoryImageSize[0] = atoi( m_pKVItem->GetString( "image_inventory_size_w", "128" ) );
 	m_iInventoryImageSize[1] = atoi( m_pKVItem->GetString( "image_inventory_size_h", "82" ) );
 	m_iInspectPanelDistance = m_pKVItem->GetInt( "inspect_panel_dist", 70 );
-	m_nVisionFilterFlags = m_pKVItem->GetInt( "vision_filter_flags", 0 );
 	m_iSubType = atoi( m_pKVItem->GetString( "subtype", "0" ) );
 	m_pszBaseDisplayModel = m_pKVItem->GetString( "model_player", NULL );
 	m_iDefaultSkin = m_pKVItem->GetInt( "default_skin", -1 );
 	m_pszWorldDisplayModel = m_pKVItem->GetString( "model_world", NULL ); // Not the ideal method. c_models are better, but this is to solve a retrofit problem with the sticky launcher.
 	m_pszWorldExtraWearableModel = m_pKVItem->GetString( "extra_wearable", NULL ); 
 	m_pszWorldExtraWearableViewModel = m_pKVItem->GetString( "extra_wearable_vm", NULL );
-	m_pszVisionFilteredDisplayModel = pKVItem->GetString( "model_vision_filtered", NULL );
 	m_pszBrassModelOverride = m_pKVItem->GetString( "brass_eject_model", NULL );
 	m_bHideBodyGroupsDeployedOnly = m_pKVItem->GetBool( "hide_bodygroups_deployed_only" );
 	m_bAttachToHands = m_pKVItem->GetInt( "attach_to_hands", 0 ) != 0;

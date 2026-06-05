@@ -1046,13 +1046,6 @@ void CSoundControllerImp::Shutdown( CSoundPatch *pSound )
 
 CSoundPatch *CSoundControllerImp::SoundCreate( IRecipientFilter& filter, int nEntIndex, const char *pSoundName )
 {
-#ifdef CLIENT_DLL
-	if ( GameRules() )
-	{
-		pSoundName = GameRules()->TranslateEffectForVisionFilter( "sounds", pSoundName );
-	}
-#endif
-
 	CSoundPatch *pSound = new CSoundPatch;
 
 	// FIXME: This is done so we don't have to futz with the public interface
@@ -1065,13 +1058,6 @@ CSoundPatch *CSoundControllerImp::SoundCreate( IRecipientFilter& filter, int nEn
 CSoundPatch *CSoundControllerImp::SoundCreate( IRecipientFilter& filter, int nEntIndex, int channel, 
 			const char *pSoundName, float attenuation )
 {
-#ifdef CLIENT_DLL
-	if ( GameRules() )
-	{
-		pSoundName = GameRules()->TranslateEffectForVisionFilter( "sounds", pSoundName );
-	}
-#endif
-
 	CSoundPatch *pSound = new CSoundPatch;
 	IHandleEntity* pEnt = (nEntIndex != -1) ? g_pEntityList->LookupEntityByNetworkIndex( nEntIndex ) : NULL;
 	pSound->Init( &filter, static_cast<CBaseEntity*>(pEnt), channel, pSoundName, ATTN_TO_SNDLVL( attenuation ) );
@@ -1082,13 +1068,6 @@ CSoundPatch *CSoundControllerImp::SoundCreate( IRecipientFilter& filter, int nEn
 CSoundPatch *CSoundControllerImp::SoundCreate( IRecipientFilter& filter, int nEntIndex, int channel, 
 			const char *pSoundName, soundlevel_t soundlevel )
 {
-#ifdef CLIENT_DLL
-	if ( GameRules() )
-	{
-		pSoundName = GameRules()->TranslateEffectForVisionFilter( "sounds", pSoundName );
-	}
-#endif
-
 	CSoundPatch *pSound = new CSoundPatch;
 	IHandleEntity* pEnt = (nEntIndex != -1) ? g_pEntityList->LookupEntityByNetworkIndex( nEntIndex ) : NULL;
 	pSound->Init( &filter, static_cast<CBaseEntity*>(pEnt), channel, pSoundName, soundlevel );

@@ -168,13 +168,7 @@ static ConVar r_screenfademaxsize( "r_screenfademaxsize", "0" );
 static ConVar cl_drawmonitors( "cl_drawmonitors", "1" );
 static ConVar r_eyewaterepsilon( "r_eyewaterepsilon", "10.0f", FCVAR_CHEAT );
 
-#ifdef TF_CLIENT_DLL
-static ConVar pyro_dof( "pyro_dof", "1", FCVAR_ARCHIVE );
-#endif
-
 extern ConVar cl_leveloverview;
-
-extern ConVar localplayer_visionflags;
 
 //-----------------------------------------------------------------------------
 // Globals
@@ -798,15 +792,6 @@ CLIENTEFFECT_REGISTER_BEGIN( PrecachePostProcessingEffects )
 	CLIENTEFFECT_MATERIAL( "dev/engine_post" )
 	CLIENTEFFECT_MATERIAL( "dev/motion_blur" )
 	CLIENTEFFECT_MATERIAL( "dev/upscale" )
-
-#ifdef TF_CLIENT_DLL
-	CLIENTEFFECT_MATERIAL( "dev/pyro_blur_filter_y" )
-	CLIENTEFFECT_MATERIAL( "dev/pyro_blur_filter_x" )
-	CLIENTEFFECT_MATERIAL( "dev/pyro_dof" )
-	CLIENTEFFECT_MATERIAL( "dev/pyro_vignette_border" )
-	CLIENTEFFECT_MATERIAL( "dev/pyro_vignette" )
-	CLIENTEFFECT_MATERIAL( "dev/pyro_post" )
-#endif
 
 CLIENTEFFECT_REGISTER_END_CONDITIONAL( engine->GetDXSupportLevel() >= 90 )
 
@@ -5440,15 +5425,6 @@ void CBaseWorldView::DrawSetup( float waterHeight, int nSetupFlags, float waterZ
 		render->PopView( GetFrustum() );
 	}
 
-#ifdef TF_CLIENT_DLL
-	bool bVisionOverride = ( localplayer_visionflags.GetInt() & ( 0x01 ) ); // Pyro-vision Goggles
-
-	if ( savedViewID == VIEW_MAIN && bVisionOverride && pyro_dof.GetBool() )
-	{
-		SSAO_DepthPass();
-	}
-#endif
-
 	g_CurrentViewID = savedViewID;
 }
 
@@ -5526,14 +5502,6 @@ void CBaseWorldView::DrawExecute( float waterHeight, view_id_t viewID, float wat
 		DrawWorld( waterZAdjust );
 		DrawOpaqueRenderables( DepthMode );
 
-#ifdef TF_CLIENT_DLL
-		bool bVisionOverride = ( localplayer_visionflags.GetInt() & ( 0x01 ) ); // Pyro-vision Goggles
-
-		if ( g_CurrentViewID == VIEW_MAIN && bVisionOverride && pyro_dof.GetBool() ) // Pyro-vision Goggles
-		{
-			DrawDepthOfField();
-		}
-#endif
 		DrawTranslucentRenderables( false, false );
 		DrawNoZBufferTranslucentRenderables();
 	}
@@ -5541,14 +5509,6 @@ void CBaseWorldView::DrawExecute( float waterHeight, view_id_t viewID, float wat
 	{
 		DrawWorld( waterZAdjust );
 
-#ifdef TF_CLIENT_DLL
-		bool bVisionOverride = ( localplayer_visionflags.GetInt() & ( 0x01 ) ); // Pyro-vision Goggles
-
-		if ( g_CurrentViewID == VIEW_MAIN && bVisionOverride && pyro_dof.GetBool() ) // Pyro-vision Goggles
-		{
-			DrawDepthOfField();
-		}
-#endif
 		// Draw translucent world brushes only, no entities
 		DrawTranslucentWorldInLeaves( false );
 	}

@@ -1844,16 +1844,6 @@ enum BombDeployingState_t
 	TF_BOMB_DEPLOYING_NOT_COUNT,
 };
 
-enum EHorriblePyroVisionHack
-{
-	kHorriblePyroVisionHack_KillAssisterType_Default						= 0,
-
-	kHorriblePyroVisionHack_KillAssisterType_CustomName						= 'a',
-	kHorriblePyroVisionHack_KillAssisterType_LocalizationString				= 'b',
-	kHorriblePyroVisionHack_KillAssisterType_CustomName_First				= 'c',
-	kHorriblePyroVisionHack_KillAssisterType_LocalizationString_First		= 'd',
-};
-
 enum EAttackBonusEffects_t
 {
 	kBonusEffect_Crit = 0,

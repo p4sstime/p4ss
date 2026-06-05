@@ -104,17 +104,6 @@ void C_BaseCombatWeapon::OnRestore()
 
 int C_BaseCombatWeapon::GetWorldModelIndex( void )
 {
-	if ( GameRules() )
-	{
-		const char *pBaseName = modelinfo->GetModelName( modelinfo->GetModel( m_iWorldModelIndex ) );
-		const char *pTranslatedName = GameRules()->TranslateEffectForVisionFilter( "weapons", pBaseName );
-
-		if ( pTranslatedName != pBaseName )
-		{
-			return modelinfo->GetModelIndex( pTranslatedName );
-		}
-	}
-
 	return m_iWorldModelIndex;
 }
 

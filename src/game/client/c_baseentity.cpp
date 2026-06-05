@@ -477,10 +477,6 @@ BEGIN_RECV_TABLE_NOBASE(C_BaseEntity, DT_BaseEntity)
 	RecvPropInt		( RECVINFO( m_bAnimatedEveryTick ), 0, RecvProxy_InterpolationAmountChanged ),
 	RecvPropBool	( RECVINFO( m_bAlternateSorting ) ),
 
-#ifdef TF_CLIENT_DLL
-	RecvPropArray3( RECVINFO_ARRAY(m_nModelIndexOverrides),	RecvPropInt( RECVINFO(m_nModelIndexOverrides[0]) ) ),
-#endif
-
 END_RECV_TABLE()
 
 const float coordTolerance = 2.0f / (float)( 1 << COORD_FRACTIONAL_BITS );
@@ -2492,41 +2488,6 @@ void C_BaseEntity::UnlinkFromHierarchy()
 //-----------------------------------------------------------------------------
 void C_BaseEntity::ValidateModelIndex( void )
 {
-#ifdef TF_CLIENT_DLL
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_HALLOWEEN ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] );
-			return;
-		}
-	}
-		
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_PYRO] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_PYRO] );
-			return;
-		}
-	}
-
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_ROME ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_ROME] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_ROME] );
-			return;
-		}
-	}
-
-	if ( m_nModelIndexOverrides[VISION_MODE_NONE] > 0 ) 
-	{
-		SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_NONE] );		
-		return;
-	}
-#endif
-
 	SetModelByIndex( m_nModelIndex );
 }
 

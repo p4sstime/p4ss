@@ -101,7 +101,6 @@ public:
 
 	// Model swaping
 	bool					ShouldDraw( void );
-	bool					ShouldHideForVisionFilterFlags( void );
 
 	virtual bool			IsTransparent( void ) OVERRIDE;
 

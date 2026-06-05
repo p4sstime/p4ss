@@ -224,9 +224,6 @@ public:
 
 	virtual bool	ShouldDraw();
 
-	virtual int		GetVisionFilterFlags( bool bWeaponsCheck = false );
-	virtual void	CalculateVisionUsingCurrentFlags( void );
-
 	void CreateSaveMeEffect( MedicCallerType nType = CALLER_TYPE_NORMAL );
 	void StopSaveMeEffect( bool bForceRemoveInstantly = false );
 

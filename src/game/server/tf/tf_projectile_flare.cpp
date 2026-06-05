@@ -164,15 +164,6 @@ void CTFProjectile_Flare::Precache()
 	PrecacheParticleSystem( "scorchshot_trail_crit_blue" );
 	PrecacheParticleSystem( "Explosions_MA_FlyingEmbers" );
 
-	PrecacheParticleSystem( "pyrovision_flaregun_trail_blue" );
-	PrecacheParticleSystem( "pyrovision_flaregun_trail_red" );
-	PrecacheParticleSystem( "pyrovision_flaregun_trail_crit_blue" );
-	PrecacheParticleSystem( "pyrovision_flaregun_trail_crit_red" );
-	PrecacheParticleSystem( "pyrovision_scorchshot_trail_blue" );
-	PrecacheParticleSystem( "pyrovision_scorchshot_trail_red" );
-	PrecacheParticleSystem( "pyrovision_scorchshot_trail_crit_blue" );
-	PrecacheParticleSystem( "pyrovision_scorchshot_trail_crit_red" );
-
 	BaseClass::Precache();
 }
 

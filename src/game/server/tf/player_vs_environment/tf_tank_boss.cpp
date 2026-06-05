@@ -103,8 +103,6 @@ void CTFTankDestruction::Precache( void )
 void CTFTankDestruction::Spawn( void )
 {
 	SetModel( TANK_DESTRUCTION );
-	SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( TANK_DESTRUCTION ) );
-	SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( TANK_DESTRUCTION_ROME ) );
 
 	BaseClass::Spawn();
 
@@ -336,8 +334,6 @@ void CTFTankBoss::Spawn( void )
 
 	m_damageModelIndex = 0;
 	SetModel( s_TankModel[ m_damageModelIndex ] );
-	SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( s_TankModel[ m_damageModelIndex ] ) );
-	SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( s_TankModelRome[ m_damageModelIndex ] ) );
 	m_lastHealth = GetMaxHealth();
 
 	AddGlowEffect();
@@ -346,8 +342,6 @@ void CTFTankBoss::Spawn( void )
 	if ( m_leftTracks )
 	{
 		m_leftTracks->SetModel( TANK_LEFT_TRACK_MODEL );
-		m_leftTracks->SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( TANK_LEFT_TRACK_MODEL ) );
-		m_leftTracks->SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( TANK_LEFT_TRACK_MODEL_ROME ) );
 
 		// bonemerge into our model
 		m_leftTracks->FollowEntity( this, true );
@@ -368,8 +362,6 @@ void CTFTankBoss::Spawn( void )
 	if ( m_rightTracks )
 	{
 		m_rightTracks->SetModel( TANK_RIGHT_TRACK_MODEL );
-		m_rightTracks->SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( TANK_RIGHT_TRACK_MODEL ) );
-		m_rightTracks->SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( TANK_RIGHT_TRACK_MODEL_ROME ) );
 
 		// bonemerge into our model
 		m_rightTracks->FollowEntity( this, true );
@@ -390,8 +382,6 @@ void CTFTankBoss::Spawn( void )
 	if ( m_bomb )
 	{
 		m_bomb->SetModel( TANK_BOMB );
-		m_bomb->SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( TANK_BOMB ) );
-		m_bomb->SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( TANK_BOMB_ROME ) );
 
 		// bonemerge into our model
 		m_bomb->FollowEntity( this, true );
@@ -627,8 +617,6 @@ void CTFTankBoss::TankBossThink( void )
 
 			m_damageModelIndex = desiredModelIndex;
 			SetModel( s_TankModel[ m_damageModelIndex ] );
-			SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( s_TankModel[ m_damageModelIndex ] ) );
-			SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( s_TankModelRome[ m_damageModelIndex ] ) );
 
 			int nAnimSequence = LookupSequence( pchSequence );
 			if ( nAnimSequence > 0 )

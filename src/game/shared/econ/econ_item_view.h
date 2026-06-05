@@ -277,7 +277,6 @@ public:
 	const char				*GetWorldDisplayModel() const;
 	const char				*GetExtraWearableModel() const;
 	const char				*GetExtraWearableViewModel() const;
-	const char				*GetVisionFilteredDisplayModel() const;
 
 	// Return the load-out slot that this item must be placed into
 	int						GetAnimationSlot( void ) const;

@@ -115,11 +115,6 @@ CNewParticleEffect *CParticleProperty::Create( const char *pszParticleName, Part
 static ConVar cl_particle_batch_mode( "cl_particle_batch_mode", "1" );
 CNewParticleEffect *CParticleProperty::Create( const char *pszParticleName, ParticleAttachment_t iAttachType, int iAttachmentPoint, Vector vecOriginOffset )
 {
-	if ( GameRules() )
-	{
-		pszParticleName = GameRules()->TranslateEffectForVisionFilter( "particles", pszParticleName );
-	}
-
 	int nBatchMode = cl_particle_batch_mode.GetInt();
 	CParticleSystemDefinition *pDef = g_pParticleSystemMgr->FindParticleSystem( pszParticleName );
 	bool bRequestedBatch = ( nBatchMode == 2 ) || ( ( nBatchMode == 1 ) && pDef && pDef->ShouldBatch() ); 
