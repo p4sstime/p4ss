@@ -441,7 +441,7 @@ public:
 
 	const char *GetHolidayString()
 	{
-		return UTIL_GetActiveHolidayString();
+		return NULL;
 	}
 
 	const char *GetOperationString()

@@ -306,9 +306,6 @@ bool CTFInventoryManager::SlotContainsBaseItems( EEquipType_t eType, int iSlot )
 	// Halloween spellbook
 	if ( iSlot == LOADOUT_POSITION_ACTION )
 	{
-		if ( TFGameRules() && TFGameRules()->IsUsingSpells() )
-			return true;
-
 		if ( TFGameRules() && TFGameRules()->IsUsingGrapplingHook() )
 			return true;
 	}
@@ -338,12 +335,6 @@ CEconItemView *CTFInventoryManager::GetBaseItemForClass( int iClass, int iSlot )
 	if ( iSlot == LOADOUT_POSITION_ACTION )
 	{
 		CUtlVector< item_definition_index_t > stockActionItemDefIndices;
-
-		static CSchemaItemDefHandle pItemDef_SpellBook( "TF_WEAPON_SPELLBOOK" );
-		if ( TFGameRules() && TFGameRules()->IsUsingSpells() && pItemDef_SpellBook )
-		{
-			stockActionItemDefIndices.AddToTail( pItemDef_SpellBook->GetDefinitionIndex() );
-		}
 
 		static CSchemaItemDefHandle pItemDef_GrapplingHook( "TF_WEAPON_GRAPPLINGHOOK" );
 		if ( TFGameRules() && TFGameRules()->IsUsingGrapplingHook() && pItemDef_GrapplingHook )

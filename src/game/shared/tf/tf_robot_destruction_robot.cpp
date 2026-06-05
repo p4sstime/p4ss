@@ -153,7 +153,7 @@ CTFRobotDestruction_Robot::CTFRobotDestruction_Robot()
 
 	m_intention = new CRobotIntention( this );
 	m_locomotor = new CRobotLocomotion( this );
-	m_body = new CHeadlessHatmanBody( this );
+	m_body = new IBody( this );
 	m_bIsPanicked = false;
 #else
 	ListenForGameEvent( "rd_robot_impact" );

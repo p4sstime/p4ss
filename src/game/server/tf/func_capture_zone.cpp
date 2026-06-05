@@ -333,18 +333,6 @@ void CCaptureZone::Capture( CBaseEntity *pOther )
 
 					gameeventmanager->FireEvent( event );
 				}
-
-				if ( TFGameRules() )
-				{
-					if ( TFGameRules()->IsHolidayActive( kHoliday_EOTL ) )
-					{
-						TFGameRules()->DropBonusDuck( pPlayer->GetAbsOrigin(), pPlayer, NULL, NULL, false, true );
-					}
-					else if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-					{
-						TFGameRules()->DropHalloweenSoulPackToTeam( 5, GetAbsOrigin(), pPlayer->GetTeamNumber(), TEAM_SPECTATOR );
-					}
-				}
 			}
 		}
 		else if ( !TFGameRules()->CanFlagBeCaptured( pOther ) && TFGameRules()->IsPowerupMode() )

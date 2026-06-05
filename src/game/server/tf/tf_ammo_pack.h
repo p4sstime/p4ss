@@ -15,14 +15,6 @@
 class CTFPlayer;
 class CTFWeaponBase;
 
-typedef enum
-{	
-	AP_NORMAL = 0,
-	AP_HALLOWEEN,
-	AP_CHRISTMAS,
-
-} AmmoPackType_t;
-
 class CTFAmmoPack : public CItem
 {
 public:
@@ -31,7 +23,6 @@ public:
 
 	CTFAmmoPack()
 	{
-		m_PackType = AP_NORMAL;
 	}
 
 	virtual void Spawn();
@@ -48,7 +39,6 @@ public:
 	int GiveAmmo( int iCount, int iAmmoType );
 
 	void MakeEmptyPack( void ) { m_bEmptyPack = true; }
-	void MakeHolidayPack( void );
 	void SetBonusScale( float flBonusScale = 1.f );
 	void SetPickupThinkTime( float flNewThinkTime );
 
@@ -57,8 +47,6 @@ public:
 	float GetCreationTime( void ) { return m_flCreationTime; }
 	void  SetInitialVelocity( Vector &vecVelocity );
 	void  SetHealthInstead( bool bHealth ) { m_bHealthInstead = bHealth; }
-
-	const char* MakeHolidayAmmoPack( const char* inModelName, CBaseEntity *pOwner, const CTakeDamageInfo &info );
 
 	bool m_bObjGib;
 
@@ -74,7 +62,6 @@ private:
 	bool m_bAllowOwnerPickup;
 	bool m_bNoPickup;
 	float m_flBonusScale;
-	AmmoPackType_t m_PackType;
 	CNetworkVector( m_vecInitialVelocity );
 
 private:

@@ -11,7 +11,6 @@
 #include <vgui_controls/ProgressBar.h>
 
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 #include "c_tf_playerresource.h"
 #include "tf_playerpanel.h"
 #include "tf_teamstatus.h"
@@ -95,17 +94,6 @@ bool CTFTeamStatusPlayerPanel::Update( void )
 			}
 
 			C_TFPlayer* pTFPlayer = ToTFPlayer( UTIL_PlayerByIndex( m_iPlayerIndex ) );
-
-			// Josh: Not sure if this halloween logic can ever trigger, but it was missing
-			// replication from the scoreboard either way.
-			if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) && TFGameRules()->ArePlayersInHell() )
-			{
-				if ( pTFPlayer && pTFPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-				{
-					bAlive = false;
-					bFeigned = true;
-				}
-			}
 
 			// Josh: Are they a Spy that's feigning death? Mark them as dead on the status UI.
 			if ( g_TF_PR->GetPlayerClass( m_iPlayerIndex ) == TF_CLASS_SPY )

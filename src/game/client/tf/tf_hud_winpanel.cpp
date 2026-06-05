@@ -24,7 +24,6 @@
 #include "fmtstr.h"
 #include "teamplayroundbased_gamerules.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 #include "c_tf_team.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -183,16 +182,6 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 
 		pBlueBGPanel->SetBorder( pScheme->GetBorder( bUseMoreOpaqueBorder ? "TFFatLineBorderBlueBGMoreOpaque" : "TFFatLineBorderBlueBG" ) );
 		pRedBGPanel->SetBorder( pScheme->GetBorder( bUseMoreOpaqueBorder ? "TFFatLineBorderRedBGMoreOpaque" : "TFFatLineBorderRedBG" ) ) ;
-
-		// we want to suppress the winreason for sd_doomsday_event and plr_hightower_event
-		if ( TFGameRules() )
-		{
-			if ( ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) && CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() ) ||
-				 ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) ) )
-			{
-				iWinReason = WINREASON_NONE;
-			}
-		}
 
 		// this is an area defense, but not a round win, if this was a successful defend until time limit but not a complete round
 		bool bIsAreaDefense = ( ( WINREASON_DEFEND_UNTIL_TIME_LIMIT == iWinReason ) && !bRoundComplete );

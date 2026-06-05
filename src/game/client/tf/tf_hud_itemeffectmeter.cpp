@@ -29,13 +29,12 @@
 #include "tf_weapon_medigun.h"
 #include "tf_weapon_throwable.h"
 #include "tf_weapon_smg.h"
-#include "halloween/tf_weapon_spellbook.h"
-#include "tf_logic_halloween_2014.h"
 #include <game/client/iviewport.h>
 #include "tf_weapon_rocketpack.h"
 #include "tf_weapon_bonesaw.h"
 #include "tf_weapon_slap.h"
 
+#include <vgui/IVGui.h>
 #include <vgui_controls/ImagePanel.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -349,8 +348,6 @@ void CHudItemEffectMeter::CreateHudElementsForClass( C_TFPlayer* pPlayer, CUtlVe
 
 	// Kill Streak
 	DECLARE_ITEM_EFFECT_METER( CTFWeaponBase, TF_WEAPON_NONE, false, "resource/UI/HudItemEffectMeter_KillStreak.res" );
-
-	DECLARE_ITEM_EFFECT_METER( CTFSpellBook, TF_WEAPON_SPELLBOOK, true, "resource/UI/HudItemEffectMeter_KartCharge.res" );
 	/*hNewMeter = new CHudItemEffectMeter_HalloweenSouls( pszElementName, pPlayer );
 	if ( hNewMeter )
 	{
@@ -460,16 +457,7 @@ bool CHudItemEffectMeter::ShouldDraw( void )
 {
 	bool bShouldDraw = true;
 
-	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( !pPlayer || !pPlayer->IsAlive() || pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-	{
-		bShouldDraw = false;
-	}
-	else if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-	{
-		bShouldDraw = false;
-	}
-	else if ( IsEnabled() )
+	if ( IsEnabled() )
 	{
 		bShouldDraw = CHudElement::ShouldDraw();
 	}
@@ -1558,78 +1546,6 @@ int CHudItemEffectMeter_Weapon<CTFRocketLauncher_AirStrike>::GetCount( void )
 }
 
 //-----------------------------------------------------------------------------
-template <>
-bool CHudItemEffectMeter_Weapon<CTFSpellBook>::IsEnabled( void )
-{
-	if ( !m_pPlayer )
-		return false;
-
-	if ( !m_pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
-		return false;
-
-	CTFSpellBook *pWep = dynamic_cast<CTFSpellBook*>( GetWeapon() );
-	if ( pWep )
-	{
-		return true;
-	}
-	return false;
-}
-
-//-----------------------------------------------------------------------------
-template <>
-float CHudItemEffectMeter_Weapon<CTFSpellBook>::GetProgress( void )
-{
-	if ( !m_pPlayer )
-		return 0;
-
-	if ( !m_pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
-		return 0;
-
-	return m_pPlayer->GetKartSpeedBoost();
-}
-
-//-----------------------------------------------------------------------------
-template <>
-int CHudItemEffectMeter_Weapon<CTFSpellBook>::GetCount( void )
-{
-	if ( !m_pPlayer )
-		return 0;
-
-	if ( !m_pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
-		return 0;
-
-	return m_pPlayer->GetKartHealth();
-}
-//-----------------------------------------------------------------------------
-template <>
-bool CHudItemEffectMeter_Weapon<CTFSpellBook>::ShowPercentSymbol( void )
-{
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool CHudItemEffectMeter_Weapon<CTFSpellBook>::ShouldDraw( void )
-{
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-	{
-		if ( m_pPlayer && m_pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-			return false;
-
-		IViewPortPanel *scoreboard = gViewPortInterface->FindPanelByName( PANEL_SCOREBOARD );
-		if ( scoreboard && scoreboard->IsVisible() )
-			return false;
-
-		if ( TFGameRules() && ( TFGameRules()->State_Get() != GR_STATE_RND_RUNNING ) )
-			return false;
-
-		return true;
-	}
-	
-	return CHudItemEffectMeter::ShouldDraw();
-}
-
-
-//-----------------------------------------------------------------------------
 CHudItemEffectMeter_ItemAttribute::CHudItemEffectMeter_ItemAttribute( const char *pszElementName, C_TFPlayer *pPlayer, loadout_positions_t iLoadoutSlot, const char *pszLabelText /*= NULL*/, bool bBeeps /*= true*/ )
 	: CHudItemEffectMeter( pszElementName, pPlayer )
 	, m_pMeterEntity( NULL )
@@ -1657,7 +1573,6 @@ CHudItemEffectMeter_ItemAttribute::CHudItemEffectMeter_ItemAttribute( const char
 
 	vgui::ivgui()->AddTickSignal( GetVPanel(), 100 ); 
 }
-
 
 const IHasGenericMeter *CHudItemEffectMeter_ItemAttribute::GetItem()
 {

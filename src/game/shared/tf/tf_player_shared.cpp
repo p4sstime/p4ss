@@ -87,12 +87,10 @@
 #include "hl2orange.spa.h"
 #include "bot/tf_bot.h"
 #include "tf_objective_resource.h"
-#include "halloween/tf_weapon_spellbook.h"
 #include "tf_weapon_buff_item.h"
 #include "tf_passtime_logic.h"
 #include "tf_weapon_passtime_gun.h"
 #include "entity_healthkit.h"
-#include "halloween/merasmus/merasmus.h"
 #include "tf_weapon_grapplinghook.h"
 #include "tf_wearable_levelable_item.h"
 #include "tf_weapon_rocketpack.h"
@@ -230,32 +228,6 @@ extern ConVar mp_developer;
 #define TF_SCREEN_OVERLAY_MATERIAL_PHASE	"effects/dodge_overlay"
 
 #define MAX_DAMAGE_EVENTS		128
-
-const char *g_pszBDayGibs[22] = 
-{
-	"models/effects/bday_gib01.mdl",
-	"models/effects/bday_gib02.mdl",
-	"models/effects/bday_gib03.mdl",
-	"models/effects/bday_gib04.mdl",
-	"models/player/gibs/gibs_balloon.mdl",
-	"models/player/gibs/gibs_burger.mdl",
-	"models/player/gibs/gibs_boot.mdl",
-	"models/player/gibs/gibs_bolt.mdl",
-	"models/player/gibs/gibs_can.mdl",
-	"models/player/gibs/gibs_clock.mdl",
-	"models/player/gibs/gibs_fish.mdl",
-	"models/player/gibs/gibs_gear1.mdl",
-	"models/player/gibs/gibs_gear2.mdl",
-	"models/player/gibs/gibs_gear3.mdl",
-	"models/player/gibs/gibs_gear4.mdl",
-	"models/player/gibs/gibs_gear5.mdl",
-	"models/player/gibs/gibs_hubcap.mdl",
-	"models/player/gibs/gibs_licenseplate.mdl",
-	"models/player/gibs/gibs_spring1.mdl",
-	"models/player/gibs/gibs_spring2.mdl",
-	"models/player/gibs/gibs_teeth.mdl",
-	"models/player/gibs/gibs_tire.mdl"
-};
 
 ETFCond g_SoldierBuffAttributeIDToConditionMap[kSoldierBuffCount + 1] =
 {
@@ -2862,19 +2834,6 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 					flBurnDamage *= tf_afterburn_mult_second_degree;
 				}
 		
-				// Halloween Spell
-				if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-				{
-					int iHalloweenSpell = 0;
-					CALL_ATTRIB_HOOK_INT_ON_OTHER( m_hBurnWeapon, iHalloweenSpell, halloween_green_flames );
-					if ( iHalloweenSpell > 0 )
-					{
-						const char *pEffectName = "halloween_burningplayer_flyingbits";
-						// Extra Halloween Particles
-						DispatchParticleEffect( pEffectName, PATTACH_ABSORIGIN_FOLLOW, m_pOuter, 0, false );
-					}
-				}
-	
 				CTakeDamageInfo info( m_hBurnAttacker, m_hBurnAttacker, m_hBurnWeapon, flBurnDamage, DMG_BURN | DMG_PREVENT_PHYSICS_FORCE, nKillType );
 				m_pOuter->TakeDamage( info );
 
@@ -3170,64 +3129,6 @@ void CTFPlayerShared::ConditionThink( void )
 		}
 #endif
 	}
-
-	if ( InCond( TF_COND_HALLOWEEN_BOMB_HEAD ) )
-	{
-#ifdef GAME_DLL
-		static struct 
-		{
-			float flTimeLeft;
-			int nStage;
-		} s_vecBombStages[] = { { 8.0f, 0 }, { 3.0f, 1 }, { 0.0f, 2 } };
-
-		for ( int i = 0; i < ARRAYSIZE( s_vecBombStages ); ++i )
-		{
-			if ( m_ConditionData[TF_COND_HALLOWEEN_BOMB_HEAD].m_flExpireTime >= s_vecBombStages[i].flTimeLeft )
-			{
-				m_nHalloweenBombHeadStage = s_vecBombStages[i].nStage;
-				break;
-			}
-		}
-
-		if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
-		{
-			if ( m_pOuter->IsAlive() )
-			{
-				Vector vToBoss = m_pOuter->EyePosition() - TFGameRules()->GetActiveBoss()->WorldSpaceCenter();
-				if ( vToBoss.IsLengthLessThan( 100.f ) )
-				{
-					CMerasmus* pMerasmus = assert_cast< CMerasmus* >( TFGameRules()->GetActiveBoss() );
-					if ( pMerasmus )
-					{
-						pMerasmus->AddStun( m_pOuter );
-					}
-				}
-			}
-		}
-#else
-		m_pOuter->HalloweenBombHeadUpdate();
-#endif 
-	}
-	else
-	{
-#ifdef GAME_DLL
-		m_nHalloweenBombHeadStage = 0;
-#endif
-	}
-
-#ifdef GAME_DLL
-	if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_VIADUCT ) && InCond( TF_COND_PURGATORY ) )
-	{
-		// escalating injury multiplier while in purgatory
-		if ( m_pOuter->m_purgatoryPainMultiplierTimer.IsElapsed() )
-		{
-			++m_pOuter->m_purgatoryPainMultiplier;
-
-			// injury multiplies rapidly after initial period
-			m_pOuter->m_purgatoryPainMultiplierTimer.Start( 10.0f );
-		}
-	}
-#endif
 
 	CheckDisguiseTimer();
 
@@ -4369,8 +4270,6 @@ void CTFPlayerShared::OnAddDisguisedAsDispenser( void )
 void CTFPlayerShared::OnAddHalloweenBombHead( void )
 {
 #ifdef CLIENT_DLL
-	m_pOuter->HalloweenBombHeadUpdate();
-	m_pOuter->CreateBombonomiconHint();
 #else
 	if ( InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -4385,8 +4284,6 @@ void CTFPlayerShared::OnAddHalloweenBombHead( void )
 void CTFPlayerShared::OnRemoveHalloweenBombHead( void )
 {
 #ifdef CLIENT_DLL
-	m_pOuter->HalloweenBombHeadUpdate();
-	m_pOuter->DestroyBombonomiconHint();
 #else
 	if ( InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -4407,10 +4304,6 @@ void CTFPlayerShared::OnRemoveHalloweenBombHead( void )
 			}
 			m_pOuter->SetKartBombHeadTarget( NULL );
 		}
-		else if ( !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_LAKESIDE ) )
-		{
-			TFGameRules()->PushAllPlayersAway( vecOrigin, 150, 400, TEAM_ANY );
-		}
 
 		// Particle
 		CPVSFilter filter( vecOrigin );
@@ -4422,31 +4315,12 @@ void CTFPlayerShared::OnRemoveHalloweenBombHead( void )
 void CTFPlayerShared::OnAddHalloweenThriller( void )
 {
 #ifdef CLIENT_DLL
-	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
-
-	if ( !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-	{
-		if ( pLocalPlayer == m_pOuter )
-		{
-			m_pOuter->EmitSound( "Halloween.dance_howl" );
-			m_pOuter->EmitSound( "Halloween.dance_loop" );	
-		}
-	}
 #endif
 }
 
 void CTFPlayerShared::OnRemoveHalloweenThriller( void )
 {
 #ifdef CLIENT_DLL
-	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
-
-	if ( !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-	{
-		if ( pLocalPlayer == m_pOuter )
-		{
-			m_pOuter->StopSound( "Halloween.dance_loop" );	
-		}
-	}
 #else
 	// If this is hightower, players will be healing themselves while dancing
 	StopHealing( m_pOuter );
@@ -5230,20 +5104,6 @@ void CTFPlayerShared::OnAddHalloweenGhostMode( void )
 	m_pOuter->AddFlag( FL_NOTARGET );
 
 #ifdef GAME_DLL
-
-	CSingleUserRecipientFilter filter( m_pOuter );
-	if ( TFGameRules() )
-	{
-		if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-		{
-			TFGameRules()->SendHudNotification( filter, HUD_NOTIFY_HOW_TO_CONTROL_GHOST );
-		}
-		else
-		{
-			TFGameRules()->SendHudNotification( filter, HUD_NOTIFY_HOW_TO_CONTROL_GHOST_NO_RESPAWN );
-		}
-	}
-
 	// The game rules listens for this event
 	IGameEvent *event = gameeventmanager->CreateEvent( "player_turned_to_ghost" );
 
@@ -5268,12 +5128,6 @@ void CTFPlayerShared::OnAddHalloweenGhostMode( void )
 	if ( pCarriedObj )
 	{
 		pCarriedObj->DetonateObject();
-	}
-
-	CTFSpellBook *pSpellBook = dynamic_cast< CTFSpellBook* >( m_pOuter->GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-	if ( pSpellBook )
-	{
-		pSpellBook->ClearSpell();
 	}
 #else
 	// Go thirdperson
@@ -5419,12 +5273,6 @@ void CTFPlayerShared::OnAddHalloweenKart( void )
 	//ResetKartDamage
 	m_pOuter->ResetKartDamage();
 	
-	CTFSpellBook *pSpellBook = dynamic_cast< CTFSpellBook* >( m_pOuter->GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-	if ( pSpellBook )
-	{
-		pSpellBook->ClearSpell();
-	}
-
 	m_pOuter->m_flKartNextAvailableBoost = gpGlobals->curtime + 3.0f;
 
 	// Switch to melee to make sure Spies and Engies don't have build menus open
@@ -5469,12 +5317,6 @@ void CTFPlayerShared::OnRemoveHalloweenKart( void )
 	RemoveAttributeFromPlayer( "head scale" );
 	//ResetKartDamage
 	m_pOuter->ResetKartDamage();
-
-	CTFSpellBook *pSpellBook = dynamic_cast<CTFSpellBook*>( m_pOuter->GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-	if ( pSpellBook )
-	{
-		pSpellBook->ClearSpell();
-	}
 #else
 	// When we have every taunt cam use this system, we should clean up after ourselves. But for now, this causes a bad interaction
 	// with other systems.
@@ -5612,12 +5454,6 @@ void CTFPlayerShared::OnRemoveSwimmingCurse( void )
 void CTFPlayerShared::OnAddHalloweenKartCage( void )
 {
 #ifdef CLIENT_DLL
-	Assert( !m_pOuter->m_hHalloweenKartCage );
-	if ( !m_pOuter->m_hHalloweenKartCage )
-	{
-		m_pOuter->m_hHalloweenKartCage = C_PlayerAttachedModel::Create( "models/props_halloween/bumpercar_cage.mdl", m_pOuter, 0, vec3_origin, PAM_PERMANENT, 0 );
-		m_pOuter->m_hHalloweenKartCage->FollowEntity( m_pOuter, true );
-	}
 #else
 	AddCond( TF_COND_FREEZE_INPUT );
 #endif // CLIENT_DLL
@@ -5629,12 +5465,6 @@ void CTFPlayerShared::OnAddHalloweenKartCage( void )
 void CTFPlayerShared::OnRemoveHalloweenKartCage( void )
 {
 #ifdef CLIENT_DLL
-	Assert( m_pOuter->m_hHalloweenKartCage );
-	if ( m_pOuter->m_hHalloweenKartCage )
-	{
-		m_pOuter->m_hHalloweenKartCage->StopFollowingEntity();
-		m_pOuter->m_hHalloweenKartCage->Release();
-	}
 #else
 	RemoveCond( TF_COND_FREEZE_INPUT );
 	DispatchParticleEffect( "ghost_appearation", PATTACH_ABSORIGIN, m_pOuter );
@@ -5842,10 +5672,6 @@ void CTFPlayerShared::OnRemoveInPurgatory( void )
 
 		CReliableBroadcastRecipientFilter filter;
 		const char* pszEscapeMessage = "#TF_Halloween_Underworld";
-		if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_LAKESIDE ) )
-		{
-			pszEscapeMessage = "#TF_Halloween_Skull_Island_Escape";
-		}
 
 		UTIL_SayText2Filter( filter, m_pOuter, false, pszEscapeMessage, m_pOuter->GetPlayerName() );
 
@@ -5859,10 +5685,6 @@ void CTFPlayerShared::OnRemoveInPurgatory( void )
 		if ( m_pOuter->GetTeam() )
 		{
 			const char* pszLogMessage = "purgatory_escaped";
-			if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_LAKESIDE ) )
-			{
-				pszEscapeMessage = "skull_island_escaped";
-			}
 
 			UTIL_LogPrintf( "HALLOWEEN: \"%s<%i><%s><%s>\" %s\n",
 							m_pOuter->GetPlayerName(),
@@ -7231,7 +7053,6 @@ void CTFPlayerShared::OnRemoveDisguised( void )
 
 	// They may have called for medic and created a visible medic bubble
 	m_pOuter->StopSaveMeEffect( true );
-	m_pOuter->StopTauntWithMeEffect();
 
 	UpdateCritBoostEffect( kCritBoost_ForceRefresh );
 	m_pOuter->UpdateSpyStateChange();
@@ -11982,27 +11803,6 @@ void CTFPlayer::OnEmitFootstepSound( const CSoundParameters& params, const Vecto
 	// footstep code in response to animation events. THIS IS A HACK!
 	if ( !ShouldDrawThisPlayer() && !m_Shared.IsStealthed() && !m_Shared.InCond( TF_COND_DISGUISED ) )
 	{
-		int iHalloweenFootstepType = 0;
-		if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-		{
-			CALL_ATTRIB_HOOK_INT( iHalloweenFootstepType, halloween_footstep_type );
-		}
-
-		if ( m_nFootStamps > 0 )
-		{
-			// White color!
-			iHalloweenFootstepType = 0xFFFFFFFF;
-		}
-
-		if ( iHalloweenFootstepType != 0 )
-		{
-			CNewParticleEffect *pEffect = SpawnHalloweenSpellFootsteps( PATTACH_CUSTOMORIGIN, iHalloweenFootstepType );
-			if ( pEffect )
-			{
-				pEffect->SetControlPoint( 0, GetAbsOrigin() );
-			}
-		}
-
 		if ( m_nFootStamps > 0 )
 		{
 			m_nFootStamps--;
@@ -12906,11 +12706,6 @@ bool CTFPlayer::CanMoveDuringTaunt()
 		if ( m_bAllowMoveDuringTaunt )
 		{
 			return true;
-		}
-
-		if ( IsReadyToTauntWithPartner() || CTFPlayerSharedUtils::ConceptIsPartnerTaunt( m_Shared.m_iTauntConcept ) )
-		{
-			return false;
 		}
 	}
 
@@ -14442,11 +14237,6 @@ CEconItemView *CTFPlayerSharedUtils::GetEconItemViewByLoadoutSlot( CTFPlayer *pT
 		*pEntity = NULL;
 	}
 	return NULL;
-}
-
-bool CTFPlayerSharedUtils::ConceptIsPartnerTaunt( int iConcept )
-{
-	return iConcept == MP_CONCEPT_HIGHFIVE_SUCCESS_FULL || iConcept == MP_CONCEPT_HIGHFIVE_SUCCESS;
 }
 
 //-----------------------------------------------------------------------------

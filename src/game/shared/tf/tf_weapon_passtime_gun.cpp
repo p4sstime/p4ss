@@ -71,7 +71,6 @@ namespace
 	static char const * const kTargetUnlockSound     = "Passtime.TargetUnlock";
 	static char const * const kShootOkSound          = "Passtime.Throw";
 	static char const * const kPassOkSound           = "Passtime.Throw";
-	static char const * const kHalloweenBallModel    = "models/passtime/ball/passtime_ball_halloween.mdl";
 }
 
 //-----------------------------------------------------------------------------
@@ -133,14 +132,6 @@ void CPasstimeGun::Precache()
 	PrecacheScriptSound( kPassOkSound );
 	PrecacheScriptSound( kChargeSound );
 	m_iAttachmentIndex = PrecacheModel( tf_passtime_ball_model.GetString() );
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		m_iHalloweenAttachmentIndex = PrecacheModel( kHalloweenBallModel );
-	}
-	else
-	{
-		m_iHalloweenAttachmentIndex = -1;
-	}
 
 	BaseClass::Precache();
 }
@@ -210,15 +201,7 @@ void CPasstimeGun::UpdateAttachmentModels()
 		return;
 
 	auto iActiveIndex = pViewmodelBall->GetModelIndex();
-	if ( m_iHalloweenAttachmentIndex != -1 ) 
-	{
-		if ( iActiveIndex != m_iHalloweenAttachmentIndex )
-		{
-			pViewmodelBall->SetModelIndex( m_iHalloweenAttachmentIndex );
-			m_bAttachmentDirty = true;
-		}
-	}
-	else if ( iActiveIndex != m_iAttachmentIndex )
+	if ( iActiveIndex != m_iAttachmentIndex )
 	{
 		pViewmodelBall->SetModelIndex( m_iAttachmentIndex );
 		m_bAttachmentDirty = true;
@@ -960,10 +943,6 @@ void CPasstimeGun::ItemHolsterFrame()
 //-----------------------------------------------------------------------------
 const char *CPasstimeGun::GetWorldModel() const
 {
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		return kHalloweenBallModel;
-	}
 	return tf_passtime_ball_model.GetString();
 }
 

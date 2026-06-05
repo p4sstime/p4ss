@@ -13,7 +13,7 @@
 #include "clientmode_shared.h"
 #include "tf_viewport.h"
 #include "GameUI/IGameUI.h"
-#include "halloween/tf_weapon_spellbook.h"
+#include "c_tf_player.h"
 #include "tf_hud_teamgoal_tournament.h"
 
 class CHudMenuEngyBuild;
@@ -117,7 +117,6 @@ private:
 	CHudMenuSpyDisguise 	*m_pMenuSpyDisguise;
 	CHudMenuTauntSelection	*m_pMenuTauntSelection;
 	CHudUpgradePanel		*m_pMenuUpgradePanel;
-	CHudSpellMenu			*m_pMenuSpell;
 	CHudEurekaEffectTeleportMenu *m_pEurekaTeleportMenu;
 	CHudTeamGoalTournament	*m_pTeamGoalTournament;
 

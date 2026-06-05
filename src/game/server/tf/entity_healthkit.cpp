@@ -52,8 +52,6 @@ void CHealthKit::Spawn( void )
 void CHealthKit::Precache( void )
 {
 	PrecacheScriptSound( TF_HEALTHKIT_PICKUP_SOUND );
-	PrecacheModel( TF_MEDKIT_LARGE_BDAY ); // always precache this for PyroVision
-	PrecacheModel( TF_MEDKIT_LARGE_HALLOWEEN ); // always precache this for Halloween
 
 	BaseClass::Precache();
 }

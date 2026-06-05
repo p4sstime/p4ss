@@ -542,28 +542,6 @@ const class CEconItemAttributeDefinition *GetCardUpgradeForIndex( const class IE
 #define GUARANTEED_OUTPUT	(1<<0)
 #define GUARANTEED_INPUT	(1<<1)
 
-//-----------------------------------------------------------------------------
-// List of holidays. These are sorted by priority. Needs to match static IIsHolidayActive *s_HolidayChecks
-//-----------------------------------------------------------------------------
-enum EHoliday
-{
-	kHoliday_None							= 0,		// must stay at zero for backwards compatibility
-	kHoliday_TFBirthday,
-	kHoliday_Halloween,
-	kHoliday_Christmas,
-	kHoliday_CommunityUpdate,
-	kHoliday_EOTL,
-	kHoliday_Valentines,
-	kHoliday_MeetThePyro,
-	kHoliday_FullMoon,
-	kHoliday_HalloweenOrFullMoon,
-	kHoliday_HalloweenOrFullMoonOrValentines,
-	kHoliday_AprilFools,
-	kHoliday_Soldier,
-	kHoliday_Summer,
-	kHolidayCount,
-};
-
 typedef int		econ_tag_handle_t;
 
 #define INVALID_ECON_TAG_HANDLE	((econ_tag_handle_t)-1)

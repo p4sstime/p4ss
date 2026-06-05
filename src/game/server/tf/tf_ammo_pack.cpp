@@ -38,7 +38,6 @@ LINK_ENTITY_TO_CLASS( tf_ammo_pack, CTFAmmoPack );
 
 PRECACHE_REGISTER( tf_ammo_pack );
 
-#define HALLOWEEN_MODEL "models/props_halloween/pumpkin_loot.mdl"
 #define CHRISTMAS_MODEL "models/items/tf_gift.mdl"
 
 void CTFAmmoPack::Spawn( void )
@@ -80,22 +79,6 @@ void CTFAmmoPack::Spawn( void )
 void CTFAmmoPack::Precache( void )
 {
 	PrecacheModel( "models/items/ammopack_medium.mdl" );
-
-	if ( TFGameRules() )
-	{
-		if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-		{
-			PrecacheModel( HALLOWEEN_MODEL );
-			PrecacheScriptSound( "Halloween.PumpkinDrop" );
-			PrecacheScriptSound( "Halloween.PumpkinPickup" );
-		}
-		else if ( TFGameRules()->IsHolidayActive( kHoliday_Christmas ) )
-		{
-			PrecacheModel( CHRISTMAS_MODEL );
-			PrecacheScriptSound( "Christmas.GiftDrop" );
-			PrecacheScriptSound( "Christmas.GiftPickup" );
-		}
-	}
 }
 
 CTFAmmoPack *CTFAmmoPack::Create( const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner, const char *pszModelName )
@@ -120,20 +103,6 @@ void CTFAmmoPack::InitAmmoPack( CTFPlayer *pPlayer, CTFWeaponBase *pWeapon, int 
 
 	if ( !bEmpty )
 	{
-		// Might be a holiday pack.
-		if ( !bIsSuicide && ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) || TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) ) )
-		{
-			float frand = (float)rand() / VALVE_RAND_MAX;
-			if ( frand < 0.3f )
-			{
-				MakeHolidayPack();
-			}
-		}
-		else if ( !bIsSuicide && TFGameRules()->IsHolidayActive( kHoliday_Christmas ) )
-		{
-			MakeHolidayPack();
-		}
-
 		// Fill the ammo pack with unused player ammo, if out add a minimum amount.
 		int iPrimary = Max( 5, pPlayer->GetAmmoCount( TF_AMMO_PRIMARY ) );
 		int iSecondary = Max( 5, pPlayer->GetAmmoCount( TF_AMMO_SECONDARY ) );
@@ -189,26 +158,6 @@ void CTFAmmoPack::InitAmmoPack( CTFPlayer *pPlayer, CTFWeaponBase *pWeapon, int 
 	SetBodygroup( 1, 1 );
 }
 
-void CTFAmmoPack::MakeHolidayPack( void )
-{
-	// Only do this on the halloween maps.
-	if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) 
-		&& TFGameRules()->IsHolidayMap( kHoliday_Halloween ) 
-		&& !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) )
-	{
-		m_PackType = AP_HALLOWEEN;
-		SetModelIndex( modelinfo->GetModelIndex( HALLOWEEN_MODEL ) );
-		SetContextThink( &CTFAmmoPack::DropSoundThink, gpGlobals->curtime + 0.1f, "DROP_SOUND_THINK" );
-	}
-	else if ( TFGameRules()->ShouldMakeChristmasAmmoPack() )
-	{
-		m_PackType = AP_CHRISTMAS;
-		SetModelIndex( modelinfo->GetModelIndex( CHRISTMAS_MODEL ) );
-		SetContextThink( &CTFAmmoPack::DropSoundThink, gpGlobals->curtime + 0.1f, "DROP_SOUND_THINK" );
-	}
-}
-
-
 void CTFAmmoPack::SetBonusScale( float flBonusScale /*= 1.f*/ )
 {
 	m_flBonusScale = flBonusScale;
@@ -217,15 +166,6 @@ void CTFAmmoPack::SetBonusScale( float flBonusScale /*= 1.f*/ )
 
 void CTFAmmoPack::SetInitialVelocity( Vector &vecVelocity )
 { 
-	if ( m_PackType != AP_NORMAL )
-	{
-		// Unusual physics for the halloween/christmas packs to make them noticable.
-		SetMoveType( MOVETYPE_FLYGRAVITY );
-		SetAbsVelocity( vecVelocity * 2.f + Vector(0,0,200) );
-		SetAbsAngles( QAngle(0,0,0) );
-		UseClientSideAnimation();
-		ResetSequence( LookupSequence("idle") );
-	}
 	m_vecInitialVelocity = vecVelocity;
 }
 
@@ -249,14 +189,6 @@ int CTFAmmoPack::GiveAmmo( int iCount, int iAmmoType )
 
 void CTFAmmoPack::DropSoundThink( void )
 {
-	if ( m_PackType == AP_HALLOWEEN )
-	{
-		EmitSound( "Halloween.PumpkinDrop" );
-	}
-	else if ( m_PackType == AP_CHRISTMAS )
-	{
-		EmitSound( "Christmas.GiftDrop" );
-	}
 }
 
 void CTFAmmoPack::FlyThink( void )
@@ -268,13 +200,6 @@ void CTFAmmoPack::FlyThink( void )
 void CTFAmmoPack::PackTouch( CBaseEntity *pOther )
 {
 	Assert( pOther );
-
-	if ( pOther->IsWorld() && ( m_PackType != AP_NORMAL ) )
-	{
-		Vector absVel = GetAbsVelocity();
-		SetAbsVelocity( Vector( 0,0,absVel.z ) );
-		return;
-	}
 
 	if( !pOther->IsPlayer() )
 		return;
@@ -387,39 +312,6 @@ void CTFAmmoPack::PackTouch( CBaseEntity *pOther )
 	{
 		int iMaxGrenades1 = pPlayer->GetMaxAmmo( TF_AMMO_GRENADES1 );
 		iAmmoTaken += pPlayer->GiveAmmo( ceil(iMaxGrenades1 * m_flAmmoRatio), TF_AMMO_GRENADES1 );
-	}
-
-	if ( m_PackType == AP_HALLOWEEN )
-	{
-		// Send a message for the achievement tracking.
-		IGameEvent *event = gameeventmanager->CreateEvent( "halloween_pumpkin_grab" );
-		if ( event )
-		{
-			event->SetInt( "userid", pPlayer->GetUserID() );
-			gameeventmanager->FireEvent( event );
-		}
-
-		float flBuffDuration = m_flBonusScale * 3.f;
-		if ( !pPlayer->m_Shared.InCond( TF_COND_CRITBOOSTED_PUMPKIN ) || (pPlayer->m_Shared.GetConditionDuration(TF_COND_CRITBOOSTED_PUMPKIN) < flBuffDuration) )
-		{
-			pPlayer->m_Shared.AddCond( TF_COND_CRITBOOSTED_PUMPKIN, flBuffDuration );
-		}
-		pPlayer->EmitSound( "Halloween.PumpkinPickup" );
-		m_PackType = AP_NORMAL; // Touch once.
-		iAmmoTaken++;
-	}
-	else if ( m_PackType == AP_CHRISTMAS )
-	{
-		// Send a message for the achievement tracking.
-		IGameEvent *event = gameeventmanager->CreateEvent( "christmas_gift_grab" );
-		if ( event )
-		{
-			event->SetInt( "userid", pPlayer->GetUserID() );
-			gameeventmanager->FireEvent( event );
-		}
-		pPlayer->EmitSound( "Christmas.GiftPickup" );
-		m_PackType = AP_NORMAL; // Touch once.
-		iAmmoTaken++;
 	}
 
 	if ( iAmmoTaken > 0 )

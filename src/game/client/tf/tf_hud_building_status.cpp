@@ -26,7 +26,6 @@
 #include "c_obj_sapper.h"
 
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -1206,9 +1205,6 @@ bool CHudBuildingStatusContainer_Engineer::ShouldDraw( void )
 		return false;
 
 	if ( pPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
-		return false;
-
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
 		return false;
 
 	return CHudElement::ShouldDraw();

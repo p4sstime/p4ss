@@ -1527,9 +1527,6 @@ const MapDef_t *CTFItemSchema::GetMasterMapDefByIndex( MapDefIndex_t unIndex ) c
 
 RTime32 CTFItemSchema::GetCustomExpirationDate( const char *pszExpirationDate ) const
 {
-	if ( !V_stricmp( pszExpirationDate, "end_of_halloween" ) )
-		return EconHolidays_TerribleHack_GetHalloweenEndData();
-
 	return CEconItemSchema::GetCustomExpirationDate( pszExpirationDate );
 }
 

@@ -21,7 +21,6 @@
 #include "tf_wearable_weapons.h"
 #include "takedamageinfo.h"
 #include "tf_weapon_buff_item.h"
-#include "halloween/tf_weapon_spellbook.h"
 #include "tf_logic_player_destruction.h"
 
 #ifdef CLIENT_DLL

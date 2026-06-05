@@ -194,7 +194,6 @@ private:
 	vgui::ImagePanel	*m_pGasImage;
 	vgui::ImagePanel	*m_pMarkedForDeathImage;
 	vgui::ImagePanel	*m_pMarkedForDeathImageSilent;
-	vgui::ImagePanel	*m_pWheelOfDoomImage;
 	vgui::ImagePanel	*m_pSlowedImage;
 	CExLabel			*m_pPlayerLevelLabel;
 
@@ -214,8 +213,6 @@ private:
 
 	CPanelAnimationVar( int, m_nHealthBonusPosAdj, "HealthBonusPosAdj", "25" );
 	CPanelAnimationVar( Color, m_clrHealthDeathWarningColor, "HealthDeathWarningColor", "HUDDeathWarning" );
-
-	void UpdateHalloweenStatus( void );
 };
 
 //-----------------------------------------------------------------------------

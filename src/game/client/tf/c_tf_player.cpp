@@ -91,7 +91,6 @@
 #include "c_tf_weapon_builder.h"
 #include "baseanimatedtextureproxy.h"
 #include "econ_entity.h"
-#include "halloween/tf_weapon_spellbook.h"
 #include "tf_weapon_grapplinghook.h"
 #include "tf_logic_robot_destruction.h"
 #include "econ_notifications.h"
@@ -141,21 +140,6 @@ static_assert( TF_TEAM_BLUE == 3, "If this assert fires, update the assert and t
 // Forward decl
 CEconItemView *GetEconItemViewFromProxyEntity( void *pEntity );
 C_TFPlayer *GetOwnerFromProxyEntity( void *pEntity );
-
-#ifdef _DEBUG
-CON_COMMAND_F ( tf_test_bomb, "Test halloween bomb", 0 )
-{
-	C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
-	if ( !pLocalPlayer )
-		return;
-
-	C_TFPlayer *pPlayer = ToTFPlayer( pLocalPlayer );
-	if ( !pPlayer )
-		return;
-
-	pPlayer->CreateBombonomiconHint();
-}
-#endif
 
 // These are all permanently STAGING_ONLY
 
@@ -915,19 +899,6 @@ void C_TFRagdoll::CreateTFRagdoll()
 		m_flTimeToDissolve = 0.5f;
 	}
 
-	if ( pPlayer->HasBombinomiconEffectOnDeath() && !m_bGib && !m_bDissolving )
-	{
-		m_flTimeToDissolve = 1.2f;
-	}
-
-	// Birthday mode.
-	if ( pPlayer && TFGameRules() && TFGameRules()->IsBirthday() )
-	{
-		AngularImpulse angularImpulse( RandomFloat( 0.0f, 120.0f ), RandomFloat( 0.0f, 120.0f ), 0.0 );
-		breakablepropparams_t breakParams( m_vecRagdollOrigin, GetRenderAngles(), m_vecRagdollVelocity, angularImpulse );
-		breakParams.impactEnergyScale = 1.0f;
-	}
-
 	const char *materialOverrideFilename = NULL;
 
 	if ( m_bFixedConstraints )
@@ -1058,16 +1029,6 @@ void C_TFRagdoll::CreateTFHeadGib( void )
 void C_TFRagdoll::CreateTFGibs( bool bDestroyRagdoll, bool bCurrentPosition )
 {
 	C_TFPlayer *pPlayer = GetPlayer();
-	
-	if ( pPlayer && pPlayer->HasBombinomiconEffectOnDeath() )
-	{
-		m_vecForce *= 2.0f;
-		m_vecForce.z *= 3.0f;
-
-		DispatchParticleEffect( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) ? "bombinomicon_burningdebris_halloween" : "bombinomicon_burningdebris", 
-								bCurrentPosition ? GetAbsOrigin() : m_vecRagdollOrigin, GetAbsAngles() );
-		EmitSound( "Bombinomicon.Explode" );
-	}
 
 	if ( pPlayer && ((pPlayer->m_hFirstGib == NULL) || m_bFeignDeath) )
 	{
@@ -1078,12 +1039,7 @@ void C_TFRagdoll::CreateTFGibs( bool bDestroyRagdoll, bool bCurrentPosition )
 
 	if ( pPlayer )
 	{
-		if ( TFGameRules() && TFGameRules()->IsBirthday() )
-		{
-			DispatchParticleEffect( "bday_confetti", pPlayer->GetAbsOrigin() + Vector(0,0,32), vec3_angle );
-			C_BaseEntity::EmitSound( "Game.HappyBirthday" );
-		}
-		else if ( m_bCritOnHardHit && !UTIL_IsLowViolence() )
+		if ( m_bCritOnHardHit && !UTIL_IsLowViolence() )
 		{
 			DispatchParticleEffect( "tfc_sniper_mist", pPlayer->WorldSpaceCenter(), vec3_angle );
 		}
@@ -1365,7 +1321,6 @@ void C_TFRagdoll::ClientThink( void )
 	}
 
 	C_TFPlayer *pPlayer = GetPlayer();
-	bool bBombinomicon = ( pPlayer && pPlayer->HasBombinomiconEffectOnDeath() );
 
 	if ( !m_bGib )
 	{
@@ -1390,51 +1345,27 @@ void C_TFRagdoll::ClientThink( void )
 				}
 			}
 		}
-		else if ( bBombinomicon && ( GetFlags() & FL_DISSOLVING ) )
-		{
-			m_flTimeToDissolve -= gpGlobals->frametime;
-			if ( m_flTimeToDissolve <= 0 )
-			{
-				CreateTFGibs( true, true );
-			}
-		}
 		else if ( m_bBecomeAsh )
 		{
 			m_flTimeToDissolve -= gpGlobals->frametime;
 			if ( m_flTimeToDissolve <= 0 )
 			{
-				if ( bBombinomicon )
-				{
-					CreateTFGibs( true, true );
-				}
-				else
-				{
-					// Hide the ragdoll and stop everything but the ash particle effect
-					AddEffects( EF_NODRAW );
-					ParticleProp()->StopParticlesNamed( "drg_fiery_death", true, true );
+				// Hide the ragdoll and stop everything but the ash particle effect
+				AddEffects( EF_NODRAW );
+				ParticleProp()->StopParticlesNamed( "drg_fiery_death", true, true );
 
-					// Hide all cosmetics
-					for ( C_BaseEntity *pEntity = ClientEntityList().FirstBaseEntity(); pEntity; pEntity = ClientEntityList().NextBaseEntity(pEntity) )
+				// Hide all cosmetics
+				for ( C_BaseEntity *pEntity = ClientEntityList().FirstBaseEntity(); pEntity; pEntity = ClientEntityList().NextBaseEntity(pEntity) )
+				{
+					if ( pEntity->GetFollowedEntity() == this )
 					{
-						if ( pEntity->GetFollowedEntity() == this )
+						CEconEntity *pItem = dynamic_cast< CEconEntity * >( pEntity );
+						if ( pItem )
 						{
-							CEconEntity *pItem = dynamic_cast< CEconEntity * >( pEntity );
-							if ( pItem )
-							{
-								pItem->AddEffects( EF_NODRAW );
-							}
+							pItem->AddEffects( EF_NODRAW );
 						}
 					}
 				}
-				return;
-			}
-		}
-		else if ( bBombinomicon )
-		{
-			m_flTimeToDissolve -= gpGlobals->frametime;
-			if ( m_flTimeToDissolve <= 0 )
-			{
-				CreateTFGibs( true, true );
 				return;
 			}
 		}
@@ -1451,21 +1382,14 @@ void C_TFRagdoll::ClientThink( void )
 
 				if ( pPlayer )
 				{
-					if ( bBombinomicon )
+					for ( int i=0; i<pPlayer->m_hSpawnedGibs.Count(); i++ )
 					{
-						CreateTFGibs( true, true );
-					}
-					else
-					{
-						for ( int i=0; i<pPlayer->m_hSpawnedGibs.Count(); i++ )
+						C_BaseEntity* pGib = pPlayer->m_hSpawnedGibs[i].Get();
+						if ( pGib )
 						{
-							C_BaseEntity* pGib = pPlayer->m_hSpawnedGibs[i].Get();
-							if ( pGib )
-							{
-								pGib->SetAbsVelocity( vec3_origin );
-								DissolveEntity( pGib );
-								pGib->ParticleProp()->StopParticlesInvolving( pGib );
-							}
+							pGib->SetAbsVelocity( vec3_origin );
+							DissolveEntity( pGib );
+							pGib->ParticleProp()->StopParticlesInvolving( pGib );
 						}
 					}
 				}
@@ -3486,8 +3410,6 @@ IMPLEMENT_CLIENTCLASS_DT( C_TFPlayer, DT_TFPlayer, CTFPlayer )
 	RecvPropDataTable( "tfnonlocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_TFNonLocalPlayerExclusive) ),
 
 	RecvPropBool( RECVINFO( m_bAllowMoveDuringTaunt ) ),
-	RecvPropBool( RECVINFO( m_bIsReadyToHighFive ) ),
-	RecvPropEHandle( RECVINFO( m_hHighFivePartner ) ),
 	RecvPropInt( RECVINFO( m_nForceTauntCam ) ),
 	RecvPropFloat( RECVINFO( m_flTauntYaw ) ),
 	RecvPropInt( RECVINFO( m_nActiveTauntSlot ) ),
@@ -3598,7 +3520,6 @@ C_TFPlayer::C_TFPlayer() :
 	m_pDisguisingEffect = NULL;
 	m_pSaveMeEffect = NULL;
 	m_pTypingEffect = NULL;
-	m_pTauntWithMeEffect = NULL;
 	m_hOldObserverTarget = NULL;
 	m_iOldObserverMode = OBS_MODE_NONE;
 	m_pStunnedEffect = NULL;
@@ -3615,8 +3536,6 @@ C_TFPlayer::C_TFPlayer() :
 	m_pRuneChargeReadyEffect = NULL;
 
 	m_aGibs.Purge();
-	m_aNormalGibs.PurgeAndDeleteElements();
-	m_aSillyGibs.Purge();
 
 	m_bCigaretteSmokeActive = false;
 
@@ -3624,9 +3543,6 @@ C_TFPlayer::C_TFPlayer() :
 
 	m_iPreviousMetal = 0;
 	m_bIsDisplayingNemesisIcon = false;
-	m_bIsDisplayingDuelingIcon = false;
-	m_bIsDisplayingIconForIT = false;
-	m_bShouldShowBirthdayEffect = false;
 
 	m_bWasTaunting = false;
 	m_angTauntPredViewAngles.Init();
@@ -3692,7 +3608,6 @@ C_TFPlayer::C_TFPlayer() :
 
 	m_hRevivePrompt = NULL;
 
-	m_bIsDisplayingTranqMark = false;
 	m_eDisplayingRuneIcon = RUNE_NONE;
 
 	m_pKart = NULL;
@@ -3741,7 +3656,6 @@ C_TFPlayer::C_TFPlayer() :
 C_TFPlayer::~C_TFPlayer()
 {
 	ShowNemesisIcon( false );
-	ShowDuelingIcon( false );
 	m_PlayerAnimState->Release();
 
 	CSoundEnvelopeController &controller = CSoundEnvelopeController::GetController();
@@ -4008,21 +3922,8 @@ void C_TFPlayer::SetDormant( bool bDormant )
 		{
 			ShowNemesisIcon( false );
 		}
-		if ( m_bIsDisplayingDuelingIcon )
-		{
-			ShowDuelingIcon( false );
-		}
-		if ( m_bIsDisplayingIconForIT )
-		{
-			ShowIconForIT( false );
-		}
 		UpdatedMarkedForDeathEffect( true );
 		UpdateRuneIcon( true );
-
-		if ( m_bShouldShowBirthdayEffect )
-		{
-			ShowBirthdayEffect( false );
-		}
 	}
 
 	if ( IsDormant() && !bDormant )
@@ -4247,26 +4148,8 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 			StartBurningSound();
 		}
 
-		bool bShouldShowIconForIT = TFGameRules() && TFGameRules()->IsIT( this ) && !IsLocalPlayer();
-		if ( bShouldShowIconForIT != m_bIsDisplayingIconForIT )
-		{
-			ShowIconForIT( bShouldShowIconForIT );
-		}
-
-		bool bShouldShowBirthdayEffect = false;//TFGameRules() && ( TFGameRules()->GetBirthdayPlayer() == this ) && !IsLocalPlayer();
-		if ( bShouldShowBirthdayEffect != m_bShouldShowBirthdayEffect )
-		{
-			ShowBirthdayEffect( bShouldShowBirthdayEffect );
-		}
-
-		bool bShouldShowDuelingIcon = ShouldShowDuelingIcon();
-		if ( bShouldShowDuelingIcon != m_bIsDisplayingDuelingIcon )
-		{
-			ShowDuelingIcon( bShouldShowDuelingIcon );
-		}
-
 		// See if we should show or hide nemesis icon for this player
-		bool bShouldDisplayNemesisIcon = ( !bShouldShowDuelingIcon && !m_bIsDisplayingIconForIT && ShouldShowNemesisIcon() );
+		bool bShouldDisplayNemesisIcon = ShouldShowNemesisIcon();
 		if ( bShouldDisplayNemesisIcon != m_bIsDisplayingNemesisIcon )
 		{
 			ShowNemesisIcon( bShouldDisplayNemesisIcon );
@@ -4932,7 +4815,6 @@ void C_TFPlayer::OnPlayerClassChange( void )
 		g_ItemEffectMeterManager.SetPlayer( this );
 	}
 	ShowNemesisIcon( false );
-	ShowDuelingIcon( false );
 
 	SetAppropriateCamera( this );
 }
@@ -5086,80 +4968,6 @@ void C_TFPlayer::ShowNemesisIcon( bool bShow )
 	}
 	m_bIsDisplayingNemesisIcon = bShow;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Displays a dueling icon on this player to the local player
-//-----------------------------------------------------------------------------
-void C_TFPlayer::ShowDuelingIcon( bool bShow )
-{
-	if ( bShow )
-	{
-		const char *pszEffect = NULL;
-		switch ( GetTeamNumber() )
-		{
-		case TF_TEAM_RED:
-			pszEffect = "duel_red";
-			break;
-		case TF_TEAM_BLUE:
-			pszEffect = "duel_blue";
-			break;
-		default:
-			return;	// shouldn't get called if we're not on a team; bail out if it does
-		}
-		AddOverheadEffect( pszEffect );
-	}
-	else
-	{
-		// stop effects for both team colors (to make sure we remove effects in event of team change)
-		RemoveOverheadEffect( "duel_red", true );
-		RemoveOverheadEffect( "duel_blue", true );
-	}
-	m_bIsDisplayingDuelingIcon = bShow;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Displays an icon denoting this player as "IT" to the local player
-//-----------------------------------------------------------------------------
-void C_TFPlayer::ShowIconForIT( bool bShow )
-{
-	if ( bShow )
-	{
-		AddOverheadEffect( "halloween_boss_victim" );
-	}
-	else
-	{
-		RemoveOverheadEffect( "halloween_boss_victim", true );
-	}
-	m_bIsDisplayingIconForIT = bShow;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Displays an icon denoting this player as the Birthday Player to the local player
-//-----------------------------------------------------------------------------
-void C_TFPlayer::ShowBirthdayEffect( bool bShow )
-{
-/*
-	if ( bShow )
-	{
-		ParticleProp()->Create( "birthday_player_circling", PATTACH_POINT_FOLLOW, "head" );
-		DispatchParticleEffect( "bday_confetti", GetAbsOrigin() + Vector(0,0,32), vec3_angle );
-	}
-	else
-	{
-		ParticleProp()->StopParticlesNamed( "birthday_player_circling", true );
-	}
-*/
-	m_bShouldShowBirthdayEffect = bShow;
-}
-
-bool C_TFPlayer::HasBombinomiconEffectOnDeath( void )
-{
-	int iBombinomicomEffectOnDeath = 0;
-	CALL_ATTRIB_HOOK_INT( iBombinomicomEffectOnDeath, bombinomicon_effect_on_death );
-
-	return ( iBombinomicomEffectOnDeath != 0 );
-}
-
 
 #define	TF_TAUNT_PITCH	0
 #define TF_TAUNT_YAW	1
@@ -5323,7 +5131,6 @@ void C_TFPlayer::HandleTaunting( void )
 				m_Shared.InCond( TF_COND_TAUNTING ) ||
 				m_Shared.IsControlStunned() ||
 				m_Shared.IsLoser() ||
-				m_bIsReadyToHighFive ||
 				m_nForceTauntCam ||
 				m_Shared.InCond( TF_COND_HALLOWEEN_BOMB_HEAD ) ||
 				m_Shared.InCond( TF_COND_HALLOWEEN_GIANT ) ||
@@ -5348,7 +5155,7 @@ void C_TFPlayer::HandleTaunting( void )
 	if (	( !IsAlive() && m_nForceTauntCam < 2 ) || 
 			(
 				m_bWasTaunting && !m_Shared.InCond( TF_COND_TAUNTING ) && !m_Shared.IsControlStunned() && 
-				!m_Shared.InCond( TF_COND_PHASE ) && !m_Shared.IsLoser() && !m_bIsReadyToHighFive &&
+				!m_Shared.InCond( TF_COND_PHASE ) && !m_Shared.IsLoser() &&
 				!m_nForceTauntCam && !m_Shared.InCond( TF_COND_HALLOWEEN_BOMB_HEAD ) &&
 				!m_Shared.InCond( TF_COND_HALLOWEEN_THRILLER ) &&
 				!m_Shared.InCond( TF_COND_HALLOWEEN_GIANT ) &&
@@ -5505,34 +5312,6 @@ bool C_TFPlayer::CanLightCigarette( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Flash the bomb hat at ever increasing frequency
-//-----------------------------------------------------------------------------
-void C_TFPlayer::HalloweenBombHeadUpdate( void )
-{
-	if ( m_Shared.InCond( TF_COND_HALLOWEEN_BOMB_HEAD ) )
-	{
-		if ( !m_hHalloweenBombHat && gpGlobals->curtime > m_flBombDelay )
-		{
-			m_hHalloweenBombHat = C_PlayerAttachedModel::Create( BOMB_HAT_MODEL, this, LookupAttachment("head"), vec3_origin, PAM_PERMANENT, 0 );
-			m_hHalloweenBombHat->FollowEntity( this, true );
-		}
-
-		if ( m_hHalloweenBombHat )
-		{
-			m_hHalloweenBombHat->m_nSkin = m_Shared.m_nHalloweenBombHeadStage;
-		}
-	}
-	else
-	{
-		if ( m_hHalloweenBombHat )
-		{
-			m_hHalloweenBombHat->StopFollowingEntity();
-			m_hHalloweenBombHat->Release();
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 bool C_TFPlayer::ShouldPlayerDrawParticles( void )
@@ -5631,15 +5410,6 @@ void C_TFPlayer::ClientThink()
 		( m_Shared.InCond( TF_COND_DISGUISED ) && IsEnemyPlayer() && ( GetPercentInvisible() > 0 ) ) )
 	{
 		StopSaveMeEffect( true );
-	}
-
-	if ( ShouldTauntHintIconBeVisible() )
-	{
-		CreateTauntWithMeEffect();
-	}
-	else
-	{
-		StopTauntWithMeEffect();
 	}
 
 	if ( IsLocalPlayer() )
@@ -6306,11 +6076,7 @@ bool C_TFPlayer::CreateMove( float flInputSampleTime, CUserCmd *pCmd )
 
 	BaseClass::CreateMove( flInputSampleTime, pCmd );
 
-	// Don't avoid players if in the middle of a high five. This prevents high-fivers from becoming separated.
-	if ( !bInTaunt || ( !m_bIsReadyToHighFive && !CTFPlayerSharedUtils::ConceptIsPartnerTaunt( m_Shared.m_iTauntConcept ) ) )
-	{
-		AvoidPlayers( pCmd );
-	}
+	AvoidPlayers( pCmd );
 
 	// Populate passtime lock target for client-side targeting
 	C_TFPlayer *pPassTarget = m_Shared.GetPasstimePassTarget();
@@ -6360,42 +6126,6 @@ void C_TFPlayer::DoAnimationEvent( PlayerAnimEvent_t event, int nData )
 	MDLCACHE_CRITICAL_SECTION();
 	m_PlayerAnimState->DoAnimationEvent( event, nData );
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void C_TFPlayer::CreateBombonomiconHint()
-{
-	if ( IsLocalPlayer() && IsAlive() )
-	{
-		m_hBombonomiconHint = C_MerasmusBombEffect::Create( BOMBONOMICON_MODEL, this, Vector(-40, 0, 120), QAngle(30, 0, 0), 100.0, 4.0, PRM_SPIN_Z );
-		m_flBombDelay = gpGlobals->curtime + 2.0f;
-		m_hBombonomiconHint->SetModelScale( 0.5f );
-
-		CSingleUserRecipientFilter filter(this);
-		CSoundParameters params;
-		if ( CBaseEntity::GetParametersForSound( "Halloween.BombinomiconSpin", params, NULL ) )
-		{
-			EmitSound_t es( params );
-			EmitSound( filter, m_hBombonomiconHint->entindex(), es );
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void C_TFPlayer::DestroyBombonomiconHint()
-{
-	if ( IsLocalPlayer() )
-	{
-		if ( m_hBombonomiconHint )
-		{
-			m_hBombonomiconHint->Release();
-		}
-	}
-}
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Similar to OnNewModel. only reset animation related data
@@ -6471,9 +6201,7 @@ float C_TFPlayer::GetEffectiveInvisibilityLevel( void )
 	float flPercentInvisible = GetPercentInvisible();
 
 	// Crude way to limit Halloween spell
-	bool bHalloweenSpellStealth = TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) && m_Shared.InCond( TF_COND_STEALTHED_USER_BUFF );
-	bool bLimitedInvis = !IsEnemyPlayer() || bHalloweenSpellStealth;
-
+	bool bLimitedInvis = !IsEnemyPlayer();
 
 	// If this is a teammate of the local player or viewer is observer,
 	// dont go above a certain max invis
@@ -6558,23 +6286,6 @@ int C_TFPlayer::DrawModel( int flags )
 		return 0;
 
 	RecalcBodygroupsIfDirty();
-
-	// Don't draw the model at all if we're fully invisible
-	if ( GetEffectiveInvisibilityLevel() >= 1.0f )
-	{
-		if ( m_hHalloweenBombHat && ( g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90 ) && !m_hHalloweenBombHat->IsEffectActive( EF_NODRAW ) )
-		{
-			m_hHalloweenBombHat->SetEffects( EF_NODRAW );
-		}
-		return 0;
-	}
-	else
-	{
-		if ( m_hHalloweenBombHat && ( g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90 ) && m_hHalloweenBombHat->IsEffectActive( EF_NODRAW ) )
-		{
-			m_hHalloweenBombHat->RemoveEffects( EF_NODRAW );
-		}
-	}
 
 	CMatRenderContextPtr pRenderContext( materials );
 	bool bDoEffect = false;
@@ -6972,62 +6683,9 @@ void C_TFPlayer::InitPlayerGibs( void )
 {
 	// Clear out the gib list and create a new one.
 	m_aGibs.Purge();
-	m_aNormalGibs.PurgeAndDeleteElements();
-	m_aSillyGibs.Purge();
 
 	int nModelIndex = GetPlayerClass()->HasCustomModel() ? modelinfo->GetModelIndex( GetPlayerClass()->GetModelName() ) : GetModelIndex();
 	BuildGibList( m_aGibs, nModelIndex, 1.0f, COLLISION_GROUP_NONE );
-
-	if ( TFGameRules() && TFGameRules()->IsBirthday() )
-	{
-		for ( int i = 0; i < m_aGibs.Count(); i++ )
-		{
-			if ( RandomFloat(0,1) < 0.75 )
-			{
-				V_strcpy_safe( m_aGibs[i].modelName, g_pszBDayGibs[ RandomInt(0,ARRAYSIZE(g_pszBDayGibs)-1) ] );
-			}
-		}
-	}
-
-	// Copy the normal gibs list to be saved for later when swapping with Pyro Vision
-	FOR_EACH_VEC ( m_aGibs, i )
-	{
-		char *cloneStr = new char [ 512 ];
-		Q_strncpy( cloneStr, m_aGibs[i].modelName, 512 );
-		m_aNormalGibs.AddToTail( cloneStr );
-
-		// Create a list of silly gibs
-		int iRandIndex = RandomInt(4,ARRAYSIZE(g_pszBDayGibs)-1);
-		m_aSillyGibs.AddToTail( iRandIndex );
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose : Checks vision flags and ensures the proper gib models are loaded for vision mode
-//-----------------------------------------------------------------------------
-void C_TFPlayer::CheckAndUpdateGibType( void )
-{
-	// check the first gib, if it's different copy them all over
-	if ( TFGameRules() && TFGameRules()->UseSillyGibs() )
-	{
-		if ( Q_strcmp( m_aGibs[0].modelName, g_pszBDayGibs[ m_aSillyGibs[0] ]) != 0 )
-		{
-			FOR_EACH_VEC( m_aGibs, i )
-			{
-				V_strcpy_safe( m_aGibs[i].modelName, g_pszBDayGibs[ m_aSillyGibs[i] ] );
-			}
-		}
-	}
-	else 
-	{
-		if ( Q_strcmp( m_aGibs[0].modelName, m_aNormalGibs[0]) != 0 )
-		{
-			FOR_EACH_VEC( m_aGibs, i )
-			{
-				V_strcpy_safe( m_aGibs[i].modelName, m_aNormalGibs[i] );
-			}
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -7118,7 +6776,6 @@ void C_TFPlayer::CreatePlayerGibs( const Vector &vecOrigin, const Vector &vecVel
 		}
 		else
 		{
-			CheckAndUpdateGibType();
 			m_hFirstGib = CreateGibsFromList( m_aGibs, nModelIndex, NULL, breakParams, this, -1 , false, true, &m_hSpawnedGibs, bBurning );
 		}
 	}
@@ -7720,52 +7377,6 @@ void C_TFPlayer::UpdateTypingEffect()
 		}
 	}
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void C_TFPlayer::CreateTauntWithMeEffect()
-{
-	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( !pLocalPlayer || this == pLocalPlayer )
-		return;
-
-	if ( !m_pTauntWithMeEffect )
-	{
-		const char *pszImageName;
-		const char *pszParticleName;
-		if ( GetTeamNumber() != pLocalPlayer->GetTeamNumber() )
-		{
-			pszImageName = "../Effects/speech_taunt";
-			pszParticleName = "speech_taunt_all";
-		}
-		else if ( GetTeamNumber() == TF_TEAM_RED )
-		{
-			pszImageName = "../Effects/speech_taunt_red";
-			pszParticleName = "speech_taunt_red";
-		}
-		else
-		{
-			pszImageName = "../Effects/speech_taunt_blue";
-			pszParticleName = "speech_taunt_blue";
-		}
-		m_pTauntWithMeEffect = ParticleProp()->Create( pszParticleName, PATTACH_POINT_FOLLOW, "head" );
-	}
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void C_TFPlayer::StopTauntWithMeEffect()
-{
-	if ( m_pTauntWithMeEffect )
-	{
-		ParticleProp()->StopEmissionAndDestroyImmediately( m_pTauntWithMeEffect );		
-		m_pTauntWithMeEffect = NULL;
-	}
-}
-
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -8580,24 +8191,6 @@ void C_TFPlayer::FireEvent( const Vector& origin, const QAngle& angles, int even
 				m_IsFootprintOnLeft = !m_IsFootprintOnLeft;
 			}
 
-			// Halloween-specific bonus footsteps
-			int iHalloweenFootstepType = 0;
-			if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-			{
-				CALL_ATTRIB_HOOK_INT( iHalloweenFootstepType, halloween_footstep_type );
-			}
-
-			if ( m_nFootStamps > 0 )
-			{
-				// White stamps!
-				iHalloweenFootstepType = 0xFFFFFFFF;
-			}
-
-			if ( iHalloweenFootstepType != 0 )
-			{
-				SpawnHalloweenSpellFootsteps( PATTACH_ABSORIGIN, iHalloweenFootstepType );
-			}
-
 			if ( m_nFootStamps > 0 )
 			{
 				m_nFootStamps--;
@@ -8701,35 +8294,6 @@ void C_TFPlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOrig
 	}
 
 	BaseClass::UpdateStepSound( psurface, vecOrigin, vecVelocity );
-}
-
-
-CNewParticleEffect *C_TFPlayer::SpawnHalloweenSpellFootsteps( ParticleAttachment_t eParticleAttachment, int iHalloweenFootstepType )
-{
-	enum EPileOfHalloweenConstantHacks
-	{ 
-		kHalloweenSpell_RGBConstant_HHH			= 2,
-		kHalloweenSpell_RGBConstant_TeamColor	= 1,
-		kHalloweenSpell_RGB_Red					= 12073019,
-		kHalloweenSpell_RGB_Blue				= 5801378,
-	};
-
-	if ( iHalloweenFootstepType == kHalloweenSpell_RGBConstant_HHH )
-		return ParticleProp()->Create( "halloween_boss_foot_impact", eParticleAttachment, 0 );
-
-	CNewParticleEffect *pEffect = ParticleProp()->Create( m_nFootStamps ? "foot_stamp" : "halloween_boss_foot_impact_customcolor", eParticleAttachment, 0 );
-	if ( pEffect )
-	{
-		const int iRGB = iHalloweenFootstepType != kHalloweenSpell_RGBConstant_TeamColor		// special "use team-color" hack value
-			? iHalloweenFootstepType													// use the attribute value as the RGB
-			: GetTeamNumber() == TF_TEAM_BLUE							// which team are we on?
-			? kHalloweenSpell_RGB_Blue
-			: kHalloweenSpell_RGB_Red;
-
-		pEffect->SetControlPoint( 1, Vector( ((iRGB & 0xff0000) >> 16) / 255.0f, ((iRGB & 0xff00) >> 8) / 255.0f, (iRGB & 0xff) / 255.0f ) );
-	}
-
-	return pEffect;
 }
 
 // Shadows
@@ -10160,26 +9724,6 @@ const Vector& C_TFPlayer::GetRenderOrigin( void )
 	return BaseClass::GetRenderOrigin();
 }
 
-
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-ConVar tf_taunt_hint_max_distance( "tf_taunt_hint_max_distance", "256", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT );
-bool C_TFPlayer::ShouldTauntHintIconBeVisible() const
-{
-	C_TFPlayer *pLocalTFPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( !pLocalTFPlayer || pLocalTFPlayer == this || pLocalTFPlayer->IsTaunting() )
-		return false;
-
-	if ( IsTaunting() && IsReadyToTauntWithPartner() )
-	{
-		return GetAbsOrigin().DistToSqr( pLocalTFPlayer->GetAbsOrigin() ) <  Square( tf_taunt_hint_max_distance.GetFloat() );
-	}
-	
-	return false;
-}
-
-
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -10504,30 +10048,8 @@ void C_TFPlayer::FireGameEvent( IGameEvent *event )
 		const int iUserID = event->GetInt( "userid" );
 		if ( pLocalPlayer && GetUserID() == pLocalPlayer->GetUserID() && iUserID == pLocalPlayer->GetUserID() )
 		{
-
-			// ADD EconNotification to equip spellbook here
-			if ( TFGameRules() && TFGameRules()->IsUsingSpells() )
-			{
-				int iCount = NotificationQueue_Count( &CEquipSpellbookNotification::IsNotificationType );
-				CEconItemView *pItem = TFInventoryManager()->GetItemInLoadoutForClass( event->GetInt( "class"), LOADOUT_POSITION_ACTION );
-				// no spell book
-				if ( !pItem || !pItem->GetStaticData()->GetItemClass() || !FStrEq( pItem->GetStaticData()->GetItemClass(), "tf_weapon_spellbook" ) )
-				{
-					if ( iCount == 0 )
-					{
-						CEquipSpellbookNotification *pNotification = new CEquipSpellbookNotification();
-						pNotification->SetText( "#TF_SpellBook_EquipAction" );
-						pNotification->SetLifetime( 10.0f );
-						NotificationQueue_Add( pNotification );
-					}
-				}
-				else
-				{
-					NotificationQueue_Remove( &CEquipSpellbookNotification::IsNotificationType );
-				}
-			}
 			// ADD EconNotification to equip grapplinghook here
-			else if ( TFGameRules() && TFGameRules()->IsUsingGrapplingHook() )
+			if ( TFGameRules() && TFGameRules()->IsUsingGrapplingHook() )
 			{
 				int iCount = NotificationQueue_Count( &CEquipGrapplingHookNotification::IsNotificationType );
 				CEconItemView *pItem = TFInventoryManager()->GetItemInLoadoutForClass( event->GetInt( "class"), LOADOUT_POSITION_ACTION );
@@ -11066,17 +10588,7 @@ void C_TFPlayer::ClientAdjustVOPitch( int& pitch )
 	float flVoicePitchScale = 1.f;
 	CALL_ATTRIB_HOOK_FLOAT( flVoicePitchScale, voice_pitch_scale );
 
-	int iHalloweenVoiceSpell = 0;
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		CALL_ATTRIB_HOOK_INT( iHalloweenVoiceSpell, halloween_voice_modulation );
-	}
-
-	if ( iHalloweenVoiceSpell > 0 )
-	{
-		pitch *= 0.8f;
-	}
-	else if ( flVoicePitchScale != 1.f )
+	if ( flVoicePitchScale != 1.f )
 	{
 		pitch *= flVoicePitchScale;
 	}

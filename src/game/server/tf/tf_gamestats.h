@@ -93,8 +93,6 @@ public:
 	void Event_PlayerP4ssSave( CTFPlayer *pPlayer );
 	void Event_PlayerP4ssIntercept( CTFPlayer *pPlayer );
 
-	void Event_HalloweenBossEvent( uint8 unBossType, uint16 unBossLevel, uint8 unEventType, uint8 unPlayersInvolved, float fElapsedTime );
-
 	virtual void FireGameEvent( IGameEvent * event );
 
 	bool IsRealGameplay( TF_Gamestats_LevelStats_t *game );

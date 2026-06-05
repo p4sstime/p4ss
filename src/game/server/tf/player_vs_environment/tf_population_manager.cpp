@@ -2025,6 +2025,8 @@ bool CPopulationManager::Parse( void )
 		m_pTemplates = pTemplates->MakeCopy();
 	}
 
+	m_nMvMEventPopfileType = false;
+
 	for ( KeyValues *data = values->GetFirstSubKey(); data != NULL; data = data->GetNextKey() )
 	{
 		const char *name = data->GetName();
@@ -2041,17 +2043,6 @@ bool CPopulationManager::Parse( void )
 		else if ( !Q_stricmp( name, "RespawnWaveTime" ) )
 		{
 			m_nRespawnWaveTime = data->GetInt();
-		}
-		else if ( !Q_stricmp( name, "EventPopfile" ) )
-		{
-			if ( !Q_stricmp( data->GetString(), "Halloween" ) )
-			{
-				m_nMvMEventPopfileType = MVM_EVENT_POPFILE_HALLOWEEN;
-			}
-			else
-			{
-				m_nMvMEventPopfileType = MVM_EVENT_POPFILE_NONE;
-			}
 		}
 		else if ( !Q_stricmp( name, "FixedRespawnWaveTime" ) )
 		{

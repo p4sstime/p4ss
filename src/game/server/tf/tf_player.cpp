@@ -85,25 +85,20 @@
 #include "tier0/icommandline.h"
 #include "entity_healthkit.h"
 #include "choreoevent.h"
-#include "minigames/tf_duel.h"
 #include "tf_bot_temp.h"
 #include "tf_objective_resource.h"
 #include "tf_weapon_pipebomblauncher.h"
 #include "func_achievement.h"
-#include "halloween/merasmus/merasmus.h"
 #include "inetchannel.h"
 #include "tf_wearable_levelable_item.h"
 #include "tf_weapon_jar.h"
-#include "halloween/tf_weapon_spellbook.h"
 #include "soundenvelope.h"
 #include "tf_triggers.h"
 #include "collisionutils.h"
 #include "tf_taunt_prop.h"
 #include "eventlist.h"
 #include "entity_rune.h"
-#include "entity_halloween_pickup.h"
 #include "tf_gc_server.h"
-#include "tf_logic_halloween_2014.h"
 #include "tf_weapon_knife.h"
 #include "tf_weapon_grapplinghook.h"
 #include "tf_dropped_weapon.h"
@@ -124,7 +119,6 @@
 #include "player_vs_environment/tf_upgrades.h"
 #include "player_vs_environment/tf_population_manager.h"
 #include "tf_revive.h"
-#include "tf_logic_halloween_2014.h"
 #include "tf_logic_player_destruction.h"
 #include "tf_weapon_slap.h"
 #include "func_croc.h"
@@ -302,22 +296,6 @@ extern ConVar bot_mimic;
 extern CBaseEntity *FindPickerEntity( CBasePlayer *pPlayer );
 extern bool CanScatterGunKnockBack( CTFWeaponBase *pWeapon, float flDamage, float flDistanceSq );
 extern bool IsCustomGameMode();
-
-static const char *s_pszTauntRPSParticleNames[] =
-{
-	"rps_rock_red",
-	"rps_paper_red",
-	"rps_scissors_red",
-	"rps_rock_red_win",
-	"rps_paper_red_win",
-	"rps_scissors_red_win",
-	"rps_rock_blue",
-	"rps_paper_blue",
-	"rps_scissors_blue",
-	"rps_rock_blue_win",
-	"rps_paper_blue_win",
-	"rps_scissors_blue_win"
-};
 
 // -------------------------------------------------------------------------------- //
 // Player animation event. Sent to the client when a player fires, jumps, reloads, etc..
@@ -540,7 +518,6 @@ BEGIN_DATADESC( CTFPlayer )
 	DEFINE_INPUTFUNC( FIELD_VOID, "TriggerLootIslandAchievement", InputTriggerLootIslandAchievement ),
 	DEFINE_INPUTFUNC( FIELD_VOID, "TriggerLootIslandAchievement2", InputTriggerLootIslandAchievement2 ),
 	DEFINE_INPUTFUNC( FIELD_STRING,	"SpeakResponseConcept",	InputSpeakResponseConcept ),
-	DEFINE_INPUTFUNC( FIELD_VOID, "RollRareSpell", InputRollRareSpell ),
 	DEFINE_INPUTFUNC( FIELD_VOID, "RoundSpawn", InputRoundSpawn ),
 END_DATADESC()
 
@@ -663,8 +640,6 @@ BEGIN_ENT_SCRIPTDESC( CTFPlayer, CBaseMultiplayerPlayer , "Team Fortress 2 Playe
 	DEFINE_SCRIPTFUNC( ExtinguishPlayerBurning, "" )
 	DEFINE_SCRIPTFUNC( BleedPlayer, "" )
 	DEFINE_SCRIPTFUNC( BleedPlayerEx, "" )
-	DEFINE_SCRIPTFUNC( RollRareSpell, "" )
-	DEFINE_SCRIPTFUNC( ClearSpells, "" )
 
 	DEFINE_SCRIPTFUNC_NAMED( ScriptGetPlayerClass, "GetPlayerClass", "" )
 	DEFINE_SCRIPTFUNC_NAMED( ScriptSetPlayerClass, "SetPlayerClass", "" )
@@ -1168,83 +1143,6 @@ void CTFPlayer::TFPlayerThink()
 		m_flSendPickupWeaponMessageTime = -1.f;
 	}
 
-	// In doomsday event, kart can run over ghost to do stuff
-	if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
-	{
-		CUtlVector< CTFPlayer * > playerVector;
-		CollectPlayers( &playerVector, TEAM_ANY, true );
-		CUtlVector< CTFPlayer * > ghostVector;
-		for ( int i=0; i<playerVector.Count(); ++i )
-		{
-			if ( playerVector[i] == this )
-				continue;
-
-			// touching ghost player?
-			// we just check for radius of 100 and assume that we touch to avoid custom collision for ghost
-			if ( playerVector[i]->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-			{
-				if ( ( playerVector[i]->GetAbsOrigin() - GetAbsOrigin() ).LengthSqr() < Square( 100 ) )
-				{
-					ghostVector.AddToTail( playerVector[i] );
-				}
-			}
-		}
-
-		for ( int i=0; i<ghostVector.Count(); ++i )
-		{
-			CTFPlayer *pGhost = ghostVector[i];
-			
-			// revive ghost on the same team
-			if ( pGhost->GetTeamNumber() == GetTeamNumber() )
-			{
-				// Trace the ghosts bbox right where they are to see if they collide with enemy players
-				trace_t trace;
-				Ray_t ray;
-				ray.Init( pGhost->GetAbsOrigin(), pGhost->GetAbsOrigin(), pGhost->GetPlayerMins(), pGhost->GetPlayerMaxs() );
-				UTIL_TraceRay( ray, PlayerSolidMask(), pGhost, COLLISION_GROUP_PLAYER, &trace );
-
-				// If our trace is clear, spawn that ghost
-				if ( trace.fraction == 1.0f )
-				{
-					// Force the players kart angles to line up with our current ghost angles.
-					// This should put us in the kart at the same direction we are currently looking.
-					pGhost->ForcePlayerViewAngles( pGhost->GetAbsAngles() );
-
-					pGhost->m_Shared.RemoveCond( TF_COND_HALLOWEEN_GHOST_MODE );
-					pGhost->m_Shared.AddCond( TF_COND_HALLOWEEN_KART );
-					pGhost->m_Shared.AddCond( TF_COND_HALLOWEEN_IN_HELL ); // keep you in hell to be able to respawn as ghost
-					pGhost->m_Shared.AddCond( TF_COND_HALLOWEEN_QUICK_HEAL, 3, this );
-					pGhost->EmitSound( "BumperCar.SpawnFromLava" );
-					DispatchParticleEffect( "ghost_appearation", PATTACH_ABSORIGIN, pGhost );
-
-					if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-					{
-						IGameEvent *pEvent = gameeventmanager->CreateEvent( "respawn_ghost" );
-						if ( pEvent )
-						{
-							pEvent->SetInt( "reviver", GetUserID() );
-							pEvent->SetInt( "ghost", pGhost->GetUserID() );
-							gameeventmanager->FireEvent( pEvent, true );
-						}
-					}
-				}
-			}
-			else if ( tf_halloween_allow_ghost_hit_by_kart_delay.GetFloat() > 0 && gpGlobals->curtime - pGhost->m_flGhostLastHitByKartTime > tf_halloween_allow_ghost_hit_by_kart_delay.GetFloat() )
-			{
-				// punt off other team ghost
-				float flImpactForce = GetLocalVelocity().Length();
-				flImpactForce = MAX( 100.f, flImpactForce ); // add min force
-				Vector vOffset = pGhost->WorldSpaceCenter() - WorldSpaceCenter();
-				vOffset.z = 0;
-				Vector vPuntDir = ( vOffset ).Normalized();
-				vPuntDir.z = 0.5f;
-				pGhost->ApplyGenericPushbackImpulse( tf_halloween_kart_punting_ghost_force_scale.GetFloat() * flImpactForce * vPuntDir, nullptr );
-				pGhost->EmitSound( "BumperCar.HitGhost" );
-				pGhost->m_flGhostLastHitByKartTime = gpGlobals->curtime;
-			}
-		}
-	}
-
 	if ( TFGameRules() && TFGameRules()->IsUsingGrapplingHook() )
 	{
 		if ( IsUsingActionSlot() && GetActiveTFWeapon() && GetActiveTFWeapon()->GetWeaponID() != TF_WEAPON_GRAPPLINGHOOK )
@@ -1334,20 +1232,6 @@ void CTFPlayer::TFPlayerThink()
 	// Spell Casting on Attack1
 	if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
 	{
-		// Check if this is the spellbook so we can save off info to preserve weapon switching
-		CTFSpellBook *pSpellBook = dynamic_cast<CTFSpellBook*>( GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-		if ( pSpellBook )
-		{
-			// cast Spell
-			if ( m_nButtons & IN_ATTACK )
-			{
-				if ( pSpellBook )
-				{
-					pSpellBook->PrimaryAttack();
-				}
-			}
-		}
-
 		// Speed Boost
 		if ( m_nButtons & IN_ATTACK2 )
 		{
@@ -2449,13 +2333,6 @@ void CTFPlayer::AddHalloweenKartPushEvent( CTFPlayer *pOther, CBaseEntity *pInfl
 		m_iKartHealth += iDamage;
 	}
 
-	// HHH
-	if ( TFGameRules()->IsIT( pOther ) )
-	{
-		// Tag! You're IT!
-		TFGameRules()->SetIT( this );
-	}
-
 	if ( iDamageType == TF_DMG_CUSTOM_DECAPITATION_BOSS )
 	{
 		m_flHHHKartAttackTime = gpGlobals->curtime;
@@ -2510,48 +2387,6 @@ void CTFPlayer::AddHalloweenKartPushEvent( CTFPlayer *pOther, CBaseEntity *pInfl
 
 	m_vHalloweenKartPush += vForce;
 
-	// Dropped collection game tokens if hit hard enough and we're in the collection minigame
-	if ( pOther && iDamage > 10 && CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() && 
-		CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame()->GetMinigameType() == CTFMiniGame::EMinigameType::MINIGAME_HALLOWEEN2014_COLLECTION )
-	{
-		CUtlVector< CTFPlayer* > vecEveryone;
-		CollectPlayers( &vecEveryone );
-		int nNumPlayers = vecEveryone.Count();
-
-		// Drop tokens
-		uint32 nNumToSpawn = ( iDamage / 5 ) + 1;
-		nNumToSpawn = RemapValClamped( nNumPlayers, 8, 16, nNumToSpawn, 1 );
-
-		if ( gpGlobals->curtime > m_flNextBonusDucksVOAllowedTime )
-		{
-			// Tell this user to play a "Bonus Ducks!" line. 
-			CSingleUserRecipientFilter filter( pOther );
-			UserMessageBegin( filter, "BonusDucks" );
-				WRITE_BYTE( entindex() );
-				WRITE_BYTE( false );
-			MessageEnd();
-		}
-
-		while( nNumToSpawn-- )
-		{
-			CHalloweenPickup *pPickup = dynamic_cast< CHalloweenPickup * >( CreateEntityByName( "tf_halloween_pickup" ) );
-			if (pPickup)
-			{
-				pPickup->m_nSkin = 2; // Golden skin
-				pPickup->Precache();
-				DispatchSpawn(pPickup);
-				Vector vecRandom = RandomVector( -200.f, 200.f );
-				vecRandom.z = RandomFloat( 300.f, 400.f );
-				Vector vecDropVector = vecRandom + vForce * 0.2f;
-				pPickup->DropSingleInstance( vecDropVector, this, 1.f, 1.f );
-
-				pPickup->SetAbsOrigin( GetAbsOrigin() + Vector( 0.f, 0.f, 40.f ) );
-
-				pPickup->Activate();
-			}
-		}
-	}
-	
 	//DevMsg( "Kart Impact %fx,%fy,%fz - %f Base. %f Multiplayer, %f TotalForce, %d Damage, %i Class \n", 
 	//	vForce.x, vForce.y, vForce.z, vForce.Length(), flNewKartKnockbackMultiplier, vForce.Length() * flNewKartKnockbackMultiplier, iDamage, GetPlayerClass()->GetClassIndex() );
 	
@@ -2637,66 +2472,6 @@ void CTFPlayer::PostThink()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFPlayer::PrecacheMvM()
-{
-	for ( int i = TF_FIRST_NORMAL_CLASS; i < TF_LAST_NORMAL_CLASS; ++i )
-	{
-		COMPILE_TIME_ASSERT( ARRAYSIZE( g_szBotModels ) == TF_LAST_NORMAL_CLASS );
-		int iModelIndex = PrecacheModel( g_szBotModels[ i ] );
-		PrecacheGibsForModel( iModelIndex );
-
-		COMPILE_TIME_ASSERT( ARRAYSIZE( g_szBotBossModels ) == TF_LAST_NORMAL_CLASS );
-		iModelIndex = PrecacheModel( g_szBotBossModels[ i ] );
-		PrecacheGibsForModel( iModelIndex );
-	}
-
-	int iModelIndex = PrecacheModel( g_szBotBossSentryBusterModel );
-	PrecacheGibsForModel( iModelIndex );
-
-	PrecacheModel( "models/items/currencypack_small.mdl" );
-	PrecacheModel( "models/items/currencypack_medium.mdl" );
-	PrecacheModel( "models/items/currencypack_large.mdl" );
-
-	PrecacheModel( "models/bots/tw2/boss_bot/twcarrier_addon.mdl" );
-
-	PrecacheParticleSystem( "bot_impact_light" );
-	PrecacheParticleSystem( "bot_impact_heavy" );
-	PrecacheParticleSystem( "bot_death" );
-	PrecacheParticleSystem( "bot_radio_waves" );
-
-	PrecacheScriptSound( "MVM.BotStep" );
-	PrecacheScriptSound( "MVM.GiantHeavyStep" );
-	PrecacheScriptSound( "MVM.GiantSoldierStep" );
-	PrecacheScriptSound( "MVM.GiantDemomanStep" );
-	PrecacheScriptSound( "MVM.GiantScoutStep" );
-	PrecacheScriptSound( "MVM.GiantPyroStep" );
-	PrecacheScriptSound( "MVM.GiantHeavyLoop" );
-	PrecacheScriptSound( "MVM.GiantSoldierLoop" );
-	PrecacheScriptSound( "MVM.GiantDemomanLoop" );
-	PrecacheScriptSound( "MVM.GiantScoutLoop" );
-	PrecacheScriptSound( "MVM.GiantPyroLoop" );
-	PrecacheScriptSound( "MVM.GiantHeavyExplodes" );
-	PrecacheScriptSound( "MVM.GiantCommonExplodes" );
-	PrecacheScriptSound( "MVM.SentryBusterExplode" );
-	PrecacheScriptSound( "MVM.SentryBusterLoop" );
-	PrecacheScriptSound( "MVM.SentryBusterIntro" );
-	PrecacheScriptSound( "MVM.SentryBusterStep" );
-	PrecacheScriptSound( "MVM.SentryBusterSpin" );
-	PrecacheScriptSound( "MVM.DeployBombSmall" );
-	PrecacheScriptSound( "MVM.DeployBombGiant" );
-	PrecacheScriptSound( "Weapon_Upgrade.ExplosiveHeadshot" );
-	PrecacheScriptSound( "Spy.MVM_Chuckle" );
-	PrecacheScriptSound( "Spy.MVM_TeaseVictim" );
-	PrecacheScriptSound( "MVM.Robot_Engineer_Spawn" );
-	PrecacheScriptSound( "MVM.Robot_Teleporter_Deliver" );
-	PrecacheScriptSound( "MVM.MoneyPickup" );
-
-	PrecacheMaterial( "effects/circle_nocull" );
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CTFPlayer::PrecacheKart()
 {
 	PrecacheModel( "models/player/items/taunts/bumpercar/parts/bumpercar.mdl" );
@@ -2743,39 +2518,6 @@ void CTFPlayer::PrecachePlayerModels( void )
 		{
 			PrecacheModel( pszModel );
 		}
-
-/*
-		if ( !IsX360() )
-		{
-			// Precache the hardware facial morphed models as well.
-			const char *pszHWMModel = GetPlayerClassData( i )->m_szHWMModelName;
-			if ( pszHWMModel && pszHWMModel[0] )
-			{
-				PrecacheModel( pszHWMModel );
-			}
-		}
-*/
-	}
-	
-	// Always precache the silly gibs.
-	for ( i = 4; i < ARRAYSIZE( g_pszBDayGibs ); ++i )
-	{
-		PrecacheModel( g_pszBDayGibs[i] );
-	}
-
-	if ( TFGameRules() && TFGameRules()->IsBirthday() )
-	{
-		for ( i = 0; i < 4/*ARRAYSIZE(g_pszBDayGibs)*/; i++ )
-		{
-			PrecacheModel( g_pszBDayGibs[i] );
-		}
-		PrecacheModel( "models/effects/bday_hat.mdl" );
-	}
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		PrecacheModel( "models/props_halloween/halloween_gift.mdl" );
-		PrecacheModel( "models/props_halloween/ghost_no_hat.mdl" );
-		PrecacheModel( "models/props_halloween/ghost_no_hat_red.mdl" );
 	}
 
 	// Precache player class sounds
@@ -2906,11 +2648,8 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheParticleSystem( "critgun_weaponmodel_blu" );
 	PrecacheParticleSystem( "overhealedplayer_red_pluses" );
 	PrecacheParticleSystem( "overhealedplayer_blue_pluses" );
-	PrecacheParticleSystem( "highfive_red" );
-	PrecacheParticleSystem( "highfive_blue" );
 	PrecacheParticleSystem( "god_rays" );
 	PrecacheParticleSystem( "bl_killtaunt" );
-	PrecacheParticleSystem( "birthday_player_circling" );
 	PrecacheParticleSystem( "drg_fiery_death" );
 	PrecacheParticleSystem( "drg_wrenchmotron_teleport" );
 	PrecacheParticleSystem( "taunt_flip_land_red" );
@@ -2920,20 +2659,7 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheParticleSystem( "dxhr_sniper_rail_red" );
 	PrecacheParticleSystem( "tfc_sniper_distortion_trail" );
 
-	for ( int i=0; i<ARRAYSIZE( s_pszTauntRPSParticleNames ); ++i )
-	{
-		PrecacheParticleSystem( s_pszTauntRPSParticleNames[i] );
-	}
-
 	PrecacheParticleSystem( "blood_decap" );
-
-	PrecacheParticleSystem( "xms_icicle_idle" );
-	PrecacheParticleSystem( "xms_icicle_impact" );
-	PrecacheParticleSystem( "xms_icicle_impact_dryice" );
-	PrecacheParticleSystem( "xms_icicle_melt" );
-	PrecacheParticleSystem( "xms_ornament_glitter" );
-	PrecacheParticleSystem( "xms_ornament_smash_blue" );
-	PrecacheParticleSystem( "xms_ornament_smash_red" );
 
 	PrecacheParticleSystem( "drg_pomson_muzzleflash" );
 	PrecacheParticleSystem( "drg_pomson_impact" );
@@ -2949,27 +2675,8 @@ void CTFPlayer::PrecacheTFPlayer()
 
 	PrecacheScriptSound( "Weapon_Mantreads.Impact" );
 
-	// Precache footstep override sounds.
-	PrecacheScriptSound( "cleats_conc.StepLeft" );
-	PrecacheScriptSound( "cleats_conc.StepRight" );
-	PrecacheScriptSound( "cleats_dirt.StepLeft" );
-	PrecacheScriptSound( "cleats_dirt.StepRight" );
-
-	PrecacheScriptSound( "xmas.jingle" );
-	PrecacheScriptSound( "xmas.jingle_higher" );
-
 	PrecacheScriptSound( "PegLeg.StepRight" );
-
-	// Halloween
-	// Bombinomicon deaths
-	PrecacheParticleSystem( "bombinomicon_burningdebris" );
-	PrecacheParticleSystem( "bombinomicon_burningdebris_halloween" );
-
-	PrecacheParticleSystem( "halloween_player_death_blue" );
-	PrecacheParticleSystem( "halloween_player_death" );
-
-	PrecacheScriptSound( "Bombinomicon.Explode" );
-
+	
 	PrecacheScriptSound( "Weapon_DRG_Wrench.Teleport" );
 	PrecacheScriptSound( "Weapon_Pomson.Single" );
 	PrecacheScriptSound( "Weapon_Pomson.SingleCrit" );
@@ -2988,14 +2695,8 @@ void CTFPlayer::PrecacheTFPlayer()
 
 	PrecacheScriptSound( "General.banana_slip" ); // Used for SodaPopper Hype Jumps
 
-
 	PrecacheScriptSound( "Parachute_open" );
 	PrecacheScriptSound( "Parachute_close" );
-
-
-	// precache the EOTL bomb cart replacements
-	PrecacheModel( "models/props_trainyard/bomb_eotl_blue.mdl" );
-	PrecacheModel( "models/props_trainyard/bomb_eotl_red.mdl" );
 }
 
 //-----------------------------------------------------------------------------
@@ -3728,28 +3429,6 @@ void CTFPlayer::Spawn()
 
 	if ( TFGameRules() )
 	{
-		// It's halloween, and it's hell time.  Force this player to spawn in hell.
-		if ( TFGameRules()->ArePlayersInHell() )
-		{
-			const char *pSpawnEntName = NULL;
-			if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) )
-			{
-				pSpawnEntName = "hell_ghost_spawn";
-			}
-			else if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) && CTFMinigameLogic::GetMinigameLogic() )
-			{
-				CTFMiniGame *pActiveMinigame = CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame();
-				if ( pActiveMinigame )
-				{
-					pSpawnEntName = pActiveMinigame->GetTeamSpawnPointName( GetTeamNumber() );
-				}
-			}
-
-			if ( pSpawnEntName )
-			{
-				TFGameRules()->SpawnPlayerInHell( this, pSpawnEntName );
-			}
-		}
 		TFGameRules()->OnPlayerSpawned( this );
 	}
 
@@ -4743,58 +4422,6 @@ void CTFPlayer::UseActionSlotItemPressed( void )
 	{
 		// @todo send event to clients so that they know what's going on
 		pPowerupBottle->Use();
-		return;
-	}
-
-	// is it a throwable?
-	CTFThrowable *pThrowable = dynamic_cast< CTFThrowable* >( pActionSlotEntity );
-	if ( pThrowable )
-	{
-		if ( !Weapon_ShouldSelectItem( pThrowable ) )
-			return;
-
-		if ( GetActiveWeapon() )
-		{
-			if ( !GetActiveWeapon()->CanHolster() )
-				return;
-
-			ResetAutoaim( );
-		}
-
-		// Check if this is the spellbook so we can save off info to preserve weapon switching
-		CTFSpellBook *pSpellBook = dynamic_cast< CTFSpellBook* >( pThrowable );
-		if ( pSpellBook )
-		{
-			if ( !pSpellBook->CanCastSpell( this ) )
-			{
-				// if no spell force a roll if cheat is active
-				if ( tf_halloween_unlimited_spells.GetBool() && !pSpellBook->HasASpellWithCharges() )
-				{
-					pSpellBook->RollNewSpell( 0 );
-				}
-				else if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
-				{
-					// if I'm in a halloween Vehicle, cast the spell immediately
-					//pSpellBook->CastKartSpell();
-					pSpellBook->PrimaryAttack();
-				}
-				else
-				{
-					EmitSound_t params;
-					params.m_flSoundTime = 0;
-					params.m_pflSoundDuration = 0;
-					params.m_pSoundName = "Player.DenyWeaponSelection";
-
-					CSingleUserRecipientFilter filter( this );
-					EmitSound( filter, entindex(), params );
-				}
-				return;
-			}
-			// Notify the spellbook of the current last used weapon
-			pSpellBook->SaveLastWeapon( GetLastWeapon() );
-		}
-		// Equip it
-		Weapon_Switch( pThrowable );
 		return;
 	}
 
@@ -5919,7 +5546,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 
 	if ( GetTeamNumber() == TF_TEAM_RED || GetTeamNumber() == TF_TEAM_BLUE )
 	{
-		if ( TFGameRules()->ArePlayersInHell() || TFGameRules()->IsPowerupMode() )
+		if ( TFGameRules()->IsPowerupMode() )
 		{
 			ClientPrint( this, HUD_PRINTCENTER, "#TF_CantChangeTeamNow" );
 			return;
@@ -6069,7 +5696,6 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 
 		m_bArenaSpectator = bArenaSpectator;
-		DuelMiniGame_NotifyPlayerChangedTeam( this, TEAM_SPECTATOR, true );
 		ChangeTeam( TEAM_SPECTATOR );
 
 		if ( m_bArenaSpectator == true )
@@ -6121,7 +5747,6 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 			return;
 		}
 
-		DuelMiniGame_NotifyPlayerChangedTeam( this, iTeam, true );
 		bool bSilent = TFGameRules() && TFGameRules()->IsPVEModeActive() && IsBot();
 
 #ifndef _DEBUG
@@ -6198,12 +5823,6 @@ void CTFPlayer::ForceChangeTeam( int iTeamNum, bool bFullTeamSwitch )
 	// if this is our current team, just abort
 	if ( iNewTeam == iOldTeam )
 		return;
-
-	// can't change teams if in a duel
-	if ( DuelMiniGame_IsInDuel( this ) )
-	{
-		DuelMiniGame_NotifyPlayerChangedTeam( this, iTeamNum, true );
-	}
 
 	RemoveAllOwnedEntitiesFromWorld( true );
 	
@@ -6385,8 +6004,6 @@ void CTFPlayer::ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent, bool bAu
 	}
 	
 	m_Shared.RemoveAllCond();
-	DuelMiniGame_NotifyPlayerChangedTeam( this, iTeamNum, false );
-
 }
 
 //-----------------------------------------------------------------------------
@@ -6563,14 +6180,6 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName, bool bAllowSpaw
 	if ( TFGameRules()->IsInArenaMode() && tf_arena_use_queue.GetBool() == true && GetTeamNumber() <= LAST_SHARED_TEAM )
 	{
 		TFGameRules()->AddPlayerToQueue( this );
-	}
-
-	// @note Tom Bui: we need to restrict the UI somehow
-	// if there's a class restriction on duels...
-	int iDuelClass = DuelMiniGame_GetRequiredPlayerClass( this );
-	if ( iDuelClass >= TF_FIRST_NORMAL_CLASS && iDuelClass < TF_LAST_NORMAL_CLASS )
-	{
-		iClass = iDuelClass;
 	}
 
 	SetDesiredPlayerClassIndex( iClass );
@@ -7412,9 +7021,6 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 			if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
 				return true;
 
-			if ( TFGameRules() && TFGameRules()->ArePlayersInHell() )
-				return true;
-
 			int iAltFireTeleportToSpawn = 0;
 			CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iAltFireTeleportToSpawn, alt_fire_teleport_to_spawn );
 
@@ -7496,10 +7102,6 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 
 			char pszWelcome[128];
 			Q_snprintf( pszWelcome, sizeof(pszWelcome), "#TF_Welcome" );
-			if ( UTIL_GetActiveHolidayString() )
-			{
-				Q_snprintf( pszWelcome, sizeof(pszWelcome), "#TF_Welcome_%s", UTIL_GetActiveHolidayString() );
-			}
 
 			KeyValues *data = new KeyValues( "data" );
 			data->SetString( "title", pszWelcome );		// info panel title
@@ -7715,11 +7317,6 @@ bool CTFPlayer::IsClassMenuOpen( void )
 void CTFPlayer::MerasmusPlayerBombExplode( bool bExcludeMe /*= true */ )
 {
 	float flDamage = 40.0f;
-	// bomb head damage is 100 only for fighting Merasmus, lower for all other scenarios
-	if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
-	{
-		flDamage = 100.0f;
-	}
 
 	// explode!
 	Vector vecExplosion = EyePosition();
@@ -10507,17 +10104,6 @@ bool CTFPlayer::ShouldGib( const CTakeDamageInfo &info )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-bool CTFPlayer::HasBombinomiconEffectOnDeath( void )
-{
-	int iBombinomicomEffectOnDeath = 0;
-	CALL_ATTRIB_HOOK_INT( iBombinomicomEffectOnDeath, bombinomicon_effect_on_death );
-
-	return ( iBombinomicomEffectOnDeath != 0 );
-}
-
-//-----------------------------------------------------------------------------
 // Purpose: Figures out if there is a special assist responsible for our death.
 // Must be called before conditions are cleared druing death.
 //-----------------------------------------------------------------------------
@@ -10915,81 +10501,12 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 		StopTaunt();
 	}
 
-	// Cheat this death!
-	if ( m_Shared.InCond( TF_COND_HALLOWEEN_IN_HELL ) )
-	{
-		// Turn into a ghost
-		m_Shared.RemoveAllCond();
-		m_Shared.AddCond( TF_COND_HALLOWEEN_GHOST_MODE );
-
-		// Create a puff right where we died to mask the ghost spawning in
-		DispatchParticleEffect( "ghost_appearation", PATTACH_ABSORIGIN, this );
-
-		CTFPlayer *pRecentDamager = ( pPlayerAttacker == this ) ? TFGameRules()->GetRecentDamager( this, 0, 5.0 ) : pPlayerAttacker;
-		CTakeDamageInfo ghostinfo = info;
-
-		// If we were killed by "the world", then give credit to the next damager in the list
-		if ( ( info.GetAttacker() == info.GetInflictor() && info.GetAttacker() && info.GetAttacker()->IsBSPModel() ) ||
-			 ( info.GetDamageCustom() == TF_DMG_CUSTOM_TRIGGER_HURT ) ||
-			 ( info.GetDamageType() & DMG_VEHICLE ) ||
-			 ( info.GetDamageCustom() == TF_DMG_CUSTOM_CROC ) )
-		{
-			pRecentDamager = TFGameRules()->GetRecentDamager( this, 1, 10.0 );
-
-			if ( pRecentDamager )
-			{
-				if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-				{
-					ghostinfo.SetDamageCustom( TF_DMG_CUSTOM_KART );
-				}
-			}
-			// if no recent damager, check for HHH
-			else if ( m_flHHHKartAttackTime > gpGlobals->curtime - 15.0f )
-			{
-				ghostinfo.SetDamageCustom( TF_DMG_CUSTOM_DECAPITATION_BOSS );	
-			}
-		}
-
-		if ( pRecentDamager )
-		{
-			ghostinfo.SetAttacker( pRecentDamager );
-
-			IGameEvent *pEvent = gameeventmanager->CreateEvent( "kill_in_hell" );
-			if ( pEvent )
-			{
-				pEvent->SetInt( "killer", pRecentDamager->GetUserID() );
-				pEvent->SetInt( "victim", GetUserID() );
-				gameeventmanager->FireEvent( pEvent, true );
-			}
-		}
-
-		gamestats->Event_PlayerKilled( this, ghostinfo );
-		g_pGameRules->PlayerKilled( this, ghostinfo );
-
-		if ( pRecentDamager )
-		{
-			pRecentDamager->Event_KilledOther( this, ghostinfo );
-		}
-
-		FeignDeath( ghostinfo, false );
-
-		// Have 1 HP
-		m_iHealth = 1;
-		return;
-	}
-
 	SpeakConceptIfAllowed( MP_CONCEPT_DIED );
 
 	StateTransition( TF_STATE_DYING );	// Transition into the dying state.
 
 	if ( pPlayerAttacker )
 	{
-		if ( TFGameRules()->IsIT( this ) )
-		{
-			// I was IT - transfer to my killer
-			TFGameRules()->SetIT( pPlayerAttacker );
-		}
-
 		if ( pPlayerAttacker != this )
 		{
 			if ( CTFPlayerDestructionLogic::GetRobotDestructionLogic() && ( CTFPlayerDestructionLogic::GetRobotDestructionLogic()->GetType() == CTFPlayerDestructionLogic::TYPE_PLAYER_DESTRUCTION ) )
@@ -11020,30 +10537,6 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 		}
 	}
 
-/*
-	// We're going to save this for a future date
-	if ( pPlayerAttacker )
-	{
-		if ( pPlayerAttacker != this )
-		{
-			// Killed by another player
-			if ( ( TFGameRules()->GetBirthdayPlayer() == this ) || ( TFGameRules()->GetBirthdayPlayer() == NULL ) )
-			{
-				// I was the birthday player (or we don't have one) - transfer to my killer
-				TFGameRules()->SetBirthdayPlayer( pPlayerAttacker );
-			}
-		}
-		else
-		{
-			// Suicide
-			if ( TFGameRules()->GetBirthdayPlayer() == this )
-			{
-				// I was the birthday player - reset for suicide
-				TFGameRules()->SetBirthdayPlayer( NULL );
-			}
-		}
-	}
-*/
 	bool bOnGround = GetFlags() & FL_ONGROUND;
 	bool bElectrocuted = false;
 	bool bDisguised = m_Shared.InCond( TF_COND_DISGUISED );
@@ -11473,23 +10966,6 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 		// Look at the sentrygun. 
 		m_hObserverTarget.Set( info.GetAttacker() ); 
 	}
-	else if ( info.GetAttacker() && TFGameRules()->GetActiveBoss() && info.GetAttacker()->entindex() == TFGameRules()->GetActiveBoss()->entindex() )
-	{
-		// killed by the boss - look at him
-		m_hObserverTarget.Set( info.GetAttacker() ); 
-
-		if ( FStrEq( gpGlobals->mapname.ToCStr(), "koth_krampus" ) )
-		{
-			if ( FStrEq( info.GetInflictor()->GetClassname(), "base_boss" ) )
-			{
-				info_modified.SetDamageCustom( TF_DMG_CUSTOM_KRAMPUS_MELEE );
-			}
-			else if ( FStrEq( info.GetInflictor()->GetClassname(), "tf_projectile_rocket" ) )
-			{
-				info_modified.SetDamageCustom( TF_DMG_CUSTOM_KRAMPUS_RANGED );
-			}
-		}
-	}
 	else
 	{
 		m_hObserverTarget.Set( NULL );
@@ -11546,11 +11022,6 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 				info_modified.SetAttacker( pRecentDamager );
 				info_modified.SetWeapon( NULL );
 				info_modified.SetInflictor( NULL );
-			}
-			else if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) && ( info_modified.GetDamageType() & DMG_CLUB ) )
-			{
-				info_modified.SetDamageCustom( TF_DMG_CUSTOM_GIANT_HAMMER );
-				info_modified.SetDamageType( info_modified.GetDamageType() | DMG_CRITICAL );
 			}
 		}
 	}
@@ -12299,8 +11770,6 @@ void CTFPlayer::TeamFortress_ClientDisconnected( void )
 	TFGameRules()->RemovePlayerFromQueue( this );
 	TFGameRules()->PlayerHistory_AddPlayer( this );
 
-	DuelMiniGame_NotifyPlayerDisconnect( this );
-
 	// notify the vote controller
 	if ( g_voteControllerGlobal )
 		g_voteControllerGlobal->OnPlayerDisconnected( this );
@@ -12574,10 +12043,6 @@ void CTFPlayer::StateEnterWELCOME( void )
 		{
 			char pszWelcome[128];
 			Q_snprintf( pszWelcome, sizeof(pszWelcome), "#TF_Welcome" );
-			if ( UTIL_GetActiveHolidayString() )
-			{
-				Q_snprintf( pszWelcome, sizeof(pszWelcome), "#TF_Welcome_%s", UTIL_GetActiveHolidayString() );
-			}
 
 			KeyValues *data = new KeyValues( "data" );
 			data->SetString( "title", pszWelcome );		// info panel title
@@ -15156,17 +14621,6 @@ int CTFPlayer::BuildObservableEntityList( void )
 		pWatcher = dynamic_cast<CTeamTrainWatcher*>( gEntList.FindEntityByClassname( pWatcher, "team_train_watcher" ) );
 	}
 
-	// observe active bosses
-	if ( TFGameRules()->GetActiveBoss() )
-	{
-		m_hObservableEntities.AddToTail( TFGameRules()->GetActiveBoss() );
-
-		if ( m_hObserverTarget.Get() == TFGameRules()->GetActiveBoss() )
-		{
-			iCurrentIndex = ( m_hObservableEntities.Count() - 1 );
-		}
-	}
-
 	return iCurrentIndex;
 }
 
@@ -15274,19 +14728,6 @@ bool CTFPlayer::IsValidObserverTarget( CBaseEntity * target )
 		if ( GetTeamNumber() == TEAM_SPECTATOR )
 			return true;
 
-		// active bosses should be valid targets
-		if ( target == TFGameRules()->GetActiveBoss() )
-		{
-			if ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS )
-			{
-				CMerasmus *pMerasmus = assert_cast< CMerasmus* >( TFGameRules()->GetActiveBoss() );
-				if ( pMerasmus && pMerasmus->IsHiding() )
-					return false;
-			}
-
-			return true;
-		}
-		
 		switch ( mp_forcecamera.GetInt() )	
 		{
 		case OBS_ALLOW_ALL	:	break;
@@ -15439,12 +14880,6 @@ CBaseEntity *CTFPlayer::FindNearestObservableTarget( Vector vecOrigin, float flM
 //-----------------------------------------------------------------------------
 void CTFPlayer::FindInitialObserverTarget( void )
 {
-	// if there is a Boss active, watch him
-	if ( TFGameRules()->GetActiveBoss() )
-	{
-		m_hObserverTarget.Set( TFGameRules()->GetActiveBoss() );
-	}
-
 	// If we're on a team (i.e. not a pure observer), try and find
 	// a target that'll give the player the most useful information.
 	if ( GetTeamNumber() >= FIRST_GAME_TEAM )
@@ -17119,22 +16554,6 @@ void CTFPlayer::HandleWeaponSlotAfterTaunt()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-static void DispatchRPSEffect( const CTFPlayer *pPlayer, const char* pszParticleName )
-{
-	CEffectData	data;
-	data.m_nHitBox = GetParticleSystemIndex( pszParticleName );
-	data.m_vOrigin = pPlayer->GetAbsOrigin() + Vector( 0, 0, 87.0f );
-	data.m_vAngles = vec3_angle;
-
-	CPASFilter intiatorFilter( data.m_vOrigin );
-	intiatorFilter.SetIgnorePredictionCull( true );
-
-	te->DispatchEffect( intiatorFilter, 0.0, data.m_vOrigin, "ParticleEffect", data );
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CTFPlayer::DoTauntAttack( void )
 {
 	if ( !IsTaunting() || !IsAlive() || m_iTauntAttack == TAUNTATK_NONE )
@@ -17835,128 +17254,6 @@ void CTFPlayer::DoTauntAttack( void )
 			}
 		}
 	}
-	else if ( iTauntAttack == TAUNTATK_HIGHFIVE_PARTICLE )
-	{
-		if ( m_hHighFivePartner.Get() )
-		{
-			QAngle bodyAngles = BodyAngles();
-			bodyAngles.x = 0;
-			Vector vecForward, vecRight, vecUp;
-			AngleVectors( bodyAngles, &vecForward, &vecRight, &vecUp );
-
-			//Msg( "forward: %f %f %f   right: %f %f %f   up: %f %f %f\n", vecForward.x, vecForward.y, vecForward.z,
-			//	vecRight.x, vecRight.y, vecRight.z,
-			//	vecUp.x, vecUp.y, vecUp.z );
-
-			Vector vecParticle = GetAbsOrigin() + (vecForward * 30.0f) + (vecRight * -3.0f) + (vecUp * 87.0f);
-			//Msg( "particle: %f %f %f\n", vecParticle.x, vecParticle.y, vecParticle.z );
-
-			CEffectData	data;
-			data.m_nHitBox = GetParticleSystemIndex( GetTeamNumber() == TF_TEAM_RED ? "highfive_red" : "highfive_blue" );
-			data.m_vOrigin = vecParticle;
-			data.m_vAngles = vec3_angle;
-
-			CPASFilter filter( data.m_vOrigin );
-			filter.SetIgnorePredictionCull( true );
-
-			te->DispatchEffect( filter, 0.0, data.m_vOrigin, "ParticleEffect", data );
-		}
-	}
-	else if ( iTauntAttack == TAUNTATK_RPS_PARTICLE )
-	{
-		if ( m_hHighFivePartner.Get() )
-		{
-			bool bInitiatorWin = ( m_iTauntRPSResult / 3 ) == 0;
-
-			// figure out for RPS
-			// 0:rock 1:paper 2:scissors
-			int iInitiator = m_iTauntRPSResult % 3;
-			int iReceiver = ( iInitiator + ( bInitiatorWin ? 2 : 1 ) ) % 3;
-
-			// offset to get the correct particle name
-			if ( bInitiatorWin )
-			{
-				iInitiator += 3;
-			}
-			else
-			{
-				iReceiver += 3;
-			}
-
-			if ( GetTeamNumber() == TF_TEAM_BLUE )
-			{
-				iInitiator += 6;
-			}
-
-			if ( m_hHighFivePartner->GetTeamNumber() == TF_TEAM_BLUE )
-			{
-				iReceiver += 6;
-			}
-
-			DispatchRPSEffect( this, s_pszTauntRPSParticleNames[iInitiator] );
-			DispatchRPSEffect( m_hHighFivePartner.Get(), s_pszTauntRPSParticleNames[iReceiver] );
-
-			// setup time to kill the opposing team loser
-			if ( GetTeamNumber() != m_hHighFivePartner->GetTeamNumber() )
-			{
-				m_iTauntAttack = TAUNTATK_RPS_KILL;
-				m_flTauntAttackTime = m_flTauntRemoveTime - 1.2f;
-			}
-
-			IGameEvent *event = gameeventmanager->CreateEvent( "rps_taunt_event" );
-			if ( event )
-			{
-				int iInitiatorRPS = m_iTauntRPSResult % 3;
-				int iReceiverRPS = ( iInitiatorRPS + ( bInitiatorWin ? 2 : 1 ) ) % 3;
-
-				event->SetInt( "winner", bInitiatorWin ? entindex() : m_hHighFivePartner.Get()->entindex() );
-				event->SetInt( "winner_rps", bInitiatorWin ? iInitiatorRPS : iReceiverRPS );
-				event->SetInt( "loser", bInitiatorWin ? m_hHighFivePartner.Get()->entindex() : entindex() );
-				event->SetInt( "loser_rps",  bInitiatorWin ? iReceiverRPS : iInitiatorRPS );
-				gameeventmanager->FireEvent( event );
-			}
-		}
-	}
-	else if ( iTauntAttack == TAUNTATK_RPS_KILL )
-	{
-		if ( m_hHighFivePartner.Get() )
-		{
-			bool bInitiatorWin = ( m_iTauntRPSResult / 3 ) == 0;
-
-			CTFPlayer *pWinner = NULL;
-			CTFPlayer *pLoser = NULL;
-			if ( bInitiatorWin )
-			{
-				pWinner = this;
-				pLoser = m_hHighFivePartner.Get();
-			}
-			else
-			{
-				pWinner = m_hHighFivePartner.Get();
-				pLoser = this;
-			}
-			
-			// gib the loser
-			pLoser->m_bSuicideExplode = true;
-			pLoser->TakeDamage( CTakeDamageInfo( pWinner, pWinner, NULL, 999, DMG_GENERIC, 0 ) );
-		}
-	}
-	// Particle Being played in VCD instead
-	//else if ( iTauntAttack == TAUNTATK_FLIP_LAND_PARTICLE )
-	//{
-	//	if ( m_hHighFivePartner.Get() )
-	//	{
-	//		CEffectData	data;
-	//		data.m_nHitBox = GetParticleSystemIndex( GetTeamNumber() == TF_TEAM_RED ? "taunt_flip_land_red" : "taunt_flip_land_blue" );
-	//		data.m_vOrigin = m_hHighFivePartner.Get()->GetAbsOrigin();
-	//		data.m_vAngles = m_hHighFivePartner.Get()->GetAbsAngles();
-
-	//		CPASFilter filter( data.m_vOrigin );
-	//		filter.SetIgnorePredictionCull( true );
-
-	//		te->DispatchEffect( filter, 0.0, data.m_vOrigin, "ParticleEffect", data );
-	//	}
-	//}
 }
 
 //-----------------------------------------------------------------------------
@@ -18275,124 +17572,12 @@ void CTFPlayer::ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet )
 		CALL_ATTRIB_HOOK_INT_ON_OTHER( pActiveWeapon, iSpecialTaunt, special_taunt );
 	}
 
-	// only roll random halloween taunt if the active weapon doesn't have special taunt attribute
-	if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) && iSpecialTaunt == 0 )
-	{
-		if ( !TFGameRules()->IsMannVsMachineMode() || ( GetTeamNumber() != TF_TEAM_PVE_INVADERS ) )
-		{
-			if ( pActiveWeapon )
-			{
-				int iRageTaunt = 0;
-				CALL_ATTRIB_HOOK_INT_ON_OTHER( pActiveWeapon, iRageTaunt, burn_damage_earns_rage );		
-				CALL_ATTRIB_HOOK_INT_ON_OTHER( pActiveWeapon, iRageTaunt, generate_rage_on_dmg );
-
-				int iWeaponID = pActiveWeapon->GetWeaponID();
-				if ( iWeaponID != TF_WEAPON_LUNCHBOX && !( iRageTaunt && m_Shared.GetRageMeter() >= 100.f ) )
-				{
-					float frand = (float) rand() / VALVE_RAND_MAX;
-					if ( frand < 0.4f )
-					{
-						criteriaSet.AppendCriteria( "IsHalloweenTaunt", "1" );
-					}
-				}
-			}
-		}
-	}
-
-	if ( TFGameRules()->IsHolidayActive( kHoliday_AprilFools ) && iSpecialTaunt == 0 )
-	{
-		if ( pActiveWeapon )
-		{
-			int iRageTaunt = 0;
-			CALL_ATTRIB_HOOK_INT_ON_OTHER( pActiveWeapon, iRageTaunt, burn_damage_earns_rage );
-			CALL_ATTRIB_HOOK_INT_ON_OTHER( pActiveWeapon, iRageTaunt, generate_rage_on_dmg );
-
-			int iWeaponID = pActiveWeapon->GetWeaponID();
-			if ( iWeaponID != TF_WEAPON_LUNCHBOX && !( iRageTaunt && m_Shared.GetRageMeter() >= 100.f ) )
-			{
-				float frand = (float)rand() / VALVE_RAND_MAX;
-				if ( frand < 0.8f )
-				{		
-					criteriaSet.AppendCriteria( "IsAprilFoolsTaunt", "1" );
-				}
-			}
-		}
-	}
-
 	// Force the thriller taunt if we have the thriller condition
 	if( m_Shared.InCond( TF_COND_HALLOWEEN_THRILLER ) )
 	{
 		criteriaSet.AppendCriteria( "IsHalloweenTaunt", "1" );
 	}
 
-	// Only allow these rules if in the holiday
-	if ( TFGameRules()->IsHolidayActive( kHoliday_HalloweenOrFullMoon ) && iSpecialTaunt == 0 )
-	{
-		// Halloween costume sets
-		if ( IsRobotCostumeEquipped() )
-		{
-			criteriaSet.AppendCriteria( "IsRobotCostume", "1" );
-		}
-		else if ( IsDemowolf() )
-		{
-			criteriaSet.AppendCriteria( "IsDemowolf", "1" );
-		}
-		else if ( IsFrankenHeavy() )
-		{
-			criteriaSet.AppendCriteria( "IsFrankenHeavy", "1" );
-		}
-		// Single items with response rules
-		else
-		{
-			static CSchemaAttributeDefHandle pAttrDef_AdditionalHalloweenResponseRule( "additional halloween response criteria name" );
-			FOR_EACH_VEC_BACK( m_hMyWearables, wbl )
-			{
-				CEconWearable *pWearable = m_hMyWearables[wbl];
-				if ( pWearable && pWearable->GetAttributeContainer()->GetItem() )
-				{
-					const char *pszAdditionalResponseRule = NULL;
-					if ( FindAttribute_UnsafeBitwiseCast<CAttribute_String>( pWearable->GetAttributeContainer()->GetItem(), pAttrDef_AdditionalHalloweenResponseRule, &pszAdditionalResponseRule ) )
-					{
-						criteriaSet.AppendCriteria( pszAdditionalResponseRule, "1" );
-					}
-				}
-			}
-		}
-
-		// Zombie could work in addition to any of these
-		if ( IsZombieCostumeEquipped() )
-		{
-			criteriaSet.AppendCriteria( "IsZombieCostume", "1" );
-		}
-	}
-
-	if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
-	{
-		CMerasmus* pMerasmus = assert_cast< CMerasmus* >( TFGameRules()->GetActiveBoss() );
-		if ( pMerasmus )
-		{
-			if ( pMerasmus->IsHiding() )
-			{
-				criteriaSet.AppendCriteria( "IsMerasmusHiding", "1" );
-			}
-		}
-	}
-
-	bool bInHell = false;
-	if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) && ( TFGameRules()->ArePlayersInHell() == true ) )
-	{
-		bInHell = true;
-	}
-	criteriaSet.AppendCriteria( "IsInHell", bInHell ? "1" : "0" );
-
-	if ( TFGameRules()->IsHolidayActive( kHoliday_HalloweenOrFullMoonOrValentines ) )
-	{
-		if ( IsFairyHeavy() )
-		{
-			criteriaSet.AppendCriteria( "IsFairyHeavy", "1" );
-		}
-	}
-	
 	if ( TFGameRules()->IsMannVsMachineMode() )
 	{
 		if ( GetTeamNumber() == TF_TEAM_PVE_DEFENDERS )
@@ -18596,9 +17781,6 @@ bool CTFPlayer::CanHearAndReadChatFrom( CBasePlayer *pPlayer )
 //-----------------------------------------------------------------------------
 bool CTFPlayer::CanBeAutobalanced()
 {
-	if ( DuelMiniGame_IsInDuel( this ) )
-		return false;
-
 	if ( IsBot() )
 		return false;
 
@@ -19329,19 +18511,8 @@ void CTFPlayer::PlayerUse ( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFPlayer::ClearSpells()
-{
-	CTFSpellBook *pSpellBook = dynamic_cast< CTFSpellBook* >( GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-	if ( pSpellBook )
-	{
-		// Take away players' spells on round restart
-		pSpellBook->ClearSpell();
-	}
-}
-
 void CTFPlayer::InputRoundSpawn( inputdata_t &inputdata )
 {
-	ClearSpells();
 }
 
 //-----------------------------------------------------------------------------
@@ -19521,15 +18692,6 @@ void CTFPlayer::InputExtinguishPlayer( inputdata_t &inputdata )
 //-----------------------------------------------------------------------------
 void CTFPlayer::InputTriggerLootIslandAchievement( inputdata_t &inputdata )
 {
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		IGameEvent *pEvent = gameeventmanager->CreateEvent( "escape_hell" );
-		if ( pEvent )
-		{
-			pEvent->SetInt( "player", GetUserID() );
-			gameeventmanager->FireEvent( pEvent, true );
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -19538,34 +18700,6 @@ void CTFPlayer::InputTriggerLootIslandAchievement( inputdata_t &inputdata )
 void CTFPlayer::InputTriggerLootIslandAchievement2( inputdata_t &inputdata )
 {
 	// nothing here yet
-
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CTFPlayer::RollRareSpell()
-{
-	CTFSpellBook *pSpellBook = dynamic_cast< CTFSpellBook* >( GetEntityForLoadoutSlot( LOADOUT_POSITION_ACTION ) );
-	if ( pSpellBook )
-	{
-		pSpellBook->RollNewSpell( 1 );
-
-		CSingleUserRecipientFilter user( this );
-		EmitSound( user, entindex(), "Halloween.Merasmus_TP_In" );
-	}
-
-	IGameEvent *pEvent = gameeventmanager->CreateEvent( "cross_spectral_bridge" );
-	if ( pEvent )
-	{
-		pEvent->SetInt( "player", GetUserID() );
-		gameeventmanager->FireEvent( pEvent, true );
-	}
-}
-
-void CTFPlayer::InputRollRareSpell( inputdata_t &inputdata )
-{
-	RollRareSpell();
 }
 
 //-----------------------------------------------------------------------------

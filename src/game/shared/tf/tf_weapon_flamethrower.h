@@ -156,7 +156,6 @@ public:
 
 	virtual void	FireGameEvent( IGameEvent *event ) OVERRIDE;
 
-	void CalculateHalloweenSpell( void );
 	int GetFlameThrowerMode( void ) const { int iMode = 0; CALL_ATTRIB_HOOK_INT( iMode, set_weapon_mode ); return iMode; }
 	bool IsCritFire( void ) { return m_bCritFire; }
 
@@ -175,7 +174,6 @@ private:
 	CNetworkVar( float, m_flChargeBeginTime );
 	CNetworkVar( float, m_flSpinupBeginTime );
 	CNetworkHandle( CTFFlameManager, m_hFlameManager );
-	CNetworkVar( bool, m_bHasHalloweenSpell );
 
 	float m_flStartFiringTime;
 	float m_flNextPrimaryAttackAnim;

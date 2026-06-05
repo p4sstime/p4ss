@@ -827,13 +827,6 @@ void CTFGrenadePipebombProjectile::PipebombTouch( CBaseEntity *pOther )
 		Explode( &pTrace, GetDamageType() );
 		bExploded = true;
 	}
-
-	// Explode on contact with a Boss, too
-	if ( !bExploded && TFGameRules()->GetActiveBoss() && pOther == TFGameRules()->GetActiveBoss() )
-	{
-		Explode( &pTrace, GetDamageType() );
-		bExploded = true;
-	}
 }
 
 //-----------------------------------------------------------------------------

@@ -227,9 +227,6 @@ public:
 	virtual void GetControlPanelInfo( int nPanelIndex, const char *&pPanelName );
 
 	virtual int	DispenseMetal( CTFPlayer *pPlayer );
-	virtual void DropSpellPickup();
-	virtual void DropDuckPickup();
-	virtual void DispenseSouls() OVERRIDE;
 
 	virtual bool	CanBeUpgraded( CTFPlayer *pPlayer ){ return false; }
 	virtual void	SetModel( const char *pModel );

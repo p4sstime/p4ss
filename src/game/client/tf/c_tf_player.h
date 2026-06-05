@@ -28,6 +28,7 @@
 #include "c_tf_mvm_boss_progress_user.h"
 #include "c_te_legacytempents.h"
 #include "playernet_vars.h"
+#include <soundstartparams.h>
 
 class C_MuzzleFlashModel;
 class C_BaseObject;
@@ -125,8 +126,6 @@ public:
 	virtual void FireEvent( const Vector& origin, const QAngle& angles, int event, const char *options ) OVERRIDE;
 	virtual void UpdateStepSound( surfacedata_t *psurface, const Vector &vecOrigin, const Vector &vecVelocity ) OVERRIDE;
 
-	CNewParticleEffect *SpawnHalloweenSpellFootsteps( ParticleAttachment_t eParticleAttachment, int iHalloweenFootstepType );
-
 	void FireBullet( CTFWeaponBase *pWpn, const FireBulletsInfo_t &info, bool bDoEffects, int nDamageType, int nCustomDamageType = TF_DMG_CUSTOM_NONE );
 
 	void ImpactWaterTrace( trace_t &trace, const Vector &vecStart );
@@ -197,7 +196,6 @@ public:
 
 	// Gibs.
 	void InitPlayerGibs( void );
-	void CheckAndUpdateGibType( void );
 	void CreatePlayerGibs( const Vector &vecOrigin, const Vector &vecVelocity, float flImpactScale, bool bBurning, bool bWearableGibs=false, bool bOnlyHead=false, bool bDisguiseGibs=false );
 	void DropPartyHat( breakablepropparams_t &breakParams, Vector &vecBreakVelocity );
 	void DropWearable( C_TFWearable *pItem, const breakablepropparams_t &params );
@@ -228,9 +226,6 @@ public:
 	void StopSaveMeEffect( bool bForceRemoveInstantly = false );
 
 	void UpdateTypingEffect();
-
-	void CreateTauntWithMeEffect();
-	void StopTauntWithMeEffect();
 
 	void CreateKart();
 	void RemoveKart();
@@ -276,14 +271,8 @@ public:
 
 	bool			IsEnemyPlayer( void );
 	void			ShowNemesisIcon( bool bShow );
-	void			ShowDuelingIcon( bool bShow );
-	void			ShowIconForIT( bool bShow );
-
-	void			ShowBirthdayEffect( bool bShow );
 
 	CUtlVector<EHANDLE>		*GetSpawnedGibs( void ) { return &m_hSpawnedGibs; }
-
-	bool			HasBombinomiconEffectOnDeath( void );
 
 	Vector			GetClassEyeHeight( void );
 
@@ -406,7 +395,6 @@ public:
 	//-----------------------------------------------------------------------------------------------------
 	// Return true if we are a "mini boss" in Mann Vs Machine mode
 	bool IsMiniBoss( void ) const;
-	bool ShouldTauntHintIconBeVisible() const;
 	virtual bool IsHealthBarVisible( void ) const OVERRIDE;
 
 	bool	CanStartPhase( void );
@@ -434,8 +422,6 @@ public:
 	float			GetTauntMoveAcceleration() const { return m_flTauntMoveAccelerationTime; }
 	float			GetTauntMoveSpeed() const { return m_flTauntForceMoveForwardSpeed; }
 	float			GetTauntTurnAccelerationTime() const { return m_flTauntTurnAccelerationTime; }
-	bool			IsReadyToTauntWithPartner( void ) const { return m_bIsReadyToHighFive; }
-	CTFPlayer *		GetTauntPartner( void )		{ return m_hHighFivePartner; }
 	float			GetTauntYaw( void )				{ return m_flTauntYaw; }
 	float			GetPrevTauntYaw( void )		{ return m_flPrevTauntYaw; }
 	void			SetTauntYaw( float flTauntYaw );
@@ -502,10 +488,6 @@ public:
 
 	// Matchmaking
 	bool	GetMatchSafeToLeave() { return m_bMatchSafeToLeave; }
-
-	// Halloween silliness.
-	void	HalloweenBombHeadUpdate( void );
-
 
 	bool	IsUsingVRHeadset( void ){ return m_bUsingVRHeadset; }
 
@@ -597,7 +579,6 @@ private:
 	// Medic callout particle effect
 	CNewParticleEffect	*m_pSaveMeEffect;
 	CNewParticleEffect *m_pTypingEffect;
-	CNewParticleEffect	*m_pTauntWithMeEffect;
 
 	bool m_bUpdateObjectHudState;
 	bool	m_bBodygroupsDirty;
@@ -632,10 +613,6 @@ public:
 
 	const QAngle& GetNetworkEyeAngles() const { return m_angEyeAngles; }
 
-	// Halloween
-	void CreateBombonomiconHint();
-	void DestroyBombonomiconHint();
-
 	void CleanUpAnimationOnSpawn();
 	CTFPlayerAnimState *m_PlayerAnimState;
 
@@ -649,10 +626,6 @@ public:
 
 	int				m_iOldPlayerClass;	// Used to detect player class changes
 	bool			m_bIsDisplayingNemesisIcon;
-	bool			m_bIsDisplayingDuelingIcon;
-	bool			m_bIsDisplayingIconForIT;
-	bool			m_bIsDisplayingTranqMark;
-	bool			m_bShouldShowBirthdayEffect;
 
 	RuneTypes_t		m_eDisplayingRuneIcon;
 
@@ -679,8 +652,6 @@ private:
 	float			m_flTauntMoveAccelerationTime;
 	float			m_flTauntTurnSpeed;
 	float			m_flTauntTurnAccelerationTime;
-	bool			m_bIsReadyToHighFive;
-	CNetworkHandle( C_TFPlayer, m_hHighFivePartner );
 	int				m_nForceTauntCam;
 	float			m_flTauntYaw;
 	float			m_flPrevTauntYaw;
@@ -810,12 +781,6 @@ public:
 	int				m_iSpyMaskBodygroup;
 	Vector			m_vecCustomModelOrigin;
 
-	// Halloween
-	CHandle<C_PlayerAttachedModel>	m_hHalloweenBombHat;
-	CHandle<C_MerasmusBombEffect>	m_hBombonomiconHint;
-	CHandle<C_PlayerAttachedModel>	m_hHalloweenKartCage;
-	float			m_flBombDelay;
-
 	// Achievements
 	float m_flSaveMeExpireTime;
 
@@ -848,8 +813,6 @@ private:
 //	RTime32 m_rtJoinedNormalTeam;
 
 	// Gibs.
-	CUtlVector< int > m_aSillyGibs;
-	CUtlVector< char* > m_aNormalGibs;
 	CUtlVector<breakmodel_t>	m_aGibs;
 
 	C_TFPlayer( const C_TFPlayer & );

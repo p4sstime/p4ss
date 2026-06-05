@@ -144,7 +144,6 @@ protected:
 		void UnlatchUp();
 	};
 
-	int m_iHalloweenAttachmentIndex;
 	int m_iAttachmentIndex;
 	
 	float m_flTargetResetTime;

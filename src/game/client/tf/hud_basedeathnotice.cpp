@@ -673,15 +673,13 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 			}
 		}
 
-		bool bIsHalloween2014 = TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY );
-
 		switch ( iEventType )
 		{
 		case TF_FLAGEVENT_PICKUP: 
-			pszMsgKey = bIsHalloween2014 ? "#Msg_PickedUpFlagHalloween2014" : "#Msg_PickedUpFlag"; 
+			pszMsgKey = "#Msg_PickedUpFlag"; 
 			break;
 		case TF_FLAGEVENT_CAPTURE: 
-			pszMsgKey = bIsHalloween2014 ? "#Msg_CapturedFlagHalloween2014" : "#Msg_CapturedFlag"; 
+			pszMsgKey = "#Msg_CapturedFlag"; 
 			break;
 		case TF_FLAGEVENT_DEFEND: 
 			if ( bIsMvM )
@@ -690,7 +688,7 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 			}
 			else
 			{
-				pszMsgKey = bIsHalloween2014 ? "#Msg_DefendedFlagHalloween2014" : "#Msg_DefendedFlag";
+				pszMsgKey = "#Msg_DefendedFlag";
 			}
 
 

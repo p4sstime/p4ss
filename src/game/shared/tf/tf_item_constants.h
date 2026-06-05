@@ -160,22 +160,6 @@ inline bool IsValidPickupWeaponSlot( int iSlot )
 // Right now, hardcoded to match TF's 10 classes.
 #define LOADOUT_COUNT					(10+1)	// 0th class is undefined
 
-// Halloween! (Shared by GC and game client.)
-enum EHalloweenMap
-{
-	kHalloweenMap_MannManor,
-	kHalloweenMap_Viaduct,
-	kHalloweenMap_Lakeside,
-	kHalloweenMap_Hightower,
-
-	kHalloweenMapCount
-};
-
-enum EHalloweenGiftSpawnMetaInfo
-{
-	kHalloweenGiftMeta_IsUnderworldOnViaduct_DEPRECATED		= 0x01,
-};
-
 //
 // Countries where opening decodable containers is prohibited
 //

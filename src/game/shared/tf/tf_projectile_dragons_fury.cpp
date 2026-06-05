@@ -21,7 +21,6 @@
 	#include "tf_logic_robot_destruction.h"
 	#include "tf_weapon_compound_bow.h"
 	#include "tf_pumpkin_bomb.h"
-	#include "halloween/merasmus/merasmus_trick_or_treat_prop.h"
 	#include "tf_robot_destruction_robot.h"
 	#include "tf_generic_bomb.h"
 #endif

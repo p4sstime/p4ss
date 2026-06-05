@@ -77,14 +77,6 @@ enum
 	NUM_TEAM_ROLES,
 };
 
-enum HalloweenBossType
-{
-	HALLOWEEN_BOSS_INVALID = 0,
-	HALLOWEEN_BOSS_HHH = 1,
-	HALLOWEEN_BOSS_MONOCULUS = 2,
-	HALLOWEEN_BOSS_MERASMUS = 3,
-};
-
 // common utility
 inline int GetEnemyTeam( int team )
 {

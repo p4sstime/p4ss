@@ -177,7 +177,7 @@ void CTFBaseBoss::Spawn( void )
 
 	if ( TFGameRules() )
 	{
-		TFGameRules()->AddActiveBoss( this );
+		// TFGameRules()->AddActiveBoss( this );
 	}
 
 	m_lastHealthPercentage = 1.0f;
@@ -427,7 +427,7 @@ void CTFBaseBoss::UpdateOnRemove()
 {
 	if ( TFGameRules() )
 	{
-		TFGameRules()->RemoveActiveBoss( this );
+		// TFGameRules()->RemoveActiveBoss( this );
 	}
 
 	BaseClass::UpdateOnRemove();

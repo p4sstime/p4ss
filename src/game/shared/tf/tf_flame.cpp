@@ -763,12 +763,6 @@ void CTFFlameManager::OnCollide( CBaseEntity *pEnt, int iPointIndex )
 			info.SetCritType( CTakeDamageInfo::CRIT_FULL );
 		}
 
-		// terrible hack for flames hitting the Merasmus props to get the particle effect in the correct position
-		if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
-		{
-			info.SetDamagePosition( GetAbsOrigin() );
-		}
-
 		// Track hits for the Flamethrower, which is used to change the weapon sound based on hit ratio
 		/*if ( m_hFlameThrower )
 		{

@@ -106,7 +106,6 @@ const int kLadder_TeamSize_12v12 = 12;
 //#define TF_MVM_FCVAR_CHEAT 0 /* Cheats enabled */
 #define TF_MVM_FCVAR_CHEAT FCVAR_CHEAT /* Cheats disabled */
 
-extern bool TF_IsHolidayActive( /*EHoliday*/ int eHoliday );
 #ifdef CLIENT_DLL
 bool BInEndOfMatch();
 #endif
@@ -175,7 +174,6 @@ public:
 	void	InputHandleMapEvent( inputdata_t &inputdata );
 	void	InputSetCustomUpgradesFile( inputdata_t &inputdata );
 	void	InputSetRoundRespawnFreezeEnabled( inputdata_t &inputdata );
-	void	InputSetMapForcedTruceDuringBossFight( inputdata_t &inputdata );
 
 	void	TeamPlayerCountChanged( CTFTeam *pTeam );
 	void	PowerupTeamImbalance( int nTeam );
@@ -330,9 +328,6 @@ public:
 	static int		CalcPlayerScore( RoundStats_t *pRoundStats, CTFPlayer *pPlayer );
 	static int		CalcPlayerSupportScore( RoundStats_t *pRoundStats, int iPlayerIdx );
 
-	bool			IsBirthday( void ) const;
-	virtual bool	IsHolidayActive( /*EHoliday*/ int eHoliday ) const;
-
 	virtual const unsigned char *GetEncryptionKey( void ) { return GetTFEncryptionKey(); }
 
 	int				GetClassLimit( int iClass );
@@ -474,8 +469,6 @@ public:
 		return IsPVEModeActive();
 	}
 
-	bool			ShouldMakeChristmasAmmoPack( void );
-
 	void			UpdatePeriodicEvent( CTFPlayer *pPlayer, eEconPeriodicScoreEvents eEvent, uint32 nCount );
 
 	void			HandleMapEvent( inputdata_t &inputdata );
@@ -496,11 +489,6 @@ public:
 	void			OnWorkshopMapUpdated( PublishedFileId_t nWorkshopID );
 
 	void			RecalculateTruce( void );
-
-	void			SetMapForcedTruceDuringBossFight( bool bState ){ m_bMapForcedTruceDuringBossFight = bState; }
-	bool			IsMapForcedTruceDuringBossFight( void ){ return m_bMapForcedTruceDuringBossFight; }
-
-	void			CreateSoldierStatue();
 
 	virtual void	BroadcastSound( int iTeam, const char *sound, int iAdditionalSoundFlags = 0, CBasePlayer *pPlayer = NULL ) override;
 
@@ -589,7 +577,7 @@ public:
 	virtual bool IsInArenaMode( void ) const OVERRIDE;
 	virtual bool IsInKothMode( void ) const OVERRIDE { return m_bPlayingKoth; }
 	bool IsInMedievalMode( void ) const { return m_bPlayingMedieval; }
-	bool IsHolidayMap( int nHoliday ) const { return m_nMapHolidayType == nHoliday; }
+	bool IsHolidayMap( int nHoliday ) const { return false; }
 	
 #ifdef TF_RAID_MODE
 	bool IsRaidMode( void ) const;
@@ -693,19 +681,6 @@ bool IsCreepWaveMode( void ) const;
 
 	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer );
 
-	void SetPlayersInHell( bool bState ){ m_bHelltowerPlayersInHell.Set( bState ); } // used for Halloween 2013 state of the game (players in the underworld fighting)
-	bool ArePlayersInHell( void ) const { return m_bHelltowerPlayersInHell; }
-	void SpawnPlayerInHell( CTFPlayer *pPlayer, const char *pszSpawnPointName );
-	
-	// Halloween 2013 
-	void PlayHelltowerAnnouncerVO( int iRedLine, int iBlueLine );
-
-	void SetUsingSpells( bool bState )
-	{ 
-		m_bIsUsingSpells.Set( bState ); 
-	}
-
-	bool IsUsingSpells( void ) const;
 	bool IsUsingGrapplingHook( void ) const;
 
 	bool IsTruceActive( void ) const; 
@@ -755,8 +730,6 @@ bool IsCreepWaveMode( void ) const;
 	virtual void LevelShutdown();
 	virtual bool ClientCommand( CBaseEntity *pEdict, const CCommand &args );
 	virtual void Think();
-
-	void PeriodicHalloweenUpdate();
 
 	virtual bool SwitchToNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon );
 
@@ -946,21 +919,10 @@ public:
 
 	void PushAllPlayersAway( const Vector& vFromThisPoint, float flRange, float flForce, int nTeam, CUtlVector< CTFPlayer* > *pPushedPlayers = NULL );
 
-	bool ShouldDropSpellPickup();
-	void DropSpellPickup( const Vector& vPosition, int nTier = 0 ) const;
-	
-	bool ShouldDropBonusDuck( void );
-	bool ShouldDropBonusDuckFromPlayer( CTFPlayer *pScorer, CTFPlayer *pVictim );
-	void DropBonusDuck( const Vector& vPosition, CTFPlayer *pScorer = NULL, CTFPlayer *pAssistor = NULL, CTFPlayer *pVictim = NULL, bool bCrit = false, bool bObjective = false ) const;
-
-	void DropHalloweenSoulPackToTeam( int nAmount, const Vector& vecPosition, int nTeamNumber, int nSourceTeam );
-	void DropHalloweenSoulPack( int nAmount, const Vector& vecSource, CBaseEntity *pTarget, int nSourceTeam );
-
 	int GetTeamAssignmentOverride( CTFPlayer *pTFPlayer, int iDesiredTeam, bool bAutoBalance = false );
 private:
 
 	int DefaultFOV( void ) { return 75; }
-	int GetDuckSkinForClass( int nTeam, int nClass ) const;
 
 	void StopWatchShouldBeTimedWin_Calculate( void );
 	
@@ -1041,13 +1003,6 @@ private:
 	int		m_iCurrencyPool;
 
 	float	m_flCheckPlayersConnectingTime;
-
-	CountdownTimer m_helltowerTimer;		// used for Halloween 2013 Announcer VO in plr_hightower_event
-	CountdownTimer m_doomsdaySetupTimer;	// used for Halloween 2014 Announcer Setup VO in sd_doomsday_event
-	CountdownTimer m_doomsdayTicketsTimer;	// Used on sd_doomsday_event to nag players about picking up the tickets
-
-	bool m_bMapForcedTruceDuringBossFight;
-	float m_flNextHalloweenGiftUpdateTime;
 #else
 
 	bool	m_bSillyGibs;
@@ -1099,10 +1054,6 @@ private:
 	CNetworkVar( int, m_nMatchGroupType );
 	CNetworkVar( bool, m_bMatchEnded );
 
-	// This is used to check if players are in hell. The name doesn't make sense because we thought this would only be used for Halloween 2013
-	// cannot change the name because it's network var which will break demo
-	CNetworkVar( bool, 	m_bHelltowerPlayersInHell );
-
 	CNetworkVar( bool, m_bIsUsingSpells );
 
 	CNetworkVar( bool, m_bTruceActive );
@@ -1120,8 +1071,6 @@ private:
 	CNetworkHandle( CTeamRoundTimer, m_hRedKothTimer );
 	CNetworkHandle( CTeamRoundTimer, m_hBlueKothTimer );
 
-	CNetworkVar( int, m_nMapHolidayType ); // Used by map authors to indicate this is a holiday map
-
 	CNetworkString( m_pszCustomUpgradesFile, MAX_PATH );
 
 	CNetworkVar( bool, m_bStopWatchWinner );
@@ -1136,67 +1085,9 @@ public:
 
 	virtual bool ShouldDrawHeadLabels() override;
 
-	enum HalloweenScenarioType
-	{
-		HALLOWEEN_SCENARIO_NONE = 0,
-		HALLOWEEN_SCENARIO_MANN_MANOR,
-		HALLOWEEN_SCENARIO_VIADUCT,
-		HALLOWEEN_SCENARIO_LAKESIDE,
-		HALLOWEEN_SCENARIO_HIGHTOWER,
-		HALLOWEEN_SCENARIO_DOOMSDAY,
-	};
-	HalloweenScenarioType GetHalloweenScenario( void ) const;
-	bool IsHalloweenScenario( HalloweenScenarioType scenario ) const;
-
 	bool CanInitiateDuels( void );
 
 #ifdef GAME_DLL
-
-	// Used on sd_doomsday_event to nag players about picking up the tickets
-	void StartDoomsdayTicketsTimer( void ) { m_doomsdayTicketsTimer.Start( RandomInt( 30, 60 ) ); }
-	void StopDoomsdayTicketsTimer( void ) { m_doomsdayTicketsTimer.Invalidate(); }
-	bool DoomsdayTicketTimerElapsed( void ) const { return m_doomsdayTicketsTimer.HasStarted() && m_doomsdayTicketsTimer.IsElapsed(); }
-
-	int GetBossCount() const { return m_activeBosses.Count(); }
-
-	CBaseCombatCharacter *GetActiveBoss( int iBoss = 0 )
-	{
-		if ( iBoss < 0 || iBoss >= m_activeBosses.Count() )
-			return NULL;
-
-		return m_activeBosses[iBoss];
-	}
-
-	void AddActiveBoss( CBaseCombatCharacter *boss )
-	{
-		// don't add the same boss
-		if ( m_activeBosses.Find( boss ) != m_activeBosses.InvalidIndex() )
-			return;
-
-		m_activeBosses.AddToTail( boss );
-	}
-
-	void RemoveActiveBoss( CBaseCombatCharacter *boss )
-	{
-		m_activeBosses.FindAndRemove( boss );
-	}
-
-	CBaseEntity *GetIT( void ) const			// who is the boss chasing
-	{
-		return m_itHandle;
-	}
-
-	void SetIT( CBaseEntity *who );
-	void SetBirthdayPlayer( CBaseEntity *pEntity );
-
-	void SetHalloweenEffectStatus( int effect, float duration )		// Update the current Halloween effect on the HUD
-	{
-		m_nHalloweenEffect = effect;
-		m_fHalloweenEffectStartTime = gpGlobals->curtime;
-		m_fHalloweenEffectDuration = duration;
-	}
-
-
 	// remove all projectiles in the world
 	void RemoveAllProjectiles();
 
@@ -1210,45 +1101,6 @@ public:
 	void RemoveAllProjectilesAndBuildings( bool bExplodeBuildings = false );
 
 #endif // GAME_DLL
-
-	void ClearHalloweenEffectStatus( void )							// Clear the current Halloween effect and hide the HUD display
-	{
-		m_nHalloweenEffect = -1;
-		m_fHalloweenEffectStartTime = -1.0f;
-		m_fHalloweenEffectDuration = -1.0f;
-	}
-
-	bool IsIT( CBaseEntity *who ) const
-	{
-		return ( who && who == m_itHandle.Get() );
-	}
-
-	CBaseEntity *GetBirthdayPlayer( void ) const
-	{
-		return m_hBirthdayPlayer.Get();
-	}
-
-	bool IsHalloweenEffectStatusActive( void ) const
-	{
-		return m_nHalloweenEffect >= 0;
-	}
-
-	int GetHalloweenEffectStatus( void ) const
-	{
-		return m_nHalloweenEffect;
-	}
-
-	float GetHalloweenEffectTimeLeft( void ) const
-	{
-		float expireTime = m_fHalloweenEffectStartTime + m_fHalloweenEffectDuration;
-
-		return expireTime - gpGlobals->curtime;
-	}
-
-	float GetHalloweenEffectDuration( void ) const
-	{
-		return m_fHalloweenEffectDuration;
-	}
 
 	int GetGlobalAttributeCacheVersion( void ) const
 	{
@@ -1283,32 +1135,13 @@ private:
 	mutable CHandle< CTeamTrainWatcher > m_bluePayloadToBlock;
 
 	bool m_hasSpawnedToy;
-	void SpawnHalloweenBoss( void );
-	CountdownTimer m_halloweenBossTimer;
-	CUtlVector< CHandle< CBaseCombatCharacter > > m_activeBosses;
 	bool m_bHasSpawnedSoccerBall[TF_TEAM_COUNT];
 
-	CountdownTimer m_ghostTimer;
-
-	void SpawnZombieMob( void );
-	CountdownTimer m_zombieMobTimer;
-	int m_zombiesLeftToSpawn;
-	Vector m_zombieSpawnSpot;
-
 public:
-	void BeginHaunting( int nDesiredCount, float flMinDuration, float flMaxDuration );
-
-	void StartHalloweenBossTimer( float flTime, float flVariation = 0.f )
-	{
-		m_halloweenBossTimer.Start( RandomFloat( flTime - flVariation, flTime + flVariation ) );
-	}
-
 	// Recent player stuff
 	void PlayerHistory_AddPlayer( CTFPlayer *pTFPlayer );
 	PlayerHistoryInfo_t *PlayerHistory_GetPlayerInfo( CTFPlayer *pTFPlayer );
 	int PlayerHistory_GetTimeSinceLastSeen( CTFPlayer *pTFPlayer );
-
-	CUtlVector< Vector > *GetHalloweenSpawnLocations() { return &m_halloweenGiftSpawnLocations; }
 
 	float CheckPowerupModeDominantDisconnect( CSteamID steamID );
 	void PowerupModeDominantDisconnect( CSteamID steamID, float flRemoveDominantConditionTime );
@@ -1353,24 +1186,9 @@ private:
 
 	bool	m_bMapCycleNeedsUpdate;
 
-	CUtlVector< Vector > m_halloweenGiftSpawnLocations;		// vector of valid gift spawn locations from the map
-
 	CHandle< CEntitySoldierStatue > m_hSoldierStatue = nullptr;
 
 #endif // GAME_DLL
-
-	// LEGACY BOSS CODE. Keeping this to not break demo
-	CNetworkVar( int, m_nBossHealth );
-	CNetworkVar( int, m_nMaxBossHealth );
-	CNetworkVar( float, m_fBossNormalizedTravelDistance );
-
-	CNetworkHandle( CBaseEntity, m_itHandle );	// entindex of current IT entity (0 = no it)
-	CNetworkHandle( CBaseEntity, m_hBirthdayPlayer );	// entindex of current birthday player (0 = none)
-
-	CNetworkVar( int, m_nHalloweenEffect );
-	CNetworkVar( float, m_fHalloweenEffectStartTime );
-	CNetworkVar( float, m_fHalloweenEffectDuration );
-	CNetworkVar( HalloweenScenarioType, m_halloweenScenario );
 
 	CNetworkVar( int, m_nForceUpgrades );
 	CNetworkVar( int, m_nForceEscortPushLogic );
@@ -1436,13 +1254,6 @@ inline bool CTFGameRules::IsCreepWaveMode( void ) const
 }
 
 #endif
-
-
-inline bool CTFGameRules::IsHalloweenScenario( HalloweenScenarioType scenario ) const
-{
-	return m_halloweenScenario == scenario;
-}
-
 
 #ifdef GAME_DLL
 bool EntityPlacementTest( CBaseEntity *pMainEnt, const Vector &vOrigin, Vector &outPos, bool bDropToGround );
@@ -1603,20 +1414,12 @@ public:
 	}
 };
 
-class CTFHolidayEntity : public CPointEntity, public CGameEventListener
+class CTFHolidayEntity : public CPointEntity
 {
 	DECLARE_CLASS( CTFHolidayEntity, CPointEntity );
 public:
-	DECLARE_DATADESC();
-
 	CTFHolidayEntity()
 	{ 
-		m_nHolidayType = kHoliday_None;
-		m_nTauntInHell = 0;
-		m_nAllowHaunting = 0;
-		ListenForGameEvent( "player_turned_to_ghost" );
-		ListenForGameEvent( "player_disconnect" );
-		ListenForGameEvent( "player_team" );
 	}
 	~CTFHolidayEntity()
 	{
@@ -1626,28 +1429,6 @@ public:
 	{
 		return SetTransmitState( FL_EDICT_ALWAYS );
 	}
-	int GetHolidayType( void ){ return m_nHolidayType; }
-	bool ShouldTauntInHell( void ){ return ( m_nTauntInHell > 0 ); }
-	bool ShouldAllowHaunting( void ){ return ( m_nAllowHaunting > 0 ); }
-
-	void InputHalloweenSetUsingSpells( inputdata_t &inputdata );
-	void InputHalloweenTeleportToHell( inputdata_t &inputdata );
-
-	virtual void FireGameEvent( IGameEvent *event );
-
-	void ResetWinner() { m_nWinningTeam = TF_TEAM_COUNT; }
-	int GetWinningTeam() const { return m_nWinningTeam; }
-private:
-
-	void HalloweenTeleportToHellDanceThink( void );
-	void Teleport();
-
-	CUtlVector< CHandle<CTFPlayer> > m_vecDancers;
-	int m_nWinningTeam;
-
-	int m_nHolidayType;
-	int m_nTauntInHell;
-	int m_nAllowHaunting;
 };
 
 class CKothLogic : public CPointEntity

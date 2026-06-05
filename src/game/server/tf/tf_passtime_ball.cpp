@@ -29,7 +29,6 @@
 static const float s_flPickupDist = 1000.f;
 static const float s_flBlockDist = 30.0f;
 static const float s_flClearDist = 50.0f;
-static const char *s_pHalloweenBallModel = "models/passtime/ball/passtime_ball_halloween.mdl";
 
 //-----------------------------------------------------------------------------
 static objectparams_t SBallVPhysicsObjectParams()
@@ -136,14 +135,7 @@ void CPasstimeBall::Precache()
 	PrecacheModel( "passtime/passtime_balltrail_red.vmt" );
 	PrecacheModel( "passtime/passtime_balltrail_blu.vmt" );
 	PrecacheModel( "passtime/passtime_balltrail_unassigned.vmt" );
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		PrecacheModel( s_pHalloweenBallModel );
-	}
-	else
-	{
-		PrecacheModel( tf_passtime_ball_model.GetString() );
-	}
+	PrecacheModel( tf_passtime_ball_model.GetString() );
 	PrecacheScriptSound( "Passtime.BallSmack" );
 	PrecacheScriptSound( "Passtime.BallGet" );
 	PrecacheScriptSound( "Passtime.BallIdle" );
@@ -342,14 +334,7 @@ void CPasstimeBall::Spawn()
 	const char *pszModelName = (char*) STRING( GetModelName() );
 	if ( !pszModelName || !*pszModelName )
 	{
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-		{
-			pszModelName = s_pHalloweenBallModel;
-		}
-		else
-		{
-			pszModelName = tf_passtime_ball_model.GetString();
-		}
+		pszModelName = tf_passtime_ball_model.GetString();
 	}
 	PrecacheModel( pszModelName );
 	Precache();

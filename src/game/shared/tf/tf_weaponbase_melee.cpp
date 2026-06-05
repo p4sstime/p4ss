@@ -621,26 +621,6 @@ bool CTFWeaponBaseMelee::OnSwingHit( trace_t &trace )
 		if ( pPlayer->GetTeamNumber() != pTargetPlayer->GetTeamNumber() )
 		{
 			bHitEnemyPlayer = true;
-
-			if ( TFGameRules()->IsIT( pPlayer ) )
-			{
-				IGameEvent *pEvent = gameeventmanager->CreateEvent( "tagged_player_as_it" );
-				if ( pEvent )
-				{
-					pEvent->SetInt( "player", pPlayer->GetUserID() );
-					gameeventmanager->FireEvent( pEvent, true );
-				}
-
-				// Tag! You're IT!
-				TFGameRules()->SetIT( pTargetPlayer );
-
-				pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_PLAYER_YES );
-
-				UTIL_ClientPrintAll( HUD_PRINTTALK, "#TF_HALLOWEEN_BOSS_ANNOUNCE_TAG", pPlayer->GetPlayerName(), pTargetPlayer->GetPlayerName() );
-
-				CSingleUserReliableRecipientFilter filter( pPlayer );
-				pPlayer->EmitSound( filter, pPlayer->entindex(), "Player.TaggedOtherIT" );
-			}
 		}
 
 		if ( pTargetPlayer->InSameTeam( pPlayer ) || pTargetPlayer->m_Shared.GetDisguiseTeam() == GetTeamNumber() )

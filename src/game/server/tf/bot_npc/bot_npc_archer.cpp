@@ -281,7 +281,7 @@ public:
 
 	virtual ActionResult< CBotNPCArcher >	Update( CBotNPCArcher *me, float interval )
 	{
-		if ( TFGameRules()->GetActiveBoss() == NULL )
+		// if ( TFGameRules()->GetActiveBoss() == NULL )
 		{
 			// the Boss has been defeated - give up
 			return ChangeTo( new CBotNPCArcherSurrender, "The Boss is dead! I give up!" );

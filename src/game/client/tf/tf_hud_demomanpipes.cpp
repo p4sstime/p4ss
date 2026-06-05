@@ -12,7 +12,6 @@
 #include "iclientmode.h"
 #include "ienginevgui.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <vgui/IVGui.h>
@@ -107,12 +106,6 @@ bool CHudDemomanPipes::ShouldDraw( void )
 		return false;
 
 	if ( !pPlayer->IsAlive() )
-		return false;
-
-	if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-		return false;
-
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
 		return false;
 
 	return CHudElement::ShouldDraw();

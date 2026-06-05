@@ -20,7 +20,6 @@
 #include "func_nogrenades.h"
 #include "Sprite.h"
 #include "tf_fx.h"
-#include "halloween/merasmus/merasmus.h"
 #include "soundenvelope.h"
 #endif
 
@@ -356,17 +355,7 @@ void CTFWeaponBaseGrenadeProj::Explode( trace_t *pTrace, int bitsDamageType )
 		ownerWeaponDefIndex = pWeapon->GetAttributeContainer()->GetItem()->GetItemDefIndex();
 	}
 
-	// Halloween Custom Spell Effect
-	int iHalloweenSpell = 0;
 	int iCustomParticleIndex = GetCustomParticleIndex();
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( m_hLauncher, iHalloweenSpell, halloween_pumpkin_explosions );
-		if ( iHalloweenSpell > 0 )
-		{
-			iCustomParticleIndex = GetParticleSystemIndex( "halloween_explosion" );
-		}
-	}
 
 	int iNoSelfBlastDamage = 0;
 	CALL_ATTRIB_HOOK_INT_ON_OTHER( m_hLauncher, iNoSelfBlastDamage, no_self_blast_dmg );

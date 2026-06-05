@@ -39,11 +39,7 @@ void TFBloodSprayCallback( Vector vecOrigin, Vector vecNormal, ClientEntityHandl
 		bUnderwater = true;
 	}
 	 
-	if ( !bUnderwater && TFGameRules() && TFGameRules()->IsBirthday() && RandomFloat(0,1) < 0.2 )
-	{
-		DispatchParticleEffect( "bday_blood", vecOrigin, vecAngles, pPlayer );
-	}
-	else if ( UTIL_IsLowViolence() )
+	if ( UTIL_IsLowViolence() )
 	{
 		DispatchParticleEffect( bUnderwater ? "lowV_water_blood_impact_red_01" : "lowV_blood_impact_red_01", vecOrigin, vecAngles, pPlayer );
 	}

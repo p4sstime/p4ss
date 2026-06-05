@@ -641,32 +641,7 @@ bool CRopeManager::IsHolidayLightMode( void )
 		return false;
 	}
 
-#ifdef TF_CLIENT_DLL
-	if ( TFGameRules() )
-	{
-		// We don't want to draw the lights for the grapple.
-		// They get left behind for a while and look bad.
-		if ( TFGameRules()->IsPowerupMode() || !TFGameRules()->GetRopesHolidayLightsAllowed() )
-		{
-			return false;
-		}
-	}
-#endif
-
-	bool bDrawHolidayLights = false;
-
-#ifdef USES_ECON_ITEMS
-	if ( !m_bHolidayInitialized && GameRules() )
-	{
-		m_bHolidayInitialized = true;
-		m_bDrawHolidayLights = GameRules()->IsHolidayActive( kHoliday_Christmas );
-	}
-
-	bDrawHolidayLights = m_bDrawHolidayLights;
-	m_nHolidayLightsStyle = 0;
-#endif // USES_ECON_ITEMS
-
-	return bDrawHolidayLights;
+	return false;
 }
 
 int CRopeManager::GetHolidayLightStyle( void )

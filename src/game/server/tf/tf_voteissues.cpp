@@ -1296,12 +1296,6 @@ bool CEnableTemporaryHalloweenIssue::RequestCallVote( int iEntIndex, const char 
 	if ( iEntIndex != DEDICATED_SERVER )
 		return false;
 
-	if( TFGameRules()->IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		nFailCode = VOTE_FAILED_MODIFICATION_ALREADY_ACTIVE;
-		return false;
-	}
-
 	return true;
 }
 

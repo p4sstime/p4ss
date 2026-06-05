@@ -2912,30 +2912,6 @@ void CTFGameStats::Event_PlayerP4ssIntercept( CTFPlayer *pPlayer )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Halloween!
-//-----------------------------------------------------------------------------
-void CTFGameStats::Event_HalloweenBossEvent( uint8 unBossType, uint16 unBossLevel, uint8 unEventType, uint8 unPlayersInvolved, float fElapsedTime )
-{
-	//if ( !GCClientSystem() )
-	//	return;
-
-	//static uint8 unEventCounter = 0;
-
-	//GCSDK::CProtoBufMsg<CMsgHalloween_ServerBossEvent> msg( k_EMsgGC_Halloween_ServerBossEvent );
-
-	//msg.Body().set_event_counter( unEventCounter++ );
-	//msg.Body().set_timestamp( CRTime::RTime32TimeCur() );
-	//msg.Body().set_boss_type( unBossType );
-	//msg.Body().set_boss_level( unBossLevel );
-	//msg.Body().set_event_type( unEventType );
-	//msg.Body().set_players_involved( unPlayersInvolved );
-	//msg.Body().set_elapsed_time( fElapsedTime );
-
-	//GCClientSystem()->BSendMessage( msg );
-}
-
-
-//-----------------------------------------------------------------------------
 // Purpose: Records player class activity during a round.
 //-----------------------------------------------------------------------------
 void CTFGameStats::SW_ClassChange( CTFPlayer* pPlayer, int oldClass, int newClass )

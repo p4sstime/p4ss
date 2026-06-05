@@ -1416,22 +1416,6 @@ int CEconItemView::GetModifiedRGBValue( bool bAltColor )
 
 	// Do we have an override paint color? This takes precedence over base paints and team
 	// paints.
-#if defined( TF_DLL ) || defined( TF_CLIENT_DLL )
-	extern bool TF_IsHolidayActive( /*EHoliday*/ int eHoliday );
-
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-#endif // defined( TF_DLL ) || defined( TF_CLIENT_DLL )
-	{
-		if ( !m_bPaintOverrideInit )
-		{
-			m_bHasPaintOverride = FindAttribute_UnsafeBitwiseCast<attrib_value_t>( this, pAttr_PaintOverride, &m_flOverrideIndex );
-			m_bPaintOverrideInit = true;
-		}
-			
-		if ( m_bHasPaintOverride )
-			return RemapOverridePaintIndexToRGB( (uint32)m_flOverrideIndex, bAltColor ? 1 : 0 );
-	}
-
 	if ( !m_bColorInit )
 	{
 		// See if we also have a secondary paint color.

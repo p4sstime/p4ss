@@ -1480,14 +1480,7 @@ Color CTFHudDeathNotice::GetTeamColor( int iTeamNumber, bool bLocalPlayerInvolve
 			return Color( 255, 255, 255, 255 );
 		break;
 	case TF_TEAM_HALLOWEEN:
-		if ( TFGameRules() && ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_LAKESIDE ) || TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) ) )
-		{
-			return m_clrGreenText;
-		}
-		else
-		{
-			return m_clrPurpleText;
-		}
+		return m_clrPurpleText;
 		break;
 	default:
 		AssertOnce( false );	// invalid team

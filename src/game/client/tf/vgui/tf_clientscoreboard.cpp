@@ -1245,11 +1245,6 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 				}
 			}
 
-			if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) && TFGameRules()->ArePlayersInHell() )
-			{
-				bAlive &= pTFPlayer && !pTFPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE );
-			}
-
 			// are they a Spy that's feigning death? mark them as dead in the scoreboard...
 			if ( g_TF_PR->GetPlayerClass( playerIndex ) == TF_CLASS_SPY )
 			{

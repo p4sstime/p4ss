@@ -302,71 +302,12 @@ private:
 // Purpose: Actual holiday implementation objects.
 //-----------------------------------------------------------------------------
 
-static CNoHoliday			g_Holiday_NoHoliday;
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_TF2Birthday	( "birthday",	"08-23", "08-25" );
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_Halloween		( "halloween",	"10-01", "11-08" );
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_ChristmasPart1( "christmas1", "12-01", "12-31 23:59:59" );
-static CDateBasedHolidayNoSpecificYear	g_Holiday_ChristmasPart2( "christmas2", "01-01", "01-08" );
-static COrHoliday	g_Holiday_Christmas		( "christmas", &g_Holiday_ChristmasPart1, &g_Holiday_ChristmasPart2 );
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_ValentinesDay	( "valentines",	"02-13", "02-15" );
-
-static CDateBasedHoliday	g_Holiday_MeetThePyro				( "meet_the_pyro",	"2012-06-26", "2012-07-05" );
-														   /*					starting date		cycle length in days	bonus time in days on both sides */
-static CCyclicalHoliday		g_Holiday_FullMoon					( "fullmoon",		12, 15, 2024,		29.53f,					1.0f );
-																								 // note: the cycle length is 29.5 instead of 29.53 so that the time calculations always start at noon based on the way CCyclicalHoliday works
-static COrHoliday			g_Holiday_HalloweenOrFullMoon		( "halloween_or_fullmoon",	&g_Holiday_Halloween,	&g_Holiday_FullMoon );
-
-static COrHoliday			g_Holiday_HalloweenOrFullMoonOrValentines	( "halloween_or_fullmoon_or_valentines",	&g_Holiday_HalloweenOrFullMoon,	&g_Holiday_ValentinesDay );
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_AprilFools	( "april_fools",	"03-31", "04-02" );
-
-static CDateBasedHoliday	g_Holiday_EndOfTheLine				( "eotl_launch",	"2014-12-03", "2015-01-05" );
-
-static CDateBasedHoliday	g_Holiday_CommunityUpdate			( "community_update", "2015-09-01", "2015-11-05" );
-
-static CDateBasedHolidayNoSpecificYear	g_Holiday_Soldier		( "soldier", "04-12", "04-14" );
-
-// only setup for 2024 right now...need to figure out how we want future events to run and maybe remove the year
-static CDateBasedHoliday	g_Holiday_Summer( "summer", "2024-07-01", "2024-09-16" );
-
-// ORDER NEEDS TO MATCH enum EHoliday
-static IIsHolidayActive *s_HolidayChecks[] =
-{
-	&g_Holiday_NoHoliday,							// kHoliday_None
-	&g_Holiday_TF2Birthday,							// kHoliday_TFBirthday
-	&g_Holiday_Halloween,							// kHoliday_Halloween
-	&g_Holiday_Christmas,							// kHoliday_Christmas
-	&g_Holiday_CommunityUpdate,						// kHoliday_CommunityUpdate
-	&g_Holiday_EndOfTheLine,						// kHoliday_EOTL
-	&g_Holiday_ValentinesDay,						// kHoliday_Valentines
-	&g_Holiday_MeetThePyro,							// kHoliday_MeetThePyro
-	&g_Holiday_FullMoon,							// kHoliday_FullMoon
-	&g_Holiday_HalloweenOrFullMoon,					// kHoliday_HalloweenOrFullMoon
-	&g_Holiday_HalloweenOrFullMoonOrValentines,		// kHoliday_HalloweenOrFullMoonOrValentines
-	&g_Holiday_AprilFools,							// kHoliday_AprilFools
-	&g_Holiday_Soldier,								// kHoliday_Soldier
-	&g_Holiday_Summer,								// kHoliday_Summer
-};
-
-COMPILE_TIME_ASSERT( ARRAYSIZE( s_HolidayChecks ) == kHolidayCount );
-
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 bool EconHolidays_IsHolidayActive( int iHolidayIndex, const CRTime& timeCurrent )
 {
-	if ( iHolidayIndex < 0 || iHolidayIndex >= kHolidayCount )
-		return false;
-
-	Assert( s_HolidayChecks[iHolidayIndex] );
-	if ( !s_HolidayChecks[iHolidayIndex] )
-		return false;
-
-	return s_HolidayChecks[iHolidayIndex]->IsActive( timeCurrent );
+	return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -374,17 +315,7 @@ bool EconHolidays_IsHolidayActive( int iHolidayIndex, const CRTime& timeCurrent 
 //-----------------------------------------------------------------------------
 int	EconHolidays_GetHolidayForString( const char* pszHolidayName )
 {
-	for ( int iHoliday = 0; iHoliday < kHolidayCount; ++iHoliday )
-	{
-		Assert( s_HolidayChecks[iHoliday] );
-		if ( s_HolidayChecks[iHoliday] &&
-			 0 == Q_stricmp( pszHolidayName, s_HolidayChecks[iHoliday]->GetHolidayName() ) )
-		{
-			return iHoliday;
-		}
-	}
-
-	return kHoliday_None;
+	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -392,29 +323,6 @@ int	EconHolidays_GetHolidayForString( const char* pszHolidayName )
 //-----------------------------------------------------------------------------
 const char *EconHolidays_GetActiveHolidayString()
 {
-	CRTime timeNow;
-	timeNow.SetToCurrentTime();
-	timeNow.SetToGMT( true );
-
-	for ( int iHoliday = 0; iHoliday < kHolidayCount; iHoliday++ )
-	{
-		if ( EconHolidays_IsHolidayActive( iHoliday, timeNow ) )
-		{
-			Assert( s_HolidayChecks[iHoliday] );
-			return s_HolidayChecks[iHoliday]->GetHolidayName();
-		}
-	}
-
 	// No holidays currently active.
 	return NULL;
 }
-
-#if defined(TF_CLIENT_DLL) || defined(TF_DLL) || defined(TF_GC_DLL)
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-RTime32 EconHolidays_TerribleHack_GetHalloweenEndData()
-{
-	return g_Holiday_Halloween.GetEndRTime();
-}
-#endif // defined(TF_CLIENT_DLL) || defined(TF_DLL) || defined(TF_GC_DLL)

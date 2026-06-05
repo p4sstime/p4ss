@@ -13,10 +13,6 @@
 #include "tf_powerup.h"
 #include "tf_gamerules.h"
 
-#define TF_AMMOPACK_SMALL_BDAY		"models/items/ammopack_small_bday.mdl"
-#define TF_AMMOPACK_MEDIUM_BDAY		"models/items/ammopack_medium_bday.mdl"
-#define TF_AMMOPACK_LARGE_BDAY		"models/items/ammopack_large_bday.mdl"
-
 //=============================================================================
 //
 // CTF AmmoPack class.
@@ -36,11 +32,6 @@ public:
 
 	virtual const char *GetDefaultPowerupModel( void )
 	{ 
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_AMMOPACK_LARGE_BDAY;
-		}
-
 		return "models/items/ammopack_large.mdl"; 
 	}
 };
@@ -54,17 +45,11 @@ public:
 
 	virtual void Precache( void )
 	{
-		PrecacheModel( TF_AMMOPACK_SMALL_BDAY ); // always precache this for PyroVision
 		BaseClass::Precache();
 	}
 
 	virtual const char *GetDefaultPowerupModel( void )
-	{ 
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_AMMOPACK_SMALL_BDAY;
-		}
-		
+	{ 		
 		return "models/items/ammopack_small.mdl"; 
 	}
 };
@@ -78,17 +63,11 @@ public:
 
 	virtual void Precache( void )
 	{
-		PrecacheModel( TF_AMMOPACK_MEDIUM_BDAY ); // always precache this for PyroVision
 		BaseClass::Precache();
 	}
 	 
 	virtual const char *GetDefaultPowerupModel( void ) 
 	{
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_AMMOPACK_MEDIUM_BDAY;
-		}
-		
 		return "models/items/ammopack_medium.mdl"; 
 	}
 };

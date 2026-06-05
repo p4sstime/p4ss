@@ -1084,15 +1084,6 @@ void CTFPasstimeLogic::SpawnBallAtSpawner( CPasstimeBallSpawn *pSpawner )
 	}
 
 	TFGameRules()->BroadcastSound( 255, "Passtime.BallSpawn" );
-	
-	//
-	// PF
-	// Shut up, Merasmus
-	//
-//	if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-//	{
-//		TFGameRules()->BroadcastSound( 255, "Passtime.Merasmus.Laugh" );
-//	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1556,18 +1547,6 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 	TFGameRules()->BroadcastSound( iTeam, "Passtime.Crowd.Cheer" );
 	TFGameRules()->BroadcastSound( GetEnemyTeam( iTeam ), "Passtime.Crowd.Boo" );
 	
-	//
-	// PF
-	// Shut up, Merasmus
-	//
-//	if ( TFGameRules()->IsHolidayActive( kHoliday_Halloween ) ) 
-//	{
-//		const char* pszSound = ( iTeam == TF_TEAM_RED )
-//			? "sf14.Merasmus.Soccer.GoalRed"
-//			: "sf14.Merasmus.Soccer.GoalBlue";
-//		TFGameRules()->BroadcastSound( 255, pszSound );
-//	}
-
 	//
 	// Game state management
 	//

@@ -30,7 +30,6 @@
 #include "ihudlcd.h"
 #include "tf_hud_ammostatus.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 
 using namespace vgui;
 
@@ -177,12 +176,6 @@ bool CTFHudWeaponAmmo::ShouldDraw( void )
 		return false;
 
 	if ( pWeapon->UberChargeAmmoPerShot() > 0.0f )
-		return false;
-
-	if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-		return false;
-
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
 		return false;
 
 	return CHudElement::ShouldDraw();

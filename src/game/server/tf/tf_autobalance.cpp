@@ -9,7 +9,6 @@
 #include "tf_autobalance.h"
 #include "tf_gamerules.h"
 #include "team.h"
-#include "minigames/tf_duel.h"
 #include "player_resource.h"
 #include "tf_player_resource.h"
 
@@ -115,9 +114,6 @@ bool CTFAutobalance::AreTeamsUnbalanced()
 		return false;
 
 	if ( mp_teams_unbalance_limit.GetInt() <= 0 )
-		return false;
-
-	if ( TFGameRules()->ArePlayersInHell() )
 		return false;
 
 	if ( !IsOkayToBalancePlayers() )

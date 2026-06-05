@@ -1274,8 +1274,6 @@ private:
 	CNetworkHandle( CBaseCombatWeapon, m_hSwitchTo );
 };
 
-extern const char *g_pszBDayGibs[22];
-
 class CTraceFilterIgnoreTeammatesAndTeamObjects : public CTraceFilterSimple
 {
 public:
@@ -1297,7 +1295,6 @@ class CTFPlayerSharedUtils
 {
 public:
 	static CEconItemView *GetEconItemViewByLoadoutSlot( CTFPlayer *pTFPlayer, int iSlot, CEconEntity **pEntity = NULL );
-	static bool ConceptIsPartnerTaunt( int iConcept );
 	static CTFWeaponBuilder *GetBuilderForObjectType( CTFPlayer *pTFPlayer, int iObjectType );
 };
 

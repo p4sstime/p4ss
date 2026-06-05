@@ -241,16 +241,7 @@ void CTFStickBomb::Smack( void )
 			CPVSFilter filter( explosion );
 			
 			// Halloween Spell
-			int iHalloweenSpell = 0;
 			int iCustomParticleIndex = INVALID_STRING_INDEX;
-			if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-			{
-				CALL_ATTRIB_HOOK_INT_ON_OTHER( this, iHalloweenSpell, halloween_pumpkin_explosions );
-				if ( iHalloweenSpell > 0 )
-				{
-					iCustomParticleIndex = GetParticleSystemIndex( "halloween_explosion" );
-				}
-			}
 
 			TE_TFExplosion( filter, 0.0f, explosion, Vector(0,0,1), TF_WEAPON_GRENADELAUNCHER, pTFPlayer->entindex(), -1, SPECIAL1, iCustomParticleIndex );
 

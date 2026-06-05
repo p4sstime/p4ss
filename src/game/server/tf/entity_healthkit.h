@@ -17,10 +17,6 @@
 #define TF_MEDKIT_MEDIUM_BDAY	"models/items/medkit_medium_bday.mdl"
 #define TF_MEDKIT_LARGE_BDAY	"models/items/medkit_large_bday.mdl"
 
-#define TF_MEDKIT_SMALL_HALLOWEEN	"models/props_halloween/halloween_medkit_small.mdl"
-#define TF_MEDKIT_MEDIUM_HALLOWEEN  "models/props_halloween/halloween_medkit_medium.mdl"
-#define TF_MEDKIT_LARGE_HALLOWEEN	"models/props_halloween/halloween_medkit_large.mdl"
-
 //=============================================================================
 //
 // CTF HealthKit class.
@@ -39,11 +35,6 @@ public:
 
 	virtual const char *GetDefaultPowerupModel( void )
 	{ 
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_MEDKIT_LARGE_BDAY;
-		}
-		
 		return "models/items/medkit_large.mdl";
 	}
 
@@ -60,20 +51,8 @@ public:
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_SMALL; }
 	virtual const char *GetHealthKitName( void ) { return "medkit_small"; }
 
-	virtual void Precache( void )
-	{
-		PrecacheModel( TF_MEDKIT_SMALL_BDAY ); // always precache this for PyroVision
-		PrecacheModel( TF_MEDKIT_SMALL_HALLOWEEN ); // always precache this for Halloween Vision
-		BaseClass::Precache();
-	}
-
 	virtual const char *GetDefaultPowerupModel( void )
 	{
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_MEDKIT_SMALL_BDAY;
-		}
-
 		return "models/items/medkit_small.mdl"; 
 	}
 };
@@ -85,20 +64,8 @@ public:
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_MEDIUM; }
 	virtual const char *GetHealthKitName( void ) { return "medkit_medium"; }
 
-	virtual void Precache( void )
-	{
-		PrecacheModel( TF_MEDKIT_MEDIUM_BDAY ); // always precache this for PyroVision
-		PrecacheModel( TF_MEDKIT_MEDIUM_HALLOWEEN ); // always precache this for Halloween Vision
-		BaseClass::Precache();
-	}
-
 	virtual const char *GetDefaultPowerupModel( void )
 	{
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_MEDKIT_MEDIUM_BDAY;
-		}
-
 		return "models/items/medkit_medium.mdl"; 
 	}
 };
@@ -122,20 +89,8 @@ public:
 
 	virtual bool MyTouch( CBasePlayer *pPlayer );
 
-	virtual void Precache( void )
-	{
-		PrecacheModel( TF_MEDKIT_MEDIUM_BDAY ); // always precache this for PyroVision
-		PrecacheModel( TF_MEDKIT_MEDIUM_HALLOWEEN ); // always precache this for Halloween Vision
-		BaseClass::Precache();
-	}
-
 	virtual const char *GetDefaultPowerupModel( void )
 	{
-		if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_TFBirthday ) )
-		{
-			return TF_MEDKIT_MEDIUM_BDAY;
-		}
-
 		return "models/items/medkit_medium.mdl";
 	}
 };

@@ -19,7 +19,6 @@
 #include "view_scene.h"
 #include "view.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 #include "tf_weapon_invis.h"
 #include <vgui_controls/AnimationController.h>
 
@@ -280,13 +279,6 @@ public:
 			return false;
 		}
 
-		CTFPlayer *pTFPlayer = CTFPlayer::GetLocalTFPlayer();
-		if ( pTFPlayer && pTFPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-			return false;
-		
-		if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-			return false;
-
 		return CHudElement::ShouldDraw();
 	}
 };
@@ -395,9 +387,6 @@ public:
 			return false;
 
 		if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-			return false;
-
-		if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
 			return false;
 
 		return CHudElement::ShouldDraw();

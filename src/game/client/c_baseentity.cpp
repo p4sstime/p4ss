@@ -6314,10 +6314,6 @@ bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 		if ( FStrEq( pszModel, "models/props_moonbase/powersupply_flag.mdl" ) )
 			return true;
 
-		// The Halloween 2014 doomsday flag replacement
-		if ( FStrEq( pszModel, "models/flag/ticket_case.mdl" ) )
-			return true;
-
 		if ( FStrEq( pszModel, "models/weapons/c_models/c_grapple_proj/c_grapple_proj.mdl" ) )
 			return true;
 	}

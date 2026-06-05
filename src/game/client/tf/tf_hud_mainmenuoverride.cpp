@@ -357,44 +357,7 @@ void CHudMainMenuOverride::ApplySchemeSettings( IScheme *scheme )
 	m_pszForcedCharacterImage = NULL;
 
 	bool bHolidayActive = false;
-	KeyValues *pConditions = NULL;
-	const char *pszHoliday = UTIL_GetActiveHolidayString();
-
-
-	if ( pszHoliday && pszHoliday[0] )
-	{
-		pConditions = new KeyValues( "conditions" );
-
-		char szCondition[64];
-		Q_snprintf( szCondition, sizeof( szCondition ), "if_%s", pszHoliday );
-		AddSubKeyNamed( pConditions, szCondition );
-
-		if ( FStrEq( pszHoliday, "halloween" ) )
-		{
-
-			// for Halloween we also want to pick a random background
-			int nBackground = RandomInt( 0, 5 );
-
-			AddSubKeyNamed( pConditions, CFmtStr( "if_halloween_%d", nBackground ) );
-			if ( ( nBackground == 3 ) || ( nBackground == 4 ) )
-			{
-				m_bBackgroundUsesCharacterImages = false;
-			}
-		}
-		else if ( FStrEq( pszHoliday, "christmas" ) )
-		{
-			// for Christmas we also want to pick a random background
-			int nBackground = RandomInt( 0, 1 );
-			AddSubKeyNamed( pConditions, CFmtStr( "if_christmas_%d", nBackground ) );
-		}
-
-		bHolidayActive = true;
-	}
-
-	if ( !pConditions )
-	{
-		pConditions = new KeyValues( "conditions" );
-	}
+	KeyValues *pConditions = new KeyValues( "conditions" );
 
 	// Put in ratio condition
 	float aspectRatio = engine->GetScreenAspectRatio();
@@ -546,22 +509,7 @@ void CHudMainMenuOverride::LoadCharacterImageFile( void )
 		// Count the number of possible characters.
 		FOR_EACH_SUBKEY( pCharacterFile, pCharacter )
 		{
-			EHoliday eHoliday = (EHoliday)UTIL_GetHolidayForString( pCharacter->GetString( "holiday_restriction" ) );
-
 			int iWeight = pCharacter->GetInt( "weight", 1 );
-
-			if ( eHoliday != kHoliday_None )
-			{
-				iWeight = UTIL_IsHolidayActive( eHoliday ) ? MAX( iWeight, 6 ) : 0;
-			}
-			else
-			{
-				// special cases for summer, halloween, fullmoon, and christmas...turn off anything not covered above
-				if ( UTIL_IsHolidayActive( kHoliday_Summer ) || UTIL_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) || UTIL_IsHolidayActive( kHoliday_Christmas ) )
-				{
-					iWeight = 0;
-				}
-			}
 
 			for ( int i = 0; i < iWeight; i++ )
 			{

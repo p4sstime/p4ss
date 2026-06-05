@@ -30,7 +30,6 @@
 #include "c_tf_weapon_builder.h"
 #include "tf_spectatorgui.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 #include "inputsystem/iinputsystem.h"
 
 #ifndef WIN32
@@ -287,18 +286,6 @@ bool CHudWeaponSelection::ShouldDraw()
 	if ( !bShouldDraw && m_pActiveWeaponBG && m_pActiveWeaponBG->IsVisible() )
 	{
 		m_pActiveWeaponBG->SetVisible( false );
-	}
-
-	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( pPlayer && pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-	{
-		bShouldDraw = false;
-
-	}
-
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-	{
-		bShouldDraw = false;
 	}
 
 	return bShouldDraw;

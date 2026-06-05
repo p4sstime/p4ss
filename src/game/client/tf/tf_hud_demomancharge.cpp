@@ -18,7 +18,6 @@
 #include <vgui_controls/ProgressBar.h>
 #include "tf_weaponbase.h"
 #include "tf_gamerules.h"
-#include "tf_logic_halloween_2014.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -86,13 +85,6 @@ bool CHudDemomanChargeMeter::ShouldDraw( void )
 	CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
 	ITFChargeUpWeapon *pChargeupWeapon = dynamic_cast< ITFChargeUpWeapon *>( pWpn );
 	if ( !pWpn || !pChargeupWeapon || !pChargeupWeapon->CanCharge() )
-		return false;
-
-
-	if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-		return false;
-
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
 		return false;
 
 	return CHudElement::ShouldDraw();

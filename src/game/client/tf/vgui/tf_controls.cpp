@@ -1240,7 +1240,7 @@ void CTFTextToolTip::PositionWindow( Panel *pTipPanel )
 	pTipPanel->GetSize( iTipW, iTipH );
 
 	int cursorX, cursorY;
-	input()->GetCursorPos(cursorX, cursorY);
+	vgui::input()->GetCursorPos(cursorX, cursorY);
 
 	int px, py, wide, tall;
 	ipanel()->GetAbsPos( m_pEmbeddedPanel->GetParent()->GetVPanel(), px, py );
@@ -1834,11 +1834,11 @@ bool CDraggableScrollingPanel::BCheckForPendingChildren()
 //-----------------------------------------------------------------------------
 void CDraggableScrollingPanel::OnMousePressed( MouseCode code )
 {
-	input()->SetMouseCapture(GetVPanel());
+	vgui::input()->SetMouseCapture( GetVPanel() );
 
 	m_bDragging = true;
 	m_iDragTotalDistance = 0;
-	input()->GetCursorPosition( m_iDragStartX, m_iDragStartY );
+	vgui::input()->GetCursorPosition( m_iDragStartX, m_iDragStartY );
 
 	PostActionSignal( new KeyValues("DragStart") );
 }
@@ -1848,7 +1848,7 @@ void CDraggableScrollingPanel::OnMousePressed( MouseCode code )
 //-----------------------------------------------------------------------------
 void CDraggableScrollingPanel::OnMouseReleased( MouseCode code )
 {
-	input()->SetMouseCapture( NULL );
+	vgui::input()->SetMouseCapture( NULL );
 	m_bDragging = false;
 	PostActionSignal( new KeyValues( "DragStop", "dist", m_iDragTotalDistance ) );
 }
@@ -1894,7 +1894,7 @@ void CDraggableScrollingPanel::OnMouseWheeled( int delta )
 	ipanel()->GetAbsPos(GetVParent(), nXP, pYP);
 
 	int nXM, nYM;
-	input()->GetCursorPosition( nXM, nYM );
+	vgui::input()->GetCursorPosition( nXM, nYM );
 
 	SetZoomAmount( m_flZoom + delta * m_flMouseWheelZoomRate, nXM - nXP, nYM - pYP );
 

@@ -40,7 +40,6 @@ extern ConVar tf_rd_flag_ui_mode;
 #include "nav_mesh/tf_nav_mesh.h"
 #include "player_vs_environment/tf_population_manager.h"
 #include "tf_logic_robot_destruction.h"
-#include "tf_logic_halloween_2014.h"
 extern ConVar tf_flag_caps_per_round;
 extern ConVar tf_mvm_endless_bomb_reset;
 extern ConVar tf_rd_min_points_to_steal;
@@ -983,11 +982,6 @@ void CCaptureFlag::ResetMessage( void )
 	else if ( m_nType == TF_FLAGTYPE_RESOURCE_CONTROL )
 	{
 		const char *pszSound = TF_RESOURCE_RETURNED;
-		if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-		{
-			TFGameRules()->StartDoomsdayTicketsTimer();
-			pszSound = TF_RESOURCE_EVENT_RETURNED;
-		}
 
 		TFGameRules()->BroadcastSound( 255, pszSound );
 
@@ -1336,30 +1330,13 @@ void CCaptureFlag::PickUp( CTFPlayer *pPlayer, bool bInvisible )
 		// In Special delivery we only tell them about the very first flag pick up from neutral
 		if ( GetTeamNumber() == TEAM_UNASSIGNED )
 		{
-			bool bEventMap = TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY );
-			if ( bEventMap )
-			{
-				TFGameRules()->StopDoomsdayTicketsTimer();
-			}
-
 			for ( int iTeam = TF_TEAM_RED; iTeam < TF_TEAM_COUNT; ++iTeam )
 			{
 				const char *pszSound = TF_RESOURCE_ENEMY_STOLEN;
 
-				if ( iTeam != pPlayer->GetTeamNumber() )
-				{
-					if ( bEventMap )
-					{
-						pszSound = TF_RESOURCE_EVENT_ENEMY_STOLEN;
-					}
-				}
-				else
+				if ( iTeam == pPlayer->GetTeamNumber() )
 				{
 					pszSound = TF_RESOURCE_TEAM_STOLEN;
-					if ( bEventMap )
-					{
-						pszSound = TF_RESOURCE_EVENT_TEAM_STOLEN;
-					}
 				}
 
 				CTeamRecipientFilter filter( iTeam, true );
@@ -1652,24 +1629,17 @@ void CCaptureFlag::Capture( CTFPlayer *pPlayer, int nCapturePoint )
 	}
 	else if ( m_nType == TF_FLAGTYPE_RESOURCE_CONTROL )
 	{
-		if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
+		for ( int iTeam = TF_TEAM_RED; iTeam < TF_TEAM_COUNT; ++iTeam )
 		{
-			TFGameRules()->BroadcastSound( 255, ( pPlayer->GetTeamNumber() == TF_TEAM_RED ) ? TF_RESOURCE_EVENT_RED_CAPPED : TF_RESOURCE_EVENT_BLUE_CAPPED );
-		}
-		else
-		{
-			for ( int iTeam = TF_TEAM_RED; iTeam < TF_TEAM_COUNT; ++iTeam )
+			const char *pszSound = TF_RESOURCE_ENEMY_CAPTURED;
+			if ( iTeam == pPlayer->GetTeamNumber() )
 			{
-				const char *pszSound = TF_RESOURCE_ENEMY_CAPTURED;
-				if ( iTeam == pPlayer->GetTeamNumber() )
-				{
-					pszSound = TF_RESOURCE_TEAM_CAPTURED;
-				}
-	
-				CTeamRecipientFilter filter( iTeam, true );
-				PlaySound( filter, pszSound, iTeam );
+				pszSound = TF_RESOURCE_TEAM_CAPTURED;
 			}
-  		}
+	
+			CTeamRecipientFilter filter( iTeam, true );
+			PlaySound( filter, pszSound, iTeam );
+		}
 
 		// Reward the player
 		CTF_GameStats.Event_PlayerCapturedPoint( pPlayer );
@@ -1752,10 +1722,7 @@ void CCaptureFlag::Capture( CTFPlayer *pPlayer, int nCapturePoint )
 
 	pPlayer->TeamFortress_SetSpeed();
 
-	if ( !TFGameRules() || !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-	{
-		pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_FLAGCAPTURED );
-	}
+	pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_FLAGCAPTURED );
 	
 	// Outputs
 	m_outputOnCapture.FireOutput( this, this );
@@ -2038,10 +2005,6 @@ void CCaptureFlag::Drop( CTFPlayer *pPlayer, bool bVisible,  bool bThrown /*= fa
 		if ( bMessage  )
 		{
 			const char *pszSound = TF_RESOURCE_TEAM_DROPPED;
-			if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-			{
-				pszSound = TF_RESOURCE_EVENT_TEAM_DROPPED;
-			}
 
 			// We only care about our own team dropping it in Special Delivery
 			int iTeam = pPlayer->GetTeamNumber();
@@ -2206,13 +2169,6 @@ void CCaptureFlag::SetDisabled( bool bDisabled )
 
 		SetThink( &CCaptureFlag::Think );
 		SetNextThink( gpGlobals->curtime );
-
-#ifdef GAME_DLL
-		if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) && ( GetTeamNumber() == TEAM_UNASSIGNED ) )
-		{
-			TFGameRules()->StartDoomsdayTicketsTimer();
-		}
-#endif
 	}
 
 #ifdef CLIENT_DLL
@@ -2381,26 +2337,6 @@ void CCaptureFlag::Think( void )
 		else if ( bRunning && !m_pFlagTrail )
 		{
 			StartFlagTrail();
-		}
-	}
-
-	if ( m_nType == TF_FLAGTYPE_RESOURCE_CONTROL )
-	{
-		if ( TFGameRules() && TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
-		{
-			if ( TFGameRules()->DoomsdayTicketTimerElapsed() )
-			{
-				if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-				{
-					// we've started playing a minigame so just cancel the timer
-					TFGameRules()->StopDoomsdayTicketsTimer();
-				}
-				else
-				{
-					TFGameRules()->StartDoomsdayTicketsTimer(); // start the timer again
-					TFGameRules()->BroadcastSound( 255, TF_RESOURCE_EVENT_NAGS );
-				}
-			}
 		}
 	}
 

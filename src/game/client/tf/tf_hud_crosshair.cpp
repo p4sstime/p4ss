@@ -16,7 +16,6 @@
 #include "materialsystem/imesh.h"
 #include "materialsystem/imaterialvar.h"
 #include "VGuiMatSurface/IMatSystemSurface.h"
-#include "tf_logic_halloween_2014.h"
 #include "tf_gamerules.h"
 #include "mathlib/mathlib.h"
 #include "tf_weapon_passtime_gun.h"
@@ -79,17 +78,10 @@ CHudTFCrosshair::~CHudTFCrosshair( void )
 //-----------------------------------------------------------------------------
 bool CHudTFCrosshair::ShouldDraw( void )
 {
-	// turn off for the minigames
-	if ( CTFMinigameLogic::GetMinigameLogic() && CTFMinigameLogic::GetMinigameLogic()->GetActiveMinigame() )
-		return false;
-
 	// turn off if the local player is a ghost
 	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
 	if ( pPlayer )
 	{
-		if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
-			return false;
-
 		if ( pPlayer->IsTaunting() )
 			return false;
 	}

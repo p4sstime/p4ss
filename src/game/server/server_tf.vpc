@@ -146,8 +146,6 @@ $Project "Server (TF)"
 			$File	"tf\entity_soldier_statue.h"
 			$File	"$SRCDIR\game\shared\tf\entity_bonuspack.cpp"
 			$File	"$SRCDIR\game\shared\tf\entity_bonuspack.h"
-			$File	"$SRCDIR\game\shared\tf\entity_halloween_pickup.cpp"
-			$File	"$SRCDIR\game\shared\tf\entity_halloween_pickup.h"
 			$File	"tf\entity_currencypack.cpp"
 			$File	"tf\entity_currencypack.h"
 			$File	"$SRCDIR\game\shared\tf\entity_capture_flag.cpp"
@@ -267,8 +265,6 @@ $Project "Server (TF)"
 			$File	"tf\tf_playermove.cpp"
 			$File	"tf\tf_powerup.cpp"
 			$File	"tf\tf_powerup.h"
-			$File	"$SRCDIR\game\shared\tf\tf_halloween_souls_pickup.cpp"
-			$File	"$SRCDIR\game\shared\tf\tf_halloween_souls_pickup.h"
 			$File	"$SRCDIR\game\shared\tf\tf_point_manager.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_point_manager.h"
 			$File	"$SRCDIR\game\shared\tf\tf_projectile_base.cpp"
@@ -315,12 +311,8 @@ $Project "Server (TF)"
 			$File	"$SRCDIR\game\server\tf\tf_gc_api.cpp" [!$SOURCESDK]
 			$File	"$SRCDIR\game\shared\tf\tf_revive.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_revive.h"
-			$File	"$SRCDIR\game\shared\tf\tf_wheel_of_doom.cpp"
-			$File	"$SRCDIR\game\shared\tf\tf_wheel_of_doom.h"
 			$File	"$SRCDIR\game\shared\tf\tf_item_constants.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_item_constants.h"
-			$File	"$SRCDIR\game\shared\tf\tf_logic_halloween_2014.h"
-			$File	"$SRCDIR\game\shared\tf\tf_logic_halloween_2014.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_logic_robot_destruction.h"
 			$File	"$SRCDIR\game\shared\tf\tf_logic_robot_destruction.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_robot_destruction_robot.cpp"
@@ -461,12 +453,6 @@ $Project "Server (TF)"
 			{
 				$File	"tf\raid\tf_raid_logic.cpp"
 				$File	"tf\raid\tf_raid_logic.h"
-			}
-
-			$Folder	"MiniGames"
-			{
-				$File	"tf\minigames\tf_duel.cpp"
-				$File	"tf\minigames\tf_duel.h"
 			}
 
 			$Folder	"Bot"
@@ -721,128 +707,6 @@ $Project "Server (TF)"
 				$File	"tf\nav_mesh\tf_path_follower.h"
 				$File	"tf\nav_mesh\tf_path_follower.cpp"
 				$File	"tf\nav_mesh\tf_nav_interface.cpp"
-			}
-
-			$Folder "Halloween"
-			{
-				$File	"tf\halloween\halloween_base_boss.cpp"
-				$File	"tf\halloween\halloween_base_boss.h"
-				$File	"tf\halloween\headless_hatman.cpp"
-				$File	"tf\halloween\headless_hatman.h"
-				$File	"tf\halloween\headless_hatman_body.cpp"
-				$File	"tf\halloween\headless_hatman_body.h"
-				$File	"tf\halloween\halloween_gift_spawn_locations.cpp"
-				$File	"tf\halloween\halloween_gift_spawn_locations.h"
-
-				$Folder "Behavior"
-				{
-					$File	"tf\halloween\halloween_behavior\headless_hatman_attack.cpp"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_attack.h"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_dying.cpp"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_dying.h"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_emerge.cpp"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_emerge.h"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_terrify.cpp"
-					$File	"tf\halloween\halloween_behavior\headless_hatman_terrify.h"
-				}
-
-				$Folder "Ghost"
-				{
-					$File	"tf\halloween\ghost\ghost.cpp"
-					$File	"tf\halloween\ghost\ghost.h"
-				}
-
-				$Folder "Eyeball Boss"
-				{
-					$File	"tf\halloween\eyeball_boss\eyeball_boss.cpp"
-					$File	"tf\halloween\eyeball_boss\eyeball_boss.h"
-					$File	"$SRCDIR\game\shared\tf\halloween\eyeball_boss\teleport_vortex.cpp"
-					$File	"$SRCDIR\game\shared\tf\halloween\eyeball_boss\teleport_vortex.h"
-					
-					$Folder "Behavior"
-					{
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_behavior.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_behavior.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_approach_target.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_approach_target.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_emerge.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_emerge.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_idle.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_idle.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_launch_rockets.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_launch_rockets.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_notice.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_notice.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_stunned.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_stunned.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_teleport.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_teleport.h"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_emote.cpp"
-						$File	"tf\halloween\eyeball_boss\eyeball_behavior\eyeball_boss_emote.h"
-					}
-				}
-
-				$Folder "Merasmus"
-				{
-					$File	"tf\halloween\merasmus\merasmus.cpp"
-					$File	"tf\halloween\merasmus\merasmus.h"
-					$File	"tf\halloween\merasmus\merasmus_body.cpp"
-					$File	"tf\halloween\merasmus\merasmus_body.h"
-					$File	"tf\halloween\merasmus\merasmus_trick_or_treat_prop.cpp"
-					$File	"tf\halloween\merasmus\merasmus_trick_or_treat_prop.h"
-					$File	"tf\halloween\merasmus\merasmus_dancer.cpp"
-					$File	"tf\halloween\merasmus\merasmus_dancer.h"
-
-					$Folder "Behavior"
-					{
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_aoe_attack.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_aoe_attack.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_attack.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_attack.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_disguise.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_disguise.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_dying.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_dying.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_reveal.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_reveal.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_staff_attack.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_staff_attack.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_stunned.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_stunned.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_teleport.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_teleport.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_throwing_grenade.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_throwing_grenade.h"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_zap.cpp"
-						$File	"tf\halloween\merasmus\merasmus_behavior\merasmus_zap.h"
-					}
-				}
-
-				$Folder "Zombie"
-				{
-					$File	"tf\halloween\zombie\zombie.cpp"
-					$File	"tf\halloween\zombie\zombie.h"
-					$File	"tf\halloween\zombie\zombie_spawner.cpp"
-					$File	"tf\halloween\zombie\zombie_spawner.h"
-
-					$Folder "Behavior"
-					{
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_attack.cpp"
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_attack.h"
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_special_attack.cpp"
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_special_attack.h"
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_spawn.cpp"
-						$File	"tf\halloween\zombie\zombie_behavior\zombie_spawn.h"
-					}
-				}
-
-				$Folder "Spell"
-				{
-					$File	"tf\halloween\spell\tf_spell_pickup.cpp"
-					$File	"tf\halloween\spell\tf_spell_pickup.h"
-					$File	"$SRCDIR\game\shared\tf\halloween\tf_weapon_spellbook.cpp"
-					$File	"$SRCDIR\game\shared\tf\halloween\tf_weapon_spellbook.h"
-				}
 			}
 
 			$Folder "Bot NPC"

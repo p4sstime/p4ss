@@ -106,7 +106,6 @@ public:
 	void				ForceRegenerateAndRespawn( void );
 	virtual CBaseEntity	*EntSelectSpawnPoint( void );
 	virtual void		InitialSpawn();
-	static void			PrecacheMvM();
 	static void			PrecacheKart();
 private:
 	static void			PrecachePlayerModels();
@@ -396,7 +395,6 @@ public:
 	void DestroyRagdoll( void );
 	CNetworkHandle( CBaseEntity, m_hRagdoll );	// networked entity handle 
 	virtual bool ShouldGib( const CTakeDamageInfo &info ) OVERRIDE;
-	bool HasBombinomiconEffectOnDeath( void );
 	void StopRagdollDeathAnim( void );
 	void SetGibbedOnLastDeath( bool bGibbed ) { m_bGibbedOnLastDeath = bGibbed; }
 	bool WasGibbedOnLastDeath( void ) { return m_bGibbedOnLastDeath; }
@@ -539,8 +537,6 @@ public:
 	void ExtinguishPlayerBurning();
 	void BleedPlayer( float flBleedingTime );
 	void BleedPlayerEx( float flBleedingTime, int nBleedDmg, bool bPermenantBleeding, int nDmgType );
-	void RollRareSpell();
-	void ClearSpells();
 
 	void InputIgnitePlayer( inputdata_t &inputdata );
 	void InputSetCustomModel( inputdata_t &inputdata );
@@ -555,7 +551,6 @@ public:
 	void InputBleedPlayer( inputdata_t &inputdata );
 	void InputTriggerLootIslandAchievement( inputdata_t &inputdata );
 	void InputTriggerLootIslandAchievement2( inputdata_t &inputdata );
-	void InputRollRareSpell( inputdata_t &inputdata );
 	void InputRoundSpawn( inputdata_t &inputdata );
 
 	void ClampChargeViewAngles(CUserCmd *ucmd);
@@ -669,22 +664,15 @@ private:
 
 // Taunts
 public:
-	bool				IsReadyToTauntWithPartner( void ) const { return m_bIsReadyToHighFive; }
-	CTFPlayer *			GetTauntPartner( void )		{ return m_hHighFivePartner; }
 	float				GetTauntYaw( void )				{ return m_flTauntYaw; }
 	float				GetPrevTauntYaw( void )		{ return m_flPrevTauntYaw; }
 	void				SetTauntYaw( float flTauntYaw );
-	CTFPlayer *			FindPartnerTauntInitiator( void );
-	void				AcceptTauntWithPartner( CTFPlayer *initiator );
-	void				MimicTauntFromPartner( CTFPlayer *initiator );
 	bool				CanMoveDuringTaunt();
 	bool				ShouldStopTaunting();
-	bool				IsTauntInitiator() const { return m_bIsTauntInitiator; }
 	bool				IsTauntForceMovingForward() const { return m_bTauntForceMoveForward; }
 	float				GetTauntMoveAcceleration() const { return m_flTauntMoveAccelerationTime; }
 	float				GetTauntMoveSpeed() const { return m_flTauntForceMoveForwardSpeed; }
 	float				GetTauntTurnAccelerationTime() const { return m_flTauntTurnAccelerationTime; }
-	virtual int			GetAllowedTauntPartnerTeam() const;
 	CEconItemView		*GetTauntEconItemView() { return m_TauntEconItemView.IsValid() ? &m_TauntEconItemView : NULL; }
 
 	int					GetTauntConcept( CEconItemDefinition *pItemDef );
@@ -696,8 +684,6 @@ public:
 	bool				IsTaunting( void ) const { return m_Shared.InCond( TF_COND_TAUNTING ); }
 	void				DoTauntAttack( void );
 	bool				IsAllowedToTaunt( void );
-	bool				FindOpenTauntPartnerPosition( const CEconItemView *pEconItemView, Vector &position, float *flTolerance );
-	bool				IsAllowedToInitiateTauntWithPartner( const CEconItemView *pEconItemView, char *pszErrorMessage = NULL, int cubErrorMessage = 0 );
 	void				CancelTaunt( void );
 	void				StopTaunt( bool bForceRemoveProp = true );
 	void				EndLongTaunt();
@@ -710,8 +696,6 @@ public:
 
 	void				ClearTauntAttack();
 	float				GetTauntAttackTime() const { return m_flTauntAttackTime; }
-
-	void				SetRPSResult( int iRPSResult ) { m_iTauntRPSResult = iRPSResult; }
 
 	void				HandleWeaponSlotAfterTaunt();
 
@@ -815,8 +799,6 @@ public:
 	void ScriptStunPlayer( float flTime, float flReductionAmount, int iStunFlags = TF_STUN_MOVEMENT, HSCRIPT hAttacker = NULL );
 
 private:
-	void				GetReadyToTauntWithPartner( void );
-	void				CancelTauntWithPartner( void );
 	void				StopTauntSoundLoop();
 	float				PlayTauntOutroScene();
 	float				PlayTauntRemapInputScene();
@@ -824,7 +806,6 @@ private:
 
 	CNetworkVar( bool, m_bAllowMoveDuringTaunt );
 	CNetworkVar( bool, m_bIsReadyToHighFive );
-	CNetworkHandle( CTFPlayer, m_hHighFivePartner );
 	CNetworkVar( int, m_nForceTauntCam );
 	CNetworkVar( float, m_flTauntYaw );
 	CNetworkVar( int, m_nActiveTauntSlot );
@@ -869,7 +850,6 @@ private:
 	float				m_flTauntInhaleTime;
 	taunt_attack_t		m_iTauntAttack;
 	int					m_iTauntAttackCount;
-	int					m_iTauntRPSResult;
 	int					m_iPreTauntWeaponSlot;
 	int					m_iPreTauntFOV;
 

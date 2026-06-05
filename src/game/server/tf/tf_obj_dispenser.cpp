@@ -15,7 +15,6 @@
 #include "world.h"
 #include "explode.h"
 #include "tf_gamestats.h"
-#include "tf_halloween_souls_pickup.h"
 #include "tf_fx.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -1075,32 +1074,6 @@ int CObjectCartDispenser::DispenseMetal( CTFPlayer *pPlayer )
 {
 	int iMetal = pPlayer->GiveAmmo( MIN( m_iAmmoMetal, DISPENSER_DROP_METAL ), TF_AMMO_METAL, false, kAmmoSource_DispenserOrCart );
 	return iMetal;
-}
-
-
-void CObjectCartDispenser::DropSpellPickup()
-{
-	if ( TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_HIGHTOWER ) )
-	{
-		TFGameRules()->DropSpellPickup( GetAbsOrigin() );
-	}
-}
-
-void CObjectCartDispenser::DropDuckPickup()
-{
-	if ( TFGameRules()->IsHolidayActive( kHoliday_EOTL ) && TFGameRules()->ShouldDropBonusDuck() )
-	{
-		TFGameRules()->DropBonusDuck( GetAbsOrigin() );
-	}
-}
-
-void CObjectCartDispenser::DispenseSouls()
-{
-	// Give a soul to the entire team
-	if ( TFGameRules() && TFGameRules()->IsHolidayActive( kHoliday_Halloween ) )
-	{
-		TFGameRules()->DropHalloweenSoulPackToTeam( 1, GetAbsOrigin(), GetTeamNumber(), TEAM_SPECTATOR );
-	}
 }
 
 //-----------------------------------------------------------------------------

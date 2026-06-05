@@ -36,7 +36,6 @@
 	#include "tf_weapon_compound_bow.h"
 	#include "tf_projectile_arrow.h"
 	#include "NextBot/NextBotManager.h"
-	#include "halloween/merasmus/merasmus_trick_or_treat_prop.h"
 	#include "tf_logic_robot_destruction.h"
 	#include "tf_passtime_logic.h"
 
@@ -183,12 +182,10 @@ BEGIN_NETWORK_TABLE_NOBASE( CTFFlameThrower, DT_LocalFlameThrower )
 		RecvPropInt( RECVINFO( m_iActiveFlames ) ),
 		RecvPropInt( RECVINFO( m_iDamagingFlames ) ),
 		RecvPropEHandle( RECVINFO( m_hFlameManager ) ),
-		RecvPropBool( RECVINFO( m_bHasHalloweenSpell ) ),
 	#else
 		SendPropInt( SENDINFO( m_iActiveFlames ), 5, SPROP_UNSIGNED | SPROP_CHANGES_OFTEN ),
 		SendPropInt( SENDINFO( m_iDamagingFlames ), 10, SPROP_UNSIGNED | SPROP_CHANGES_OFTEN ),
 		SendPropEHandle( SENDINFO( m_hFlameManager ) ),
-		SendPropBool( SENDINFO( m_bHasHalloweenSpell ) ),
 	#endif
 END_NETWORK_TABLE()
 
@@ -255,7 +252,6 @@ CTFFlameThrower::CTFFlameThrower()
 #endif
 
 	m_flSecondaryAnimTime = 0.f;
-	m_bHasHalloweenSpell.Set( false );
 	m_flMinPrimaryAttackBurstTime = 0.f;
 
 	m_szParticleEffectBlue[0] = '\0';
@@ -328,7 +324,6 @@ void CTFFlameThrower::Precache( void )
 	PrecacheParticleSystem( "drg_bison_idle" );
 	PrecacheParticleSystem( "medicgun_invulnstatus_fullcharge_blue" );
 	PrecacheParticleSystem( "medicgun_invulnstatus_fullcharge_red" );
-	PrecacheParticleSystem( "halloween_burningplayer_flyingbits" );
 	PrecacheParticleSystem( "torch_player_burn" );
 	PrecacheParticleSystem( "torch_red_core_1" );
 
@@ -2126,21 +2121,6 @@ Vector CTFFlameThrower::GetMuzzlePosHelper( bool bVisualPos )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFFlameThrower::CalculateHalloweenSpell( void )
-{
-	m_bHasHalloweenSpell.Set( false );
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		int iHalloweenSpell = 0;
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( this, iHalloweenSpell, halloween_green_flames );
-		m_bHasHalloweenSpell.Set( iHalloweenSpell > 0 );
-	}
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CTFFlameThrower::Deploy( void )
 {
 #if defined( CLIENT_DLL )
@@ -2155,8 +2135,6 @@ bool CTFFlameThrower::Deploy( void )
 	StopFullCritEffect();
 #endif // CLIENT_DLL
 
-	CalculateHalloweenSpell();
-
 	return BaseClass::Deploy();
 }
 
@@ -2165,10 +2143,6 @@ bool CTFFlameThrower::Deploy( void )
 //-----------------------------------------------------------------------------
 void CTFFlameThrower::FireGameEvent( IGameEvent *event )
 {
-	if ( FStrEq( event->GetName(), "recalculate_holidays" ) )
-	{
-		CalculateHalloweenSpell();
-	}
 }
 
 #if defined( CLIENT_DLL )
@@ -2549,12 +2523,6 @@ const char* CTFFlameThrower::FlameEffectName( bool bIsFirstPersonView )
 	if ( !pOwner )
 		return NULL;
 
-	// Halloween Spell
-	if ( m_bHasHalloweenSpell )
-	{
-		return "flamethrower_halloween_new_flame";
-	}
-
 	switch ( GetFlameThrowerMode() )
 	{
 	case TF_FLAMETHROWER_MODE_PHLOG:	return "drg_phlo_stream_new_flame";
@@ -2575,12 +2543,6 @@ const char* CTFFlameThrower::FlameCritEffectName( bool bIsFirstPersonView )
 	CTFPlayer *pOwner = GetTFPlayerOwner();
 	if ( !pOwner )
 		return NULL;
-
-	// Halloween Spell
-	if ( m_bHasHalloweenSpell )
-	{
-		return ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_halloween_crit_blue_new_flame" : "flamethrower_halloween_crit_red_new_flame" );
-	}
 
 	switch ( GetFlameThrowerMode() )
 	{
@@ -3067,12 +3029,6 @@ void CTFFlameEntity::OnCollide( CBaseEntity *pOther )
 	if ( info.GetDamageType() & DMG_CRITICAL )
 	{
 		info.SetCritType( CTakeDamageInfo::CRIT_FULL );
-	}
-
-	// terrible hack for flames hitting the Merasmus props to get the particle effect in the correct position
-	if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
-	{
-		info.SetDamagePosition( GetAbsOrigin() );
 	}
 
 	// Track hits for the Flamethrower, which is used to change the weapon sound based on hit ratio

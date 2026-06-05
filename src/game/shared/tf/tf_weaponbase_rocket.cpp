@@ -475,21 +475,10 @@ void CTFBaseRocket::Explode( trace_t *pTrace, CBaseEntity *pOther )
 	Vector vecOrigin = GetAbsOrigin();
 	CPVSFilter filter( vecOrigin );
 	
-	// Halloween Spell Effect Check
-	int iHalloweenSpell = 0;
 	int iCustomParticleIndex = INVALID_STRING_INDEX;
 	item_definition_index_t ownerWeaponDefIndex = INVALID_ITEM_DEF_INDEX;
 	// if the owner is a Sentry, Check its owner
 	CBaseEntity *pPlayerOwner = GetOwnerPlayer();
-
-	if ( TF_IsHolidayActive( kHoliday_HalloweenOrFullMoon ) )
-	{
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( pPlayerOwner, iHalloweenSpell, halloween_pumpkin_explosions );
-		if ( iHalloweenSpell > 0 )
-		{
-			iCustomParticleIndex = GetParticleSystemIndex( "halloween_explosion" );
-		}
-	}
 
 	int iNoSelfBlastDamage = 0;
 	CTFWeaponBase *pWeapon = dynamic_cast< CTFWeaponBase * >( GetOriginalLauncher() );
