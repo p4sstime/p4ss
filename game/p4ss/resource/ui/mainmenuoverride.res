@@ -382,7 +382,7 @@
 			"dulltext"		"0"
 			"brighttext"	"0"
 			"default"		"1"
-			"labelText"		"#P4SS_PlayModePipe"
+			"labelText"		"|"
 
 			"paintbackground"	"0"
 			"paintborder"		"1"
