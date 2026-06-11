@@ -383,11 +383,35 @@ Scheme
 		{
 				"font"	"resource/fonts/compacta-bt.ttf"
 				"name"	"Compacta BT"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"19"	//Compacta Black
 		{
 				"font"	"resource/fonts/compacta-bt-black.ttf"
 				"name"	"Compacta BT Black"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"20"	//Glyphs font
 		{
@@ -398,26 +422,86 @@ Scheme
 		{
 				"font"	"resource/fonts/futura-condensed-demi.ttf"
 				"name"	"Futura Condensed Demi Regular"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"22"
 		{
 				"font"	"resource/fonts/montserrat-black.ttf"
 				"name"	"Montserrat Black"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"23"
 		{
 				"font"	"resource/fonts/montserrat-semibold.ttf"
 				"name"	"Montserrat SemiBold"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"24"
 		{
 				"font"	"resource/fonts/montserrat-light.ttf"
 				"name"	"Montserrat Light"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 		"25"
 		{
 				"font"	"resource/fonts/minecart-lcd.ttf"
 				"name"	"Minecart LCD"
+				"russian"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"polish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
+				"turkish"
+				{
+					"range" "0x0000 0xFFFF"
+				}
 		}
 	}
 }

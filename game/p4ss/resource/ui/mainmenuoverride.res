@@ -292,7 +292,7 @@
 			"xpos"			"40"
 			"ypos"			"153"
 			"zpos"			"3"
-			"wide"			"60"
+			"wide"			"f0"
 			"tall"			"35"
 			
 			"SubButton"
@@ -300,7 +300,7 @@
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
 				"zpos"			"3"
-				"wide"			"65"
+				"auto_wide_tocontents" "1"
 				"tall"			"35"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -329,6 +329,82 @@
 				"armedFgColor_override" 	"PFGreen"
 				"depressedFgColor_override" "PFDarkGreen"
 			}
+
+			"PlayModePipe"
+			{
+				"ControlName"	"CExLabel"
+				"fieldName"		"PlayModePipe"
+				"xpos"			"7"
+				"ypos"			"0"
+				"zpos"			"3"
+				"wide"			"70"
+				"tall"			"35"
+				"autoResize"	"0"
+				"pinCorner"		"3"
+				"visible"		"1"
+				"enabled"		"1"
+				"tabPosition"	"0"
+				"use_proportional_insets" "1"
+				"font"			"MontserratBlack36"
+				"textAlignment"	"west"
+				"dulltext"		"0"
+				"brighttext"	"0"
+				"default"		"1"
+				"labelText"		"|"
+
+				"paintbackground"	"0"
+				"paintborder"		"1"
+				
+				"FgColor" 					"TanLight"
+				"defaultFgColor_override" 	"TanLight"
+
+				"pin_to_sibling"		"SubButton"
+				"pin_corner_to_sibling"   "PIN_TOPLEFT"
+				"pin_to_sibling_corner"   "PIN_TOPRIGHT"
+			}
+			
+			"HostButton"
+			{
+				"ControlName"	"CExImageButton"
+				"fieldName"		"HostButton"
+				"xpos"			"-9"
+				"auto_wide_tocontents" "1"
+				"tall"			"35"
+				"zpos"			"4"
+				"autoResize"	"0"
+				"pinCorner"		"3"
+				"visible"		"1"
+				"enabled"		"1"
+				"command"		"OpenCreateMultiplayerGameDialog"
+				"actionsignallevel"		"2"
+				"tabPosition"	"0"
+				"use_proportional_insets" "1"
+				"labeltext"		"#P4SS_Host"
+				"font"			"MontserratBlack36"
+				"textAlignment"	"west"
+				"dulltext"		"0"
+				"brighttext"	"0"
+				"default"		"1"
+				
+				"sound_armed"        "UI/buttonrollover.wav"
+				"sound_depressed"	"UI/buttonclick.wav"
+				"sound_released"	"UI/buttonclickrelease.wav"	
+
+				"paintbackground"	"0"
+				"paintborder"		"0"
+				
+				"navUp"			"SettingsButton"
+				"navDown"		"ReplayBrowserButton"
+				"navLeft"		"ServerBrowserButton"
+				"navRight"		"FriendsContainer"
+				
+				"FgColor" 					"TanLight"
+				"defaultFgColor_override" 	"TanLight"
+				"armedFgColor_override" 	"PFGreen"
+				"depressedFgColor_override" "PFDarkGreen"
+
+				"pin_to_sibling"		"PlayModePipe"
+			}
 		}
 		
 		"PlayModeShadow"
@@ -338,7 +414,7 @@
 			"xpos"			"48"
 			"ypos"			"155.5"
 			"zpos"			"2"
-			"wide"			"200"
+			"auto_wide_tocontents" "1"
 			"tall"			"35"
 			"autoResize"	"0"
 			"pinCorner"		"3"
@@ -362,37 +438,6 @@
 			"fgcolor"		"TransparentLightBlack"
 		}
 		
-		"PlayModePipe"
-		{
-			"ControlName"	"CExLabel"
-			"fieldName"		"PlayModePipe"
-			"xpos"			"107"
-			"ypos"			"153"
-			"zpos"			"3"
-			"wide"			"70"
-			"tall"			"35"
-			"autoResize"	"0"
-			"pinCorner"		"3"
-			"visible"		"1"
-			"enabled"		"1"
-			"tabPosition"	"0"
-			"use_proportional_insets" "1"
-			"font"			"MontserratBlack36"
-			"textAlignment"	"west"
-			"dulltext"		"0"
-			"brighttext"	"0"
-			"default"		"1"
-			"labelText"		"|"
-
-			"paintbackground"	"0"
-			"paintborder"		"1"
-				
-			"FgColor" 					"TanLight"
-			"defaultFgColor_override" 	"TanLight"
-			
-
-		}
-		
 		"ReplayButton"
 		{
 			"ControlName"	"EditablePanel"
@@ -400,7 +445,7 @@
 			"xpos"			"40"
 			"ypos"			"198"
 			"zpos"			"4"
-			"wide"			"90"
+			"wide"			"f0"
 			"tall"			"35"
 			"visible"		"1"
 
@@ -408,7 +453,7 @@
 			{
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
-				"wide"			"90"
+				"auto_wide_tocontents" "1"
 				"tall"			"35"
 				"zpos"			"4"
 				"autoResize"	"0"
@@ -449,7 +494,7 @@
 			"xpos"			"48"
 			"ypos"			"200.5"
 			"zpos"			"2"
-			"wide"			"200"
+			"auto_wide_tocontents" "1"
 			"tall"			"35"
 			"autoResize"	"0"
 			"pinCorner"		"3"
@@ -473,55 +518,6 @@
 			"fgcolor"		"TransparentLightBlack"
 		}
 
-		"HostAServerButton"		//Host Button
-		{
-			"ControlName"	"EditablePanel"
-			"fieldname"		"HostAServerButton"
-			"xpos"			"116"
-			"ypos"			"153"
-			"zpos"			"4"
-			"wide"			"65"
-			"tall"			"35"
-			"visible"		"1"
-
-			"SubButton"
-			{
-				"ControlName"	"CExImageButton"
-				"fieldName"		"SubButton"
-				"wide"			"65"
-				"tall"			"35"
-				"zpos"			"4"
-				"autoResize"	"0"
-				"pinCorner"		"3"
-				"visible"		"1"
-				"enabled"		"1"
-				"tabPosition"	"0"
-				"use_proportional_insets" "1"
-				"font"			"MontserratBlack36"
-				"textAlignment"	"west"
-				"dulltext"		"0"
-				"brighttext"	"0"
-				"default"		"1"
-				
-				"sound_armed"        "UI/buttonrollover.wav"
-				"sound_depressed"	"UI/buttonclick.wav"
-				"sound_released"	"UI/buttonclickrelease.wav"	
-
-				"paintbackground"	"0"
-				"paintborder"		"0"
-				
-				"navUp"			"SettingsButton"
-				"navDown"		"ReplayBrowserButton"
-				"navLeft"		"ServerBrowserButton"
-				"navRight"		"FriendsContainer"
-				
-				"FgColor" 					"TanLight"
-				"defaultFgColor_override" 	"TanLight"
-				"armedFgColor_override" 	"PFGreen"
-				"depressedFgColor_override" "PFDarkGreen"
-			}
-		}
-		
 		"LearnButton"		//LEARN Button
 		{
 			"ControlName"	"EditablePanel"
@@ -529,7 +525,7 @@
 			"xpos"			"40"
 			"ypos"			"243"
 			"zpos"			"15"
-			"wide"			"85"
+			"wide"			"f0"
 			"tall"			"35"
 			"visible"		"1"
 
@@ -537,7 +533,7 @@
 			{
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
-				"wide"			"85"
+				"auto_wide_tocontents" "1"
 				"tall"			"35"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -576,7 +572,7 @@
 			"xpos"			"48"
 			"ypos"			"245.5"
 			"zpos"			"2"
-			"wide"			"200"
+			"auto_wide_tocontents" "1"
 			"tall"			"35"
 			"autoResize"	"0"
 			"pinCorner"		"3"
@@ -607,7 +603,7 @@
 			"xpos"			"40"
 			"ypos"			"288"
 			"zpos"			"15"
-			"wide"			"80"
+			"wide"			"f0"
 			"tall"			"35"
 			"visible"		"1"
 			"PaintBackgroundType"	"0"
@@ -616,7 +612,7 @@
 			{
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
-				"wide"			"80"
+				"auto_wide_tocontents" "1"
 				"tall"			"35"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -655,7 +651,7 @@
 			"xpos"			"48"
 			"ypos"			"290.5"
 			"zpos"			"2"
-			"wide"			"200"
+			"auto_wide_tocontents" "1"
 			"tall"			"35"
 			"autoResize"	"0"
 			"pinCorner"		"3"
@@ -686,7 +682,7 @@
 			"xpos"			"42"
 			"ypos"			"318"
 			"zpos"			"15"
-			"wide"			"45"
+			"wide"			"f0"
 			"tall"			"25"
 			"visible"		"1"
 			"PaintBackgroundType"	"0"
@@ -696,7 +692,7 @@
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
 				"zpos"			"3"
-				"wide"			"45"
+				"auto_wide_tocontents" "1"
 				"tall"			"25"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -729,7 +725,7 @@
 				"xpos"			"8"
 				"ypos"			"1"
 				"zpos"			"2"
-				"wide"			"32"
+				"auto_wide_tocontents" "1"
 				"tall"			"25"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -757,7 +753,7 @@
 			"xpos"			"41"
 			"ypos"			"318"
 			"zpos"			"15"
-			"wide"			"85"
+			"auto_wide_tocontents" "1"
 			"tall"			"25"
 			"visible"		"1"
 			"PaintBackgroundType"	"0"
@@ -767,7 +763,7 @@
 				"ControlName"	"CExImageButton"
 				"fieldName"		"SubButton"
 				"zpos"			"3"
-				"wide"			"85"
+				"auto_wide_tocontents" "1"
 				"tall"			"25"
 				"autoResize"	"0"
 				"pinCorner"		"3"
@@ -801,7 +797,7 @@
 				"xpos"			"8"
 				"ypos"			"2"
 				"zpos"			"2"
-				"wide"			"85"
+				"auto_wide_tocontents" "1"
 				"tall"			"25"
 				"autoResize"	"0"
 				"pinCorner"		"3"

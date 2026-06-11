@@ -53,13 +53,6 @@
 		"subimage" 		""
 	}
 	
-	"HostAServerButton"
-	{
-		"label" 		"#P4SS_Host" 
-		"command" 		"OpenCreateMultiplayerGameDialog"
-		"subimage" 		""
-	}
-	
 	"ReplayButton"
 	{
 		"label"			"#P4SS_Replay"
