@@ -367,7 +367,7 @@
 			{
 				"ControlName"	"CExImageButton"
 				"fieldName"		"HostButton"
-				"xpos"			"-9"
+				"xpos"			"-8"
 				"auto_wide_tocontents" "1"
 				"tall"			"35"
 				"zpos"			"4"
