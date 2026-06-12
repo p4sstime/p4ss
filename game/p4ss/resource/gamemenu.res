@@ -79,21 +79,21 @@
 		"label" 		"A"
 		"command" 		"OpenOptionsDialog"
 		"subimage" 		""
-		"tooltip"		"Settings"
+		"tooltip"		"#P4SS_Settings"
 	}
 	
 	"SettingsAdvancedButton"
 	{
 		"label" 		"B"
 		"command" 		"opentf2options"
-		"tooltip"		"Advanced Settings"
+		"tooltip"		"#P4SS_AdvSettings"
 	}
 	
 	"ReportBugButton"
 	{
 		"label"			"C"
 		"command"		"url https://github.com/p4sstime/p4ss/issues"
-		"tooltip"		"Report A Bug"
+		"tooltip"		"#P4SS_BugReport"
 
 	}
 	"WebsiteButton"
