@@ -53,7 +53,7 @@
 		"subimage" 		""
 	}
 	
-	"ReplayButton"
+	"ReplayButtonNoTooltip"
 	{
 		"label"			"#P4SS_Replay"
 		"command"		"engine replay_reloadbrowser"

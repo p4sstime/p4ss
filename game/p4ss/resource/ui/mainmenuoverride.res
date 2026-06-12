@@ -437,11 +437,17 @@
 			
 			"fgcolor"		"TransparentLightBlack"
 		}
-		
-		"ReplayButton"
+
+		//because of the wideness of the replay container, the 
+		//tooltip can appear in the range from the start of the actual 
+		//button to ~90 pixels to the left from friends container, disabled
+		//can maybe be fixed by coding the tooltips to only work when hovering 
+		//the subbuton instead of the whole panel but i dont know any c++ apart from huds
+
+		"ReplayButtonNoTooltip"
 		{
 			"ControlName"	"EditablePanel"
-			"fieldname"		"ReplayButton"
+			"fieldname"		"ReplayButtonNoTooltip"
 			"xpos"			"40"
 			"ypos"			"198"
 			"zpos"			"4"
