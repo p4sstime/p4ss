@@ -48,35 +48,35 @@
 	
 	"ServerBrowserButton"
 	{
-		"label" 		"Play" 
+		"label" 		"#P4SS_Play" 
 		"command" 		"OpenServerBrowser"
 		"subimage" 		""
 	}
 	
-	"HostAServerButton"
+	"ReplayButtonNoTooltip"
 	{
-		"label" 		"Host" 
-		"command" 		"OpenCreateMultiplayerGameDialog"
-		"subimage" 		""
+		"label"			"#P4SS_Replay"
+		"command"		"engine replay_reloadbrowser"
+		"subimage"		""
 	}
-	
+
 	"ReplayButton"
 	{
-		"label"			"Watch"
-		"command"		"engine replay_reloadbrowser"
+		"label"			"                           "
+		"command"		""
 		"subimage"		""
 	}
 	
 	"EquipButton"
 	{
-		"label" 		"Equip" 
+		"label" 		"#P4SS_Equip" 
 		"command" 		"engine open_charinfo_direct"
 		"subimage" 		""
 	}
 	
 	"LearnButton"
 	{
-		"label" 		"Learn" 
+		"label" 		"#P4SS_Learn" 
 		"command" 		"#TF_Training_SelectMode"
 		"subimage" 		""
 	}
@@ -86,21 +86,21 @@
 		"label" 		"A"
 		"command" 		"OpenOptionsDialog"
 		"subimage" 		""
-		"tooltip"		"Settings"
+		"tooltip"		"#P4SS_Settings"
 	}
 	
 	"SettingsAdvancedButton"
 	{
 		"label" 		"B"
 		"command" 		"opentf2options"
-		"tooltip"		"Advanced Settings"
+		"tooltip"		"#P4SS_AdvSettings"
 	}
 	
 	"ReportBugButton"
 	{
 		"label"			"C"
 		"command"		"url https://github.com/p4sstime/p4ss/issues"
-		"tooltip"		"Report A Bug"
+		"tooltip"		"#P4SS_BugReport"
 
 	}
 	"WebsiteButton"
@@ -113,7 +113,7 @@
 	//only shows in-game
 	"DisconnectButton"
 	{
-		"label" 		" Disconnect"
+		"label" 		"#P4SS_Disconnect"
 		"command" 		"engine disconnect"
 		"OnlyInGame"	"1"
 		"subimage" 		""
@@ -122,7 +122,7 @@
 	//only shows on main menu
 	"QuitButton"
 	{
-		"label" 		" Quit"
+		"label" 		"#P4SS_Quit"
 		"command" 		"engine replay_confirmquit"
 		"OnlyAtMenu" 	"1"
 		"subimage" 		""
