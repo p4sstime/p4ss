@@ -58,8 +58,8 @@ DESCRIPTION SERVER_OPTIONS
 	"maxplayers"
 	{
 		"#Valve_Max_Players"
-		{ NUMBER 1 24 }
-		{ "24" }
+		{ NUMBER 1 16 }
+		{ "8" }
 	}
 
 	"sv_password"
@@ -73,19 +73,38 @@ DESCRIPTION SERVER_OPTIONS
 	{
 		"#TF_Timelimit"
 		{ NUMBER 0 -1 }
-		{ "30" }
+		{ "0" }
 	}
 
 	"mp_winlimit"
 	{
-		"#TF_WinLimit"
+		"#PF_WinLimit"
 		{ NUMBER 0 -1 }
-		{ "0" }
+		{ "2" }
 	}
 	"mp_maxrounds"
 	{
-		"#TF_MaxRounds"
+		"#PF_MaxRounds"
 		{ NUMBER 0 -1 }
 		{ "0" }
 	}
+	"tf_passtime_scores_per_round"
+	{
+		"#PF_Scores_Per_Round"
+		{ NUMBER 0 -1 }
+		{ "5" }
+	}
+	"tf_passtime_ball_reset_time"
+	{
+		"#PF_Ball_Reset_Time"
+		{ NUMBER 0 -1 }
+		{ "15" }
+	}
+	"tf_passtime_pack_speed" 
+	{
+		"#PF_Pack_Speed"
+		{ NUMBER 0 -1 }
+		{ "1" }
+	}
+
 }
