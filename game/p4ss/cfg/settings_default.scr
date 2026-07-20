@@ -52,14 +52,14 @@ DESCRIPTION SERVER_OPTIONS
 	{
 		"#Valve_Hostname"
 		{ STRING }
-		{ "PASS Fortress server" }
+		{ "PASS Fortress server" } //overwritten elsewhere?
 	}
 
-	"maxplayers"
+	"maxplayers" //overwritten elsewhere?
 	{
 		"#Valve_Max_Players"
 		{ NUMBER 1 16 }
-		{ "8" }
+		{ "8" } //overwritten elsewhere?
 	}
 
 	"sv_password"
@@ -69,42 +69,75 @@ DESCRIPTION SERVER_OPTIONS
 		{ "" }
 	}
 
-	"mp_timelimit"
+	"mp_timelimit" 
 	{
 		"#TF_Timelimit"
 		{ NUMBER 0 -1 }
-		{ "0" }
+		{ "0" } //overwritten elsewhere?
 	}
 
-	"mp_winlimit"
+	"mp_winlimit" 
 	{
-		"#PF_WinLimit"
+		"#P4SS_WinLimit"
 		{ NUMBER 0 -1 }
-		{ "2" }
+		{ "2" } //overwritten elsewhere?
 	}
 	"mp_maxrounds"
 	{
-		"#PF_MaxRounds"
+		"#P4SS_MaxRounds"
 		{ NUMBER 0 -1 }
 		{ "0" }
 	}
 	"tf_passtime_scores_per_round"
 	{
-		"#PF_Scores_Per_Round"
+		"#P4SS_Scores_Per_Round"
 		{ NUMBER 0 -1 }
 		{ "5" }
 	}
 	"tf_passtime_ball_reset_time"
 	{
-		"#PF_Ball_Reset_Time"
+		"#P4SS_Ball_Reset_Time"
 		{ NUMBER 0 -1 }
 		{ "15" }
 	}
 	"tf_passtime_pack_speed" 
 	{
-		"#PF_Pack_Speed"
+		"#P4SS_Pack_Speed"
+		{ LIST "#P4SS_Enabled" "1" "#P4SS_Disabled" "0" }
+		{ "0" }
+	}
+	"p4ss_heal_on_pass"
+	{
+		"#P4SS_Heal_On_Pass"
 		{ NUMBER 0 -1 }
+		{ "0" }
+	}
+	
+	"p4ss_heal_on_pass_flight_time"
+	{
+		"#P4SS_Heal_On_Pass_Flight_Time"
+		{ NUMBER 0 -1 }
+		{ "0" }
+	}
+	
+	"pf_nolock" 
+	{
+		"#P4SS_Homing_Passes"
+		{ LIST "#P4SS_Enabled" "0" "#P4SS_Disabled" "1" } //reversed values because that's how the command works
+		{ "0" }
+	}
+	
+	"p4ss_heal_on_pass_flight_time"
+	{
+		"#P4SS_Heal_On_Pass_Flight_Time"
+		{ NUMBER 0 -1 }
+		{ "2" }
+	}
+	
+	"p4ss_med_canheadshot"
+	{
+		"#P4SS_Medic_Headshots"
+		{ LIST "#P4SS_Enabled" "1" "#P4SS_Disabled" "0" }
 		{ "1" }
 	}
-
 }
