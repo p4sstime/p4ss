@@ -260,8 +260,15 @@ void CTFStickBomb::Smack( void )
 			else if ( m_bMiniCrit )
 				dmgType |= DMG_RADIUS_MAX;
 
-			CTakeDamageInfo info( pTFPlayer, pTFPlayer, this, explosion, explosion, 75.0f, dmgType, TF_DMG_CUSTOM_STICKBOMB_EXPLOSION, &explosion );
-			CTFRadiusDamageInfo radiusinfo( &info, explosion, 100.f );
+			float flDamage = 75.0f;
+			CALL_ATTRIB_HOOK_FLOAT( flDamage, mult_dmg );
+
+			CTakeDamageInfo info( pTFPlayer, pTFPlayer, this, explosion, explosion, flDamage, dmgType, TF_DMG_CUSTOM_STICKBOMB_EXPLOSION, &explosion );
+
+			float flRadius = 100.f;
+			CALL_ATTRIB_HOOK_FLOAT( flRadius, mult_explosion_radius );
+
+			CTFRadiusDamageInfo radiusinfo( &info, explosion, flRadius );
 			TFGameRules()->RadiusDamage( radiusinfo );
 		}
 #endif
