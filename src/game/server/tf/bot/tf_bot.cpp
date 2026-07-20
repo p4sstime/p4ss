@@ -157,7 +157,6 @@ const char *GetRandomBotName( void )
 		"Tom Jones",
 		"Puny Mortal",
 		"Tactical egg!",
-		"Pow!",
 		"Russian Detective",
 		"Soldier's Pet Raccoon",
 		"Bombinomicon ($6.66)",
