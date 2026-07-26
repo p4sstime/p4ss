@@ -18,7 +18,6 @@ game/p4ss/tf2_playerstats.dmx
 game/p4ss/stats.txt
 game/p4ss/voice_ban.dt
 game/p4ss/maps/graphs/*
-game/p4ss/media/*
 game/p4ss/videoconfig_linux.cfg
 game/p4ss/ServerConfig.vdf
 src/.ninja*
@@ -568,6 +567,8 @@ game/p4ss/bin/linux64/game_shader_generic_example.so
 !game/p4ss/media/Valve_Intro.webm
 !game/p4ss/media/movie_readme.txt
 !game/p4ss/media/startupvids.txt
+game/p4ss/media/viewed.res
+
 game/p4ss/cfg/user.scr
 game/p4ss/cfg/settings.scr
 game/p4ss/screenshots/
