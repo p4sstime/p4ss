@@ -224,6 +224,9 @@ ConVar tf_romevision_skip_prompt( "tf_romevision_skip_prompt", "0", FCVAR_ARCHIV
 
 ConVar tf_chat_particle( "tf_chat_particle", "1", FCVAR_ARCHIVE, "Show typing bubble above player heads" );
 
+//Wasn't sure where else to put this.
+ConVar pf_use_shortnames( "pf_use_shortnames", "1", FCVAR_ARCHIVE, "Use short nicknames in place of regular, Steam usernames." );
+
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 #define BOMB_HAT_MODEL		"models/props_lakeside_event/bomb_temp_hat.mdl"
 #define BOMBONOMICON_MODEL  "models/props_halloween/bombonomicon.mdl"
