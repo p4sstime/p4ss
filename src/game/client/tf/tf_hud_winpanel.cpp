@@ -108,6 +108,19 @@ void CTFWinPanel::SetVisible( bool state )
 	BaseClass::SetVisible( state );
 }
 
+const char *GetPlayerWinPanelName( int iPlayerIndex )
+{
+	if ( pf_use_shortnames.GetBool() )
+	{
+		static char szShortName[MAX_PLAYER_NAME_LENGTH];
+		const wchar_t *wszShortName = GetPlayerShortName( iPlayerIndex );
+		g_pVGuiLocalize->ConvertUnicodeToANSI( wszShortName, szShortName,
+											   sizeof( szShortName ) );
+		return szShortName;
+	}
+	return g_PR->GetPlayerName( iPlayerIndex );
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -433,7 +446,7 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 				wchar_t wzCapMsg[512]=L"";
 				for ( int i = 0; i < iCappers; i++ )
 				{
-					Q_strncat( szPlayerNames, g_PR->GetPlayerName( (int) pCappers[i] ), ARRAYSIZE( szPlayerNames ) );
+					Q_strncat( szPlayerNames, GetPlayerWinPanelName( (int) pCappers[i] ), ARRAYSIZE( szPlayerNames ) );
 					if ( i < iCappers - 1 )
 					{
 						Q_strncat( szPlayerNames, ", ", ARRAYSIZE( szPlayerNames ) );
@@ -521,7 +534,7 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 				pPlayerScore->SetFgColor( clr );
 
 				// set label contents
-				pPlayerName->SetText( g_PR->GetPlayerName( iPlayerIndex ) );
+				pPlayerName->SetText( GetPlayerWinPanelName( iPlayerIndex ) );
 				pPlayerClass->SetText( g_aPlayerClassNames[g_TF_PR->GetPlayerClass( iPlayerIndex )] );
 				pPlayerScore->SetText( CFmtStr( "%d", iRoundScore ) );
 
@@ -577,7 +590,7 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 				pKillStreakPlayerScore->SetFgColor( clr );
 
 				// set label contents
-				pKillStreakPlayerName->SetText( g_PR->GetPlayerName( iPlayerIndex ) );
+				pKillStreakPlayerName->SetText( GetPlayerWinPanelName( iPlayerIndex ) );
 				pKillStreakPlayerClass->SetText( g_aPlayerClassNames[g_TF_PR->GetPlayerClass( iPlayerIndex )] );
 				pKillStreakPlayerScore->SetText( CFmtStr( "%d", iCount ) );
 			}
