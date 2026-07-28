@@ -20,6 +20,9 @@
 
 extern CEngineSprite *Draw_SetSpriteTexture( const model_t *pSpriteModel, int frame, int rendermode );
 
+ConVar pf_ball_trail_width( "pf_ball_trail_width", "1.0", FCVAR_ARCHIVE, "Scales the width of the passtime ball trail.", true, 0.1f, true, 1.0f );
+ConVar pf_ball_trail_lifetime( "pf_ball_trail_lifetime", "3.0", FCVAR_ARCHIVE, "Sets the lifetime in seconds of the passtime ball trail.", true, 0.5f, true, 3.0f );
+
 #endif // CLIENT_DLL
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -274,6 +277,54 @@ void CSpriteTrail::OnDataChanged( DataUpdateType_t updateType )
 
 
 //-----------------------------------------------------------------------------
+// Purpose: Identifies whether this trail belongs to the passtime ball, so that
+// the pf_ball_trail_width/pf_ball_trail_lifetime convars can be applied.
+//-----------------------------------------------------------------------------
+bool CSpriteTrail::IsPasstimeBallTrail( void ) const
+{
+	C_BaseEntity *pEnt = m_hAttachedToEntity.Get();
+	if ( !pEnt )
+		return false;
+
+	// GetClassname() isn't reliable on the client (it falls back to a mangled
+	// typeid name unless the entity has prediction data), so identify the ball
+	// via its networked client class instead.
+	ClientClass *pClientClass = pEnt->GetClientClass();
+	return pClientClass && FStrEq( pClientClass->m_pNetworkName, "CPasstimeBall" );
+}
+
+float CSpriteTrail::GetEffectiveLifeTime( void ) const
+{
+	if ( IsPasstimeBallTrail() )
+	{
+		return pf_ball_trail_lifetime.GetFloat();
+	}
+	return m_flLifeTime;
+}
+
+float CSpriteTrail::GetEffectiveStartWidth( void ) const
+{
+	if ( IsPasstimeBallTrail() )
+	{
+		return m_flStartWidth * pf_ball_trail_width.GetFloat();
+	}
+	return m_flStartWidth;
+}
+
+float CSpriteTrail::GetEffectiveEndWidth( void ) const
+{
+	if ( m_flEndWidth < 0.0f )
+	{
+		return m_flEndWidth;
+	}
+	if ( IsPasstimeBallTrail() )
+	{
+		return m_flEndWidth * pf_ball_trail_width.GetFloat();
+	}
+	return m_flEndWidth;
+}
+
+//-----------------------------------------------------------------------------
 // Compute position	+ bounding box
 //-----------------------------------------------------------------------------
 void CSpriteTrail::ClientThink()
@@ -348,10 +399,12 @@ void CSpriteTrail::UpdateBoundingBox( void )
 	m_vecRenderMins = vecRenderOrigin;
 	m_vecRenderMaxs = vecRenderOrigin;
 
-	float flMaxWidth = m_flStartWidth;
-	if (( m_flEndWidth >= 0.0f ) && ( m_flEndWidth > m_flStartWidth ))
+	float flStartWidth = GetEffectiveStartWidth();
+	float flEndWidth = GetEffectiveEndWidth();
+	float flMaxWidth = flStartWidth;
+	if (( flEndWidth >= 0.0f ) && ( flEndWidth > flStartWidth ))
 	{
-		flMaxWidth = m_flEndWidth;
+		flMaxWidth = flEndWidth;
 	}
 
 	Vector mins, maxs;
@@ -382,6 +435,8 @@ void CSpriteTrail::UpdateTrail( void )
 	if ( m_flUpdateTime > gpGlobals->curtime )
 		return;
 
+	float flLifeTime = GetEffectiveLifeTime();
+
 	Vector	screenPos;
 	ComputeScreenPosition( &screenPos );
 	TrailPoint_t *pLast = m_nStepCount ? GetTrailPoint( m_nStepCount-1 ) : NULL;
@@ -397,7 +452,7 @@ void CSpriteTrail::UpdateTrail( void )
 		// Save off its screen position, not its world position
 		TrailPoint_t *pNewPoint = GetTrailPoint( m_nStepCount );
 		pNewPoint->m_vecScreenPos = screenPos;
-		pNewPoint->m_flDieTime	= gpGlobals->curtime + m_flLifeTime;
+		pNewPoint->m_flDieTime	= gpGlobals->curtime + flLifeTime;
 		pNewPoint->m_flWidthVariance = random->RandomFloat( -m_flStartWidthVariance, m_flStartWidthVariance );
 		if (pLast)
 		{
@@ -412,7 +467,7 @@ void CSpriteTrail::UpdateTrail( void )
 	}
 
 	// Don't update again for a bit
-	m_flUpdateTime = gpGlobals->curtime + ( m_flLifeTime / (float) MAX_SPRITE_TRAIL_POINTS );
+	m_flUpdateTime = gpGlobals->curtime + ( flLifeTime / (float) MAX_SPRITE_TRAIL_POINTS );
 }
 
 
@@ -440,10 +495,14 @@ int CSpriteTrail::DrawModel( int flags )
 	CBeamSegDraw segDraw;
 	segDraw.Start( pRenderContext, m_nStepCount + 1, pSprite->GetMaterial( GetRenderMode() ) );
 	
+	float flLifeTime = GetEffectiveLifeTime();
+	float flStartWidth = GetEffectiveStartWidth();
+	float flEndWidth = GetEffectiveEndWidth();
+
 	// Setup the first point, always emanating from the attachment point
 	TrailPoint_t *pLast = GetTrailPoint( m_nStepCount-1 );
 	TrailPoint_t currentPoint;
-	currentPoint.m_flDieTime = gpGlobals->curtime + m_flLifeTime;
+	currentPoint.m_flDieTime = gpGlobals->curtime + flLifeTime;
 	ComputeScreenPosition( &currentPoint.m_vecScreenPos );
 	currentPoint.m_flTexCoord = pLast->m_flTexCoord + currentPoint.m_vecScreenPos.DistTo(pLast->m_vecScreenPos) * m_flTextureRes;
 	currentPoint.m_flWidthVariance = 0.0f;
@@ -461,7 +520,7 @@ int CSpriteTrail::DrawModel( int flags )
 		// This makes it so that we're always drawing to the current location
 		TrailPoint_t *pPoint = (i != m_nStepCount) ? GetTrailPoint(i) : &currentPoint;
 
-		float flLifePerc = (pPoint->m_flDieTime - gpGlobals->curtime) / m_flLifeTime;
+		float flLifePerc = (pPoint->m_flDieTime - gpGlobals->curtime) / flLifeTime;
 		flLifePerc = clamp( flLifePerc, 0.0f, 1.0f );
 
 		BeamSeg_t curSeg;
@@ -495,13 +554,13 @@ int CSpriteTrail::DrawModel( int flags )
 		curSeg.m_vPos = pPoint->m_vecScreenPos;
 #endif
 
-		if ( m_flEndWidth >= 0.0f )
+		if ( flEndWidth >= 0.0f )
 		{
-			curSeg.m_flWidth = Lerp( flLifePerc, m_flEndWidth.Get(), m_flStartWidth.Get() );
+			curSeg.m_flWidth = Lerp( flLifePerc, flEndWidth, flStartWidth );
 		}
 		else
 		{
-			curSeg.m_flWidth = m_flStartWidth.Get();
+			curSeg.m_flWidth = flStartWidth;
 		}
 		curSeg.m_flWidth += pPoint->m_flWidthVariance;
 		if ( curSeg.m_flWidth < 0.0f )
