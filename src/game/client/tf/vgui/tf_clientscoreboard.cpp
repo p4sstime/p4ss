@@ -1227,15 +1227,15 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 					{
 						int iIndex = PING_VERY_HIGH;
 
-						if ( nPing < 125 )
+						if ( nPing < 50 )
 						{
 							iIndex = PING_LOW;
 						}
-						else if ( nPing < 200 )
+						else if ( nPing < 100 )
 						{
 							iIndex = PING_MED;
 						}
-						else if ( nPing < 275 )
+						else if ( nPing < 150 )
 						{
 							iIndex = PING_HIGH;
 						}
