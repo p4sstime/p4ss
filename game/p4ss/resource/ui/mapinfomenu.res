@@ -57,7 +57,7 @@
 		"fieldName"		"MapInfoTitle"
 		"xpos"			"c-220"
 		"ypos"			"130"
-		"zpos"			"1"
+		"zpos"			"3"
 		"wide"			"440"
 		"tall"			"44"
 		"autoResize"	"3"
