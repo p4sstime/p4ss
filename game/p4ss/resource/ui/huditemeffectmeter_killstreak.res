@@ -112,7 +112,7 @@
 		"xpos"					"25"
 		"xpos_minmode"			"28"
 		"ypos_minmode"			"11"
-		"ypos"					"4"	[$!POSIX] //Windows
+		"ypos"					"4"	[!$POSIX] //Windows
 		"ypos"					"7"	[$POSIX]  //Linux"
 		"zpos"					"2"
 		"wide"					"40"
@@ -137,7 +137,7 @@
 		"xpos"					"27"
 		"xpos_minmode"			"30"
 		"ypos_minmode"			"14"
-		"ypos"					"7"	[$!POSIX] //Windows
+		"ypos"					"7"	[!$POSIX] //Windows
 		"ypos"					"10"	[$POSIX]  //Linux"
 		"zpos"					"2"
 		"wide"					"40"

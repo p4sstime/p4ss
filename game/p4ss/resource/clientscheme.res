@@ -2882,7 +2882,7 @@ Scheme
 			"1"
 			{
 				"name"	"Minecart LCD"
-				"tall"	"38"	[$!POSIX] //Windows
+				"tall"	"38"	[!$POSIX] //Windows
 				"tall"	"35"	[$POSIX]  //Linux
 			}
 		}
@@ -2892,7 +2892,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"14"	[$!POSIX] //Windows
+				"tall"	"14"	[!$POSIX] //Windows
 				"tall"	"12"	[$POSIX]  //Linux
 			}
 		}
@@ -2901,7 +2901,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
@@ -2910,7 +2910,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"18"	[$!POSIX] //Windows
+				"tall"	"18"	[!$POSIX] //Windows
 				"tall"	"16"	[$POSIX]  //Linux
 			}
 		}
@@ -2919,7 +2919,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
@@ -2928,7 +2928,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"24"	[$!POSIX] //Windows
+				"tall"	"24"	[!$POSIX] //Windows
 				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
@@ -2937,7 +2937,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"28"	[$!POSIX] //Windows
+				"tall"	"28"	[!$POSIX] //Windows
 				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
@@ -2946,7 +2946,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"32"	[$!POSIX] //Windows
+				"tall"	"32"	[!$POSIX] //Windows
 				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
@@ -2955,7 +2955,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"36"	[$!POSIX] //Windows
+				"tall"	"36"	[!$POSIX] //Windows
 				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
@@ -2965,7 +2965,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"14"	[$!POSIX] //Windows
+				"tall"	"14"	[!$POSIX] //Windows
 				"tall"	"12"	[$POSIX]  //Linux
 			}
 		}
@@ -2974,7 +2974,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
@@ -2983,7 +2983,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
@@ -2992,7 +2992,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"24"	[$!POSIX] //Windows
+				"tall"	"24"	[!$POSIX] //Windows
 				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
@@ -3001,7 +3001,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"28"	[$!POSIX] //Windows
+				"tall"	"28"	[!$POSIX] //Windows
 				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
@@ -3010,7 +3010,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"32"	[$!POSIX] //Windows
+				"tall"	"32"	[!$POSIX] //Windows
 				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
@@ -3019,7 +3019,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"36"	[$!POSIX] //Windows
+				"tall"	"36"	[!$POSIX] //Windows
 				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
@@ -3028,7 +3028,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"40"	[$!POSIX] //Windows
+				"tall"	"40"	[!$POSIX] //Windows
 				"tall"	"37"	[$POSIX]  //Linux
 			}
 		}
@@ -3037,7 +3037,7 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"44"	[$!POSIX] //Windows
+				"tall"	"44"	[!$POSIX] //Windows
 				"tall"	"41"	[$POSIX]  //Linux
 			}
 		}
@@ -3055,7 +3055,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"11"	[$!POSIX] //Windows
+				"tall"	"11"	[!$POSIX] //Windows
 				"tall"	"10"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3065,7 +3065,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"12"	[$!POSIX] //Windows
+				"tall"	"12"	[!$POSIX] //Windows
 				"tall"	"11"	[$POSIX]  //Linux
 			}
 		}
@@ -3074,7 +3074,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"12"	[$!POSIX] //Windows
+				"tall"	"12"	[!$POSIX] //Windows
 				"tall"	"11"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3084,7 +3084,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"14"	[$!POSIX] //Windows
+				"tall"	"14"	[!$POSIX] //Windows
 				"tall"	"13"	[$POSIX]  //Linux
 			}
 		}
@@ -3093,7 +3093,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"14"	[$!POSIX] //Windows
+				"tall"	"14"	[!$POSIX] //Windows
 				"tall"	"13"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3103,7 +3103,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3113,7 +3113,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
@@ -3122,7 +3122,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 				"antialias" 	"1"
@@ -3133,7 +3133,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 				"additive"	"1"
 				"antialias" 	"1"
@@ -3144,7 +3144,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"22"	[$!POSIX] //Windows
+				"tall"	"22"	[!$POSIX] //Windows
 				"tall"	"20"	[$POSIX]  //Linux
 			}
 		}
@@ -3153,7 +3153,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"24"	[$!POSIX] //Windows
+				"tall"	"24"	[!$POSIX] //Windows
 				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
@@ -3162,7 +3162,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"26"	[$!POSIX] //Windows
+				"tall"	"26"	[!$POSIX] //Windows
 				"tall"	"24"	[$POSIX]  //Linux
 			}
 		}
@@ -3171,7 +3171,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"28"	[$!POSIX] //Windows
+				"tall"	"28"	[!$POSIX] //Windows
 				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
@@ -3180,7 +3180,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"32"	[$!POSIX] //Windows
+				"tall"	"32"	[!$POSIX] //Windows
 				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
@@ -3189,7 +3189,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"34"	[$!POSIX] //Windows
+				"tall"	"34"	[!$POSIX] //Windows
 				"tall"	"31"	[$POSIX]  //Linux
 			}
 		}
@@ -3198,7 +3198,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"36"	[$!POSIX] //Windows
+				"tall"	"36"	[!$POSIX] //Windows
 				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
@@ -3207,7 +3207,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"40"	[$!POSIX] //Windows
+				"tall"	"40"	[!$POSIX] //Windows
 				"tall"	"37"	[$POSIX]  //Linux
 			}
 		}
@@ -3216,7 +3216,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"40"	[$!POSIX] //Windows
+				"tall"	"40"	[!$POSIX] //Windows
 				"tall"	"37"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3226,7 +3226,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"44"	[$!POSIX] //Windows
+				"tall"	"44"	[!$POSIX] //Windows
 				"tall"	"41"	[$POSIX]  //Linux
 			}
 		}
@@ -3235,7 +3235,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"48"	[$!POSIX] //Windows
+				"tall"	"48"	[!$POSIX] //Windows
 				"tall"	"45"	[$POSIX]  //Linux
 			}
 		}
@@ -3244,7 +3244,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"52"	[$!POSIX] //Windows
+				"tall"	"52"	[!$POSIX] //Windows
 				"tall"	"49"	[$POSIX]  //Linux
 			}
 		}
@@ -3253,7 +3253,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"56"	[$!POSIX] //Windows
+				"tall"	"56"	[!$POSIX] //Windows
 				"tall"	"53"	[$POSIX]  //Linux
 			}
 		}
@@ -3262,7 +3262,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"64"	[$!POSIX] //Windows
+				"tall"	"64"	[!$POSIX] //Windows
 				"tall"	"60"	[$POSIX]  //Linux
 			}
 		}
@@ -3271,7 +3271,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"12"	[$!POSIX] //Windows
+				"tall"	"12"	[!$POSIX] //Windows
 				"tall"	"10"	[$POSIX]  //Linux
 			}
 		}
@@ -3280,7 +3280,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
@@ -3289,7 +3289,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
@@ -3299,7 +3299,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
@@ -3308,7 +3308,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
@@ -3317,7 +3317,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"24"	[$!POSIX] //Windows
+				"tall"	"24"	[!$POSIX] //Windows
 				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
@@ -3326,7 +3326,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"28"	[$!POSIX] //Windows
+				"tall"	"28"	[!$POSIX] //Windows
 				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
@@ -3335,7 +3335,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"32"	[$!POSIX] //Windows
+				"tall"	"32"	[!$POSIX] //Windows
 				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
@@ -3363,7 +3363,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"12"	[$!POSIX] //Windows
+				"tall"	"12"	[!$POSIX] //Windows
 				"tall"	"10"	[$POSIX]  //Linux
 				"antialias" "1"
 			}
@@ -3373,7 +3373,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"16"	[$!POSIX] //Windows
+				"tall"	"16"	[!$POSIX] //Windows
 				"tall"	"14"	[$POSIX]  //Linux
 				"antialias" "1"
 			}
@@ -3383,7 +3383,7 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"20"	[$!POSIX] //Windows
+				"tall"	"20"	[!$POSIX] //Windows
 				"tall"	"18"	[$POSIX]  //Linux
 				"antialias" "1"
 			}
@@ -3434,7 +3434,7 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat Black"
-				"tall"		"16"	[$!POSIX] //Windows
+				"tall"		"16"	[!$POSIX] //Windows
 				"tall"		"14"	[$POSIX]  //Linux
 				"weight"	"400"
 				"additive"	"1"

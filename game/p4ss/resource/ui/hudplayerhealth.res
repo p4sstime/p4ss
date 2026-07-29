@@ -105,7 +105,7 @@
 		"fieldName"		"PlayerStatusHealthValue"
 		"xpos"			"-3"
 		"xpos_minmode"	"-28"
-		"ypos"			"-31"	[$!POSIX] //Windows
+		"ypos"			"-31"	[!$POSIX] //Windows
 		"ypos"			"-32"	[$POSIX]  //Linux
 		"ypos_minmode"	"-1"
 		"zpos"			"5"
