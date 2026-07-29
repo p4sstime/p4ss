@@ -2739,11 +2739,6 @@
 			}
 			"attributes"
 			{
-				"dmg taken from fire reduced"
-				{
-					"attribute_class"	"mult_dmgtaken_from_fire"
-					"value"			"0.5"
-				}
 				"dmg taken from blast reduced"
 				{
 					"attribute_class"	"mult_dmgtaken_from_explosions"
@@ -3669,16 +3664,6 @@
 			}
 			"attributes"
 			{
-				"increase player capture value"
-				{
-					"attribute_class"	"add_player_capturevalue"
-					"value"	"1"
-				}
-				"dmg taken from bullets increased"
-				{
-					"attribute_class"	"mult_dmgtaken_from_bullets"
-					"value"	"1.1"
-				}
 			}
 			"visuals"
 			{
@@ -4970,11 +4955,6 @@
 					"attribute_class"	"charge_impact_damage"
 					"value"			"1.7"
 				}
-				"dmg taken from fire reduced"
-				{
-					"attribute_class"	"mult_dmgtaken_from_fire"
-					"value"			"0.8"
-				}
 				"allowed in medieval mode"
 				{
 					"attribute_class"	"allowed_in_medieval_mode"
@@ -5180,11 +5160,6 @@
 				"damage force reduction"
 				{
 					"attribute_class"	"damage_force_reduction"
-					"value"	"0.25"
-				}
-				"airblast vulnerability multiplier"
-				{
-					"attribute_class"	"airblast_vulnerability_multiplier"
 					"value"	"0.25"
 				}
 				"boots falling stomp"
