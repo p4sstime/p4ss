@@ -198,6 +198,24 @@
 	"wave"			"*passtime/scroll_close.wav"
 }
 
+"Passtime.Ball.Countdown.1"
+{
+	"channel" 		"CHAN_STATIC"
+	"volume" 		"1"
+	"pitch" 		"PITCH_NORM"
+	"soundlevel" 	"SNDLVL_NORM"
+	"wave"			"*p4ss/jack_countdown/jack_countdown_1.wav"
+}
+
+"Passtime.Ball.Countdown.2"
+{
+	"channel" 		"CHAN_STATIC"
+	"volume" 		"1"
+	"pitch" 		"PITCH_NORM"
+	"soundlevel" 	"SNDLVL_NORM"
+	"wave"			"*p4ss/jack_countdown/jack_countdown_2.wav"
+}
+
 "Passtime.Merasmus.Laugh"
 {
 	"channel"		"CHAN_VOICE2"
