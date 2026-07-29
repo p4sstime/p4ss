@@ -1,8 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture" "vgui\maps\menu_fullscreenbg_pass_maple"
-	"%keywords" "tf,p4ss,passtime,map_photos"
-	"$translucent" 1
-	"$vertexcolor" 1
-	"$ignorez" 1
-}

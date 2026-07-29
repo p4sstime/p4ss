@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/maps/menu_photos_pass_maple_a10"
+	"$basetexture" "vgui/maps/menu_photos_pass_maple"
 	"%keywords" "maple,tf,p4ss,passtime,map_photos"
 	"$translucent" 1
 	"$vertexcolor" 1

@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/maps/menu_photos_pass_plexiglass_b6"
+	"$basetexture" "vgui/maps/menu_photos_pass_plexiglass"
 	"%keywords" "plexiglass,tf,p4ss,passtime,map_photos"
 	"$translucent" 1
 	"$vertexcolor" 1
