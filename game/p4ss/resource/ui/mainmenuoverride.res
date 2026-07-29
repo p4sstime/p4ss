@@ -951,7 +951,7 @@
 					"tall"			"14"
 					"visible"		"1"
 					"enabled"		"1"
-					"image"			"glyph_options"
+					"image"			"glyph_options_advanced"
 					"scaleImage"	"1"
 					"proportionaltoparent"	"1"
 				}	
@@ -1018,7 +1018,7 @@
 					"tall"			"14"
 					"visible"		"1"
 					"enabled"		"1"
-					"image"			"glyph_achievements"
+					"image"			"glyph_website"
 					"scaleImage"	"1"
 					"proportionaltoparent"	"1"
 				}	
