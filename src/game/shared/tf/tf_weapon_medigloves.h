@@ -4,8 +4,8 @@
 //
 //=============================================================================
 
-#ifndef TF_WEAPON_MEDIGUN_H
-#define TF_WEAPON_MEDIGUN_H
+#ifndef TF_WEAPON_MEDIGLOVES_H
+#define TF_WEAPON_MEDIGLOVES_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -13,41 +13,28 @@
 #include "tf_weaponbase_gun.h"
 
 #if defined( CLIENT_DLL )
-#define CWeaponMedigun C_WeaponMedigun
-#define CTFMedigunShield C_TFMedigunShield
+#define CWeaponMedigloves C_WeaponMedigloves
+#define CTFMediglovesShield C_TFMediglovesShield
 #endif
 
-class CTFMedigunShield;
+class CTFMediglovesShield;
 class CTFReviveMarker;
 
-class CRecvProxyData;
-void RecvProxy_HealingTarget(const CRecvProxyData *pData, void *pStruct, void *pOut);
-
-enum medigun_weapontypes_t
+enum medigloves_weapontypes_t
 {
-	MEDIGUN_STANDARD = 0,
-	MEDIGUN_UBER,
-	MEDIGUN_QUICKFIX,
-	MEDIGUN_RESIST,
+	MEDIGLOVES_BLAST = 0,
+	MEDIGLOVES_JUMP,
+	MEDIGLOVES_TELEPORT,
+	MEDIGLOVES_GRAPPLE,
 };
 
-enum medigun_resist_types_t
-{
-	MEDIGUN_BULLET_RESIST = 0,
-	MEDIGUN_BLAST_RESIST,
-	MEDIGUN_FIRE_RESIST,
-	MEDIGUN_NUM_RESISTS
-};
-
-struct MedigunEffects_t
+struct MediglovesEffects_t
 {
 	ETFCond eCondition;
 	ETFCond eWearingOffCondition;
 	const char *pszChargeOnSound;
 	const char *pszChargeOffSound;
 };
-
-extern MedigunEffects_t g_MedigunEffects[MEDIGUN_NUM_CHARGE_TYPES];
 
 #define MAX_HEALING_TARGETS			1	//6
 
@@ -59,15 +46,15 @@ extern MedigunEffects_t g_MedigunEffects[MEDIGUN_NUM_CHARGE_TYPES];
 //=========================================================
 // Beam healing gun
 //=========================================================
-class CWeaponMedigun : public CTFWeaponBaseGun
+class CWeaponMedigloves : public CTFWeaponBaseGun
 {
-	DECLARE_CLASS( CWeaponMedigun, CTFWeaponBaseGun );
+	DECLARE_CLASS( CWeaponMedigloves, CTFWeaponBaseGun );
 public:
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
 
-	CWeaponMedigun( void );
-	~CWeaponMedigun( void );
+	CWeaponMedigloves( void );
+	~CWeaponMedigloves( void );
 
 	virtual void	Precache();
 
@@ -88,15 +75,12 @@ public:
 	virtual float	GetHealRate( void );
 	virtual bool	AppliesModifier( void ) { return true; }
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_MEDIGUN; }
-	int				GetMedigunType( void ) const;
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_MEDIGLOVES; }
+	int				GetMediglovesType( void ) const;
 
 
 	bool			IsReleasingCharge( void ) const;
-	medigun_charge_types GetChargeType( void ) const;
-
-	void			CycleResistType();
-	medigun_resist_types_t GetResistType() const;
+	medigloves_charge_types GetChargeType( void ) const;
 
 	CBaseEntity		*GetHealTarget( void ) { return IsAttachedToBuilding() ? NULL : m_hHealingTarget.Get(); }
 
@@ -165,8 +149,8 @@ private:
 	void					UberchargeChunkDeployed();
 #endif
 
-	void					CreateMedigunShield( void );
-	void					RemoveMedigunShield( void );
+	void					CreateMediglovesShield( void );
+	void					RemoveMediglovesShield( void );
 
 public:
 
@@ -213,7 +197,7 @@ protected:
 	float					m_flChargeLevelToPreserve;
 	float					m_flOverHealExpert;		// Upgrade
 
-	CHandle< CTFMedigunShield > m_hMedigunShield;
+	CHandle< CTFMediglovesShield > m_hMediglovesShield;
 	CHandle< CTFReviveMarker > m_hReviveMarker;
 
 #ifdef CLIENT_DLL
@@ -244,20 +228,20 @@ protected:
 #endif
 
 private:														
-	CWeaponMedigun( const CWeaponMedigun & );
+	CWeaponMedigloves( const CWeaponMedigloves & );
 };
 
-class CTFMedigunShield : public CBaseAnimating
+class CTFMediglovesShield : public CBaseAnimating
 {
-	DECLARE_CLASS( CTFMedigunShield, CBaseAnimating );
+	DECLARE_CLASS( CTFMediglovesShield, CBaseAnimating );
 
 public:
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
 	DECLARE_DATADESC();
 
-	CTFMedigunShield();
-	~CTFMedigunShield();
+	CTFMediglovesShield();
+	~CTFMediglovesShield();
 
 	virtual void Spawn();
 	virtual void Precache();
@@ -269,7 +253,7 @@ public:
 	virtual void TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr, CDmgAccumulator *pAccumulator );
 	virtual int OnTakeDamage( const CTakeDamageInfo &info );
 
-	static CTFMedigunShield *Create( CTFPlayer *pOwner );
+	static CTFMediglovesShield *Create( CTFPlayer *pOwner );
 	// virtual bool TestCollision( const Ray_t &ray, unsigned int mask, trace_t& trace );
 	virtual bool ShouldCollide( int collisionGroup, int contentsMask ) const;
 	virtual void StartTouch( CBaseEntity *pOther ) OVERRIDE;
@@ -293,4 +277,4 @@ private:
 #endif // GAME_DLL
 };
 
-#endif // TF_WEAPON_MEDIGUN_H
+#endif // TF_WEAPON_MEDIGLOVES_H

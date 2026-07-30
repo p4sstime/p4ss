@@ -1851,6 +1851,62 @@
 			"particle_suffix"		"medigun"
 		}
 
+		"weapon_medigloves"
+		{
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_heal_allies"		"1"
+			}
+			"base_item_name"	"TF_WEAPON_MEDIGLOVES"
+			"inspect_panel_dist" "70"
+			"enabled"	"1"
+			"item_class"	"tf_weapon_medigloves"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"item_type_name"	"#TF_Weapon_Medigloves"
+			"item_name"	"#TF_Weapon_Medigloves"
+			"item_slot"	"secondary"
+			"equip_region"	"medigun_backpack"
+			"item_quality"	"normal"
+			"baseitem" "1"
+			"min_ilevel"	"1"
+			"max_ilevel"	"1"
+			"image_inventory"	"backpack/weapons/c_models/c_medigun/c_medigun"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"attach_to_hands"	"1"
+			"model_player"	"models/weapons/c_models/c_medigun/c_medigun.mdl"
+			"used_by_classes"
+			{
+				"medic"	"1"
+			}
+			"attributes"
+			{
+				"kill eater score type"
+				{
+					"attribute_class"	"kill_eater_score_type"
+					"value"				"1"								
+				}
+				"kill eater score type 2"
+				{
+					"attribute_class"	"kill_eater_score_type_2"
+					"value" 			"2"								
+				}
+			}
+			"static_attrs"
+			{
+				"weapon_stattrak_module_scale"			"1"
+				"min_viewmodel_offset"					"10 0 -9"
+			}
+			"mouse_pressed_sound"	"ui/item_heavy_gun_pickup.wav"
+			"drop_sound"		"ui/item_heavy_gun_drop.wav"
+			"particle_suffix"		"medigun"
+		}
+
 		"weapon_melee_allclass"
 		{
 			"visuals"
