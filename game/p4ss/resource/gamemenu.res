@@ -110,6 +110,12 @@
 		"tooltip"		"passtime.tf"
 	}
 	
+	"ForumButton"
+	{
+		"command" 		"url https://forum.passtime.tf/"
+		"tooltip"		"Forums"
+	}
+	
 	//only shows in-game
 	"DisconnectButton"
 	{
