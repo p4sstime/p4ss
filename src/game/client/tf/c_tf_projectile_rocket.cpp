@@ -159,5 +159,13 @@ const char *C_TFProjectile_Rocket::GetTrailParticleName( void )
 		}
 	}
 	
-	return "rockettrail"; 
+	switch( GetTeamNumber() )
+	{
+	case TF_TEAM_BLUE:
+		return "rockettrail_pf_blue";
+	case TF_TEAM_RED:
+		return "rockettrail_pf_red";
+	default:
+		return "rockettrail";
+	}
 }
