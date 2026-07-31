@@ -214,6 +214,7 @@ Scheme
 		"PureWhite"				"255 255 255 255"
 		"PureBlack"				"0 0 0 255"
 		"PFGrey" 				"32 32 32 180"
+		"PFGreyOpaque" 				"32 32 32 255"
 		"PFGreen"				"152 191 101 255"
 		"PFDarkGreen"			"62 76 41 255"
 		"PFGreenDim" 			"152 191 101 128"

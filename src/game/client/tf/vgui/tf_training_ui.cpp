@@ -209,7 +209,7 @@ void Training_MarkClassComplete( int iClass, int iStage )
 			-1,						// TF_CLASS_SCOUT
 		    -1,						// TF_CLASS_SNIPER
 		    TF_CLASS_DEMOMAN,		// TF_CLASS_SOLDIER
-			TF_CLASS_SPY,			// TF_CLASS_DEMOMAN
+			TF_CLASS_MEDIC,			// TF_CLASS_DEMOMAN
 			-1,						// TF_CLASS_MEDIC
 			-1,						// TF_CLASS_HEAVYWEAPONS
 			-1,						// TF_CLASS_PYRO
@@ -222,10 +222,10 @@ void Training_MarkClassComplete( int iClass, int iStage )
 		    -1,						// TF_CLASS_SNIPER
 		     2,						// TF_CLASS_SOLDIER	- must beat 2 stages to complete soldier training
 			 1,						// TF_CLASS_DEMOMAN
-			-1,						// TF_CLASS_MEDIC
+			 1,						// TF_CLASS_MEDIC
 			-1,						// TF_CLASS_HEAVYWEAPONS
 			-1,						// TF_CLASS_PYRO
-			 1,						// TF_CLASS_SPY
+			-1,						// TF_CLASS_SPY
 			-1,						// TF_CLASS_ENGINEER		
 		};
 		const int iNextClass = aNextClasses[ iClass ];
@@ -267,10 +267,10 @@ int Training_GetNumCoursesForClass( int iClass )
 	    0,		// TF_CLASS_SNIPER
 	    2,		// TF_CLASS_SOLDIER
 		1,		// TF_CLASS_DEMOMAN
-		0,		// TF_CLASS_MEDIC
+		1,		// TF_CLASS_MEDIC
 		0,		// TF_CLASS_HEAVYWEAPONS
 		0,		// TF_CLASS_PYRO
-		1,		// TF_CLASS_SPY
+		0,		// TF_CLASS_SPY
 		1,		// TF_CLASS_ENGINEER		
 	};
 
@@ -292,7 +292,7 @@ int Training_GetNumCourses()
 		s_bComputed = true;
 	}
 
-	AssertMsg( s_nTotal == 5, "Number of total courses is incorrect - should be soldier (2) + demo (1) + spy (1) + engy (1)" );
+	AssertMsg( s_nTotal == 5, "Number of total courses is incorrect - should be soldier (2) + demo (1) + medic (1) + movement (1)" );
 
 	return s_nTotal;
 }
@@ -923,7 +923,7 @@ const char *g_pClassPanelNames[ NUM_CLASS_PANELS ] =
 {
 	"SoldierPanel",
 	"DemoPanel",
-	"SpyPanel",
+	"MedicPanel",
 	"EngineerPanel"
 };
 
@@ -977,7 +977,7 @@ public:
 		const int nClassPanelH = YRES( 260 );
 
 		const int aTrainingClasses[ NUM_CLASS_PANELS ] = {
-			TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN, TF_CLASS_SPY, TF_CLASS_ENGINEER
+			TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN, TF_CLASS_MEDIC, TF_CLASS_ENGINEER
 		};
 
 
@@ -1106,6 +1106,9 @@ public:
 		NavigateTo();
 	}
 
+	//NOTE FOR PF
+	// The game pulls these images from
+	// materials/backpack/weapons/w_models/w_<weaponname>.vmt
 	void GetWeaponPath( int iClass, int iWeapon, CFmtStr &fmtOut )	// iWeapon is in [0,2]
 	{
 		static const char *s_pWeaponNames[ TF_CLASS_COUNT ][ 3 ] = {
@@ -1114,19 +1117,36 @@ public:
 			{ NULL, NULL, NULL },	// TF_CLASS_SNIPER
 			{ "rocketlauncher", "shotgun", "shovel" },		// TF_CLASS_SOLDIER
 			{ "grenadelauncher", "stickybomb_launcher", "bottle" },	// TF_CLASS_DEMOMAN,
-			{ NULL, NULL, NULL },	// TF_CLASS_MEDIC
+			{ "syringegun", "medigun", "bonesaw"},	// TF_CLASS_MEDIC
 			{ NULL, NULL, NULL },	// TF_CLASS_HEAVYWEAPONS
 			{ NULL, NULL, NULL },	// TF_CLASS_PYRO
-			{ "revolver", "c_spy_watch", "knife", },		// TF_CLASS_SPY,
-			{ "shotgun", "pistol", "wrench" },				// TF_CLASS_ENGINEER,		
+			{ NULL, NULL, NULL, },		// TF_CLASS_SPY,
+			{ "shotgun", "pistol", "wrench" },				// TF_CLASS_ENGINEER, repurpose these for jump map things I guess?	
 		};
 
 		Assert( iClass >= TF_FIRST_NORMAL_CLASS && iClass < TF_CLASS_COUNT );
 		Assert( iWeapon >= 0 && iWeapon < 3 );
 
-		if ( iClass == TF_CLASS_SPY && iWeapon == 1 )
+		//This is ass but it's the same as what Valve did for Spy so who cares
+		if ( iClass == TF_CLASS_SOLDIER && iWeapon == 1 )
 		{
-			fmtOut.sprintf( "../backpack/weapons/c_models/c_spy_watch/parts/c_spy_watch" );
+			fmtOut.sprintf( "../backpack/weapons/c_models/c_rocketboots_soldier" );
+		}
+		else if ( iClass == TF_CLASS_MEDIC && iWeapon == 0 )
+		{
+			fmtOut.sprintf( "../backpack/workshop/weapons/c_models/c_crusaders_crossbow/c_crusaders_crossbow" );
+		}
+		else if ( iClass == TF_CLASS_DEMOMAN && iWeapon == 0 )
+		{
+			fmtOut.sprintf( "../backpack/workshop/weapons/c_models/c_quadball/c_quadball" );
+		}
+		else if ( iClass == TF_CLASS_DEMOMAN && iWeapon == 1 )
+		{
+			fmtOut.sprintf( "../backpack/workshop/weapons/c_models/c_persian_shield/c_persian_shield" );
+		}
+		else if ( iClass == TF_CLASS_DEMOMAN && iWeapon == 2 )
+		{
+			fmtOut.sprintf( "../backpack/workshop/weapons/c_models/c_caber/c_caber" );
 		}
 		else
 		{
@@ -1164,9 +1184,9 @@ public:
 		{
 			m_iClass = TF_CLASS_DEMOMAN;
 		}
-		else if ( FStrEq( pClassName, "spy" ) )
+		else if ( FStrEq( pClassName, "medic" ) )
 		{
-			m_iClass = TF_CLASS_SPY;
+			m_iClass = TF_CLASS_MEDIC; 
 		}
 		else if ( FStrEq( pClassName, "engineer" ) )
 		{
