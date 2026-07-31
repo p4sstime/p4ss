@@ -450,13 +450,16 @@ void CTFTeamStatus::PerformLayout( void )
 		int iTeam = m_PlayerPanels[i]->GetTeam();
 		int iXPos = 0;
 
+		// Raised the 6 to a 9 here... Explained why below in the comment for
+		// nNewWide
+		// 
 		// Setup vars
 		EGrowDir& eGrowDir	= iTeam == TF_TEAM_BLUE ? m_eTeam1GrowDir	: m_eTeam2GrowDir;
 		int& iTeamCount		= iTeam == TF_TEAM_BLUE ? iTeam1Count		: iTeam2Count;
 		int& iBaseX			= iTeam == TF_TEAM_BLUE ? m_iTeam1BaseX		: m_iTeam2BaseX;
 		int& iProcessed		= iTeam == TF_TEAM_BLUE ? iTeam1Processed	: iTeam2Processed;
 		int& iMaxExpand		= iTeam == TF_TEAM_BLUE ? m_iTeam1MaxExpand	: m_iTeam2MaxExpand;
-		const int iGap		= RemapValClamped( iTeamCount, 6, 12, m_i6v6Gap, m_i12v12Gap );
+		const int iGap		= RemapValClamped( iTeamCount, 9, 12, m_i6v6Gap, m_i12v12Gap );
 
 		// Local player is always the innermost panel
 		int nTeamPanelIndex = bIsLocalPlayerPanel ? 0
@@ -464,8 +467,10 @@ void CTFTeamStatus::PerformLayout( void )
 							: iProcessed;
 
 		// Setup X-position and widths
-		// Use the max width if less than 6 (to fill out the space)
-		int nNewWide = iTeamCount <= 6 ? m_iMaxSize : ( iMaxExpand - ( iGap * ( iTeamCount - 1 ) ) ) / iTeamCount;
+		// Use the max width if less than 6 [RAISED TO 9 IN PASS FORTRESS] (to fill out the space).
+		// This is the largest number before the panels go off-screen in 4:3 in pass time mode
+
+		int nNewWide = iTeamCount <= 9 ? m_iMaxSize : ( iMaxExpand - ( iGap * ( iTeamCount - 1 ) ) ) / iTeamCount;
 
 		// How far each panel is apart from each other
 		const int iXStep = iGap + nNewWide;
