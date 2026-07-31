@@ -14301,6 +14301,34 @@
 			"passtime"		"1"
 		}
 	}
+	"29"
+	{
+		"name"				"tr_stadium_surf"
+		"localizedname"		"#P4SS_Map_Stadium_Surf"
+		"authors"			"#P4SS_Authors_Stadium_Surf"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"30"
+	{
+		"name"				"pass_throwing_grounds"
+		"localizedname"		"#P4SS_Map_Throwing_Grounds"
+		"authors"			"#P4SS_Authors_Throwing_Grounds"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
 }
 
 	"string_lookups"
