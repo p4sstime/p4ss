@@ -16150,6 +16150,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 
 	// we haven't found a "friendly" map name, so let's just clean up what we have
 	if ( !Q_strncmp( pszSrc, "cp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "sp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "tr_", 3 ) ||
 		 !Q_strncmp( pszSrc, "tc_", 3 ) ||
 		 !Q_strncmp( pszSrc, "pl_", 3 ) ||
 		 !Q_strncmp( pszSrc, "ad_", 3 ) ||
@@ -16165,6 +16167,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 		pszSrc +=  4;
 	}
 	else if ( !Q_strncmp( szTempName, "koth_", 5 ) ||
+			  !Q_strncmp( pszSrc,	  "jksr_", 5 ) ||
+			  !Q_strncmp( pszSrc,  	  "jump_", 5 ) ||
 			  !Q_strncmp( szTempName, "pass_", 5 ) )
 	{
 		pszSrc +=  5;
