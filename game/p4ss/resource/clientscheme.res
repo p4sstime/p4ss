@@ -95,7 +95,7 @@ Scheme
 		"HudTimerProgressWarning"	"240 30 30 255"
 
 		// training
-		"HudTrainingHint"			"212 160 23 255"
+		"HudTrainingHint"			"152 191 101 255"
 		
 		"TanDark"				"117 107 94 255"
 		"Tan"					"176 165 141 255"
