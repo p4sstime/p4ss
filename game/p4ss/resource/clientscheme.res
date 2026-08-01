@@ -45,6 +45,7 @@ Scheme
 		"PartyMember6"	"255 133 255 255"
 		
 		"White"				"235 235 235 255"
+		"WhiteSolid"		"255 255 255 255"
 		"Red"				"192 28 0 140"
 		"RedSolid"			"192 28 0 255"
 		"Blue"				"0 28 162 140"
