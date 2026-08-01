@@ -5,7 +5,7 @@
 		"ControlName"		"EditablePanel"
 		"fieldName"			"ObjectiveStatusTraining"
 		"xpos"				"c-200"
-		"ypos"				"r138"
+		"ypos"				"20"
 		"zpos"				"1"
 		"wide"				"400"
 		"tall"				"80"
