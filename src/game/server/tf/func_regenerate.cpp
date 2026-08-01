@@ -201,8 +201,13 @@ void CRegenerateZone::Regenerate( CTFPlayer *pPlayer )
 	pPlayer->Regenerate();
 	pPlayer->SetNextRegenTime( gpGlobals->curtime + TF_REGENERATE_NEXT_USE_TIME );
 
-	CSingleUserRecipientFilter filter( pPlayer );
-	EmitSound( filter, pPlayer->entindex(), TF_REGENERATE_SOUND );
+	//Mute this on jump maps. I want to jump in peace and quiet
+	const char *mapName = STRING( gpGlobals->mapname );
+	if ( Q_strnicmp( mapName, "jump_", 5 ) != 0 )
+	{
+		CSingleUserRecipientFilter filter( pPlayer );
+		EmitSound( filter, pPlayer->entindex(), TF_REGENERATE_SOUND );
+	}
 
 	if ( m_hAssociatedModel )
 	{
