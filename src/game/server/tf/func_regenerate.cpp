@@ -12,6 +12,9 @@
 #include "tf_gamerules.h"
 #include "eventqueue.h"
 
+ConVar pf_mute_resupply_on_jump_maps( "pf_mute_resupply_on_jump_maps", "1", FCVAR_NONE,
+	"Mute the resupply locker sound on maps with the 'jump_' prefix in the filename" );
+
 LINK_ENTITY_TO_CLASS( func_regenerate, CRegenerateZone );
 
 #define TF_REGENERATE_SOUND				"Regenerate.Touch"
@@ -203,7 +206,10 @@ void CRegenerateZone::Regenerate( CTFPlayer *pPlayer )
 
 	//Mute this on jump maps. I want to jump in peace and quiet
 	const char *mapName = STRING( gpGlobals->mapname );
-	if ( Q_strnicmp( mapName, "jump_", 5 ) != 0 )
+	bool bIsJumpMap = ( Q_strnicmp( mapName, "jump_", 5 ) == 0 );
+	bool bShouldMuteOnJumpMap = pf_mute_resupply_on_jump_maps.GetBool();
+
+	if ( !bIsJumpMap || !bShouldMuteOnJumpMap )
 	{
 		CSingleUserRecipientFilter filter( pPlayer );
 		EmitSound( filter, pPlayer->entindex(), TF_REGENERATE_SOUND );
