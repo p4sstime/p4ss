@@ -2,13 +2,13 @@
 {
 	"soldier"
 	{
-		"class"				"9" //works, but uses non-standard numbers
-		"map"				"tr_stadium_surf" //works
+		"class"				"3" //works, but uses non-standard numbers
+		"map"				"tr_throwing_grounds" //works
 		"name"				"#TF_Soldier" //seemingly does nothing
 		"description"			"#TR_ClassInfo_Soldier" //seemingly does nothing
 		"activeImage"			"class_sel_sm_soldier_blu" //seemingly does nothing
 		"inactiveImage"			"class_sel_sm_soldier_inactive" //seemingly does nothing
-		"video"				"" //clearly works, a file was specified for each class
+		"video"				"tr_throwing_grounds" //clearly works, a file was specified for each class
 	}
 
 	//assume the same for the rest
