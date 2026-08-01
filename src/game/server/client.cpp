@@ -101,7 +101,7 @@ ConVar sv_allow_point_servercommand ( "sv_allow_point_servercommand",
                                       "Allow use of point_servercommand entities in map. Potentially dangerous for untrusted maps.\n"
                                       "  disallow : Always disallow\n"
 #ifdef TF_DLL
-                                      "  official : Allowed for valve maps only\n"
+                                      "  official : Allowed for Valve maps and official PASS Fortress maps only\n"
 #endif // TF_DLL
                                       "  always   : Allow for all maps", sv_allow_point_servercommand_changed );
 

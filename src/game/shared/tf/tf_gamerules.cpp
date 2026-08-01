@@ -241,6 +241,18 @@ struct MapInfo_t
 };
 
 static MapInfo_t s_ValveMaps[] = {
+	//PF
+	{ "pass_arena2", "Arena2", "#Gametype_Passtime" },
+	{ "pass_arena2_classic", "Arena2 Classic", "#Gametype_Passtime" },
+	{ "pass_stadium", "Stadium", "#Gametype_Passtime" },
+	{ "pass_stonework", "Stonework", "#Gametype_Passtime" },
+	{ "pass_plexiglass", "Plexiglass", "#Gametype_Passtime" },
+	{ "pass_boutique", "Plexiglass", "#Gametype_Passtime" },
+	{ "tr_throwing_grounds", "Throwing Grounds", "#Gametype_Training" },
+	{ "tr_stadium_surf", "Stadium (Surf)", "#Gametype_Training" },
+	{ "jksr_arena2", "Arena2 (JKSR)", "#Gametype_Jacksercise" },
+	
+	//TF2
 	{ "ctf_2fort",	"2Fort",		"#Gametype_CTF" },
 	{ "cp_dustbowl",	"Dustbowl",		"#TF_AttackDefend" },
 	{ "cp_granary",	"Granary",		"#Gametype_CP" },
@@ -16138,6 +16150,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 
 	// we haven't found a "friendly" map name, so let's just clean up what we have
 	if ( !Q_strncmp( pszSrc, "cp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "sp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "tr_", 3 ) ||
 		 !Q_strncmp( pszSrc, "tc_", 3 ) ||
 		 !Q_strncmp( pszSrc, "pl_", 3 ) ||
 		 !Q_strncmp( pszSrc, "ad_", 3 ) ||
@@ -16153,6 +16167,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 		pszSrc +=  4;
 	}
 	else if ( !Q_strncmp( szTempName, "koth_", 5 ) ||
+			  !Q_strncmp( pszSrc,	  "jksr_", 5 ) ||
+			  !Q_strncmp( pszSrc,  	  "jump_", 5 ) ||
 			  !Q_strncmp( szTempName, "pass_", 5 ) )
 	{
 		pszSrc +=  5;
@@ -16273,10 +16289,30 @@ const char *GetMapType( const char *mapName )
 		{
 			return "#Gametype_MVM";
 		}
+
+		//Relevant to PF
 		else if ( !Q_strnicmp( mapName, "pass_", 5 ) )
 		{
 			return "#GameType_Passtime";
 		}
+		else if ( !Q_strnicmp( mapName, "jksr_", 5 ) )
+		{
+			return "#GameType_Jacksercise";
+		}
+		else if ( !Q_strnicmp( mapName, "sp_", 3 ) )
+		{
+			return "#GameType_StreetPASS";
+		}
+		else if ( !Q_strnicmp( mapName, "jump_", 5 ) )
+		{
+			return "#GameType_Jump";
+		}
+		else if ( !Q_strnicmp( mapName, "tr_", 3 ) )
+		{
+			return "#GameType_Training";
+		}
+
+		//Back to TF stuff
 		else if ( !Q_strnicmp( mapName, "rd_", 3 ) )
 		{
 			return "#Gametype_RobotDestruction";
