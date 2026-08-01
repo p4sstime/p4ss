@@ -1986,7 +1986,7 @@ public:
 		const char *pMapName = pData->GetString( "map", NULL );
 		if ( m_bContinue )
 		{
-			pMapName = "tr_dustbowl";
+			pMapName = "tr_stadium_surf";
 		}
 
 		if ( pMapName )

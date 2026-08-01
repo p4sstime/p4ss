@@ -46,10 +46,10 @@
 		"inactiveImage"			"class_sel_sm_spy_inactive"
 		"video"				""
 	}
-	"engineer" //idk what we do with this one
+	"engineer" //movement maps
 	{
-		"class"				"9"
-		"map"				"tr_target"
+		"class"				"3"
+		"map"				"tr_stadium_surf"
 		"name"				"#TF_Engineer"
 		"description"			"#TR_ClassInfo_Engineer"
 		"locked"				"#TR_Locked_Engineer"
