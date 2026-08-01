@@ -219,6 +219,7 @@ Scheme
 		"PFGreen"				"152 191 101 255"
 		"PFDarkGreen"			"62 76 41 255"
 		"PFGreenDim" 			"152 191 101 128"
+		"PFGreenDimSolid" 			"92 116 61 255" //Dim doesn't mean TRANSPARENT you MUPPET
 		"PFWhite"				"255 255 246 255"
 		
 		"PFBluTeam"                "72 121 171 255"
@@ -272,9 +273,9 @@ Scheme
 		Button.TextColor				"TanLight"
 		Button.BgColor					"TanDark"
 		Button.ArmedTextColor			"TanLight"
-		Button.ArmedBgColor				"PFGreenDim"
+		Button.ArmedBgColor				"PFGreenDimSolid"
 		Button.SelectedTextColor		"TanLight"
-		Button.SelectedBgColor			"PFGreenDim"
+		Button.SelectedBgColor			"PFGreenDimSolid"
 		Button.DepressedTextColor		"Black"
 		Button.DepressedBgColor			"PFGreen"
 
