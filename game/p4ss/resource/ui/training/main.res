@@ -210,20 +210,15 @@
 			
 			"TrainingTitle"		"#TR_PracticeModeSelectTitle"
 			
-			"Mode0Token"		"#Gametype_CP"
-			"Desc0Token"		"#TF_GameModeDesc_CP"
+			"Mode0Token"		"#Gametype_Jacksercise"
+			"Desc0Token"		"#TF_GameModeDesc_Jacksercise"
 			"Image0Path"		"illustrations/gamemode_cp"
 			"Mode0Id"			"0"
 			
-			"Mode1Token"		"#Gametype_Koth"
-			"Desc1Token"		"#TF_GameModeDesc_Koth"
+			"Mode1Token"		"#Gametype_Jump"
+			"Desc1Token"		"#TF_GameModeDesc_Jump"
 			"Image1Path"		"illustrations/gamemode_koth"
 			"Mode1Id"			"1"
-			
-			"Mode2Token"		"#Gametype_Escort"
-			"Desc2Token"		"#TF_GameModeDesc_Escort"
-			"Image2Path"		"illustrations/gamemode_payload"
-			"Mode2Id"			"2"
 		}
 		
 		"OfflinePractice_MapSelectionPanel"

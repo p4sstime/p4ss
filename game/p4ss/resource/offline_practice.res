@@ -6,88 +6,22 @@
 		"min_players"	"1"
 		"max_players"	"32"
 		"suggested_players"	"16"
-		"map"			"cp_dustbowl"
+		"map"			"jksr_arena2"
 	}
 	
 	"maps"
 	{
-		"cp_dustbowl"
+		"jksr_arena2; tf_bot_kick all"
 		{
-			"name"				"Dustbowl"
+			"name"				"Arena2"
 			"min_players"		"1"
 			"max_players"		"1"
 		}
-		"cp_gorge"
+		"jump_jackjam_jam2; tf_bot_kick all" //Placeholder
 		{
-			"name"				"Gorge"
+			"name"				"Jackjam"
 			"min_players"		"1"
 			"max_players"		"1"
 		}
-		"koth_viaduct"
-		{
-			"name"				"Viaduct"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"koth_badlands"
-		{
-			"name"				"Badlands"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"koth_nucleus"
-		{
-			"name"				"Nucleus"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"koth_lakeside_final"
-		{
-			"name"				"Lakeside"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"koth_sawmill"
-		{
-			"name"				"Sawmill"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"pl_upward"
-		{
-			"name"				"Upward"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"pl_thundermountain"
-		{
-			"name"				"Thunder Mountain"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"pl_hoodoo_final"
-		{
-			"name"				"Hoodoo"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"pl_goldrush"
-		{
-			"name"				"Gold Rush"
-			"min_players"		"1"
-			"max_players"		"1"
-		}
-		"pl_badwater"
-		{
-			"name"				"Badwater Basin"
-			"min_players"		"1"
-			"max_players"		"1"
-		}	
-		"pl_barnblitz"
-		{
-			"name"				"Barnblitz"
-			"min_players"		"1"
-			"max_players"		"1"
-		}	
 	}
 }

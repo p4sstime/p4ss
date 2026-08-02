@@ -38,17 +38,15 @@ enum GameMode_t	// Supported game modes for offline practice
 {
 	MODE_INVALID = -1,
 
-	MODE_CP,
-	MODE_KOTH,
-	MODE_PL,
+	MODE_JKSR,
+	MODE_JUMP,
 
 	NUM_GAME_MODES
 };
 
 static const char *gs_pGameModeTokens[ NUM_GAME_MODES ] = {
-	"#Gametype_CP",
-	"#Gametype_Koth",
-	"#Gametype_Escort",
+	"#Gametype_Jacksercise",
+	"#Gametype_Jump",
 };
 
 //------------------------------------------------------------------------------------------------------
@@ -1294,7 +1292,7 @@ public:
 private:
 	enum Consts_t
 	{
-		NUM_PRACTICE_MODES = 3,
+		NUM_PRACTICE_MODES = 2,
 	};
 
 	struct PracticeModeInfo_t
@@ -1516,13 +1514,12 @@ public:
 		if ( !pSelectedMapInfo )
 			return false;
 
-		int nQuota = 1;
-		int iDifficulty = 0;
-		GetControlValues( &nQuota, &iDifficulty );
-
-		// the player count in the dialog includes the human player, so decrease the bot count by one
+		// Bots disabled for offline practice because they don't apply to Jacksercise or jump
+		// They wouldn't work well for pass time either
+		// Removed bot quota and bot configuration
+		
 		ConVarRef tf_bot_quota( "tf_bot_quota" );
-		tf_bot_quota.SetValue( nQuota - 1 );
+		tf_bot_quota.SetValue( 0 );
 
 		ConVarRef tf_bot_quota_mode( "tf_bot_quota_mode" );
 		tf_bot_quota_mode.SetValue( "normal" );
@@ -1531,10 +1528,10 @@ public:
 		tf_bot_auto_vacate.SetValue( 0 );
 
 		ConVarRef tf_bot_difficulty( "tf_bot_difficulty" );
-		tf_bot_difficulty.SetValue( iDifficulty );
+		tf_bot_difficulty.SetValue( 0 );
 
 		ConVarRef tf_bot_offline_practice( "tf_bot_offline_practice" );
-		tf_bot_offline_practice.SetValue( 1 );
+		tf_bot_offline_practice.SetValue( 0 );
 
 		tf_training_client_message.SetValue( TRAINING_CLIENT_MESSAGE_WATCHING_INTRO_MOVIE );
 
@@ -1706,17 +1703,13 @@ private:
 
 	GameMode_t GetGameModeFromMapName( const char *pMapName )
 	{
-		if ( !V_strnicmp( pMapName, "cp", 2 ) )
+		if ( !V_strnicmp( pMapName, "jksr", 4 ) )
 		{
-			return MODE_CP;
+			return MODE_JKSR;
 		}
-		else if ( !V_strnicmp( pMapName, "koth", 4 ) )
+		else if ( !V_strnicmp( pMapName, "jump", 4 ) )
 		{
-			return MODE_KOTH;
-		}
-		else if ( !V_strnicmp( pMapName, "pl", 2 ) )
-		{
-			return MODE_PL;
+			return MODE_JUMP;
 		}
 
 		AssertMsg( 0, "Should never get here!" );
@@ -2070,7 +2063,7 @@ public:
 
 			// exec
 			engine->ClientCmd_Unrestricted( fmtMapCommand.Access() );
-		}
+			}
 
 		Close();
 	}
