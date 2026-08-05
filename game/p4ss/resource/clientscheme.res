@@ -2095,7 +2095,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Montserrat Black"
+				"name"		"TF2 Build"
 				"tall"		"8"
 				"weight"	"500"
 				"additive"	"0"
@@ -2106,7 +2106,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Montserrat Black"
+				"name"		"TF2 Build"
 				"tall"		"9"
 				"weight"	"500"
 				"additive"	"0"
@@ -2117,7 +2117,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Montserrat Black"
+				"name"		"TF2 Build"
 				"tall"		"12"
 				"weight"	"500"
 				"additive"	"0"
@@ -2128,7 +2128,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Montserrat Black"
+				"name"		"TF2 Build"
 				"tall"		"18"
 				"weight"	"500"
 				"additive"	"0"
