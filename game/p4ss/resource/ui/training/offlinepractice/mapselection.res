@@ -129,9 +129,9 @@
 	{
 		"ControlName"		"CExButton"
 		"fieldName"			"StartOfflinePracticeButton"
-		"xpos"				"150"
+		"xpos"				"125"
 		"ypos"				"260"
-		"wide"				"150"
+		"wide"				"200"
 		"tall"				"30"
 		"zpos"				"4"
 		"autoResize"		"0"
@@ -140,9 +140,11 @@
 		"enabled"			"1"
 		"tabPosition"		"0"
 		"labelText"			"#TF_StartPractice"
-		"font"				"HudFontSmallBold"
+		"font"				"MontserratBlack24"
 		"textAlignment"		"center"
 		"textinsetx"		"50"
+		"textinsety"		"0"		[!$POSIX] //Windows
+		"textinsety"		"3"		[$POSIX] //Linux
 		"dulltext"			"0"
 		"brighttext"		"0"
 		"Command"			"startofflinepractice"

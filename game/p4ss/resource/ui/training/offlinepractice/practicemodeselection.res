@@ -144,9 +144,9 @@
 	{
 		"ControlName"		"CExButton"
 		"fieldName"			"SelectCurrentGameModeButton"
-		"xpos"				"160"
+		"xpos"				"135"
 		"ypos"				"260"
-		"wide"				"130"
+		"wide"				"180"
 		"tall"				"30"
 		"autoResize"		"0"
 		"pinCorner"			"0"
@@ -154,9 +154,11 @@
 		"enabled"			"1"
 		"tabPosition"		"0"
 		"labelText"			"#TF_Select"
-		"font"				"HudFontSmallBold"
+		"font"				"MontserratBlack24"
 		"textAlignment"		"center"
 		"textinsetx"		"50"
+		"textinsety"		"0"		[!$POSIX] //Windows
+		"textinsety"		"3"		[$POSIX] //Linux
 		"dulltext"			"0"
 		"brighttext"		"0"
 		"Command"			"selectcurrentgamemode"

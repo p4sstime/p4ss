@@ -30,7 +30,7 @@
 		"enabled"		"1"
 		"wrap"			"1"
 		"labelText"		"%goal%"
-		"font"			"GoalText"
+		"font"			"MontserratSemibold14"
 		"textAlignment"		"North"
 	}
 	"GoalLabelShadow"
@@ -51,7 +51,7 @@
 		"enabled"		"1"
 		"wrap"			"1"
 		"labelText"		"%goal%"
-		"font"			"GoalText"
+		"font"			"MontserratSemibold14"
 		"textAlignment"		"North"
 	}
 	"MsgLabel"
@@ -73,7 +73,7 @@
 		"wrap"			"1"
 		"labelText"		""
 		"textAlignment"		"North"
-		"font"			"InstructionalText"
+		"font"			"MontserratSemibold14"
 	}
 	"PressSpacebarToContinue"
 	{	

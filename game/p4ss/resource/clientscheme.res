@@ -1881,18 +1881,15 @@ Scheme
 			}
 		}		
 		
-		InstructionalText
+		"InstructionalText"
 		{
 			"1"
 			{
-				"name"		"Verdana"
-				"tall"		"11"  [!$OSX]
-				"tall"		"9"  [$OSX]
-				"weight"	"800"
-				"additive"	"0"
-				"antialias" 	"1"
+				"name"	"Montserrat SemiBold"
+				"tall"	"13"	[!$POSIX] //Windows
+				"tall"	"12"	[$POSIX]  //Linux
 			}
-		}		
+		}	
 		
 		MatchmakingDialogTitle
 		{
@@ -3275,7 +3272,16 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"12"	[!$POSIX] //Windows
-				"tall"	"10"	[$POSIX]  //Linux
+				"tall"	"11"	[$POSIX]  //Linux
+			}
+		}
+		"MontserratSemibold14"
+		{
+			"1"
+			{
+				"name"	"Montserrat SemiBold"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"13"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold16"

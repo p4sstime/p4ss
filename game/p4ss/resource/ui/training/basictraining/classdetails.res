@@ -70,7 +70,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"DescLabel"
-			"font"			"MontserratBlack16"
+			"font"			"MontserratSemibold14"
 			"labelText"		"%description%"
 			"textAlignment"	"left"
 			"xpos"			"10"
@@ -88,7 +88,7 @@
 		{
 			"ControlName"	"CExLabel"
 			"fieldName"		"WeaponSetLabel"
-			"font"			"MontserratBlack16"
+			"font"			"MontserratSemibold14"
 			"labelText"		"#TR_StandardWeaponSet"
 			"textAlignment"	"center"
 			"xpos"			"10"
