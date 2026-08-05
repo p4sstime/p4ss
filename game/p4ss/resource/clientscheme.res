@@ -1431,9 +1431,8 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat SemiBold"
-				"tall"		"8"
-				"tall_hidef"	"10"
-				"tall_lodef"	"14"
+				"tall"	"11"	[!$POSIX] //Windows
+				"tall"	"10"	[$POSIX]  //Linux
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"
