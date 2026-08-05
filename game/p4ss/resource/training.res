@@ -1,13 +1,20 @@
+//NOTE FOR THE OTHER PF DEVS
+
+//If you intend on replacing these maps, you can do so by changing the "map" entries in this file.
+//However, when completing a map, your progress is saved via tf_hud_training_complete.cpp, which has its own map list that it checks for.
+//Hence, you will need to update both lists to include your new map.
+//Each map will need to be distinct for each course, for simplicity's sake and also because the code was originally written to be class-specific. We are hacking our way around it.
+
 "Resource\training.res"
 {
 	"soldier"
 	{
 		"class"				"3" //works, but uses non-standard numbers
-		"map"				"tr_throwing_grounds" //works
-		"name"				"#TF_Soldier" //seemingly does nothing
-		"description"			"#TR_ClassInfo_Soldier" //seemingly does nothing
-		"activeImage"			"class_sel_sm_soldier_blu" //seemingly does nothing
-		"inactiveImage"			"class_sel_sm_soldier_inactive" //seemingly does nothing
+		"map"				"tr_debug_soldier" //works
+		"name"				"" //seemingly does nothing
+		"description"			"" //seemingly does nothing
+		"activeImage"			"" //seemingly does nothing
+		"inactiveImage"			"" //seemingly does nothing
 		"video"				"tr_throwing_grounds" //clearly works, a file was specified for each class
 	}
 
@@ -27,34 +34,89 @@
 	"demoman"
 	{
 		"class"				"4"
-		"map"				"tr_target"
-		"name"				"#TF_Demoman"
-		"description"			"#TR_ClassInfo_Demo"
-		"locked"				"#TR_Locked_Demo"
-		"activeImage"			"class_sel_sm_demo_blu"
-		"inactiveImage"			"class_sel_sm_demo_inactive"
+		"map"				"tr_debug_demoman"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
 		"video"				""
 	}
-	"medic" //I killed spy
+	"medic"
 	{
 		"class"				"5"
-		"map"				"tr_passfortress_test6"
-		"name"				"#TF_Medic"
-		"description"			"#TR_ClassInfo_Medic"
-		"locked"				"#TR_Locked_Medic"
-		"activeImage"			"class_sel_sm_spy_blu"
-		"inactiveImage"			"class_sel_sm_spy_inactive"
+		"map"				"tr_debug_medic"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
 		"video"				""
 	}
-	"engineer" //movement maps
+	"scout" //Throwing Grounds, Demoman
+	{
+		"class"				"4"
+		"map"				"tr_debug_throwing_grounds"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
+		"video"				""
+	}
+	"pyro" //tr_passfortress, Medic
+	{
+		"class"				"5"
+		"map"				"tr_debug_passfortress"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
+		"video"				""
+	}
+	"heavyweapons" //Jack Jumping, Soldier
 	{
 		"class"				"3"
-		"map"				"tr_stadium_surf"
-		"name"				"#TF_Engineer"
-		"description"			"#TR_ClassInfo_Engineer"
-		"locked"				"#TR_Locked_Engineer"
-		"activeImage"			"class_sel_sm_engineer_blu"
-		"inactiveImage"			"class_sel_sm_engineer_inactive"
+		"map"				"tr_debug_jackjumping"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
+		"video"				""
+	}
+	"engineer" //Harder Jumping, Soldier
+	{
+		"class"				"3"
+		"map"				"tr_debug_harderjumping"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
+		"video"				""
+	}
+	"sniper" //Trimping, Demoman
+	{
+		"class"				"4"
+		"map"				"tr_debug_trimping"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
+		"video"				""
+	}
+	"spy" //Surfing, Soldier
+	{
+		"class"				"3"
+		"map"				"tr_debug_surfing"
+		"name"				""
+		"description"			""
+		"locked"				""
+		"activeImage"			""
+		"inactiveImage"			""
 		"video"				""
 	}
 }

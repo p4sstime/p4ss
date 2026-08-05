@@ -8,7 +8,7 @@
 		"labelText"		"#TF_COMPLETE_TRAINING_DESC"
 		"textAlignment"	"center"
 		"xpos"			"0"
-		"ypos"			"255"
+		"ypos"			"295"
 		"zpos"			"1"
 		"wide"			"430"
 		"tall"			"20"

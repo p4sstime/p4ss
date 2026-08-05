@@ -11,6 +11,7 @@
 		"tileImage"		"0"
 		"scaleImage"	"1"
 		"image"			"illustrations/training_basic"
+		"border"		"TFThinLineBorder" //I need to see the actual bounds of the image, for testing
 	}	
 
 	"SelectButton"
@@ -50,9 +51,9 @@
 		"labelText"		""
 		"textAlignment"	"center"
 		"xpos"			"0"
-		"ypos"			"241"
+		"ypos"			"54"
 		"wide"			"30"
-		"tall"			"15"
+		"tall"			"16"
 		"autoResize"	"1"
 		"pinCorner"		"0"
 		"visible"		"0"

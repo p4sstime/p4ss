@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/trainingmenu/course_select_medic_on"
+	"$translucent" 1
+}

@@ -50,7 +50,7 @@
 			"pinCorner"		"0"
 			"visible"		"1"
 			"enabled"		"1"
-			"fgcolor"		"White"
+			"fgcolor"		"PFGreen"
 		}
 
 		"SubTitleLabel"
@@ -69,7 +69,7 @@
 			"pinCorner"		"0"
 			"visible"		"1"
 			"enabled"		"1"
-			"fgcolor"		"Tan"
+			"fgcolor"		"WhiteSolid"
 		}
 
 		"BackButton"
@@ -144,7 +144,7 @@
 			"ControlName"		"CBasicTraining_ClassSelectionPanel"
 			"fieldName"			"BasicTraining_ClassSelectionPanel"
 			"xpos"				"10"
-			"ypos"				"80"
+			"ypos"				"55"
 			"zpos"				"2"
 			"wide"				"430"
 			"tall"				"400"
@@ -156,22 +156,37 @@
 			"paintBackground"	"0"
 			
 			"TrainingTitle"		"#TR_AttackDefense"
-			"TrainingSubTitle"	"#TF_SelectAClass"
+			"TrainingSubTitle"	"#PF_Training_SelectAClass"
 				
-			"Class0Token"		"#TF_Soldier"
-			"Class1Token"		"#TF_Demoman"
-			"Class2Token"		"#TF_Medic"
-			"Class3Token"		"#TF_Engineer"
+			"Class0Token"		"#TR_ClassInfo_Classname_Soldier"
+			"Class1Token"		"#TR_ClassInfo_Classname_Demoman"
+			"Class2Token"		"#TR_ClassInfo_Classname_Medic"
+			"Class3Token"		"#TR_ClassInfo_Classname_Scout"
+			"Class4Token"		"#TR_ClassInfo_Classname_Pyro"
+			"Class5Token"		"#TR_ClassInfo_Classname_Heavyweapons"
+			"Class6Token"		"#TR_ClassInfo_Classname_Engineer"
+			"Class7Token"		"#TR_ClassInfo_Classname_Sniper"
+			"Class8Token"		"#TR_ClassInfo_Classname_Spy"
 			
-			"Class0Image"		"training/class_soldier"
-			"Class1Image"		"training/class_demoman"
-			"Class2Image"		"training/class_medic"
-			"Class3Image"		"training/class_engineer"
+			"Class0Image"		"trainingmenu/course_select_soldier"
+			"Class1Image"		"trainingmenu/course_select_demo"
+			"Class2Image"		"trainingmenu/course_select_medic"
+			"Class3Image"		"trainingmenu/course_select_throwing"
+			"Class4Image"		"trainingmenu/course_select_magnetism"
+			"Class5Image"		"trainingmenu/course_select_jackjumping"
+			"Class6Image"		"trainingmenu/course_select_harderjumping"
+			"Class7Image"		"trainingmenu/course_select_hardertrimping"
+			"Class8Image"		"trainingmenu/course_select_surf"
 			
 			"Class0Command"		"basictraining_classselection_soldier"
 			"Class1Command"		"basictraining_classselection_demoman"
 			"Class2Command"		"basictraining_classselection_medic"
-			"Class3Command"		"basictraining_classselection_engineer"
+			"Class3Command"		"basictraining_classselection_scout"
+			"Class4Command"		"basictraining_classselection_pyro"
+			"Class5Command"		"basictraining_classselection_heavyweapons"
+			"Class6Command"		"basictraining_classselection_engineer"
+			"Class7Command"		"basictraining_classselection_sniper"
+			"Class8Command"		"basictraining_classselection_spy"
 		}
 		
 		"BasicTraining_ClassDetailsPanel"
@@ -210,12 +225,12 @@
 			
 			"TrainingTitle"		"#TR_PracticeModeSelectTitle"
 			
-			"Mode0Token"		"#Gametype_Jacksercise"
+			"Mode0Token"		"#Gametype_Jacksercise_ALLCAPS"
 			"Desc0Token"		"#TF_GameModeDesc_Jacksercise"
 			"Image0Path"		"illustrations/gamemode_cp"
 			"Mode0Id"			"0"
 			
-			"Mode1Token"		"#Gametype_Jump"
+			"Mode1Token"		"#Gametype_Jump_ALLCAPS"
 			"Desc1Token"		"#TF_GameModeDesc_Jump"
 			"Image1Path"		"illustrations/gamemode_koth"
 			"Mode1Id"			"1"

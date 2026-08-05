@@ -12,7 +12,7 @@
 		"visible"		"1"
 		"tileImage"		"0"
 		"scaleImage"	"1"
-		"border"		"ButtonBorder"
+		"border"		"NoBorder"
 		"paintbackgroundtype"	"2"
 		"paintbackground"	"1"
 	}
@@ -28,7 +28,8 @@
 		"visible"		"1"
 		"tileImage"		"0"
 		"scaleImage"	"1"
-		"image"			"illustrations/bg"
+		"image"			""
+		"border"		"TFFatLineBorderBlueBG"
 	}
 	
 	"PrevButton"
@@ -85,7 +86,7 @@
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"GameModeLabel"
-		"font"			"HudFontMediumSmallBold"
+		"font"			"MontserratBlack20"
 		"labelText"		"%gamemode%"
 		"textAlignment"	"center"
 		"xpos"			"60"
@@ -97,14 +98,14 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"wrap"			"0"
-		"fgcolor_override"	"83 75 66 255"
+		"fgcolor_override"	"32 32 32 255"
 	}
 	
 	"CurPageLabel"
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"CurPageLabel"
-		"font"			"HudFontSmallBold"
+		"font"			"MontserratBlack20"
 		"labelText"		"%curpage%"
 		"textAlignment"	"north"
 		"xpos"			"70"
@@ -117,14 +118,14 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"wrap"			"1"
-		"fgcolor_override"	"83 75 66 255"
+		"fgcolor_override"	"32 32 32 255"
 	}
 	
 	"DescLabel"
 	{
 		"ControlName"	"CExLabel"
 		"fieldName"		"DescLabel"
-		"font"			"HudFontSmallest"
+		"font"			"MontserratBlack12"
 		"labelText"		"%description%"
 		"textAlignment"	"center"
 		"xpos"			"60"
@@ -136,7 +137,7 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"wrap"			"0"
-		"fgcolor_override"	"83 75 66 255"
+		"fgcolor_override"	"32 32 32 255"
 	}
 	
 	"SelectCurrentGameModeButton"
