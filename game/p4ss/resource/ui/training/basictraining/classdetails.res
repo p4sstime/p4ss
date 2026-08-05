@@ -17,6 +17,8 @@
 		"font"				"MontserratBlack24"
 		"textAlignment"		"center"
 		"textinsetx"		"50"
+		"textinsety"		"0"		[!$POSIX] //Windows
+		"textinsety"		"4"		[$POSIX] //Linux
 		"dulltext"			"0"
 		"brighttext"		"0"
 		"Command"			"startbasictraining"

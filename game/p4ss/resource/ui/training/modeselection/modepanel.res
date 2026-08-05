@@ -103,6 +103,8 @@
 		"font"				"MontserratBlack20"
 		"textAlignment"		"center"
 		"textinsetx"		"50"
+		"textinsety"		"0"		[!$POSIX] //Windows
+		"textinsety"		"2"		[$POSIX] //Linux
 		"dulltext"			"0"
 		"brighttext"		"0"
 		"Command"			"%startcommand%"
