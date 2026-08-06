@@ -579,3 +579,4 @@ jumpqol.inc
 game/p4ss/glshaders.cfg
 
 src/content/
+game/hud_normalizer.py

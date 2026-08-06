@@ -73,7 +73,8 @@
 		"fgcolor"		"PFWhite"
 		"xpos"			"4"
 		"xpos_minmode"	"4"
-		"ypos"			"-50"
+		"ypos"			"-50"	[!$POSIX] //Windows
+		"ypos"			"-47"	[$POSIX]  //Linux
 		"ypos_minmode"	"-50"
 		"zpos"			"5"
 		"wide"			"55"
@@ -116,7 +117,8 @@
 		"fgcolor"		"PFWhite"
 		"xpos"			"64"
 		"xpos_minmode"	"65"
-		"ypos"			"6"
+		"ypos"			"6"	[!$POSIX] //Windows
+		"ypos"			"7"	[$POSIX]  //Linux
 		"ypos_minmode"	"14"
 		"zpos"			"7"
 		"wide"			"40"

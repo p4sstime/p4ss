@@ -152,7 +152,8 @@ Scheme
 			"1"	[!$OSX]
 			{
 				"name"		"TF2 Build"
-				"tall"		"18"
+				"tall"		"18"	[$!POSIX] //Windows
+				"tall"		"16"	[$POSIX]  //Linux
 				"weight"	"500"
 				"additive"	"0"
 				"antialias" "1"
@@ -171,8 +172,8 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat SemiBold"
-				"tall"		"35"
-				"tall_lodef"	"40"
+				"tall"		"35"	[$!POSIX] //Windows
+				"tall"		"32"	[$POSIX]  //Linux
 				"weight"	"500"
 				"additive"	"0"
 				"antialias" "1"
@@ -184,7 +185,8 @@ Scheme
 			"1"
 			{
 				"name"		"Verdana"
-				"tall"		"14"
+				"tall"		"14"	[$!POSIX] //Windows
+				"tall"		"13"	[$POSIX]  //Linux
 				"weight"	"500"
 			}
 		}
@@ -195,7 +197,8 @@ Scheme
 			{
 				"name"		"Montserrat Black" [!$POSIX]
 				"name"		"Montserrat Black" [$POSIX]
-				"tall"		"30"
+				"tall"		"30"	[$!POSIX] //Windows
+				"tall"		"28"	[$POSIX]  //Linux
 				"weight"	"0"
 				"antialias"	"1"
 			}
@@ -206,7 +209,8 @@ Scheme
 			"1"
 			{
 				"name"		"Tahoma"
-				"tall"		"16"
+				"tall"		"16"	[$!POSIX] //Windows
+				"tall"		"14"	[$POSIX]  //Linux
 				"weight"	"0"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
 				"yres"	"480 599"
@@ -214,7 +218,8 @@ Scheme
 			"2"
 			{
 				"name"		"Tahoma"
-				"tall"		"16"
+				"tall"		"16"	[$!POSIX] //Windows
+				"tall"		"14"	[$POSIX]  //Linux
 				"weight"	"0"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
 				"yres"	"600 767"
@@ -222,7 +227,8 @@ Scheme
 			"3"
 			{
 				"name"		"Tahoma"
-				"tall"		"16"
+				"tall"		"16"	[$!POSIX] //Windows
+				"tall"		"14"	[$POSIX]  //Linux
 				"weight"	"0"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
 				"yres"	"768 1023"
@@ -231,7 +237,8 @@ Scheme
 			"4"
 			{
 				"name"		"Tahoma"
-				"tall"		"19"
+				"tall"		"19"	[$!POSIX] //Windows
+				"tall"		"17"	[$POSIX]  //Linux
 				"weight"	"0"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
 				"yres"	"1024 1199"
@@ -240,7 +247,8 @@ Scheme
 			"5"
 			{
 				"name"		"Tahoma"
-				"tall"		"19"
+				"tall"		"19"	[$!POSIX] //Windows
+				"tall"		"17"	[$POSIX]  //Linux
 				"weight"	"0"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
 				"yres"	"1200 6000"
@@ -256,8 +264,8 @@ Scheme
 				"name"		"Arial" [!$OSX]
 				"name"		"Verdana Bold" [$OSX]
 				"weight"		"1500"
-				"tall"			"16" [!$OSX]
-				"tall"			"18" [$OSX]
+				"tall"			"16"	[$!POSIX] //Windows
+				"tall"			"14"	[$POSIX]  //Linux
 				"antialias"		"1"
 			}
 		}
@@ -269,8 +277,8 @@ Scheme
 				"name"		"Arial" [!$OSX]
 				"name"		"Verdana Bold" [$OSX]
 				"weight"		"1500"
-				"tall"			"18" [!$OSX]
-				"tall"			"19" [$OSX]
+				"tall"			"18"	[$!POSIX] //Windows
+				"tall"			"16"	[$POSIX]  //Linux
 				"antialias"		"1"
 			}
 		}
@@ -282,8 +290,8 @@ Scheme
 				"name"		"Arial" [!$OSX]
 				"name"		"Verdana" [$OSX]
 				"weight"		"1000"
-				"tall"			"14" [!$OSX]
-				"tall"			"12" [$OSX]
+				"tall"			"14"	[$!POSIX] //Windows
+				"tall"			"12"	[$POSIX]  //Linux
 				"antialias"		"1" [!$OSX]
 			}
 		}
