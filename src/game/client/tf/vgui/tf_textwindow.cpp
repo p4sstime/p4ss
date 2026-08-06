@@ -193,11 +193,15 @@ void CTFTextWindow::ShowPanel( bool bShow )
 	}
 
 	// P4SS: Auto-advance to map info, skip text window
-	if ( bShow && !m_bCustomSvrPage )
-	{
-		m_pViewPort->ShowPanel( this, false );
-		m_pViewPort->ShowPanel( PANEL_MAPINFO, true );
-	}
+	// This works, but I worry that this will end up breaking logs.tf !logs or similar
+	// plugins in the future, so I am commenting this custom code out for now. I should
+	// revisit this some other time.
+	// 
+	//if ( bShow && !m_bCustomSvrPage )
+	//{
+	//	m_pViewPort->ShowPanel( this, false );
+	//	m_pViewPort->ShowPanel( PANEL_MAPINFO, true );
+	//}
 }
 
 //-----------------------------------------------------------------------------
