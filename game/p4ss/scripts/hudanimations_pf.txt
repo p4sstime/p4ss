@@ -39,3 +39,9 @@ event HudMedicChargedStop
 	Animate	ChargeLabel 	FgColor		"PFGrey"		Linear 0.0 0.0001
 	Animate	ChargeMeter 	FgColor		"PFGrey"		Linear 0.0 0.0001
 }
+
+event TrainingHudBounce
+{
+	Animate ObjectiveStatusTraining	Position		"c-200 0"		Linear 0 0
+	Animate ObjectiveStatusTraining	Position		"c-200 20"		Bounce 0.0 2.0
+}

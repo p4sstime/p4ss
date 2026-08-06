@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/trainingmenu/course_images_big_vertical/soldier"
+	"$translucent" 1
+}

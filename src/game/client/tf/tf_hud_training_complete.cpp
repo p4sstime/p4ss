@@ -136,15 +136,59 @@ void CTFTrainingComplete::SetUpResults( IGameEvent *event )
 		m_ResultsPanel->SetDialogVariable( "wintext", outputText);
 	}
 
+	//TF original note
 	// record that the player has completed training with the current class
+	// 
+	//PF EDIT
+	//We seemingly have to hack our way around this because we do not intend on making each map and course class-specific.
+	//We will mark the class entries as complete manually,
+	//just as Valve had originally done on tr_dustbowl for Soldier's second stage
+	//IF IF IF IF IF IF IF IF IF
+
 	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
 	if ( pLocalPlayer && !V_stricmp(map, "tr_target" ) )
 	{
 		Training_MarkClassComplete( pLocalPlayer->GetPlayerClass()->GetClassIndex(), 1 );
 	}
-	else if ( !V_stricmp(map, "tr_dustbowl" ) )
+//	else if ( !V_stricmp(map, "tr_dustbowl" ) )
+//	{
+//		Training_MarkClassComplete( TF_CLASS_SOLDIER, 2 );
+//	}
+	else if ( !V_stricmp( map, "tr_debug_soldier" ) )
 	{
-		Training_MarkClassComplete( TF_CLASS_SOLDIER, 2 );
+		Training_MarkClassComplete( TF_CLASS_SOLDIER, 1 ); //We have nuked tr_dustbowl, so only one stage for Soldier
+	}
+	else if ( !V_stricmp( map, "tr_debug_demoman" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_DEMOMAN, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_medic" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_MEDIC, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_throwing_grounds" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_SCOUT, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_passfortress" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_PYRO, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_jackjumping" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_HEAVYWEAPONS, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_harderjumping" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_ENGINEER, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_trimping" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_SNIPER, 1 );
+	}
+	else if ( !V_stricmp( map, "tr_debug_surfing" ) )
+	{
+		Training_MarkClassComplete( TF_CLASS_SPY, 1 );
 	}
 	else
 	{

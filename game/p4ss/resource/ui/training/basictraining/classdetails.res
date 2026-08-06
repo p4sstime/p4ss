@@ -1,0 +1,226 @@
+"Resource/training/basictraining/classdetails.res"
+{
+	"StartTrainingButton"
+	{
+		"ControlName"		"CExButton"
+		"fieldName"			"StartTrainingButton"
+		"xpos"				"125"
+		"ypos"				"220"
+		"wide"				"200"
+		"tall"				"35"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"labelText"			"#TF_Training_StartTraining"
+		"font"				"MontserratBlack24"
+		"textAlignment"		"center"
+		"textinsetx"		"50"
+		"textinsety"		"0"		[!$POSIX] //Windows
+		"textinsety"		"4"		[$POSIX] //Linux
+		"dulltext"			"0"
+		"brighttext"		"0"
+		"Command"			"startbasictraining"
+		"sound_depressed"	"UI/buttonclick.wav"
+		"sound_released"	"UI/buttonclickrelease.wav"
+
+		"border_default"	"MainMenuButtonDefault"
+		"border_armed"		"MainMenuButtonArmed"
+		"paintbackground"	"0"
+		
+		"defaultFgColor_override" "46 43 42 255"
+		"armedFgColor_override" "235 226 202 255"
+		"depressedFgColor_override" "46 43 42 255"
+	}
+	
+	"OverlayPanel"
+	{
+		"ControlName"		"EditablePanel"
+		"fieldName"			"OverlayPanel"
+		"xpos"				"20"
+		"ypos"				"0"
+		"wide"				"300"
+		"tall"				"200"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"paintbackground"	"1"
+		"bgcolor_override"	"PFGrey"
+		"border"			"ButtonBorder"
+		
+		"ClassNameLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"ClassNameLabel"
+			"font"			"MontserratBlack24"
+			"labelText"		"%classname%"
+			"textAlignment"	"left"
+			"xpos"			"10"
+			"ypos"			"2"
+			"zpos"			"1"
+			"wide"			"430"
+			"tall"			"20"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+		}
+		
+		"DescLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"DescLabel"
+			"font"			"MontserratSemibold14"
+			"labelText"		"%description%"
+			"textAlignment"	"left"
+			"xpos"			"10"
+			"ypos"			"6"
+			"wide"			"280"
+			"tall"			"100"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+			"wrap"			"1"
+		}
+		
+		"WeaponSetLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"WeaponSetLabel"
+			"font"			"MontserratSemibold14"
+			"labelText"		"#TR_StandardWeaponSet"
+			"textAlignment"	"center"
+			"xpos"			"10"
+			"ypos"			"95"
+			"wide"			"300"
+			"tall"			"15"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+			"fgcolor_override" "PFGreen"
+		}
+		
+		"WeaponImage0"
+		{
+			"ControlName"	"ImagePanel"
+			"FieldName"		"WeaponImage0"
+			"xpos"			"15"
+			"ypos"			"115"
+			"wide"			"70"
+			"tall"			"70"
+			"visible"		"1"
+			"tileImage"		"0"
+			"scaleImage"	"1"
+		}
+		
+		"WeaponImage1"
+		{
+			"ControlName"	"ImagePanel"
+			"FieldName"		"WeaponImage1"
+			"xpos"			"115"
+			"ypos"			"115"
+			"wide"			"70"
+			"tall"			"70"
+			"visible"		"1"
+			"tileImage"		"0"
+			"scaleImage"	"1"
+		}
+		
+		"WeaponImage2"
+		{
+			"ControlName"	"ImagePanel"
+			"FieldName"		"WeaponImage2"
+			"xpos"			"215"
+			"ypos"			"115"
+			"wide"			"70"
+			"tall"			"70"
+			"visible"		"1"
+			"tileImage"		"0"
+			"scaleImage"	"1"
+		}
+		
+		"PrimaryLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"PrimaryLabel"
+			"font"			"MontserratBlack16"
+			"labelText"		"#TR_Primary"
+			"textAlignment"	"center"
+			"xpos"			"15"
+			"ypos"			"180"
+			"wide"			"70"
+			"tall"			"15"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+		}
+		
+		"SecondaryLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"SecondaryLabel"
+			"font"			"MontserratBlack16"
+			"labelText"		"#TR_Secondary"
+			"textAlignment"	"center"
+			"xpos"			"115"
+			"ypos"			"180"
+			"wide"			"70"
+			"tall"			"15"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+		}
+		
+		"MeleeLabel"
+		{
+			"ControlName"	"CExLabel"
+			"fieldName"		"MeleeLabel"
+			"font"			"MontserratBlack16"
+			"labelText"		"#TR_Melee"
+			"textAlignment"	"center"
+			"xpos"			"215"
+			"ypos"			"180"
+			"wide"			"70"
+			"tall"			"15"
+			"autoResize"	"1"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+		}
+	}
+	
+	"ClassImage"
+	{
+		"ControlName"	"ImagePanel"
+		"FieldName"		"ClassImage"
+		"xpos"			"325"
+		"ypos"			"0"
+		"zpos"			"1"
+		"wide"			"100"
+		"tall"			"200"
+		"visible"		"1"
+		"tileImage"		"0"
+		"scaleImage"	"1"
+	}
+	
+	"ClassIconImage"
+	{
+		"ControlName"	"ImagePanel"
+		"FieldName"		"ClassIconImage"
+		"xpos"			"325"
+		"ypos"			"175"
+		"zpos"			"2"
+		"wide"			"25"
+		"tall"			"25"
+		"visible"		"1"
+		"tileImage"		"0"
+		"scaleImage"	"1"
+		"alpha"			"32"
+	}
+}

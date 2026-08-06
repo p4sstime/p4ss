@@ -45,6 +45,7 @@ Scheme
 		"PartyMember6"	"255 133 255 255"
 		
 		"White"				"235 235 235 255"
+		"WhiteSolid"		"255 255 255 255"
 		"Red"				"192 28 0 140"
 		"RedSolid"			"192 28 0 255"
 		"Blue"				"0 28 162 140"
@@ -94,7 +95,7 @@ Scheme
 		"HudTimerProgressWarning"	"240 30 30 255"
 
 		// training
-		"HudTrainingHint"			"212 160 23 255"
+		"HudTrainingHint"			"152 191 101 255"
 		
 		"TanDark"				"117 107 94 255"
 		"Tan"					"176 165 141 255"
@@ -214,9 +215,11 @@ Scheme
 		"PureWhite"				"255 255 255 255"
 		"PureBlack"				"0 0 0 255"
 		"PFGrey" 				"32 32 32 180"
+		"PFGreyOpaque" 				"32 32 32 255"
 		"PFGreen"				"152 191 101 255"
 		"PFDarkGreen"			"62 76 41 255"
 		"PFGreenDim" 			"152 191 101 128"
+		"PFGreenDimSolid" 			"92 116 61 255" //Dim doesn't mean TRANSPARENT you MUPPET
 		"PFWhite"				"255 255 246 255"
 		
 		"PFBluTeam"                "72 121 171 255"
@@ -270,9 +273,9 @@ Scheme
 		Button.TextColor				"TanLight"
 		Button.BgColor					"TanDark"
 		Button.ArmedTextColor			"TanLight"
-		Button.ArmedBgColor				"PFGreenDim"
+		Button.ArmedBgColor				"PFGreenDimSolid"
 		Button.SelectedTextColor		"TanLight"
-		Button.SelectedBgColor			"PFGreenDim"
+		Button.SelectedBgColor			"PFGreenDimSolid"
 		Button.DepressedTextColor		"Black"
 		Button.DepressedBgColor			"PFGreen"
 
@@ -1428,7 +1431,8 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat SemiBold"
-				"tall"		"10"
+				"tall"	"11"	[!$POSIX] //Windows
+				"tall"	"10"	[$POSIX]  //Linux
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"
@@ -1874,18 +1878,15 @@ Scheme
 			}
 		}		
 		
-		InstructionalText
+		"InstructionalText"
 		{
 			"1"
 			{
-				"name"		"Verdana"
-				"tall"		"11"  [!$OSX]
-				"tall"		"9"  [$OSX]
-				"weight"	"800"
-				"additive"	"0"
-				"antialias" 	"1"
+				"name"	"Montserrat SemiBold"
+				"tall"	"13"	[!$POSIX] //Windows
+				"tall"	"12"	[$POSIX]  //Linux
 			}
-		}		
+		}	
 		
 		MatchmakingDialogTitle
 		{
@@ -3268,7 +3269,16 @@ Scheme
 			{
 				"name"	"Montserrat SemiBold"
 				"tall"	"12"	[!$POSIX] //Windows
-				"tall"	"10"	[$POSIX]  //Linux
+				"tall"	"11"	[$POSIX]  //Linux
+			}
+		}
+		"MontserratSemibold14"
+		{
+			"1"
+			{
+				"name"	"Montserrat SemiBold"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"13"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold16"

@@ -173,21 +173,22 @@ Scheme
 			{
 				"name"		"Montserrat SemiBold"
 				"tall"		"35"	[$!POSIX] //Windows
-				"tall"		"32"	[$POSIX]  //Linux
+				"tall"		"42"	[$POSIX]  //Linux
 				"weight"	"500"
 				"additive"	"0"
 				"antialias" "1"
 			}
 		}
 
-		"Default" [$OSX]
+		"Default"
 		{
 			"1"
 			{
-				"name"		"Verdana"
-				"tall"		"14"	[$!POSIX] //Windows
-				"tall"		"13"	[$POSIX]  //Linux
+				"name"		"Montserrat SemiBold"
+				"tall"		"20"	[$!POSIX] //Windows
+				"tall"		"19"	[$POSIX]  //Linux
 				"weight"	"500"
+				"antialias"	"1"
 			}
 		}
 		
