@@ -255,7 +255,12 @@ float CPasstimeGun::GetCurrentCharge()
 	return 0;
 }
 
-
+//-----------------------------------------------------------------------------
+bool CPasstimeGun::CanInspect() const
+{
+	// P4SS: Change this if the JACK ever gets its own inspect animation.
+	return false;
+}
 
 //-----------------------------------------------------------------------------
 void CPasstimeGun::UpdateOnRemove()
