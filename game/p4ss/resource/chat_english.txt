@@ -1,0 +1,481 @@
+"lang"
+{
+	"Language" "English"
+	
+	"Tokens"
+	{
+
+		//Change game names
+		"TF_Title"				"PASS FORTRESS"
+		//Menu
+		
+		//Loadout menu
+		"TF_SDK_LocalLoadout"		"Any changes made to your loadout are local to PASS Fortress."
+		"TF_SDK_ClearLoadout_Desc"	"Would you like to reset all of your loadouts back to stock items?"
+		
+		//Options - Keybinds
+		"P4SS_Pass_To_Me_Key"		"Call for a PASS"
+		"Keybind_Call_For_Medic"	"Call for MEDIC!"
+		"Keybind_Call_For_Help"		"Call for help"
+		"Keybind_Instant_Resupply"	"Resupply (in spawn area)"
+		"Keybind_Inspect"			"Inspect weapon"
+		"Keybind_Vaccinator"		"MEDIC: Toggle Vaccinator resistances...?"
+		"Keybind_Cheats_Toggle"		"Toggle server cheats"
+		"#TF_ClassSkill_Demoman"	"DEMOMAN: Shield charge"
+		
+		//Advanced Options
+		"TF_OptionCategory_PASSTime"	"PASS Time Settings"
+		"Tooltip_PASSCrosshairRed"		"JACK Crosshair RED Channel"
+		"Tooltip_PASSCrosshairGreen"	"JACK Crosshair Green Channel"
+		"Tooltip_PASSCrosshairBlue"		"JACK Crosshair Blue Channel"
+		"Tooltip_PASSCrosshairAlpha"	"JACK Crosshair Transparency"
+		"Tooltip_PASSCrosshairColors"	"Edit the color of the crosshair that appears while holding primary fire with the JACK. (RGB values 0-255, right is higher)"
+		"Tooltip_PASSCrosshairColorsAlpha"	"Edit the transparency of the crosshair that appears while holding primary fire with the JACK. (0-255, right is more opaque)"
+		
+		//Host server
+		"P4SS_Config_File"				"Config file"
+		"P4SS_Config_None"				"None (server.cfg)"
+		"P4SS_Config_RGL"				"RGL.gg"
+		"P4SS_MaxRounds"				"Max rounds played"
+		"P4SS_WinLimit"					"Win limit (rounds)"
+		"P4SS_Scores_Per_Round"			"Scores per round"
+		"P4SS_Ball_Reset_Time"			"JACK reset time"
+		"P4SS_Pack_Speed"				"JACK group speed"
+		"P4SS_Enabled"					"Enabled"
+		"P4SS_Disabled"					"Disabled"
+		"P4SS_Homing_Passes"			"Homing passes"
+		"P4SS_Heal_On_Pass"				"Passing heals X HP"
+		"P4SS_Heal_On_Pass_Flight_Time"	"Pass heal flight time"
+		"P4SS_Medic_Headshots"			"Medic can headshot?"
+		"TF_Timelimit"					"Match time (minutes)"		
+		
+		//Improved Pass Time Wording
+		//Objective tutorial
+		"default_passtime_description"			"Get the JACK and score with it!\nHelp friendly JACK-carriers reach the goal.\nStop enemy JACK-carriers from reaching your goal.\n\nPress ATTACK to throw or toss the JACK. Hold to aim or maintain lock.\nPress or hold ATTACK2 instead to always perform a no-lock-on throw.\nPress the opposite ATTACK button to cancel a throw.\nPress ATTACK3 to call for a pass."
+		// Killfeed
+		"Msg_PasstimeBallGet" 			"got the JACK!"
+		"Msg_PasstimeScoreCount" 		"scored %s1 points!"
+		"Msg_PasstimeScore"				"scored!"
+		"Msg_PasstimeDirect"				"directed the JACK!"
+		"Msg_PasstimeSplash"				"splashed the JACK to save!"
+		"Msg_PasstimeSplashDirected"				"directed the JACK to save!"
+		"Msg_PasstimePassComplete" 		"passed to"
+		"Msg_PasstimeInterception" 		"intercepted"
+		"Msg_PasstimeSteal" 			"stole from"
+		"Msg_PasstimeBlock" 			"blocked"
+
+					// 'Pop ups'
+		"Msg_PasstimePassIncoming" 		"PASS INCOMING"
+		"Msg_PasstimeLockedOn" 			"LOCKED ON"
+		"Msg_PasstimeInPassRange" 		"IN PASS RANGE"
+		"TF_Passtime_InPassRange"		"IN PASS RANGE"
+
+					// Notifs
+		"TF_Passtime_Goal"				"GOAL"
+		"TF_Passtime_CarrierName"		"%s1"
+
+
+		// map names
+		"P4SS_Map_Amperage"		"Amperage"
+		"P4SS_Map_Arena2"		"Arena2"
+		"P4SS_Map_Boutique"		"Boutique"
+		"P4SS_Map_Coastal"		"Coastal"
+		"P4SS_Map_Colosseum2"	"Colosseum"
+		"P4SS_Map_Greenhouse"	"Greenhouse"
+		"P4SS_Map_Khobar"		"Khobar"
+		"P4SS_Map_Maple"		"Maple"
+		"P4SS_Map_MannDamm"		"Mann Damm"
+		"P4SS_Map_Park"			"Park"
+		"P4SS_Map_Pibble"		"Pibble"
+		"P4SS_Map_Plexiglass"	"Plexiglass"
+		"P4SS_Map_Obelisk"		"Obelisk"
+		"P4SS_Map_Ore"			"Ore"
+		"P4SS_Map_Ruin"			"Ruin"
+		"P4SS_Map_Soho"			"Soho"
+		"P4SS_Map_Stonework"	"Stonework"
+		"P4SS_Map_Stadium"		"Stadium"
+		"P4SS_Map_Stadium_Surf"		"Stadium (Surf)"
+		"P4SS_Map_Thesis"		"Thesis"
+		"P4SS_Map_Throwing_Grounds"		"Throwing Grounds"
+		"P4SS_Map_Torii"		"Torii"
+		"P4SS_Map_Park"			"Park"
+		"P4SS_Map_UFO"			"UFO"
+		"P4SS_Map_Yard"			"Yard"
+		
+		// map authors
+		"TF_MapAuthors_Community_Title"		"Created by:"
+		"P4SS_Authors_Amperage"		"nikeshoe92"
+		"P4SS_Authors_Arena2"		"Jaguarfiend and nikeshoe92"
+		"P4SS_Authors_Arena2_Classic"		"Jaguarfiend, nikeshoe92 and Danmar33"
+		"P4SS_Authors_Boutique"		"Kin"
+		"P4SS_Authors_Coastal"		"CREDITS PENDING"
+		"P4SS_Authors_Colosseum"	"CREDITS PENDING"
+		"P4SS_Authors_Greenhouse"	"nikeshoe92"
+		"P4SS_Authors_Khobar"		"CREDITS PENDING"
+		"P4SS_Authors_Maple"		"kingfin, nBerry, Crowbar, Lacry, Taxicat,\nnikeshoe92, 3Dnj, and Harlen 'UEAK' Crash"
+		"P4SS_Authors_MannDamm"		"CREDITS PENDING"
+		"P4SS_Authors_Park"			"CREDITS PENDING"
+		"P4SS_Authors_Pibble"		"CREDITS PENDING\nPowered by Vscript!"
+		"P4SS_Authors_Plexiglass"	"Shears and Danmar33"
+		"P4SS_Authors_Obelisk"		"CREDITS PENDING"
+		"P4SS_Authors_Ore"			"CREDITS PENDING"
+		"P4SS_Authors_Ruin"			"DropKnock, Sean 'Heyo' Cutino, EArkham,\nand Aeon 'Void' Bollig"
+		"P4SS_Authors_Soho"			"CREDITS PENDING"
+		"P4SS_Authors_Stonework"	"nikeshoe92"
+		"P4SS_Authors_Stadium"		"nikeshoe92"
+		"P4SS_Authors_Stadium_Surf"		"nikeshoe92, SolarLight, Void"
+		"P4SS_Authors_Thesis"		"CREDITS PENDING"
+		"P4SS_Authors_Throwing_Grounds"		"owen608 and SolarLight"
+		"P4SS_Authors_Torii"		"kingfin, Speakers, Freyja, EArkham,\nAeon 'Void' Bollig, and Exactol"
+		"P4SS_Authors_UFO"			"CREDITS PENDING"
+		"P4SS_Authors_Yard"			"CREDITS PENDING"
+		
+		//Map info descriptions
+		
+		"pass_aquarium_description"		"Aquarium is known for it's water. Duh.\n\nYou can use said water to slide across, maintaining your speed from jumps or charges. Simply hold the jump button to slide.\n\nThe JACK will spawn from either top left, top right or lower.\n\nMedics can take jump pads, which go on a 5 second cooldown when used."
+		"pass_arena2_description"		"Soldier's favourite, for good reason.\n\nThis map features goal barriers. After the JACK has spawned, the barriers prevent early scores for a short period."
+		"pass_arena2_classic_description"	"4v4 PASS Time was born alongside this very map, which was the sequel to an older map experiment called pass_arena. Everything from map sizing, to goal positioning and size, to the way ramps are placed around, was decided on Arena2.\n\nThis map features goal barriers. After the JACK has spawned, the barriers prevent early scores for a short period."
+		"pass_boutique_description"		"Boutique is an Arena-like with some different trimp spots and terrain. But more notably, the addition of lower surf ramps.\n\nLanding on top of the fences (where the small health packs spawn) will deal no fall damage."
+		"pass_brickyard_description"		"More than a classic.\n\nPASS Fortress was not designed with the original PASS Time maps in mind, but you can still play this."
+		"pass_coastal_description"		"Coastal is an Arena-like with lowered, staggered surf ramps, wider under-passageways with ramps, angled fences, surf ramps in lower, open shelves without rooves, and non-walkable JACK-spawners."
+		"pass_colosseum2_description"	"We don't have 300 people here. 8 will do.\n\nThe JACK can spawn from lower, top left, or top right.\n\nMedic can use the jump pads from spawn, if you climb the ladders."
+		"pass_district_description"			"This used to be an Engineer's dream.\n\nPASS Fortress was not designed with the original PASS Time maps in mind, but you can still play this."
+		"pass_greenhouse_description"	"Greenhouse is called Greenhouse because its middle tower looks like a Greenhouse.\n\nUnlike most maps, the surf ramps extend for the entire map, and conclude with additional ramping for bigger jumps at the end of your slide."
+		"pass_khobar_description"			"Khobar is a very large map with more emphasis on catapults.\n\nThere are some catapults located on each of the fences, as well as on the middle platform.\nTry bouncing the JACK into a pult for an easy jump setup."
+		"pass_manndamm_description"		"Khobar features a tunnel stricture in the middle, and has curved ramps on the sides.\n\nThrowing the JACK into one of the holes in the fences will cause the JACK to teleport to the corresponding 'straw' at the top."
+		"pass_maple_description"		"Maple puts more emphasis on the sides, rather than having a middle tower.\n\nThis map features forcefields. You can walk through them and carry the JACK through them. But thrown JACKs will bounce off, and projectiles will not pass either."
+		"pass_obelisk_description"		"Obelisk is an Arena-like with different ramps, and a different JACK spawner for the upper platform. Instead of dropping from the sky, it will fly up from the floor of the upper platform.\n\nThis map features goal barriers. After the JACK has spawned, the barriers prevent early scores for a short period."
+		"pass_ore_description"			"Ore's unique gimmick are the magnets under the side ramps. Hit your head underneath and you'll stick to the ceiling, keeping all of your speed."
+		"pass_amperage_description"		"Amperage features a much taller middle platform, and a sideways lower area where the ramps cannot be shot with explosives."
+		"pass_park_description"			"Park is a very open, chaotic map with lots to see and do. Ramps everywhere!\n\n\Medics can pick up flasks to gain a speed boost.\nMedics can also teleport by collecting crystals."
+		"pass_pibble_description"		"Pibble is a 2v2 gamemode designed for Soldier only.\n\nWhichever team finishes with the highest score wins! Performing 'Extender' jumps with ramps increases a combo rating which, upon successful score, will increase the number of points scored.\nAfter any score, the JACK will respawn on the side of the team that just got dunked on. It will be protected from the the scorer's team for a few seconds.\n\nPlayers respawn instantly, and spawn with overheal. Make use of your killbind to teleport to spawn quickly!\n\nThere is a health/ammo resupply line above the enemy spawn, and there is a large vent that can push the JACK."
+		"pass_plexiglass_description"	"Plexiglass is a unique, horizontal map with two JACK droppers:\nOne on the left, and one on the right!\n\nThere is a barrier in the lower tunnel that prevents the JACK from rolling through it, but you can still carry it through.\n\nThere are some Medic jump pads, marked in yellow on the floor."
+		"pass_ruin_description"			"Ruin features curved ramps in the upper corners, and there are surf ramps in the dark passageways underneath.\n\nThis map features a pool of water behind the goal, which can be used to increase the height and speed of your explosive jumps."
+		"pass_soho_description"			"Soho seems like an Arena clone at first, but it is considerably larger and features a bridge to the upper platform. There are also walkable paths to said bridges."
+		"pass_stadium_description"		"Stadium was one of the first alternate maps to be created, and is known for its rounded side ramps.\n\nThis map features goal barriers. After the JACK has spawned, the barriers prevent early scores for a short period.\n\nRocket jump off of the water, if you dare.\n\nThere are also Medic jump pads located near the goals, which go on a 4 second cooldown when used."
+		"pass_stonework_description"	"Stonework is an Arena-like with a much larger tower, walkable routes next to lower surf ramps on the sides, and plenty of unique trimp spots.\n\nMore importantly, the upper JACK spawn is a second fountain-spawn on top of the tower!\n\nThis map features goal barriers. After the JACK has spawned, the barriers prevent early scores for a short period."
+		"pass_thesis_description"		"An Arena2 clone, and the first one to implement goal barriers, which Arena2 later borrowed the idea from.\n\nThe barriers on this map open slowly after the JACK has spawned, preventing early scores."
+		"pass_timbertown_description"		"This used to be a Sniper's dream.\n\nPASS Fortress was not designed with the original PASS Time maps in mind, but you can still play this."
+		"pass_torii_description"			"Torii borrows from a lot of places. The tower is like Arena but larger, more open, and with plenty of ramps and stairs. It has curved side ramps, a bit like Stadium. It has lower surf ramps, too.\n\nCheck out those ramps suspended in the corners!"
+		"pass_ufo_description"			"Do the aliens yearn for ball games?\n\nAfter scoring, both teams will respawn, and a barrier will appear. The JACK will respawn on the side of the team that just got dunked on.\n\nMedic is able to gain a temporary jump boost by standing on the glowing circles near the fences, or the in the spawn room."
+		"pass_yard_description"			"A 3v3 map - Intended for Soldier only.\n\nAn Arena-like with unique ramps, angled fences and two upper spawners.\nThe JACK will bounce across the middle platform and land on the opposite side if it is not collected.\nThe JACK will NEVER spawn from lower.\n\nPlayers respawn 1 second faster and recieve a slight overheal upon spawning."
+
+		//Loading screen
+		"LoadingMap"				"Dimension-hopping to:"
+
+		//Tournament mode
+		"Tournament_TeamReady"			"O"
+		"Tournament_TeamNotReady"		"X"
+
+
+		// scoreboard 
+		"P4SS_Scoreboard_Goals"		"Goals"
+		"P4SS_Scoreboard_Assists"		"Assists"
+		"P4SS_Scoreboard_Intercepts"		"Intercepts"
+		"P4SS_Scoreboard_Saves"		"Saves"
+		"P4SS_Scoreboard_Steals"		"Steals"
+		"P4SS_Scoreboard_Splashes"		"Splashes"
+		
+		"P4SS_Scoreboard_KillAssists"		"Kill-Assists:"
+
+					// events
+		"Msg_PasstimeEventStealTitle" 			"%team% STEAL"
+		"Msg_PasstimeEventStealDetail" 			"%subject% stole from %source%"
+		"Msg_PasstimeEventPassTitle"			"%team% PASS"
+		"Msg_PasstimeEventPassDetail" 			"%source% passed to %subject%"
+
+		"Msg_PasstimeEventHandoffTitle"			"%team% HANDOFF"
+		"Msg_PasstimeEventHandoffDetail" 		"%source%  handed off to %subject%"
+
+		"Msg_PasstimeEventScoreTitle"			"%team% SCORES"
+		"Msg_PasstimeEventScoreDetail_Assist"	"%subject% assisted by %source%"
+		"Msg_PasstimeEventScoreDetail_NoAssist"	"%subject%"
+
+		"Msg_PasstimeEventDeathbombTitle"			"%subject% DEATHBOMB"
+		"Msg_PasstimeEventDeathbombDetail"	"assisted by %source%"
+
+		"Msg_PasstimeEventPanaceaTitle"			"%team% PANACEA"
+		"Msg_PasstimeEventPanaceaDetail"	"%subject%"
+
+		"Msg_PasstimeEventWinstratTitle"			"%team% WINSTRAT"
+		"Msg_PasstimeEventWinstratDetail"	"%subject%"
+
+		// ADJUSTED
+		"Msg_PasstimeEventInterceptTitle"		"%team% INTERCEPT"		//%team% INTERCEPTION
+		"Msg_PasstimeEventInterceptDetail"		"%subject% intercepted %source%"
+
+		"Msg_PasstimeEventSaveTitle"		"%team%  SAVE"		//%team% INTERCEPTION
+		"Msg_PasstimeEventSaveDetail"		"%subject% stopped %source% from scoring"
+
+		"Msg_PasstimeEventWinstratBonus" 			"" 	
+
+		"Msg_PasstimeEventSaveBonus" 			"" 	
+		"Msg_PasstimeEventPanaceaBonus" 			"" 	
+		"Msg_PasstimeEventDeathbombBonus" 			"" 	
+		"Msg_PasstimeEventScoreBonus" 			"" 						// +CRIT Empty because there is no crits in pass time
+		"Msg_PasstimeEventPowerDownDetail"		""						// Has no text
+		"Msg_PasstimeEventStealBonus"			"" 						// +BOOST +DODGE
+		"Msg_PasstimeEventInterceptBonus" 		"" 						// +BOOST +DODGE
+		"Msg_PasstimeEventPassBonus" 			"" 						// +BOOST
+		"Msg_PasstimeEventPowerUpBonus"			"BONUS GOAL OPEN"		// Just used for Casual
+		"Msg_PasstimeEventPowerUpTitle"			""						// JACK POWER UP
+		"Msg_PasstimeEventPowerUpDetail"		""						// Bonus goal is worth more points
+		"Msg_PasstimeEventPowerDownTitle"		"POWER DOWN"			// JACK POWER DOWN
+
+				//Still in use for casual
+		"Msg_PasstimeEventPowerDownBonus"		"BONUS GOAL CLOSED"		//
+		//	/***
+		//	 * 
+		//	 * PASS TIME:
+		//	 * 	0x01 - Pure white
+		//	 * 	0x06 - Use Assist color
+		//	 * 	0x07 - Use Save color
+		//	 * 	0x08 - Use Intercept color
+		//	 * 	0x14 - Use Steal color
+		//	 * 	0x0F - Use Splash color
+		//	 * 	0x13 - Use PRIMARY TEAM color (%source% team, or if no %source%, %subject% team)
+		//	 * 	0x11 - Use SECONDARY TEAM color (opposite of previous team)
+		//	 * 	0x12 - Use Goal color
+		//	 *     0x15 - Use Deathbomb Color
+		//	 *     0x17 - Use Panacea Color
+		//	 */
+
+		//Most of this is copied from "drastically improved chat_english"
+			
+		// Class Selection Screen tips
+		// Scout
+		"ClassTips_1_Count"			"1"
+		"ClassTips_1_1"				"Don't!"
+		"ClassTips_1_1_Icon"		"/achievements/tf_scout_fast_cap.vmt"
+
+		// Sniper
+		"ClassTips_2_Count"			"1"
+		"ClassTips_2_1"				"Don't!"
+		"ClassTips_2_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Soldier
+		"ClassTips_3_Count"			"3"
+		"ClassTips_3_1"				"Rocket jump while being passed to!"
+		"ClassTips_3_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_3_2"				"Shoot the floor near the JACK, to pick it up while jumping!"
+		"ClassTips_3_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_3_3"				"Use surf ramps to your advantage!"
+		"ClassTips_3_3_Icon"		"/pve/chalf_circle.vmt"
+
+		// Demo
+		"ClassTips_4_Count"			"3"
+		"ClassTips_4_1"				"Use Caber jumps or trimps while being passed to!"
+		"ClassTips_4_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_4_2"				"Place grenades near the JACK to explosive jump with it!"
+		"ClassTips_4_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_4_3"				"Place the JACK on a ramp, and collect it while rampsliding!"
+		"ClassTips_4_3_Icon"		"/pve/chalf_circle.vmt"
+
+		// Medic
+		"ClassTips_5_Count"			"5"
+		"ClassTips_5_1"				"You can throw the JACK really far!"
+		"ClassTips_5_1_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_2"				"Use your superior run speed to steal the JACK with melee!"
+		"ClassTips_5_2_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_3"				"Heal teammates to enable more explosive jumping!"
+		"ClassTips_5_3_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_4"				"Don't ÜberCharge the JACK Carrier, it doesn't work!"
+		"ClassTips_5_4_Icon"		"/pve/chalf_circle.vmt"
+		"ClassTips_5_5"				"Deny JACK scores with the Crossbow!"
+		"ClassTips_5_5_Icon"		"/pve/chalf_circle.vmt"
+
+		// Heavy
+		"ClassTips_6_Count"			"1"
+		"ClassTips_6_1"				"Don't!"
+		"ClassTips_6_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Pyro
+		"ClassTips_7_Count"			"1"
+		"ClassTips_7_1"				"Don't!"
+		"ClassTips_7_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Spy
+		"ClassTips_8_Count"			"1"
+		"ClassTips_8_1"				"Don't!"
+		"ClassTips_8_1_Icon"		"/pve/chalf_circle.vmt"
+
+		// Engi
+		"ClassTips_9_Count"			"1"
+		"ClassTips_9_1"				"Don't!"
+		"ClassTips_9_1_Icon"		"/pve/chalf_circle.vmt"
+
+		//Map gamemode prefixes, exclusive to PF. Applies to loading screen.
+		"Gametype_Jacksercise"	"Jacksercise"
+		"Gametype_Jump"			"Jump"
+		"Gametype_StreetPASS"	"StreetPASS"
+		
+		//Map gamemode prefixes, exclusive to PF. Allcaps. Applies to offline practice screen.
+		"Gametype_Jacksercise_ALLCAPS"	"JACKSERCISE"
+		"Gametype_Jump_ALLCAPS"			"JUMP"
+		"Gametype_Freeplay_ALLCAPS"			"FREE PLAY"
+		
+		
+		"TF_GameModeDesc_Jacksercise"	"Score as many goals as you can, in one minute."
+		"TF_GameModeDesc_Jump"	"Complete some obstacle courses with blast jumps."
+		
+		//Loading tips, exclusive to PF
+
+		"Tip_Abuse_Report"		"Powered by passtime.tf."
+		
+		"Tip_1_Count"				"0" //Scout
+		
+		"Tip_2_Count"				"0" //Sniper
+
+		"Tip_3_Count"				"13" //Soldier
+		"Tip_3_1"				"As a Soldier, you can pick up your own JACK throws by hitting the JACK with your rocket jump explosion."
+		"Tip_3_2"				"As a Soldier, you can airshot the JACK, but it's very tricky!"
+		"Tip_3_3"				"As a Soldier, you can deny scores by shooting the goal with rockets. The explosion covers a wide area."
+		"Tip_3_4"				"As a Soldier, the Market Gardener is excellent. Deny dribbles by predicting enemies, and smacking them mid-jump."
+		"Tip_3_5"				"As a Soldier, the Black Box lets you adopt a tankier playstyle. Eat all of the health packs. Become the Nombler."
+		"Tip_3_6"				"As a Soldier, know that JACK carriers are often marked for death. Hitting directs and airshots can deal massive damage!"
+		"Tip_3_7"				"As a Soldier, you can shoot the JACK with rockets to move it towards you, or send it away from enemies."
+		"Tip_3_8"				"As a Soldier, try to recieve passes while rocket jumping forward. Use surf ramps to go even further!"
+		"Tip_3_9"				"As a Soldier, you can perform a 'deathbomb' pressing your killbind next to a goal, while a JACK PASS is incoming. Very precise!"
+		"Tip_3_10"				"As a Soldier, 'speedshot' rocket jumps work when performed next to the JACK, and it can be extremely powerful."
+		"Tip_3_11"				"As a Soldier, you can pick up the JACK while wall jumping or surfing if you make sure the explosion hits the JACK."
+		"Tip_3_12"				"As a Soldier, remember that you can pick up the JACK when it's thrown by your teammate, even if it's still team colored."
+		"Tip_3_13"				"As a Soldier, you can rocket jump off of the JACK by shooting it as the JACK magnetizes towards you. This is very precise."
+
+		"Tip_4_Count"				"11" //Demoman
+		"Tip_4_1"				"As a Demoman, no stickybombs are allowed. Too unsportsmanlike."
+		"Tip_4_2"				"As a Demoman, the Iron Bomber is generally preferred due to its easier grenade jumps."
+		"Tip_4_3"				"As a Demoman, you can place grenades near the JACK to explosive jump with it!"
+		"Tip_4_4"				"As a Demoman, you can Caber jump by hitting the JACK itself."
+		"Tip_4_5"				"As a Demoman, the Ullapool Caber is great for explosive jumping, especially while rampsliding."
+		"Tip_4_6"				"As a Demoman, crouch when preparing a Caber jump in order to achieve maximum height."
+		"Tip_4_7"				"As a Demoman, use your Grenade Launcher for direct combat. Grenades detonate upon impact with an enemy unless they touch the ground first."
+		"Tip_4_8"				"As a Demoman, your Bottle deploys and holsters faster than the Caber, and it lets you play a steal-heavy playstyle called we call 'Scallop'."
+		"Tip_4_9"				"As a Demoman, using the Boots with the Caber is what we call 'Stoic Demo'."
+		"Tip_4_10"				"As a Soldier, you can... Wait, no..."
+		"Tip_4_11"				"As a Demoman, you can grenade jump off of the JACK by shooting it as the JACK magnetizes towards you. This is very precise."
+
+		"Tip_5_Count"				"12" //Medic
+		"Tip_5_1"				"As Medic, use your Medi Gun to buff your team's HP, enabling more blast jumping."
+		"Tip_5_2"				"As Medic, you have the best loose throw out of the three PASS Time classes. Passes, meanwhile, are identical."
+		"Tip_5_3"				"As Medic, your ÜberCharge provides invulnerability, but it won't work on the JACK carrier."
+		"Tip_5_4"				"As Medic, you can fill your ÜberCharge faster by healing teammates who are more injured."
+		"Tip_5_5"				"As Medic, use your superior movement speed to threaten JACK steals with your melee weapon. You can force people to toss it away."
+		"Tip_5_6"				"As Medic, if an opponent tries to steal the JACK from you, bounce it off the ground into their hands. They won't gain invulnerability, and you can steal it right back."
+		"Tip_5_7"				"As Medic, it is better to not use an Übercharge than it is to grief your team by preventing them from picking up the JACK."
+		"Tip_5_8"				"As Medic, heal Soldiers and Demomen at the beginning of a round so they can jump out of spawn and start early."
+		"Tip_5_9"				"As Medic, you can ÜberCharge without a heal target to save yourself. Use it or lose it!"
+		"Tip_5_10"				"As Medic, the Crusader's Crossbow heals teammates, damages enemies, and can deny goals by neutralizing the JACK."
+		"Tip_5_11"				"As Medic, the Crusader's Crossbow deals more damage the longer a bolt travels."
+		"Tip_5_12"				"As Medic, you can keep multiple targets overhealed, allowing them to absorb more damage."
+
+		"Tip_6_Count"				"0" //Heavy
+
+		"Tip_7_Count"				"0" //Pyro
+
+		"Tip_8_Count"				"0" //Spy
+
+		"Tip_9_Count"				"0" //Engineer
+
+		"Tip_10_Count"				"8" //THE JACK RAAAAGGGHHH
+		"Tip_10_1"				"You can curve a locked pass around obstacles and enemies by priming a throw and looking away from the target before releasing."
+		"Tip_10_2"				"The JACK has a team pack radius. If at least one teammate is within the holder's radius, they'll receive 2hp per second, speed up to the fastest pack member's speed, and prevent the holder from taking Mini-Crits."
+		"Tip_10_3"				"If nobody picks the JACK up after 15 seconds, it will disappear and respawn after an additional ten seconds."
+		"Tip_10_4"				"Not only can the JACK be splashed with explosives, but it can also be hit directly by them! Pipes and rockets will detonate upon making contact with it."
+		"Tip_10_5"				"Intercepting an enemy pass or stealing it (melee) out of their hands directly will grant you two seconds of invulnerability."
+		"Tip_10_6"				"If you're pushed into a corner with the JACK, most maps have catapults that let you launch the ball way out of the corner."
+		"Tip_10_7"				"The JACK floats on the surface of deep water but sinks in shallow pools."
+		"Tip_10_8"				"If the JACK hits a solid surface while in a homing pass, it will bounce and cancel the pass."
+
+
+		//----------------------------------------------------------------------------------------
+		// Training
+		// Some of these training strings have control characters embedded to set colors.
+		// The control characters can be copied and pasted in notepad.
+		//  = 0x01 (SOH) - Use default color from this point forward
+		//  = 0x02 (STX) - Use hint color from this point forward (HudTrainingHint in ClientScheme.res)
+		
+		"TR_Stadium_Surf_Intro_Title"	"Surfing"
+		"TR_Stadium_Surf_Intro"			"A technique that lets you slide on ramps.\nHold %+moveright% (right) while on the ramp to make it across.\nDo not hold %+forward% (forward) while on the ramp."
+		"TR_Cant_Jump_Pad"		"Only Medics can use jump pads... Try it anyway?"
+		"TR_Stadium_FirstLowerJump_Title"	"Surf through Lower"
+		"TR_Stadium_FirstLowerJump"	"'Lower' has two surf ramps on each side. Again, use %+moveleft% (left) or %+moveright% (right) without holding %+forward% (forward).\nDon't forget to look straight ahead."	
+		"TR_Stadium_FirstLowerJump2"	"Try going back the other way, using what you just learned.\nDon't forget to look straight ahead."		
+		"TR_Stadium_SecondLowerJump_Title"	"Wall jump into a surf"
+		"TR_Stadium_SecondLowerJump"	"For this jump, rockets will only explode near the health and ammo packs. Do a wall jump while holding %+duck% (duck), and aim for a surf ramp.\nDon't forget to look straight ahead when you hit the ramp."	
+		"TR_Stadium_SecondLowerJump2"	"Try going back the other way, using what you just learned.\nDon't forget to look straight ahead when you hit the ramp."	
+		"TR_Stadium_Freedom_Title"	"Freedom!"
+		"TR_Stadium_Freedom"	"Restrictions removed! Rocket jump to your heart's content!\nProceed to BLU's left side health pack whenever you're ready for the next section."			
+		"TR_Stadium_FirstRocketJump_Title"	"Higher jump, bigger ramp"
+		"TR_Stadium_FirstRocketJump"	"Jump onto the ramp and hold %+moveleft% (left) to make it across."		
+		"TR_Stadium_SecondRocketJump_Title"	"Higher jump, bigger ramp"
+		"TR_Stadium_SecondRocketJump"	"Make it back where you came from.\nBut this time, shoot your feet while holding %+moveright% (right) and %+duck% (duck) before you hit the obstacle."	
+		"TR_Stadium_CurvedRocketJump_Title"	"Curved ramps!"
+		"TR_Stadium_CurvedRocketJump"	"You still want to hold %+moveright% (right).\nBut this time, slowly turn your view to the left as you curve along the ramp, always looking forward."
+		"TR_Stadium_CurvedRocketJump2"	"Time to hold %+moveleft% (left) instead.\nDon't forget: Slowly turn your view to the right as you curve along the ramp, always looking forward."
+		"TR_Stadium_SecondCurvedJump_Title"	"Higher jump, bigger ramp"
+		"TR_Stadium_SecondCurvedJump"	"Make it back where you came from.\nBut this time, shoot your feet while holding %+moveright% (right) and %+duck% (duck) before you hit the obstacle."	
+		
+		"TR_Completed"	   	 	 	"TRAINING COMPLETED!"
+		"TR_Not_Completed"	   	 	"NOT COMPLETED"
+		"TR_AttackDefense"		"BASIC TRAINING"
+		"TR_PracticeModeSelectTitle"	"SELECT A PRACTICE MODE"
+		"TR_PracticeMapSelectTitle"		"SELECT A %gametype% MAP"
+
+		"TR_ClassInfo_Classname_Soldier"	"The Soldier"
+		"TR_ClassInfo_Soldier"		"Soldier is the main focus of PASS Fortress. He's armed! Two of them! His Rocket Launcher lets him be a great offense and a great goalie. Rocket jumping allows him to move forward while the JACK is being passed to him, but he needs to be mindful of self damage and reloading."
+		"TR_ClassInfo_Classname_Demoman"	"The Demoman"
+		"TR_ClassInfo_Demoman"		"Demoman sacrifices defensive movement and goalie potential, but what he gets in return is an enormous burst of speed with his charge. He can pair this with explosive jumps from his bombs to go even faster, even to the point of smacking walls and ramps with one."
+		"TR_ClassInfo_Classname_Medic"		"The Medic"
+		"TR_ClassInfo_Medic"		"Medic is the support class that can heal people with a beam. No surprises there. However, he can still be a menace with the JACK, as he has the fastest foot speed and best loose throw of any class, letting him score goals or steal the JACK in ways that nobody else can."
+
+		//Scout repurposed to JACK
+		"TR_ClassInfo_Classname_Scout"	"Throwing Grounds"
+		"TR_ClassInfo_Scout"		"The JACK was found in a warehouse, but we don't know much else. Why is it green? Who named it Jack? Does it have parents? Are they also green? Is there a Jill? Whatever the case, you should probably learn how to throw it into the enemy's goal-shaped goals for the amusement of Merasmus."
+
+		//Pyro repurposed to JACK Part 2
+		"TR_ClassInfo_Classname_Pyro"	"Magnetism"
+		"TR_ClassInfo_Pyro"		"\"Medic here. Ze Demoman is fascinated with zhe JACK. Bomb experts... You see, zhe JACK has magnetic properties, and it sticks to our gloves. It even flies across zhe field, if you find someone to pass to! Not to brag, but I also have zhe best gloves out of everyone. I can toss it further!\""
+
+		//Heavy repurposed to JACK Part 3
+		"TR_ClassInfo_Classname_Heavyweapons"	"JACK Jumping"
+		"TR_ClassInfo_Heavyweapons"		"\"Soldier reporting. Listen up, maggots. Crawling on the floor with the JACK is for hippies. Merasmus' castle window is way too high for that, and I need practice for the real thing. The only way I'm breaking glass with the JACK is if I bounce it off something, and hit it with a rocket as I jump. Oorah!\""
+		
+		//Engineer repurposed to Advanced Rocket Jump
+		"TR_ClassInfo_Classname_Engineer"	"Harder Jumping"
+		"TR_ClassInfo_Engineer"		"\"Soldier reporting. Pay attention, ladies. The highest window of Merasmus' castle is just out of reach, so it's escaped my JACK throws for now. I can't just use the stairs; I destroyed them to make room for more raccoons. Time to practice leaps until my LEGS leap off my torso!\""
+		
+		//Sniper repurposed to Trimping
+		"TR_ClassInfo_Classname_Sniper"	"Harder Trimping"
+		"TR_ClassInfo_Sniper"		"\"Hey lad, look at me boots. Rocket-powered. Not bad, 'eh? Who had the bright idea of makin' us prance aboot in cleats on bloody CONCRETE?! These rocket shoes made me offense so strong that the wizard banned me from bringin' bomb launchers with 'em! He should unban ME EYE!\""
+		
+		//Spy repurposed to Surfing
+		"TR_ClassInfo_Classname_Spy"	"Surfing"
+		"TR_ClassInfo_Spy"		"Decorative slants exist all over the various arenas. Turns out, they're really good for sliding on. Why? How do we explain this, narratively? I don't know. A wizard did it?"
+		
+		"TR_Primary"				"Primary"
+		"TR_Secondary"				"Secondary"
+		"TR_Melee"					"Melee"
+
+		"TR_StandardWeaponSet"		"WEAPONS USED IN THIS LEVEL"
+		
+		"TF_COMPLETE_TRAINING_DESC"			"Complete each course to unlock the next."
+		"PF_Training_SelectAClass"			"CHOOSE A COURSE"
+		
+
+		// Offline Practice
+		"TF_Training_Desc_BasicTraining"	"Classes to learn classes."
+		"TF_Training_Desc_OfflinePractice"	"Explore some single-player content."
+		
+		"TF_StartPractice"		"START PRACTICE"
+		"TF_OfflinePractice"		"SINGLE-PLAYER MODES"
+		"TF_OfflinePractice_Settings"	"Settings"
+		"TF_OfflinePractice_NumPlayers"	"%s1 - %s2 Suggested"
+		"TF_Bot_Difficulty"		"Difficulty:"
+		"TF_Bot_Difficulty0"		"Easy"
+		"TF_Bot_Difficulty1"		"Normal"
+		"TF_Bot_Difficulty2"		"Hard"
+		"TF_Bot_Difficulty3"		"Expert"
+		"TF_Bot_NumberOfBots"		"Number of Players:"
+		"TF_OfflinePractice_Players"	"Players:"
+	}
+}
