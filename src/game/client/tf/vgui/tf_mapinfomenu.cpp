@@ -104,6 +104,11 @@ void CTFMapInfoMenu::ApplySchemeSettings( vgui::IScheme *pScheme )
 	Q_strncpy( m_szMapName, mapname, sizeof( m_szMapName ) );
 	Q_strupr( m_szMapName );
 
+	// P4SS: Delay map page loading to ensure controls are initialized
+	PostMessage( this, new KeyValues( "LoadMapData" ) );
+
+	SetMapTitle();
+
 #ifdef _X360
 	char *pExt = Q_stristr( m_szMapName, ".360" );
 	if ( pExt )
@@ -563,21 +568,62 @@ void CTFMapInfoMenu::LoadMapPage()
 	}
 
 	// we haven't loaded a valid map image for the current map
+	// P4SS: Reduced multiplication of mapimage width here because the text width was massive
 	if ( m_pMapImage && !m_pMapImage->IsVisible() )
 	{
 		if ( m_pMapInfo )
 		{
-			m_pMapInfo->SetWide( m_pMapInfo->GetWide() + ( m_pMapImage->GetWide() * 0.75 ) ); // add in the extra space the images would have taken 
+			m_pMapInfo->SetWide( m_pMapInfo->GetWide() + ( m_pMapImage->GetWide() * 0.06 ) ); // add in the extra space the images would have taken 
 		}
 	}
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: We are loading this menu so quickly that the map info
+// text is not displaying. We need to delay!
+//-----------------------------------------------------------------------------
+void CTFMapInfoMenu::OnLoadMapData() { LoadMapPage(); }
+
+
+//-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
+//P4SS: Fix localized map names not showing. How did this break? Who knows? Who CARES? Alexa, write code
 void CTFMapInfoMenu::SetMapTitle()
 {
-	SetDialogVariable( "mapname", GetMapDisplayName( m_szMapName ) );
+	const char *pMapDisplayName = NULL;
+
+	const MapDef_t *pMapInfo =
+	GetItemSchema()->GetMasterMapDefByName( m_szMapName );
+	if ( pMapInfo )
+	{
+		pMapDisplayName = pMapInfo->pszMapNameLocKey;
+	}
+
+	wchar_t wzMapName[255] = L"";
+	if ( pMapDisplayName )
+	{
+		const wchar_t *pLocalizedMapName =
+		g_pVGuiLocalize->Find( pMapDisplayName );
+		if ( pLocalizedMapName )
+		{
+			wcsncpy( wzMapName, pLocalizedMapName,
+					 sizeof( wzMapName ) / sizeof( wchar_t ) - 1 );
+		}
+		else
+		{
+			g_pVGuiLocalize->ConvertANSIToUnicode(
+			GetMapDisplayName( m_szMapName ), wzMapName, sizeof( wzMapName ) );
+		}
+	}
+	else
+	{
+		g_pVGuiLocalize->ConvertANSIToUnicode( GetMapDisplayName( m_szMapName ),
+											   wzMapName, sizeof( wzMapName ) );
+	}
+
+	SetDialogVariable( "mapname", wzMapName );
 }
 
 //-----------------------------------------------------------------------------

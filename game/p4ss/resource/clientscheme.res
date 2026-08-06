@@ -664,7 +664,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"44"
 				"tall_lodef"	"52"
 				"weight"	"500"
@@ -677,7 +677,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"35"
 				"tall_lodef"	"40"
 				"weight"	"500"
@@ -713,7 +713,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"30"
 				"weight"	"500"
 				"additive"	"0"
@@ -756,7 +756,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -767,7 +767,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"18"
 				"weight"	"500"
 				"additive"	"0"
@@ -816,7 +816,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"16"
 				"weight"	"500"
 				"additive"	"0"
@@ -827,7 +827,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -838,7 +838,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -873,7 +873,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"additive"	"0"
@@ -884,7 +884,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"4"
 				"weight"	"500"
 				"additive"	"0"
@@ -895,7 +895,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"10"
 				"weight"	"500"
 				"additive"	"0"
@@ -906,7 +906,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"16"
 				"weight"	"500"
 				"additive"	"0"
@@ -917,7 +917,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"0"
 				"additive"	"0"
@@ -939,7 +939,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"6"
 				"weight"	"0"
 				"additive"	"0"
@@ -1444,8 +1444,6 @@ Scheme
 			{
 				"name"		"Montserrat SemiBold"
 				"tall"		"12"
-				"tall_hidef"	"12"
-				"tall_lodef"	"12"
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"
@@ -1894,7 +1892,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"36"
 				"tall_lodef"		"28"
 				"weight"	"500"
@@ -1904,7 +1902,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"30"
 				"tall_lodef"		"22"
 				"weight"	"500"
@@ -1990,7 +1988,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"36"
 				"weight"	"500"
 				"additive"	"0"
@@ -2197,7 +2195,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"500"
 				"additive"	"0"
@@ -2208,7 +2206,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"500"
 				"blur"		"3"
@@ -2663,7 +2661,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"additive"	"0"
@@ -2674,7 +2672,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -2698,7 +2696,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -2727,7 +2725,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -2738,7 +2736,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -2775,7 +2773,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"antialias" 	"1"
@@ -2786,7 +2784,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"blur"		"3"
@@ -2799,7 +2797,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"12"
 				"weight"	"500"
 				"additive"	"0"
@@ -6248,7 +6246,7 @@ Scheme
 		"6" 
 		{
 			"font" "resource/tf2build.ttf"
-			"name" "TF2 Build"
+			"name" "Montserrat Black"
 			"russian"
 			{
 				"range" "0x0000 0xFFFF"
