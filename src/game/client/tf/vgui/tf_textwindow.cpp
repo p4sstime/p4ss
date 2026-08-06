@@ -181,7 +181,8 @@ void CTFTextWindow::ShowPanel( bool bShow )
 	if ( IsVisible() == bShow )
 		return;
 
-	// Force use to reevaluate our scheme, in case Steam Controller stuff has changed.
+	// Force use to reevaluate our scheme, in case Steam Controller stuff has
+	// changed.
 	InvalidateLayout( true, true );
 
 	BaseClass::ShowPanel( bShow );
@@ -190,6 +191,17 @@ void CTFTextWindow::ShowPanel( bool bShow )
 	{
 		m_pViewPort->ShowBackGround( false );
 	}
+
+	// P4SS: Auto-advance to map info, skip text window
+	// This works, but I worry that this will end up breaking logs.tf !logs or similar
+	// plugins in the future, so I am commenting this custom code out for now. I should
+	// revisit this some other time.
+	// 
+	//if ( bShow && !m_bCustomSvrPage )
+	//{
+	//	m_pViewPort->ShowPanel( this, false );
+	//	m_pViewPort->ShowPanel( PANEL_MAPINFO, true );
+	//}
 }
 
 //-----------------------------------------------------------------------------

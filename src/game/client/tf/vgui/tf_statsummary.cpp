@@ -43,9 +43,9 @@ const char *g_pszTipsClassImages[] =
 	"",								// TF_CLASS_UNDEFINED = 0,
 	"class_portraits/scout",		// TF_CLASS_SCOUT,			
 	"class_portraits/sniper",		// TF_CLASS_SNIPER,
-	"class_portraits/soldier",		// TF_CLASS_SOLDIER,
-	"class_portraits/demoman",		// TF_CLASS_DEMOMAN,
-	"class_portraits/medic",		// TF_CLASS_MEDIC,
+	"class_portraits/soldier_model",		// TF_CLASS_SOLDIER,
+	"class_portraits/demoman_model",		// TF_CLASS_DEMOMAN,
+	"class_portraits/medic_model",		// TF_CLASS_MEDIC,
 	"class_portraits/heavy",		// TF_CLASS_HEAVYWEAPONS,
 	"class_portraits/pyro",			// TF_CLASS_PYRO,
 	"class_portraits/spy",			// TF_CLASS_SPY,
@@ -160,6 +160,10 @@ void CTFStatsSummaryPanel::Init( void )
 	m_pTipText = new vgui::Label( this, "TipText", "" );
 	m_pMapInfoPanel = NULL;
 	m_pMainBackground = NULL;
+	
+	//P4SS: Partial reintroduction of leaderboard stuff in an attempt to fix broken map localization
+	m_pLeaderboardTitle = NULL;
+	m_pContributedPanel = NULL;
 
 #ifdef _X360
 	m_pFooter = new CTFFooter( this, "Footer" );
@@ -386,6 +390,9 @@ void CTFStatsSummaryPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 	// set the background image
 	UpdateMainBackground();
 
+	//P4SS: Someone broke MapInfo and made it stop loading... Fix.
+	m_pMapInfoPanel = dynamic_cast<EditablePanel *>( FindChildByName( "MapInfo" ) );
+
 	// get the dimensions and position of a left-hand bar and a right-hand bar so we can do bar sizing later
 	Panel *pLHBar = m_pPlayerData->FindChildByName( "ClassBar1A" );
 	Panel *pRHBar = m_pPlayerData->FindChildByName( "ClassBar1B" );
@@ -407,13 +414,21 @@ void CTFStatsSummaryPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 	KeyValues *pKeyValues = new KeyValues( "data" );
 	pKeyValues->SetInt( "class", TF_CLASS_UNDEFINED );
 	m_pClassComboBox->AddItem( "#StatSummary_Label_AsAnyClass", pKeyValues );
-	for ( int iClass = TF_FIRST_NORMAL_CLASS; iClass <= TF_LAST_NORMAL_CLASS; iClass++ )
+
+	// P4SS: Only add Soldier, Demoman, and Medic
+	if ( 1 )
 	{
-		if ( iClass == TF_CLASS_CIVILIAN )
-			continue;
 		pKeyValues = new KeyValues( "data" );
-		pKeyValues->SetInt( "class", iClass );
-		m_pClassComboBox->AddItem( g_aPlayerClassNames[iClass], pKeyValues );
+		pKeyValues->SetInt( "class", TF_CLASS_SOLDIER );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_SOLDIER], pKeyValues );
+
+		pKeyValues = new KeyValues( "data" );
+		pKeyValues->SetInt( "class", TF_CLASS_DEMOMAN );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_DEMOMAN], pKeyValues );
+
+		pKeyValues = new KeyValues( "data" );
+		pKeyValues->SetInt( "class", TF_CLASS_MEDIC );
+		m_pClassComboBox->AddItem( g_aPlayerClassNames[TF_CLASS_MEDIC], pKeyValues );
 	}
 	m_pClassComboBox->ActivateItemByRow( 0 );
 
@@ -447,33 +462,26 @@ void CTFStatsSummaryPanel::OnKeyCodePressed( KeyCode code )
 //-----------------------------------------------------------------------------
 // Purpose: Sets stats to use
 //-----------------------------------------------------------------------------
-void CTFStatsSummaryPanel::SetStats( CUtlVector<ClassStats_t> &vecClassStats ) 
+void CTFStatsSummaryPanel::SetStats( CUtlVector<ClassStats_t> &vecClassStats )
 {
-	m_aClassStats = vecClassStats; 
+	m_aClassStats.RemoveAll();
+
+	// P4SS: Only track Soldier, Demoman, and Medic
+	for ( int i = 0; i < vecClassStats.Count(); i++ )
+	{
+		int iClass = vecClassStats[i].iPlayerClass;
+
+		// Only add playable classes
+		if ( iClass == TF_CLASS_SOLDIER || iClass == TF_CLASS_DEMOMAN ||
+			 iClass == TF_CLASS_MEDIC )
+		{
+			m_aClassStats.AddToTail( vecClassStats[i] );
+		}
+	}
+
 	if ( m_bControlsLoaded )
 	{
 		UpdateDialog();
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Updates the dialog
-//-----------------------------------------------------------------------------
-void CTFStatsSummaryPanel::ClearMapLabel()
-{
-	SetDialogVariable( "maplabel", "" );
-	SetDialogVariable( "maptype", "" );
-
-	vgui::Label *pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
-	if ( pLabel && pLabel->IsVisible() )
-	{
-		pLabel->SetVisible( false );
-	}
-
-	pLabel = dynamic_cast<Label *>( FindChildByName( "MapType" ) );
-	if ( pLabel && pLabel->IsVisible() )
-	{
-		pLabel->SetVisible( false );
 	}
 }
 
@@ -506,7 +514,8 @@ void CTFStatsSummaryPanel::ShowMapInfo( bool bShowMapInfo, bool bIsMVM /*= false
 //-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 {
-	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() || engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
+	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() ||
+		 engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
 		return;
 
 	bool bWidescreenBackground = false;
@@ -514,42 +523,70 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 	bool bIsMVM = ( pMapName && !Q_strncmp( pMapName, "mvm_", 4 ) );
 	bool bIsMVMBackground = false;
 	const char *pszBackgroundOverride = NULL;
-	
+
 	if ( bIsMVM && !pszBackgroundOverride )
 	{
-		// this will preserve the current behavior for non-matchmaking servers
 		pszBackgroundOverride = "mvm_background_map";
 		bIsMVMBackground = true;
 	}
 
 	bool bIsCommunityMap = false;
 	const char *pAuthors = NULL;
-	
-	const MapDef_t *pMapInfo = GetItemSchema()->GetMasterMapDefByName( pMapName );
+	const char *pMapDisplayName = NULL;
+
+	const MapDef_t *pMapInfo =
+	GetItemSchema()->GetMasterMapDefByName( pMapName );
 	if ( pMapInfo )
 	{
 		bIsCommunityMap = pMapInfo->IsCommunityMap();
 		pAuthors = pMapInfo->pszAuthorsLocKey;
+		pMapDisplayName = pMapInfo->pszMapNameLocKey;
 	}
-	
+
 	ShowMapInfo( true, bIsMVM, ( pszBackgroundOverride != NULL ) );
 
-	// If we're loading a background map, don't display anything
-	// HACK: Client doesn't get gpGlobals->eLoadType, so just do string compare for now.
-	if ( Q_stristr( pMapName, "background") )
+	if ( Q_stristr( pMapName, "background" ) )
 	{
 		ClearMapLabel();
 	}
 	else
 	{
 		// set the map name in the UI
-		wchar_t wzMapName[255]=L"";
-		g_pVGuiLocalize->ConvertANSIToUnicode( GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+		wchar_t wzMapName[255] = L"";
+		if ( pMapDisplayName )
+		{
+			const wchar_t *pLocalizedMapName =
+			g_pVGuiLocalize->Find( pMapDisplayName );
+			if ( pLocalizedMapName )
+			{
+				wcsncpy( wzMapName, pLocalizedMapName,
+						 sizeof( wzMapName ) / sizeof( wchar_t ) - 1 );
+			}
+			else
+			{
+				g_pVGuiLocalize->ConvertANSIToUnicode(
+				GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+			}
+		}
+		else
+		{
+			g_pVGuiLocalize->ConvertANSIToUnicode(
+			GetMapDisplayName( pMapName ), wzMapName, sizeof( wzMapName ) );
+		}
 
 		SetDialogVariable( "maplabel", wzMapName );
-		SetDialogVariable( "maptype", g_pVGuiLocalize->Find( GetMapType( pMapName ) ) );
+		SetDialogVariable( "maptype",
+						   g_pVGuiLocalize->Find( GetMapType( pMapName ) ) );
 
-		vgui::Label *pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+		vgui::Label *pLabel =
+		dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+		if ( pLabel && !pLabel->IsVisible() )
+		{
+			pLabel->SetVisible( true );
+		}
+
+		pLabel =
+		dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
 		if ( pLabel && !pLabel->IsVisible() )
 		{
 			pLabel->SetVisible( true );
@@ -561,19 +598,24 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 			pLabel->SetVisible( true );
 		}
 
-		ImagePanel *pMapImage = m_pMapInfoPanel ? dynamic_cast< ImagePanel *>( m_pMapInfoPanel->FindChildByName( "MapImage" ) ) : NULL;
+		ImagePanel *pMapImage =
+		m_pMapInfoPanel ? dynamic_cast<ImagePanel *>(
+						  m_pMapInfoPanel->FindChildByName( "MapImage" ) )
+						: NULL;
 		if ( pMapImage )
 		{
-			// load the map image (if it exists for the current map)
-			char szMapImage[ MAX_PATH ];
-			Q_snprintf( szMapImage, sizeof( szMapImage ), "VGUI/maps/menu_photos_%s", pMapName );
+			char szMapImage[MAX_PATH];
+			Q_snprintf( szMapImage, sizeof( szMapImage ),
+						"VGUI/maps/menu_photos_%s", pMapName );
 			Q_strlower( szMapImage );
 
-			IMaterial *pMapMaterial = materials->FindMaterial( szMapImage, TEXTURE_GROUP_VGUI, false );
-			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) && ( !pszBackgroundOverride || bIsMVMBackground ) )
+			IMaterial *pMapMaterial =
+			materials->FindMaterial( szMapImage, TEXTURE_GROUP_VGUI, false );
+			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) &&
+				 ( !pszBackgroundOverride || bIsMVMBackground ) )
 			{
-				// take off the vgui/ at the beginning when we set the image
-				Q_snprintf( szMapImage, sizeof( szMapImage ), "maps/menu_photos_%s", pMapName );
+				Q_snprintf( szMapImage, sizeof( szMapImage ),
+							"maps/menu_photos_%s", pMapName );
 				Q_strlower( szMapImage );
 				pMapImage->SetImage( szMapImage );
 				pMapImage->SetVisible( true );
@@ -584,23 +626,55 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 			}
 		}
 
-		ImagePanel *pBackgroundImage = m_pMapInfoPanel ? dynamic_cast< ImagePanel *>( m_pMapInfoPanel->FindChildByName( "Background" ) ) : NULL;
+		ImagePanel *pMapFullScreenImage =
+		m_pMapInfoPanel
+		? dynamic_cast<ImagePanel *>(
+		  m_pMapInfoPanel->FindChildByName( "MapFullScreenImage" ) )
+		: NULL;
+		if ( pMapFullScreenImage )
+		{
+			char szMapFullScreenImage[MAX_PATH];
+			Q_snprintf( szMapFullScreenImage, sizeof( szMapFullScreenImage ),
+						"VGUI/maps/menu_fullscreenbg_%s", pMapName );
+			Q_strlower( szMapFullScreenImage );
+
+			IMaterial *pMapMaterial = materials->FindMaterial(
+			szMapFullScreenImage, TEXTURE_GROUP_VGUI, false );
+			if ( pMapMaterial && !IsErrorMaterial( pMapMaterial ) &&
+				 ( !pszBackgroundOverride || bIsMVMBackground ) )
+			{
+				Q_snprintf( szMapFullScreenImage,
+							sizeof( szMapFullScreenImage ),
+							"maps/menu_fullscreenbg_%s", pMapName );
+				Q_strlower( szMapFullScreenImage );
+				pMapFullScreenImage->SetImage( szMapFullScreenImage );
+				pMapFullScreenImage->SetVisible( true );
+			}
+			else
+			{
+				pMapFullScreenImage->SetVisible( false );
+			}
+		}
+
+		ImagePanel *pBackgroundImage =
+		m_pMapInfoPanel ? dynamic_cast<ImagePanel *>(
+						  m_pMapInfoPanel->FindChildByName( "Background" ) )
+						: NULL;
 		if ( pBackgroundImage )
 		{
-			const char* pszBackgroundImage = pszBackgroundOverride ? pszBackgroundOverride : "stamp_background_map";
-
+			const char *pszBackgroundImage = pszBackgroundOverride
+											 ? pszBackgroundOverride
+											 : "stamp_background_map";
 			pBackgroundImage->SetImage( pszBackgroundImage );
 
-			// Resize to accomodate the background image coming in
 			if ( bWidescreenBackground )
 			{
 				pBackgroundImage->SetWide( GetWide() );
 			}
-			else 
+			else
 			{
 				pBackgroundImage->SetWide( GetTall() * ( 4.f / 3.f ) );
 			}
-
 		}
 
 		if ( bIsMVM )
@@ -612,20 +686,46 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 		}
 		else
 		{
-			// add authors
+			m_pLeaderboardTitle = NULL;
 			if ( m_pMapInfoPanel )
 			{
 				if ( bIsCommunityMap )
 				{
-					m_pMapInfoPanel->SetDialogVariable( "title", g_pVGuiLocalize->Find( "#TF_MapAuthors_Community_Title" ) );
-					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title", "" );
-					m_pMapInfoPanel->SetDialogVariable( "authors", g_pVGuiLocalize->Find( pAuthors ) ); 
+					m_pMapInfoPanel->SetDialogVariable(
+					"title",
+					g_pVGuiLocalize->Find( "#TF_MapAuthors_Community_Title" ) );
+					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title",
+														"" );
+
+					const wchar_t *pAuthorsLocalized =
+					g_pVGuiLocalize->Find( pAuthors );
+					if ( pAuthorsLocalized )
+					{
+						m_pMapInfoPanel->SetDialogVariable( "authors",
+															pAuthorsLocalized );
+					}
+					else
+					{
+						m_pMapInfoPanel->SetDialogVariable( "authors",
+															pAuthors );
+					}
+
+					m_pLeaderboardTitle =
+					m_pMapInfoPanel->FindChildByName( "MapLeaderboardTitle" );
 				}
 				else
 				{
-					m_pMapInfoPanel->SetDialogVariable( "title", g_pVGuiLocalize->Find( "#TF_DuelLeaderboard_Title" ) );
-					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title", "" );
+					m_pMapInfoPanel->SetDialogVariable( "title", "" );
+					m_pMapInfoPanel->SetDialogVariable( "map_leaderboard_title",
+														"" );
 					m_pMapInfoPanel->SetDialogVariable( "authors", "" );
+
+					vgui::Panel *pInfoBG =
+					m_pMapInfoPanel->FindChildByName( "InfoBG" );
+					if ( pInfoBG )
+					{
+						pInfoBG->SetVisible( false );
+					}
 				}
 			}
 
@@ -637,11 +737,41 @@ void CTFStatsSummaryPanel::OnMapLoad( const char *pMapName )
 //-----------------------------------------------------------------------------
 // Purpose: Updates the dialog
 //-----------------------------------------------------------------------------
+void CTFStatsSummaryPanel::ClearMapLabel()
+{
+	SetDialogVariable( "maplabel", "" );
+	SetDialogVariable( "maptype", "" );
+
+	vgui::Label *pLabel =
+	dynamic_cast<Label *>( FindChildByName( "OnYourWayLabel" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+
+	pLabel = dynamic_cast<Label *>( FindChildByName( "MapType" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+
+	// P4SS: Add shadow label
+	pLabel = dynamic_cast<Label *>( FindChildByName( "OnYourWayLabelShadow" ) );
+	if ( pLabel && pLabel->IsVisible() )
+	{
+		pLabel->SetVisible( false );
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Updates the dialog
+//-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::UpdateDialog()
 {
 	UpdateMainBackground();
 
-	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() || engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
+	if ( g_bIsReplayRewinding || engine->IsLoadingDemo() ||
+		 engine->IsPlayingDemo() || engine->IsSkippingPlayback() )
 	{
 		// hide all of the various panels for the other loadscreen modes
 		if ( IsPC() )
@@ -660,7 +790,8 @@ void CTFStatsSummaryPanel::UpdateDialog()
 			{
 				m_pMapInfoPanel->SetVisible( false );
 
-				vgui::Panel* pInfoBG = m_pMapInfoPanel->FindChildByName( "InfoBG" );
+				vgui::Panel *pInfoBG =
+				m_pMapInfoPanel->FindChildByName( "InfoBG" );
 				if ( pInfoBG )
 				{
 					pInfoBG->SetVisible( false );
@@ -675,26 +806,33 @@ void CTFStatsSummaryPanel::UpdateDialog()
 
 	m_iTotalSpawns = 0;
 
-	// if we don't have stats for any class, add empty stat entries for them 
-	for ( int iClass = TF_FIRST_NORMAL_CLASS; iClass <= TF_LAST_NORMAL_CLASS; iClass++ )
+	// P4SS: Only track Soldier, Demoman, and Medic
+	// if we don't have stats for any playable class, add empty stat entries for
+	// them
+	if ( 1 )
 	{
-		if ( iClass == TF_CLASS_CIVILIAN )
-			continue; // Ignore the civilian.
+		int nPlayableClasses[] = { TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN,
+								   TF_CLASS_MEDIC };
 
-		int j;
-		for ( j = 0; j < m_aClassStats.Count(); j++ )
+		for ( int i = 0; i < ARRAYSIZE( nPlayableClasses ); i++ )
 		{
-			if ( m_aClassStats[j].iPlayerClass == iClass )
+			int iClass = nPlayableClasses[i];
+
+			int j;
+			for ( j = 0; j < m_aClassStats.Count(); j++ )
 			{
-				m_iTotalSpawns += m_aClassStats[j].iNumberOfRounds;
-				break;
+				if ( m_aClassStats[j].iPlayerClass == iClass )
+				{
+					m_iTotalSpawns += m_aClassStats[j].iNumberOfRounds;
+					break;
+				}
 			}
-		}
-		if ( j == m_aClassStats.Count() )
-		{
-			ClassStats_t stats;
-			stats.iPlayerClass = iClass;
-			m_aClassStats.AddToTail( stats );
+			if ( j == m_aClassStats.Count() )
+			{
+				ClassStats_t stats;
+				stats.iPlayerClass = iClass;
+				m_aClassStats.AddToTail( stats );
+			}
 		}
 	}
 
@@ -715,7 +853,7 @@ void CTFStatsSummaryPanel::UpdateDialog()
 	// update the tip
 	UpdateTip();
 	// show or hide controls depending on if we're interactive or not
-	UpdateControls();		
+	UpdateControls();
 }
 
 //-----------------------------------------------------------------------------
@@ -732,28 +870,32 @@ void CTFStatsSummaryPanel::UpdateBarCharts()
 		float flMax = 0;
 		for ( int i = 0; i < m_aClassStats.Count(); i++ )
 		{
-			// get max value of stat being charted so we know how to scale the graph
-			float flVal = GetDisplayValue( m_aClassStats[i], m_statBarGraph[iChart], m_displayBarGraph[iChart] );
+			// get max value of stat being charted so we know how to scale the
+			// graph
+			float flVal =
+			GetDisplayValue( m_aClassStats[i], m_statBarGraph[iChart],
+							 m_displayBarGraph[iChart] );
 			flMax = MAX( flVal, flMax );
 		}
 
 		// draw the bar chart value for each player class
-		// TODO: Fix up after the civilian becomes playable.
 		int iChartBar = 0;
 		for ( int i = 0; i < m_aClassStats.Count(); i++ )
-		{	
+		{
 			int iClass = m_aClassStats[i].iPlayerClass;
-			if ( iClass == TF_CLASS_CIVILIAN )
-			{
-				continue;
-			}
+
 			if ( 0 == iChart )
 			{
-				// if this is the first chart, set the class label for each class
-				m_pPlayerData->SetDialogVariable( CFmtStr( "class%d", iChartBar+1 ), g_pVGuiLocalize->Find( g_aPlayerClassNames[iClass] ) );
+				// if this is the first chart, set the class label for each
+				// class
+				m_pPlayerData->SetDialogVariable(
+				CFmtStr( "class%d", iChartBar + 1 ),
+				g_pVGuiLocalize->Find( g_aPlayerClassNames[iClass] ) );
 			}
 			// draw the bar for this class
-			DisplayBarValue( iChart, iChartBar++, m_aClassStats[i], m_statBarGraph[iChart], m_displayBarGraph[iChart], flMax );
+			DisplayBarValue( iChart, iChartBar++, m_aClassStats[i],
+							 m_statBarGraph[iChart], m_displayBarGraph[iChart],
+							 flMax );
 		}
 	}
 }
@@ -868,8 +1010,12 @@ void CTFStatsSummaryPanel::UpdateTip()
 	SetDialogVariable( "tiptext", g_TFTips.GetRandomTip( iTipClass ) );
 
 	if ( m_pTipImage )
-	{	//This + 1 on the end of ENGINEER is the only thing propping up the JACK tip class.
-		if ( iTipClass > TF_CLASS_UNDEFINED && iTipClass <= (TF_CLASS_ENGINEER + 1))
+	{
+		// P4SS - Only allow Soldier, Demoman, Medic, and JACK tips. "Engineer + 1" is the JACK.
+		if ( iTipClass == TF_CLASS_SOLDIER || 
+			 iTipClass == TF_CLASS_DEMOMAN ||
+			 iTipClass == TF_CLASS_MEDIC ||
+			 iTipClass == ( TF_CLASS_ENGINEER + 1 ) )
 		{
 			m_pTipImage->SetVisible( true );
 			m_pTipImage->SetImage( g_pszTipsClassImages[iTipClass] );
@@ -888,7 +1034,7 @@ void CTFStatsSummaryPanel::UpdateControls()
 {
 	// show or hide controls depending on what mode we're in
 #ifndef _X360
-	bool bShowPlayerData = ( m_bInteractive || m_iTotalSpawns > 0 );
+	bool bShowPlayerData = ( m_bInteractive || m_iTotalSpawns > 0 || !m_bEmbedded ); //P4SS - Adding !m_bEmbedded seemingly fixed an issue where player stats were not displaying on the first instance of a load screen
 #else
 	bool bShowPlayerData = ( m_bInteractive || m_bShowBackButton || m_iTotalSpawns > 0 );
 #endif
@@ -1267,6 +1413,8 @@ void CTFStatsSummaryPanel::OnActivate()
 	ClearMapLabel();
 
 	m_bLoadingCommunityMap = false;
+
+	// P4SS. Idk why Bender Bending Rodriguez wants this here
 	ShowMapInfo( false );
 
 #ifdef _X360

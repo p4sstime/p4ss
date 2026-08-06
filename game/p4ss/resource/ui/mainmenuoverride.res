@@ -862,12 +862,32 @@
 				
 				"navUp"			"EquipButton"
 				"navDown"		"ServerBrowserButton"
-				"navRight"		"SettingsAdvancedButton"
+				"navRight"		"ReportBugButton"
+				"navLeft"		"SettingsButton"
 				
-				"FgColor" 					"Tan"
-				"defaultFgColor_override" 	"Tan"
-				"armedFgColor_override" 	"PFGreen"
-				"depressedFgColor_override" "PFDarkGreen"	
+				"image_drawcolor"	"176 165 141 255"
+				"image_armedcolor"	"152 191 101 255"
+				"image_selectedcolor"	"62 76 41 255"
+				
+				"defaultFgColor_override" 		"0 0 0 0"
+				"armedFgColor_override" 		"0 0 0 0"
+				"depressedFgColor_override"		"0 0 0 0"	
+				
+				"SubImage"
+				{
+					"ControlName"	"ImagePanel"
+					"fieldName"		"SubImage"
+					"xpos"			"cs-0.5"
+					"ypos"			"cs-0.5"
+					"zpos"			"1"
+					"wide"			"14"
+					"tall"			"14"
+					"visible"		"1"
+					"enabled"		"1"
+					"image"			"glyph_options"
+					"scaleImage"	"1"
+					"proportionaltoparent"	"1"
+				}	
 			}
 		}
 		
@@ -912,10 +932,29 @@
 				"navRight"		"ReportBugButton"
 				"navLeft"		"SettingsButton"
 				
-				"FgColor" 					"Tan"
-				"defaultFgColor_override" 	"Tan"
-				"armedFgColor_override" 	"PFGreen"
-				"depressedFgColor_override" "PFDarkGreen"	
+				"image_drawcolor"	"176 165 141 255"
+				"image_armedcolor"	"152 191 101 255"
+				"image_selectedcolor"	"62 76 41 255"
+				
+				"defaultFgColor_override" 		"0 0 0 0"
+				"armedFgColor_override" 		"0 0 0 0"
+				"depressedFgColor_override"		"0 0 0 0"	
+				
+				"SubImage"
+				{
+					"ControlName"	"ImagePanel"
+					"fieldName"		"SubImage"
+					"xpos"			"cs-0.5"
+					"ypos"			"cs-0.5"
+					"zpos"			"1"
+					"wide"			"14"
+					"tall"			"14"
+					"visible"		"1"
+					"enabled"		"1"
+					"image"			"glyph_options_advanced"
+					"scaleImage"	"1"
+					"proportionaltoparent"	"1"
+				}	
 			}
 		}
 		
@@ -960,18 +999,37 @@
 				"navRight"		"ReportBugButton"
 				"navLeft"		"SettingsButton"
 				
-				"FgColor" 					"Tan"
-				"defaultFgColor_override" 	"Tan"
-				"armedFgColor_override" 	"PFGreen"
-				"depressedFgColor_override" "PFDarkGreen"	
+				"image_drawcolor"	"176 165 141 255"
+				"image_armedcolor"	"152 191 101 255"
+				"image_selectedcolor"	"62 76 41 255"
+				
+				"defaultFgColor_override" 		"0 0 0 0"
+				"armedFgColor_override" 		"0 0 0 0"
+				"depressedFgColor_override"		"0 0 0 0"	
+				
+				"SubImage"
+				{
+					"ControlName"	"ImagePanel"
+					"fieldName"		"SubImage"
+					"xpos"			"cs-0.5"
+					"ypos"			"cs-0.5"
+					"zpos"			"1"
+					"wide"			"14"
+					"tall"			"14"
+					"visible"		"1"
+					"enabled"		"1"
+					"image"			"glyph_website"
+					"scaleImage"	"1"
+					"proportionaltoparent"	"1"
+				}	
 			}
 		}
-
-		"ReportBugButton"
+		
+		"ForumButton" //Why were we using font glyphs for the other ones? The world may never know
 		{
 			"ControlName"	"EditablePanel"
-			"fieldname"		"ReportBugButton"
-			"xpos"			"64"
+			"fieldname"		"ForumButton"
+			"xpos"			"112"
 			"ypos"			"380"
 			"zpos"			"15"
 			"wide"			"24"
@@ -1008,10 +1066,96 @@
 				"navRight"		"ReportBugButton"
 				"navLeft"		"SettingsButton"
 				
-				"FgColor" 					"Tan"
-				"defaultFgColor_override" 	"Tan"
-				"armedFgColor_override" 	"PFGreen"
-				"depressedFgColor_override" "PFDarkGreen"	
+				"image_drawcolor"	"176 165 141 255"
+				"image_armedcolor"	"152 191 101 255"
+				"image_selectedcolor"	"62 76 41 255"
+				
+				"defaultFgColor_override" 		"0 0 0 0"
+				"armedFgColor_override" 		"0 0 0 0"
+				"depressedFgColor_override"		"0 0 0 0"	
+				
+				"SubImage"
+				{
+					"ControlName"	"ImagePanel"
+					"fieldName"		"SubImage"
+					"xpos"			"cs-0.5"
+					"ypos"			"cs-0.5"
+					"zpos"			"1"
+					"wide"			"14"
+					"tall"			"14"
+					"visible"		"1"
+					"enabled"		"1"
+					"image"			"glyph_forums"
+					"scaleImage"	"1"
+					"proportionaltoparent"	"1"
+				}	
+			}
+		}
+
+		"ReportBugButton"
+		{
+			"ControlName"	"EditablePanel"
+			"fieldname"		"ReportBugButton"
+			"xpos"			"76"
+			"ypos"			"380"
+			"zpos"			"15"
+			"wide"			"24"
+			"tall"			"24"
+			"visible"		"1"
+			"PaintBackgroundType"	"0"
+
+			"SubButton"
+			{
+				"ControlName"	"CExImageButton"
+				"fieldName"		"SubButton"
+				"wide"			"24"
+				"tall"			"24"
+				"autoResize"	"0"
+				"pinCorner"		"3"
+				"visible"		"1"
+				"enabled"		"1"
+				"tabPosition"	"0"
+				"use_proportional_insets" "1"
+				"font"			"MenuGlyphs12"
+				"textAlignment"	"west"
+				"dulltext"		"0"
+				"brighttext"	"0"
+				"default"		"1"
+				
+				"sound_depressed"	"UI/buttonclick.wav"
+				"sound_released"	"UI/buttonclickrelease.wav"
+				
+				"paintbackground"	"0"
+				"paintborder"		"0"
+				
+				"navUp"			"EquipButton"
+				"navDown"		"ServerBrowserButton"
+				"navRight"		"ReportBugButton"
+				"navLeft"		"SettingsButton"
+				
+				"image_drawcolor"	"176 165 141 255"
+				"image_armedcolor"	"152 191 101 255"
+				"image_selectedcolor"	"62 76 41 255"
+				
+				"defaultFgColor_override" 		"0 0 0 0"
+				"armedFgColor_override" 		"0 0 0 0"
+				"depressedFgColor_override"		"0 0 0 0"	
+				
+				"SubImage"
+				{
+					"ControlName"	"ImagePanel"
+					"fieldName"		"SubImage"
+					"xpos"			"cs-0.5"
+					"ypos"			"cs-0.5"
+					"zpos"			"1"
+					"wide"			"14"
+					"tall"			"14"
+					"visible"		"1"
+					"enabled"		"1"
+					"image"			"glyph_bug"
+					"scaleImage"	"1"
+					"proportionaltoparent"	"1"
+				}	
 			}
 		}
 
@@ -2653,45 +2797,6 @@
 
 			//Disabled until in use
 		
-		
-		"ReportBugButton"
-		{
-			"ControlName"	"CExImageButton"
-			"fieldName"		"ReportBugButton"
-			"xpos"			"77"
-			"ypos"			"380"
-			"zpos"			"4"
-			"wide"			"24"
-			"tall"			"24"
-			"autoResize"	"0"
-			"pinCorner"		"3"
-			"visible"		"1"
-			"enabled"		"1"
-			"tabPosition"	"0"
-			"labelText"		"C"
-			"font"			"MenuGlyphs12"
-			"textAlignment"	"center"
-			"dulltext"		"0"
-			"brighttext"	"0"
-			"default"		"1"
-			"command"		"url https://github.com/p4sstime/p4ss/issues"
-			
-			"paintbackground"	"0"
-			"paintborder"		"0"
-
-			"navUp"			"EquipButton"
-			"navDown"		"ServerBrowserButton"
-			"navRight"		"PTWebsiteButton"
-			"navLeft"		"SettingsAdvancedButton"
-
-			"sound_depressed"	"UI/buttonclick.wav"
-			"sound_released"	"UI/buttonclickrelease.wav"
-			
-			"FgColor" 					"Tan"
-			"defaultFgColor_override" 	"Tan"
-			"armedFgColor_override" 	"PFGreen"
-			"depressedFgColor_override" "PFDarkGreen"
-		}
 		
 		"BackToReplaysButton"
 		{
