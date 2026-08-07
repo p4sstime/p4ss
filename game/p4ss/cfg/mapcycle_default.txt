@@ -1,0 +1,14 @@
+// Default mapcycle file for PASS Fortress.
+//
+// DO NOT MODIFY THIS FILE!
+// Instead, copy it to mapcycle.txt and modify that file.  If no custom mapcycle.txt file is found,
+// this file will be used as the default.
+//
+// Also, note that the "mapcyclefile" convar can be used to specify a particular mapcycle file.
+
+pass_arena2_classic
+pass_boutique
+pass_stadium
+pass_stonework
+pass_plexiglass
+
