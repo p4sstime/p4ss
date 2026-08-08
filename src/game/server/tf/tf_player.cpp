@@ -196,6 +196,7 @@ ConVar tf_damageforcescale_pyro_jump( "tf_damageforcescale_pyro_jump", "8.5", FC
 ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 
 
+
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 ConVar tf_damage_multiplier_blue( "tf_damage_multiplier_blue", "1.0", FCVAR_CHEAT, "All incoming damage to a blue player is multiplied by this value" );
 ConVar tf_damage_multiplier_red( "tf_damage_multiplier_red", "1.0", FCVAR_CHEAT, "All incoming damage to a red player is multiplied by this value" );
@@ -894,6 +895,10 @@ CTFPlayer::CTFPlayer()
 	m_bHudClassAutoKill = false;
 	m_bMedigunAutoHeal  = false;
 	m_bWantsResupply    = false;
+	m_flLastDuckPressTime = -1.0f;
+	m_flLastJumpPressTime = -1.0f;
+	m_bCtapJumpPending = false;
+	m_flCtapSoundExpiryTime = -1.0f;
 
 	m_vecLastDeathPosition = Vector( FLT_MAX, FLT_MAX, FLT_MAX );
 
@@ -2835,6 +2840,7 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheScriptSound( "TFPlayer.ReCharged" );
 	PrecacheScriptSound( "Camera.SnapShot" );
 	PrecacheScriptSound( "TFPlayer.Dissolve" );
+	PrecacheScriptSound( "TFPlayer.Ctap" );
 
 	PrecacheScriptSound( "Saxxy.TurnGold" );
 
@@ -3070,7 +3076,43 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 		}
 	}
 
+	bool bDuckJustPressed = ( ucmd->buttons & IN_DUCK ) && !( m_nButtons & IN_DUCK );
+	bool bJumpJustPressed = ( ucmd->buttons & IN_JUMP ) && !( m_nButtons & IN_JUMP );
+
+	if ( bDuckJustPressed )
+	{
+		m_flLastDuckPressTime = gpGlobals->curtime;
+	}
+
+	if ( bJumpJustPressed && ( GetFlags() & FL_ONGROUND ) )
+	{
+		if ( tf_passtime_ctap_helper.GetBool() && IsPlayerClass( TF_CLASS_SOLDIER ) && m_flLastDuckPressTime > 0.0f )
+		{
+			float flDuckToJump = gpGlobals->curtime - m_flLastDuckPressTime;
+			if ( flDuckToJump >= tf_passtime_ctap_window_min.GetFloat() && flDuckToJump <= tf_passtime_ctap_window_max.GetFloat() )
+			{
+				m_bCtapJumpPending = true;
+			}
+		}
+	}
+
 	BaseClass::PlayerRunCommand( ucmd, moveHelper );
+
+	if ( m_bCtapJumpPending )
+	{
+		m_bCtapJumpPending = false;
+		if ( !( GetFlags() & FL_ONGROUND ) )
+		{
+			AddFlag( FL_DUCKING );
+			m_Local.m_bDucked = true;
+			m_Local.m_bDucking = false;
+			m_Local.m_flDucktime = 0.0f;
+			SetCollisionBounds( VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX );
+			SetViewOffset( VEC_DUCK_VIEW_SCALED( this ) );
+
+			m_flCtapSoundExpiryTime = gpGlobals->curtime + 0.25f;
+		}
+	}
 
 	// try to play taunt remap on input after updating user command
 	if ( IsTaunting() && m_flNextAllowTauntRemapInputTime >= 0.f && m_flNextAllowTauntRemapInputTime <= gpGlobals->curtime )
@@ -3455,6 +3497,11 @@ void CTFPlayer::Spawn()
 
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
+
+	m_flLastDuckPressTime = -1.0f;
+	m_flLastJumpPressTime = -1.0f;
+	m_bCtapJumpPending = false;
+	m_flCtapSoundExpiryTime = -1.0f;
 
 	// We have to clear this early, so that the sword knows its max health in ManageRegularWeapons below
 	m_Shared.SetDecapitations( 0 );
@@ -9925,6 +9972,13 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 
 				// Reset duck in air on self rocket impulse.
 				m_Shared.SetAirDucked( 0 );
+
+				if ( m_flCtapSoundExpiryTime > 0.0f && gpGlobals->curtime <= m_flCtapSoundExpiryTime )
+				{
+					m_flCtapSoundExpiryTime = -1.0f;
+
+					EmitSound( "TFPlayer.Ctap" );
+				}
 			}
 			else
 			{
