@@ -2,7 +2,15 @@ name: Build P4SS
 
 on:
   workflow_dispatch: 
-
+    inputs:
+      publish:
+        description: 'Publish to Steam?'
+        type: boolean
+        default: false
+      playtest:
+        description: 'Playtest app?'
+        type: boolean
+        default: true
 env:
   SOLUTION_FILE_PATH: p4ss.sln
 
@@ -63,10 +71,29 @@ jobs:
         ninja -f "${solution_out}.ninja" -j $(nproc)
 
     - name: Publish game binaries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: 'bin-linux'
         path: |
           game/p4ss/bin/linux64/*.so
           game/p4ss_linux64
         if-no-files-found: error
+
+  package_and_publish:
+    needs: [build, build-linux]
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8.0.0
+        with:
+          path: game
+          pattern: bin-*
+          merge-multiple: true
+
+      - uses: Lordfirespeed/setup-steamcmd@v2.0.2
+      - uses: Lordfirespeed/auth-steamcmd@v1.0.1
+        with:
+          steam_config_vdf: ${{secrets.STEAM_CONFIG_VDF}}
+          steam_username: pfbuilder
+
+      - run: steamcmd +login pfbuilder +run_app_build steamcmd/scripts/${{ inputs.playtest && 'p4ss_build_playtest.vdf' || 'p4ss_build.vdf' }} +quit
