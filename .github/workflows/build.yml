@@ -97,4 +97,4 @@ jobs:
           steam_config_vdf: ${{secrets.STEAM_CONFIG_VDF}}
           steam_username: pfbuilder
 
-      - run: steamcmd +login pfbuilder +run_app_build steamcmd/scripts/${{ inputs.playtest && 'p4ss_build_playtest.vdf' || 'p4ss_build.vdf' }} +quit
+      - run: steamcmd +login pfbuilder +run_app_build ${{ github.workspace }}/steamcmd/scripts/${{ inputs.playtest && 'p4ss_build_playtest.vdf' || 'p4ss_build.vdf' }} +quit
