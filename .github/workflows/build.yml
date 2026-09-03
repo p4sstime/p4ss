@@ -22,7 +22,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.1.0
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
@@ -54,7 +54,7 @@ jobs:
       VPC_ENABLE_CCACHE: 1
       CCACHE_SLOPPINESS: pch_defines,time_macros
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.1.0
 
     - uses: hendrikmuhs/ccache-action@v1.2
       with:
@@ -84,6 +84,7 @@ jobs:
     if: ${{ inputs.publish }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6.1.0
       - uses: actions/download-artifact@v8.0.0
         with:
           path: game
