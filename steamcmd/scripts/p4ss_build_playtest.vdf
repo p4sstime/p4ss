@@ -8,7 +8,7 @@
 	"ContentRoot" "../../game" // root content folder, relative to location of this file
 	"BuildOutput" "../output/" // build output folder for build logs and build cache files
 
-	// "SetLive" "test" // automatically publish this build to the test branch
+	"SetLive" "test" // automatically publish this build to the test branch
 
 	"Depots"
 	{
