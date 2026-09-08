@@ -794,19 +794,16 @@ ConVar mp_tournament_prevent_team_switch_on_readyup( "mp_tournament_prevent_team
 ConVar mp_windifference( "mp_windifference", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Score difference between teams before server changes maps", true, 0, false, 0 );
 ConVar mp_windifference_min( "mp_windifference_min", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Minimum score needed for mp_windifference to be applied", true, 0, false, 0 );
 
-ConVar tf_tournament_classlimit_scout( "tf_tournament_classlimit_scout", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Scouts.\n" );
-ConVar tf_tournament_classlimit_sniper( "tf_tournament_classlimit_sniper", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Snipers.\n" );
-ConVar tf_tournament_classlimit_soldier( "tf_tournament_classlimit_soldier", "3", FCVAR_REPLICATED, "Tournament mode per-team class limit for Soldiers.\n" );
-ConVar tf_tournament_classlimit_demoman( "tf_tournament_classlimit_demoman", "1", FCVAR_REPLICATED, "Tournament mode per-team class limit for Demomenz.\n" );
-ConVar tf_tournament_classlimit_medic( "tf_tournament_classlimit_medic", "1", FCVAR_REPLICATED, "Tournament mode per-team class limit for Medics.\n" );
-ConVar tf_tournament_classlimit_heavy( "tf_tournament_classlimit_heavy", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Heavies.\n" );
-ConVar tf_tournament_classlimit_pyro( "tf_tournament_classlimit_pyro", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Pyros.\n" );
-ConVar tf_tournament_classlimit_spy( "tf_tournament_classlimit_spy", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Spies.\n" );
-ConVar tf_tournament_classlimit_engineer( "tf_tournament_classlimit_engineer", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Engineers.\n" );
+ConVar pf_classlimit_soldier( "pf_classlimit_soldier", "3", FCVAR_REPLICATED, "Per-team class limit for Soldiers.\n" );
+ConVar pf_classlimit_demoman( "pf_classlimit_demoman", "1", FCVAR_REPLICATED, "Per-team class limit for Demomen.\n" );
+ConVar pf_classlimit_medic( "pf_classlimit_medic", "1", FCVAR_REPLICATED, "Per-team class limit for Medics.\n" );
+
 ConVar tf_tournament_classchange_allowed( "tf_tournament_classchange_allowed", "1", FCVAR_REPLICATED, "Allow players to change class while the game is active?.\n" );
 ConVar tf_tournament_classchange_ready_allowed( "tf_tournament_classchange_ready_allowed", "1", FCVAR_REPLICATED, "Allow players to change class after they are READY?.\n" );
 
-ConVar tf_classlimit( "tf_classlimit", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Limit on how many players can be any class (i.e. tf_class_limit 2 would limit 2 players per class).\n", true, 0.f, false, 0.f );
+//Legacy TF command, making it dev only in favor of using pf_classlimit_*
+ConVar tf_classlimit( "tf_classlimit", "0", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED | FCVAR_NOTIFY, "Limit on how many players can be any class (i.e. tf_class_limit 2 would limit 2 players per class).\n", true, 0.f, false, 0.f );
+
 ConVar tf_player_movement_restart_freeze( "tf_player_movement_restart_freeze", "1", FCVAR_REPLICATED, "When set, prevent player movement during round restart" );
 
 ConVar tf_autobalance_ask_candidates_maxtime( "tf_autobalance_ask_candidates_maxtime", "10", FCVAR_REPLICATED );
@@ -14749,35 +14746,25 @@ void CTFGameRules::GetTeamGlowColor( int nTeam, float &r, float &g, float &b )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
+//PF - This is where we have removed access to the other classes.
+//The game treats their classlimits as 0 even outside of Tournament mode.
 int CTFGameRules::GetClassLimit( int iClass )
 {
-	if ( IsInTournamentMode() || IsPasstimeMode() )
+	switch ( iClass )
 	{
-		switch ( iClass )
-		{
-		case TF_CLASS_SCOUT: return tf_tournament_classlimit_scout.GetInt(); break;
-		case TF_CLASS_SNIPER: return tf_tournament_classlimit_sniper.GetInt(); break;
-		case TF_CLASS_SOLDIER: return tf_tournament_classlimit_soldier.GetInt(); break;
-		case TF_CLASS_DEMOMAN: return tf_tournament_classlimit_demoman.GetInt(); break;
-		case TF_CLASS_MEDIC: return tf_tournament_classlimit_medic.GetInt(); break;
-		case TF_CLASS_HEAVYWEAPONS: return tf_tournament_classlimit_heavy.GetInt(); break;
-		case TF_CLASS_PYRO: return tf_tournament_classlimit_pyro.GetInt(); break;
-		case TF_CLASS_SPY: return tf_tournament_classlimit_spy.GetInt(); break;
-		case TF_CLASS_ENGINEER: return tf_tournament_classlimit_engineer.GetInt(); break;
-		default:
-			break;
-		}
+	case TF_CLASS_SCOUT: return 0; break;
+	case TF_CLASS_SNIPER: return 0; break;
+	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt(); break;
+	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt(); break;
+	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt(); break;
+	case TF_CLASS_HEAVYWEAPONS: return 0; break;
+	case TF_CLASS_PYRO: return 0; break;
+	case TF_CLASS_SPY: return 0; break;
+	case TF_CLASS_ENGINEER: return 0; break;
+	default:
+		break;
 	}
-	else if ( IsInHighlanderMode() )
-	{
-		return 1;
-	}
-	else if ( tf_classlimit.GetInt() )
-	{
-		return tf_classlimit.GetInt();
-	}
-
-	return NO_CLASS_LIMIT;
 }
 
 //-----------------------------------------------------------------------------
