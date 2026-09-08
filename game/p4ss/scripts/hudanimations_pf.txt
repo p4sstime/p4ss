@@ -1,3 +1,49 @@
+// sample animation script
+//
+//
+// commands:
+//	Animate <panel name> <variable> <target value> <interpolator> <start time> <duration>
+//		variables:
+//			FgColor
+//			BgColor
+//			Position
+//			Size
+//			Blur		(hud panels only)
+//			TextColor	(hud panels only)
+//			Ammo2Color	(hud panels only)
+//			Alpha		(hud weapon selection only)
+//			SelectionAlpha  (hud weapon selection only)
+//			TextScan	(hud weapon selection only)
+//
+//		interpolator:
+//			Linear
+//			Accel - starts moving slow, ends fast
+//			Deaccel - starts moving fast, ends slow
+//			Spline - simple ease in/out curve
+//			Pulse - < freq > over the duration, the value is pulsed (cosine) freq times ending at the dest value (assuming freq is integral)
+//			Flicker - < randomness factor 0.0 to 1.0 > over duration, each frame if random # is less than factor, use end value, otherwise use prev value
+//			Gain - < bias > Lower bias values bias towards 0.5 and higher bias values bias away from it.
+//			Bias - < bias > Lower values bias the curve towards 0 and higher values bias it towards 1.
+//
+//	RunEvent <event name> <start time>
+//		starts another even running at the specified time
+//
+//	StopEvent <event name> <start time>
+//		stops another event that is current running at the specified time
+//
+//	StopAnimation <panel name> <variable> <start time>
+//		stops all animations refering to the specified variable in the specified panel
+//
+//	StopPanelAnimations <panel name> <start time>
+//		stops all active animations operating on the specified panel
+//
+//  SetFont <panel name> <fontparameter> <fontname from scheme> <set time> 
+//
+//	SetTexture <panel name> <textureidname> <texturefilename> <set time>
+//
+//  SetString <panel name> <string varname> <stringvalue> <set time>
+
+
 //Disable deathcam snapshot reminder
 
 event HudSnapShotReminderIn
@@ -49,8 +95,18 @@ event TrainingHudBounce
 event WinPanelAnimate
 {
 	//Placeholder, testing
-	Animate WinningTeamLabel	Position		"16 63"		Linear 0 0
-	Animate WinningTeamLabel	Position		"16 73"		Bounce 0.0 2.0
-	Animate WinningTeamLabelDropshadow	Position		"17 64"		Linear 0 0
-	Animate WinningTeamLabelDropshadow	Position		"17 74"		Bounce 0.0 2.0
+	Animate WinningTeamLabel		fgcolor		"235 226 202 0"		Linear 0 0
+	Animate WinningTeamLabel		fgcolor		"235 226 202 255"		Deaccel 0.2 0.8	
+	Animate WinningTeamLabelDropshadow	fgcolor		"32 32 32 0"		Linear 0 0
+	Animate WinningTeamLabelDropshadow	fgcolor		"32 32 32 255"		Deaccel 0.2 0.8	
+	
+	Animate WinPanelBGBorder	Position		"50 0"		Linear 0 0
+	Animate WinPanelBGBorder	Position		"50 10"		Deaccel 0 0.6
+
+	Animate WinPanelBGBorder	Alpha		"0"		Linear 0 0
+	Animate WinPanelBGBorder	Alpha		"255"		Deaccel 0 0.8
+	
+	Animate WinReasonLabel		fgcolor		"255 255 255 0"		Linear 0 0
+	Animate WinReasonLabel		fgcolor		"255 255 255 255"		Deaccel 1.2 0.8	
+
 }

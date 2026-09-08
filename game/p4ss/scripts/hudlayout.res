@@ -893,7 +893,7 @@
 		"visible"				"1"
 		"enabled"				"1"
 		"xpos"					"c-150"
-		"ypos"					"215"
+		"ypos"					"105"
 		"wide"					"300"
 		"tall"					"300"
 		"zpos"					"4"
