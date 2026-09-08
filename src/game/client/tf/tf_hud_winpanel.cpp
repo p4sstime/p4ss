@@ -96,9 +96,6 @@ void CTFWinPanel::SetVisible( bool state )
 	if ( state == IsVisible() )
 		return;
 
-	// PF FANCY ANIMATION
-	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( this, "WinPanelAnimate" );
-
 	BaseClass::SetVisible( state );
 }
 
@@ -438,6 +435,10 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 				SetDialogVariable( "DetailsLabel", wzCapMsg );
 			}
 		}
+
+		// PF FANCY ANIMATION
+		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence(
+		this, "WinPanelAnimate" );
 
 		// get the current & previous team scores
 		int iBlueTeamPrevScore = event->GetInt( "blue_score_prev", 0 );
