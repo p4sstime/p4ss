@@ -11008,8 +11008,8 @@ void GlowColor_Callback( IConVar *var, const char *pOldValue, float flOldValue )
 }
 
 	ConVar pf_glow_healthcolor(
-	"pf_glow_healthcolor", "1", FCVAR_ARCHIVE,
-	"Enables health-based coloring of the teammate glow.", GlowColor_Callback );
+	"pf_glow_healthcolor", "0", FCVAR_ARCHIVE,
+	"Enables health-based coloring of the teammate glow. Might make team recognition difficult.", GlowColor_Callback );
 	//-----------------------------------------------------------------------------
 	// Purpose:
 	//-----------------------------------------------------------------------------
