@@ -96,15 +96,8 @@ void CTFWinPanel::SetVisible( bool state )
 	if ( state == IsVisible() )
 		return;
 
-//	PF - show objective hud during winpanel by commenting this out. Maybe replace these with the animation triggers?
-//	if ( state )
-//	{
-//		HideLowerPriorityHudElementsInGroup( "mid" );
-//	}
-//	else
-//	{
-//		UnhideLowerPriorityHudElementsInGroup( "mid" );
-//	}
+	// PF FANCY ANIMATION
+	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( this, "WinPanelAnimate" );
 
 	BaseClass::SetVisible( state );
 }
