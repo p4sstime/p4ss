@@ -45,3 +45,12 @@ event TrainingHudBounce
 	Animate ObjectiveStatusTraining	Position		"c-200 0"		Linear 0 0
 	Animate ObjectiveStatusTraining	Position		"c-200 20"		Bounce 0.0 2.0
 }
+
+event WinPanelAnimate
+{
+	//Placeholder, testing
+	Animate WinningTeamLabel	Position		"16 63"		Linear 0 0
+	Animate WinningTeamLabel	Position		"16 73"		Bounce 0.0 2.0
+	Animate WinningTeamLabelDropshadow	Position		"17 64"		Linear 0 0
+	Animate WinningTeamLabelDropshadow	Position		"17 74"		Bounce 0.0 2.0
+}
