@@ -61,6 +61,13 @@ public:
 	virtual const Vector &GetRenderOrigin( void );
 	virtual const QAngle &GetRenderAngles( void );
 
+	// Returns true if this trail is attached to the passtime ball, used to apply
+	// client-controlled pf_ball_trail_width/pf_ball_trail_lifetime convars.
+	bool IsPasstimeBallTrail( void ) const;
+	float GetEffectiveLifeTime( void ) const;
+	float GetEffectiveStartWidth( void ) const;
+	float GetEffectiveEndWidth( void ) const;
+
 	// On data update
 	virtual void OnPreDataChanged( DataUpdateType_t updateType );
 	virtual void OnDataChanged( DataUpdateType_t updateType );
