@@ -147,17 +147,36 @@ void C_TFProjectile_Rocket::CreateTrails( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
+//PF ROCKET TRAILS TOGGLE
+static ConVar pf_legacy_rocket_trails( "pf_legacy_rocket_trails", "0",
+FCVAR_CLIENTDLL, "Use the non-team-colored rocket trail for all teams" );
+
 const char *C_TFProjectile_Rocket::GetTrailParticleName( void )
 {
-	if ( GetLauncher() )
+	if ( GetLauncher() ) //if we ever have a rocket jumper for some reason, prioritize this first
 	{
 		int iNoSelfBlastDamage = 0;
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( GetLauncher(), iNoSelfBlastDamage, no_self_blast_dmg );
+		CALL_ATTRIB_HOOK_INT_ON_OTHER( GetLauncher(), iNoSelfBlastDamage,
+									   no_self_blast_dmg );
 		if ( iNoSelfBlastDamage )
 		{
 			return "rockettrail_RocketJumper";
 		}
 	}
-	
-	return "rockettrail"; 
+
+	if ( pf_legacy_rocket_trails.GetBool() ) //then check for legacy rocket trails
+	{
+		return "rockettrail";
+	}
+
+	switch( GetTeamNumber() ) //otherwise, use team-colored trails
+	{
+	case TF_TEAM_BLUE:
+		return "rockettrail_pf_blue";
+	case TF_TEAM_RED:
+		return "rockettrail_pf_red";
+	default:
+		return "rockettrail";
+	}
 }
