@@ -77,8 +77,6 @@ void cc_scoreboard_convar_changed( IConVar *pConVar, const char *pOldString, flo
 ConVar tf_scoreboard_ping_as_text( "tf_scoreboard_ping_as_text", "0", FCVAR_ARCHIVE, "Show ping values as text in the scoreboard.", cc_scoreboard_convar_changed );
 ConVar tf_scoreboard_alt_class_icons( "tf_scoreboard_alt_class_icons", "0", FCVAR_ARCHIVE, "Show alternate class icons in the scoreboard." );
 
-ConVar pf_scoreboard_use_shortnames( "pf_scoreboard_use_shortnames", "0", FCVAR_ARCHIVE, "Use shortnames in place of player names in the scoreboard." );
-
 extern bool IsInCommentaryMode( void );
 extern void AddSubKeyNamed( KeyValues *pKeys, const char *pszName );
 
@@ -1157,7 +1155,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			KeyValues *pKeyValues = new KeyValues( "data" );
 			pKeyValues->SetInt( "playerIndex", playerIndex );
 
-			if ( pf_scoreboard_use_shortnames.GetBool() )
+			if ( pf_use_shortnames.GetBool() )
 			{
 				pKeyValues->SetWString( "name", GetPlayerShortName( playerIndex ) );
 			}

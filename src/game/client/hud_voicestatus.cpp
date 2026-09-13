@@ -16,7 +16,22 @@
 #include "voice_common.h"
 #include "vgui_avatarimage.h"
 
+#include "c_tf_player.h" //added for shortnames
+
 ConVar *sv_alltalk = NULL;
+
+const char *GetPlayerVoiceStatusName( int iPlayerIndex )
+{
+	if ( pf_use_shortnames.GetBool() )
+	{
+		static char szShortName[MAX_PLAYER_NAME_LENGTH];
+		const wchar_t *wszShortName = GetPlayerShortName( iPlayerIndex );
+		g_pVGuiLocalize->ConvertUnicodeToANSI( wszShortName, szShortName,
+											   sizeof( szShortName ) );
+		return szShortName;
+	}
+	return g_PR->GetPlayerName( iPlayerIndex );
+}
 
 //=============================================================================
 // Icon for the local player using voice
@@ -359,7 +374,7 @@ void CHudVoiceStatus::Paint()
 
 		c[3] = 128;
 
-		const char *pName = g_PR ? g_PR->GetPlayerName(playerId) : "unknown";
+		const char *pName = g_PR ? GetPlayerVoiceStatusName(playerId) : "unknown";
 		wchar_t szconverted[ 64 ];
 
 		// Add the location, if any

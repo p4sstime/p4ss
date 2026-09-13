@@ -54,11 +54,9 @@ ConVar cl_hud_killstreak_display_time( "cl_hud_killstreak_display_time", "3", FC
 ConVar cl_hud_killstreak_display_fontsize( "cl_hud_killstreak_display_fontsize", "0", FCVAR_ARCHIVE, "Adjusts font size of killstreak notices.  Range is from 0 to 2 (default is 1)." );
 ConVar cl_hud_killstreak_display_alpha( "cl_hud_killstreak_display_alpha", "120", FCVAR_ARCHIVE, "Adjusts font alpha value of killstreak notices.  Range is from 0 to 255 (default is 200)." );
 
-ConVar pf_killfeed_use_nicks( "pf_killfeed_use_nicks", "0", FCVAR_ARCHIVE, "Use short nicknames in the killfeed instead of full names." );
-
 const char* GetPlayerDeathNoticeName( int iPlayerIndex )
 {
-	if ( pf_killfeed_use_nicks.GetBool() )
+	if ( pf_use_shortnames.GetBool() )
 	{
 		static char szShortName[MAX_PLAYER_NAME_LENGTH];
 		const wchar_t *wszShortName = GetPlayerShortName( iPlayerIndex );
