@@ -122,23 +122,23 @@ void CTFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer 
 		// Send every STATS_SEND_FREQUENCY (1.f)
 		if ( gpGlobals->curtime > m_flNextDamageAndHealingSend )
 		{
-			m_iDamage.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE] );
-			m_iDamageAssist.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_ASSIST] );
-			m_iDamageBoss.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_BOSS] );
-			m_iHealing.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_HEALING] );
-			m_iHealingAssist.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_HEALING_ASSIST] );
-			m_iDamageBlocked.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_BLOCKED] );
+			m_iDamage           .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE] );
+			m_iDamageAssist     .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_ASSIST] );
+			m_iDamageBoss       .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_BOSS] );
+			m_iHealing          .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_HEALING] );
+			m_iHealingAssist    .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_HEALING_ASSIST] );
+			m_iDamageBlocked    .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_DAMAGE_BLOCKED] );
 			m_iCurrencyCollected.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_CURRENCY_COLLECTED] );
-			m_iBonusPoints.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_BONUS_POINTS] );
-			m_iPlayerLevel.Set( iIndex, pTFPlayer->GetExperienceLevel() );
+			m_iBonusPoints      .Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_BONUS_POINTS] );
+			m_iPlayerLevel      .Set( iIndex, pTFPlayer->GetExperienceLevel() );
 		}
 
 		if ( TFGameRules()->IsPasstimeMode() )
 		{
-			m_iP4ssScores.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SCORES] );
-			m_iP4ssAssists.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_ASSISTS] );
-			m_iP4ssSaves.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_SAVES] );
-			m_iP4ssIntercepts.Set( iIndex, pTFPlayerStats->statsCurrentRound.m_iStat[TFSTAT_P4SS_INTERCEPTS] );
+			m_iP4ssScores    .Set( iIndex, pTFPlayerStats->statsAccumulated.m_iStat[TFSTAT_P4SS_SCORES] );
+			m_iP4ssAssists   .Set( iIndex, pTFPlayerStats->statsAccumulated.m_iStat[TFSTAT_P4SS_ASSISTS] );
+			m_iP4ssSaves     .Set( iIndex, pTFPlayerStats->statsAccumulated.m_iStat[TFSTAT_P4SS_SAVES] );
+			m_iP4ssIntercepts.Set( iIndex, pTFPlayerStats->statsAccumulated.m_iStat[TFSTAT_P4SS_INTERCEPTS] );
 		}
 	}
 
