@@ -11,6 +11,7 @@ steam_appid.txt
 
 # Ignore build artifacts
 game/p4ss_linux64
+game/cfg/*
 game/p4ss/custom
 game/p4ss/GameState.txt
 game/p4ss/tf2_playerstats.dmx
