@@ -1198,6 +1198,7 @@
 			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Bottle"
 			"item_name"	"#TF_Weapon_Bottle"
+			"item_description"	"#PF_ItemDescription_Bottle"
 			"item_slot"	"melee"
 			"item_quality"	"normal"
 			"min_ilevel"	"1"
@@ -1358,9 +1359,9 @@
 				"can_heal_allies"		"1"
 			}
 			"base_item_name"	"The Crusader's Crossbow"
-			"item_type_name"	"#TF_Weapon_Crossbow"
-			"item_name"	"#TF_CrusadersCrossbow"
-			"item_description"	"#TF_CrusadersCrossbow_desc"
+			"item_type_name"	"#PF_ItemType_Medicbow"
+			"item_name"	"#PF_ItemName_Medicbow"
+			"item_description"		"#PF_ItemDescription_Medicbow"
 			"item_logname"	"crusaders_crossbow"
 			"item_iconname"	"crusaders_crossbow"
 			"item_slot"	"primary"
@@ -1379,17 +1380,18 @@
 			}
 			"static_attrs"
 			{
+				"medicbow explain"			"1"
 				"min_viewmodel_offset"				"10 0 -14"
 				"weapon_stattrak_module_scale"			"0.608"
 			}
 			"attributes"
 			{
-				"sniper no headshots"
+				"sniper no headshots hidden"
 				{
 					"attribute_class" "set_weapon_mode"
 					"value" "1"
 				}
-				"maxammo primary reduced"
+				"maxammo primary reduced hidden"
 				{
 					"attribute_class"	"mult_maxammo_primary"
 					"value"	"0.25"
@@ -1459,7 +1461,7 @@
 					"attribute_class"	"kill_refills_meter"
 					"value"			"0.25"
 				}
-				"move speed bonus shield required"
+				"move speed bonus"
 				{
 					"attribute_class"	"mult_player_movespeed_shieldrequired"
 					"value" "1.10"
@@ -1674,6 +1676,7 @@
 			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_GrenadeLauncher"
 			"item_name"	"#TF_Weapon_GrenadeLauncher"
+			"item_description"	"#PF_ItemDescription_GrenadeLauncher"
 			"item_slot"	"primary"
 			"anim_slot"	"secondary"
 			"item_quality"	"normal"
@@ -1813,6 +1816,7 @@
 			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Medigun"
 			"item_name"	"#TF_Weapon_Medigun"
+			"item_description"	"#PF_ItemDescription_Medigun"
 			"item_slot"	"secondary"
 			"equip_region"	"medigun_backpack"
 			"item_quality"	"normal"
@@ -1843,6 +1847,7 @@
 			}
 			"static_attrs"
 			{
+				"medigun explain"			"1"
 				"weapon_stattrak_module_scale"			"1"
 				"min_viewmodel_offset"					"10 0 -9"
 			}
@@ -2041,7 +2046,8 @@
 			"item_logname"	"iron_bomber"
 			"item_iconname"	"iron_bomber"
 			"item_type_name"	"#TF_Weapon_GrenadeLauncher"
-			"item_name"		"#TF_Weapon_Iron_bomber"
+			"item_name"		"#PF_ItemName_Bomber"
+			"item_description"	"#PF_ItemDescription_Bomber"
 			"item_slot"		"primary"
 			"anim_slot"		"secondary"
 			"item_quality"		"normal"
@@ -2165,6 +2171,7 @@
 			"item_type_name"	"#TF_Weapon_RocketLauncher"
 			// "item_name"	"#TF_Weapon_RocketLauncher"
 			"item_name"	"#TF_Weapon_RocketLauncher"
+			"item_description"	"#PF_ItemDescription_RocketLauncher"
 			"item_slot"	"primary"
 			"item_quality"	"normal"
 			"baseitem" "0"
@@ -2478,6 +2485,7 @@
 			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Shovel"
 			"item_name"	"#TF_Weapon_Shovel"
+			"item_description"	"#PF_ItemDescription_Shovel"
 			"item_slot"	"melee"
 			"item_quality"	"normal"
 			"min_ilevel"	"1"
@@ -2495,6 +2503,24 @@
 			"static_attrs"
 			{
 				"min_viewmodel_offset"					"10 -6 -12"
+			}
+			"attributes"
+			{
+				"fire rate penalty meleeswing"
+				{
+					"attribute_class"	"mult_postfiredelay"
+					"value"	"1.2"
+				}
+				"mod crit while airborne"
+				{
+					"attribute_class"	"crit_while_airborne"
+					"value"	"1"
+				}
+				"crit mod disabled hidden"
+				{
+					"attribute_class"	"mult_crit_chance"
+					"value"	"0"
+				}
 			}
 			"mouse_pressed_sound"	"ui/item_shovel_pickup.wav"
 			"drop_sound"		"ui/item_shovel_drop.wav"
@@ -2777,6 +2803,7 @@
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Bonesaw"
 			"item_name"	"#TF_Unique_Achievement_Bonesaw1"
+			"item_description"		"#PF_ItemDescription_Ubersaw"
 			"item_slot"	"melee"
 			"image_inventory"	"backpack/weapons/c_models/c_ubersaw/c_ubersaw"
 			"image_inventory_size_w"		"128"
@@ -2804,7 +2831,7 @@
 					"attribute_class"	"add_onhit_ubercharge"
 					"value"	"0.25"
 				}
-				"fire rate penalty"
+				"fire rate penalty meleeswing"
 				{
 					"attribute_class"	"mult_postfiredelay"
 					"value"	"1.2"
@@ -3518,8 +3545,9 @@
 			}
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Pickaxe"
-			"item_name"	"#TF_Unique_Achievement_Pickaxe"
-			"item_logname"	"unique_pickaxe"
+			"item_name"	"#PF_ItemName_Pickaxe"
+			"item_description"	"#PF_ItemDescription_Pickaxe"
+			"item_logname"	"unique_pickaxe_escape"
 			"item_slot"	"melee"
 			"item_quality"	"unique"
 			"propername"	"1"
@@ -3546,15 +3574,20 @@
 					"attribute_class"	"provide_on_active"
 					"value" "1"
 				}
-				"mod shovel damage boost"
+				"mod shovel speed boost"
 				{
 					"attribute_class"	"set_weapon_mode"
-					"value"	"1"
+					"value"	"2"
 				}
 				"reduced_healing_from_medics"
 				{
 					"attribute_class"	"mult_healing_from_medics"
 					"value" "0.1"
+				}
+				"self mark for death"
+				{
+					"attribute_class"	"self_mark_for_death"
+					"value"	"1"
 				}
 				"special taunt"
 				{
@@ -3587,6 +3620,7 @@
 			}
 			"item_type_name" 	"#TF_Wearable_Boots"
 			"item_name"		"#TF_Unique_Blast_Boots"
+			"item_description"		"#PF_ItemDescription_Gunboats"
 			"item_slot"		"secondary"
 			"equip_region"	"feet"
 			"anim_slot"		"FORCE_NOT_USED"
@@ -3815,6 +3849,7 @@
 			"armory_desc"	"stockitem"
 			"item_type_name"	"#TF_Weapon_Bottle"
 			"item_name"	"#TF_Weapon_Bottle"
+			"item_description"	"#PF_ItemDescription_Bottle"
 			"item_slot"	"melee"
 			"item_quality"		"unique"
 			"min_ilevel"	"1"
@@ -4817,8 +4852,8 @@
 			// "show_in_armory"	"1"
 			"baseitem" "1"
 			"item_type_name"	"#TF_Weapon_StickBomb"
-			"item_name"	"#TF_UllapoolCaber"
-			"item_description"	"#TF_UllapoolCaber_Desc"
+			"item_name"	"#PF_ItemName_Boomstick"
+			"item_description"		"#PF_ItemDescription_Boomstick"
 			"item_logname"	"ullapool_caber"
 			"item_iconname"	"ullapool_caber"
 			"item_slot"	"melee"
@@ -4838,13 +4873,14 @@
 			}
 			"static_attrs"
 			{
+				"boomstick explain"			"1"
 				"min_viewmodel_offset"		"12 0 -17"				
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 			"attributes"
 			{
-				"fire rate penalty"
+				"fire rate penalty meleeswing"
 				{
 					"attribute_class"	"mult_postfiredelay"
 					"value"	"1.2"
@@ -4854,7 +4890,7 @@
 					"attribute_class"	"mult_single_wep_deploy_time"
 					"value"	"2.0"
 				}
-				"crit mod disabled"
+				"crit mod disabled hidden"
 				{
 					"attribute_class"	"mult_crit_chance"
 					"value"	"0"
@@ -4894,7 +4930,8 @@
 			"prefab"	"weapon_demoman_boots"
 			"show_in_armory"	"1"
 			"item_type_name" 	"#TF_Wearable_Boots"
-			"item_name"		"#TF_Ali_Babas_Wee_Booties"
+			"item_name"		"#PF_ItemName_RocketBoots"
+			"item_description"		"#PF_ItemDescription_RocketBoots"
 			"min_ilevel"		"10"
 			"max_ilevel"		"10"
 			"image_inventory"	"backpack/workshop/player/items/demo/demo_booties/demo_booties"
@@ -4921,13 +4958,13 @@
 			"item_type_name" 	"#TF_Wearable_Shield"
 			"item_logname" "splendid_screen"
 			"item_iconname" "splendid_screen"
-			"item_name"		"#TF_SplendidScreen"
-			"item_description"	"#TF_SplendidScreen_Desc"
+			"item_name"		"#PF_ItemName_PFShield"
+			"item_description"		"#PF_ItemDescription_PFShield"
 			"item_slot"		"secondary"
 			"equip_region"	"arms"
 			"anim_slot"		"FORCE_NOT_USED"
 			"item_quality"		"normal"
-			"propername"	"1"
+			"propername"	"0"
 			"min_ilevel"		"10"
 			"max_ilevel"		"10"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_persian_shield/c_persian_shield"
@@ -4943,14 +4980,18 @@
 			{
 				"demoman"	"1"
 			}
+			"static_attrs"
+			{
+				"shield explain"			"1"		
+			}
 			"attributes"
 			{
-				"charge recharge rate increased"
+				"charge recharge rate increased hidden"
 				{
 					"attribute_class"	"charge_recharge_rate"
 					"value"	"1.5"
 				}
-				"charge impact damage increased"
+				"charge impact damage increased hidden"
 				{
 					"attribute_class"	"charge_impact_damage"
 					"value"			"1.7"
@@ -5035,7 +5076,7 @@
 			}
 			"attributes"
 			{
-				"fire rate penalty"
+				"fire rate penalty meleeswing"
 				{
 					"attribute_class"	"mult_postfiredelay"
 					"value"	"1.1"
@@ -5089,7 +5130,6 @@
 			"attach_to_hands" "1"
 			"used_by_classes"
 			{
-				"soldier"	"1"
 			}
 			"static_attrs"
 			{
@@ -5097,7 +5137,7 @@
 			}
 			"attributes"
 			{
-				"fire rate penalty"
+				"fire rate penalty meleeswing"
 				{
 					"attribute_class"	"mult_postfiredelay"
 					"value"	"1.2"
@@ -5233,6 +5273,7 @@
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_RocketLauncher"
 			"item_name"	"#TF_TheOriginal"
+			"item_description"	"#PF_ItemDescription_PFLauncher"
 			"item_slot"	"primary"
 			"item_quality"	"unique"
 			"propername"	"1"
@@ -5250,6 +5291,7 @@
 			}
 			"static_attrs"
 			{
+				"pflauncher explain"	"1"
 				"min_viewmodel_offset"					"10 0 -5"				
 			}
 			"attributes"
@@ -5349,7 +5391,6 @@
 			"attach_to_hands" "1"
 			"used_by_classes"
 			{
-				"soldier"	"1"
 			}
 			"static_attrs"
 			{
@@ -13898,6 +13939,115 @@
 			"attribute_class"	"item_drop_wave"
 			"hidden"			"1"
 			"stored_as_integer"	"1"
+		}
+		
+//////////////////////////////////////////////////////////////////////////////
+//PASS FORTRESS ATTRIBUTES
+//////////////////////////////////////////////////////////////////////////////
+
+		"5000"
+		{
+			"name"					"boomstick explain"
+			"attribute_class"		"boomstick_explain"
+			"description_string"	"#PF_ItemExplain_Boomstick"
+			"description_format"	"value_is_additive"
+		}
+		
+		"5001"
+		{
+			"name"					"grenadelauncher explain"
+			"attribute_class"		"grenadelauncher_explain"
+			"description_string"	"#PF_ItemExplain_GrenadeLauncher"
+			"description_format"	"value_is_additive"
+		}
+		
+		"5002"
+		{
+			"name"					"shield explain"
+			"attribute_class"		"shield_explain"
+			"description_string"	"#PF_ItemExplain_PFShield"
+			"description_format"	"value_is_additive"
+		}
+		
+		"5003"
+		{
+			"name"					"medicbow explain"
+			"attribute_class"		"medicbow_explain"
+			"description_string"	"#PF_ItemExplain_Medicbow"
+			"description_format"	"value_is_additive"
+		}
+		
+		"5004"
+		{
+			"name"					"medigun explain"
+			"attribute_class"		"medigun_explain"
+			"description_string"	"#PF_ItemExplain_Medigun"
+			"description_format"	"value_is_additive"
+		}
+		
+		"5005"
+		{
+			"name"					"pflauncher explain"
+			"attribute_class"		"pflauncher_explain"
+			"description_string"	"#PF_ItemExplain_PFLauncher"
+			"description_format"	"value_is_additive"
+		}
+		
+		//Hidden versions of existing stats
+
+		"5050"
+		{
+			"name"	"maxammo primary reduced hidden"
+			"attribute_class"	"mult_maxammo_primary"
+			"description_string"	"#Attrib_MaxammoPrimary_Reduced"
+			"description_format"	"value_is_percentage"
+			"hidden"	"1"
+			"effect_type"	"negative"
+			"armory_desc"	"on_wearer"
+			"stored_as_integer"	"0"
+		}
+		"5051"
+		{
+			"name"	"sniper no headshots hidden"
+			"attribute_class"	"set_weapon_mode"
+			"description_string"	"#Attrib_SniperNoHeadshots"
+			"description_format"	"value_is_additive"
+			"hidden"	"1"
+			"effect_type"	"negative"
+			"stored_as_integer"	"0"
+		}
+		
+		//Reworded fire rate stats, for melee weapons
+		"5052"
+		{
+			"name"	"fire rate penalty meleeswing"
+			"attribute_class"	"mult_postfiredelay"
+			"description_string"	"#Attrib_FireRate_Negative_Meleeswing"
+			"description_format"	"value_is_inverted_percentage"
+			"hidden"	"0"
+			"effect_type"	"negative"
+			"stored_as_integer"	"0"
+		}
+		//Hiding the charge stats on the Splendid Screen because it is becoming the new stock item and we did not tweak the base shield values yet
+		"5053"
+		{
+			"name"	"charge impact damage increased hidden"
+			"attribute_class"	"charge_impact_damage"
+			"description_string"	"#Attrib_ChargeImpactDamageIncreased"
+			"description_format"	"value_is_percentage"
+			"hidden"	"1"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"5054"
+		{
+			"name"	"charge recharge rate increased hidden"
+			"attribute_class"	"charge_recharge_rate"
+			"description_string"	"#Attrib_ChargeRechargeRateIncreased"
+			"description_format"	"value_is_percentage"
+			"hidden"	"1"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
 		}
 	}
 
