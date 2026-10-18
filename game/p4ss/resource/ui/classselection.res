@@ -206,7 +206,7 @@
 		"visible"			"1"
 		"enabled"			"1"
 		"tabPosition"		"0"
-		"labelText"			"2"	[$WIN32]
+		"labelText"			"1"	[$WIN32]
 		"labelText"			""		[$X360]
 		"textAlignment"		"south-west"
 		"Command"			"select 3"
@@ -355,7 +355,7 @@
 		"visible"			"1"
 		"enabled"			"1"
 		"tabPosition"		"0"
-		"labelText"			"4"	[$WIN32]
+		"labelText"			"2"	[$WIN32]
 		"labelText"			""		[$X360]
 		"textAlignment"		"south-west"
 		"Command"			"select 4"
@@ -559,7 +559,7 @@
 		"visible"			"1"
 		"enabled"			"1"
 		"tabPosition"		"0"
-		"labelText"			"7"	[$WIN32]
+		"labelText"			"3"	[$WIN32]
 		"labelText"			""		[$X360]
 		"textAlignment"		"south-west"
 		"Command"			"select 5"
