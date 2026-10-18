@@ -1,5 +1,28 @@
+POLAROID PHOTOS:
 For the INSTAX Wide, set your fov to 63.2 for 16:9 aspect ratios. 
 When putting the image in the Photoshop template, scale it (proportionally) until the top and bottom bounds of the image match the top and bottom bounds of the image frame.
 
 For the Polaroid, set your fov to 71.1 for 16:9 aspect ratios.
 When putting the image in the Photoshop template, do the same as described for the INSTAX Wide.
+
+FULLSCREEN MAP SCREENSHOTS
+
+
+Take the screenshot in 4K in 16:9 aspect ratio. In Photoshop, convert this 4K screenshot into a 4096x2048 image and then convert said image to .vtf.
+The loading screen already implements "black bar" cutoffs for ultrawide users, so yes, just make a 16:9 image.
+If your monitor is 1080p, you can use downsampling (setting Windows resolution to 2160p regardless of your monitor type)
+
+Set the FOV to 20. PF will automatically use the lowest FOV available, which certainly isn't 20.
+Position the camera on RED's side of the map and aim towards BLU's side from a high up position, making sure that:
+1. Upper is visible, and ideally the hole which the JACK falls through is visible too.
+2. The side surf ramps are as visible as feasibly possible.
+3. BLU goal is visible.
+4. The crosshair is aimed in a centered position (horizontally) such that the ball spawn (or center of map) appears in the center of the image.
+5. If there are any interesting map props (e.g. Windmills on Maple), you attempt to make them visible.
+6. The camera is horizontally pointed at roughly a 30-40 degree angle (Head-on shots look cool, but will typically hide the spawn doors. Bad.)
+7. The developer text isn't showing on the top left of the screen.
+
+You have more leeway in terms of vertical camera position/tilt, as long as you can show as much of the map as feasibly possible.
+
+Please bear in mind that a portion of the screenshot will be obscured by the shaded bar at the bottom the loading screen, so you need to frame the shot around this.
+If you're familiar with .res editing, you can simulate this by copying "ShadedBar" from statsummary.res and pasting it into hudlayout.res. It will be visible when the HUD is enabled.

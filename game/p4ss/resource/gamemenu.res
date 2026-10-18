@@ -77,7 +77,7 @@
 	"LearnButton"
 	{
 		"label" 		"Learn" 
-		"command" 		"#TF_Training_SelectMode"
+		"command" 		"offlinepractice"
 		"subimage" 		""
 	}
 	

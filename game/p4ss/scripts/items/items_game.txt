@@ -13953,7 +13953,7 @@
 	}
 	"4"
 	{			//Authors: Jaguarfiend, nikeshoe92, Danmar33
-		"name"				"pass_arena2_b15"
+		"name"				"pass_arena2"
 		"localizedname"		"#P4SS_Map_Arena2"
 		"authors"			"#P4SS_Authors_Arena2"
 		"rolling_match_tags"
@@ -13966,8 +13966,22 @@
 		}
 	}
 	"5"
+	{			//Authors: Jaguarfiend, nikeshoe92, Danmar33
+		"name"				"pass_arena2_classic"
+		"localizedname"		"#P4SS_Map_Arena2_Classic"
+		"authors"			"#P4SS_Authors_Arena2_Classic"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"6"
 	{			//Authors: kin
-		"name"				"pass_boutique_rc5"
+		"name"				"pass_boutique"
 		"localizedname"		"#P4SS_Map_Boutique"
 		"authors"			"#P4SS_Authors_Boutique"
 		"rolling_match_tags"
@@ -13979,9 +13993,9 @@
 			"passtime"		"1"
 		}
 	}
-	"6"
+	"7"
 	{			//Authors: kingfin, Berry, Crowbar, Lacry, Taxicat, nikeshoe92, Harlen 'UEAK' Crash
-		"name"				"pass_maple_a10"
+		"name"				"pass_maple_"
 		"localizedname"		"#P4SS_Map_Maple"
 		"authors"			"#P4SS_Authors_Maple"
 		"rolling_match_tags"
@@ -13993,9 +14007,9 @@
 			"passtime"		"1"
 		}
 	}
-	"7"
+	"8"
 	{			//Authors: Shears, Danmar33
-		"name"				"pass_plexiglass_b6"
+		"name"				"pass_plexiglass"
 		"localizedname"		"#P4SS_Map_Plexiglass"
 		"authors"			"#P4SS_Authors_Plexiglass"
 		"rolling_match_tags"
@@ -14007,9 +14021,9 @@
 			"passtime"		"1"
 		}
 	}
-	"8"
+	"9"
 	{			//Authors: DropKnock, Sean 'Heyo' Cutino, EArkham, Aeon 'Void' Bollig
-		"name"				"pass_ruin_a14"
+		"name"				"pass_ruin"
 		"localizedname"		"#P4SS_Map_Ruin"
 		"authors"			"#P4SS_Authors_Ruin"
 		"rolling_match_tags"
@@ -14021,9 +14035,9 @@
 			"passtime"		"1"
 		}
 	}
-	"9"
+	"10"
 	{			//Authors: nikeshoe92
-		"name"				"pass_stadium_rc5"
+		"name"				"pass_stadium"
 		"localizedname"		"#P4SS_Map_Stadium"
 		"authors"			"#P4SS_Authors_Stadium"
 		"rolling_match_tags"
@@ -14035,9 +14049,9 @@
 			"passtime"		"1"
 		}
 	}
-	"10"
+	"11"
 	{			//Authors: nikeshoe92
-		"name"				"pass_stonework_rc4"
+		"name"				"pass_stonework"
 		"localizedname"		"#P4SS_Map_Stonework"
 		"authors"			"#P4SS_Authors_Stonework"
 		"rolling_match_tags"
@@ -14049,9 +14063,9 @@
 			"passtime"		"1"
 		}
 	}
-	"11"
+	"12"
 	{			//Authors: kingfin, Speakers, Freyja, EArkham, Aeon 'Void' Bollig, Exactol
-		"name"				"pass_torii_a7"
+		"name"				"pass_torii"
 		"localizedname"		"#P4SS_Map_Torii"
 		"authors"			"#P4SS_Authors_Torii"
 		"rolling_match_tags"
@@ -14063,9 +14077,9 @@
 			"passtime"		"1"
 		}
 	}
-	"12"
+	"13"
 	{			//Authors: nikeshoe92
-		"name" "pass_amperage_a27"
+		"name" "pass_amperage"
 		"localizedname" "#P4SS_Map_Amperage"
 		"authors" "#P4SS_Authors_Amperage"
 			"rolling_match_tags"
@@ -14077,9 +14091,9 @@
 				"passtime"		"1"
 			}
 	}
-	"13"
+	"14"
 	{			//Authors: nikeshoe92
-		"name" "pass_greenhouse_a27"
+		"name" "pass_greenhouse"
 		"localizedname" "#P4SS_Map_Greenhouse"
 		"authors" "#P4SS_Authors_Greenhouse"
 			"rolling_match_tags"
@@ -14090,6 +14104,230 @@
 			{
 				"passtime"		"1"
 			}
+	}
+	"15"
+	{			//Authors: nikeshoe92
+		"name" "pass_park"
+		"localizedname" "#P4SS_Map_Park"
+		"authors" "#P4SS_Authors_Park"
+			"rolling_match_tags"
+			{
+				"passtime"		"1"
+			}
+			"rolling_match_target_tags"
+			{
+				"passtime"		"1"
+			}
+	}
+	"16"
+	{
+		"name"				"pass_aquarium"
+		"localizedname"		"#P4SS_Map_Aquarium"
+		"authors"			"#P4SS_Authors_Aquarium"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"17"
+	{
+		"name"				"pass_coastal"
+		"localizedname"		"#P4SS_Map_Coastal"
+		"authors"			"#P4SS_Authors_Coastal"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"18"
+	{
+		"name"				"pass_colosseum2"
+		"localizedname"		"#P4SS_Map_Colosseum2"
+		"authors"			"#P4SS_Authors_Colosseum2"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"19"
+	{
+		"name"				"pass_forgotten"
+		"localizedname"		"#P4SS_Map_Forgotten"
+		"authors"			"#P4SS_Authors_Forgotten"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"20"
+	{
+		"name"				"pass_khobar"
+		"localizedname"		"#P4SS_Map_Khobar"
+		"authors"			"#P4SS_Authors_Khobar"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"21"
+	{
+		"name"				"pass_manndamm"
+		"localizedname"		"#P4SS_Map_Manndamm"
+		"authors"			"#P4SS_Authors_Manndamm"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"22"
+	{
+		"name"				"pass_obelisk"
+		"localizedname"		"#P4SS_Map_Obelisk"
+		"authors"			"#P4SS_Authors_Obelisk"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"23"
+	{
+		"name"				"pass_ore"
+		"localizedname"		"#P4SS_Map_Ore"
+		"authors"			"#P4SS_Authors_Ore"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"24"
+	{
+		"name"				"pass_pibble"
+		"localizedname"		"#P4SS_Map_Pibble"
+		"authors"			"#P4SS_Authors_Pibble"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"25"
+	{
+		"name"				"pass_soho"
+		"localizedname"		"#P4SS_Map_Soho"
+		"authors"			"#P4SS_Authors_Soho"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"26"
+	{
+		"name"				"pass_thesis"
+		"localizedname"		"#P4SS_Map_Thesis"
+		"authors"			"#P4SS_Authors_Thesis"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"27"
+	{
+		"name"				"pass_ufo"
+		"localizedname"		"#P4SS_Map_UFO"
+		"authors"			"#P4SS_Authors_UFO"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"28"
+	{
+		"name"				"pass_yard"
+		"localizedname"		"#P4SS_Map_Yard"
+		"authors"			"#P4SS_Authors_Yard"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"29"
+	{
+		"name"				"tr_stadium_surf"
+		"localizedname"		"#P4SS_Map_Stadium_Surf"
+		"authors"			"#P4SS_Authors_Stadium_Surf"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
+	}
+	"30"
+	{
+		"name"				"pass_throwing_grounds"
+		"localizedname"		"#P4SS_Map_Throwing_Grounds"
+		"authors"			"#P4SS_Authors_Throwing_Grounds"
+		"rolling_match_tags"
+		{
+			"passtime"		"1"
+		}
+		"rolling_match_target_tags"
+		{
+			"passtime"		"1"
+		}
 	}
 }
 

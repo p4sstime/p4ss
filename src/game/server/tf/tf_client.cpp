@@ -48,6 +48,9 @@ extern bool			g_fGameOver;
 
 extern ConVar tf_allow_player_name_change;
 
+//P4SS: Add custom killbind cvar
+extern ConVar pf_kill_enable_custom_ragdolls;
+
 
 void FinishClientPutInServer( CTFPlayer *pPlayer )
 {
@@ -120,7 +123,7 @@ const char *GetGameDescription()
 	if ( g_pGameRules ) // this function may be called before the world has spawned, and the game rules initialized
 		return g_pGameRules->GetGameDescription();
 	else
-		return "Team Fortress";
+		return "PASS Fortress";
 }
 
 
@@ -264,4 +267,52 @@ void GameStartFrame( void )
 void InstallGameRules()
 {
 	CreateGameRulesObject( "CTFGameRules" );
+}
+
+//------------------------------------------------------------------------------
+// kill commands with custom ragdolls by RealGamerX
+//------------------------------------------------------------------------------
+CON_COMMAND(
+pf_kill, "Kills the player in multiple entertaining ways. If none is selected, "
+		 "the normal kill behavior will be used. Usage: pf_kill <ragdoll death "
+		 "type> [player name]\nDeath Type List:\n0 = Normal\n1 = Burn\n2 = "
+		 "Freeze\n3 = Incinerate\n4 = Disintegrate\n5 = Disintegrate and "
+		 "Gib\n6 = Mistify\n7 = Decapitate\n8 = Cloak\n9 = Turn to Gold" )
+{
+	int iRagdollType = atoi( args[1] );
+	const char *cPlayerName = args[2];
+
+	if ( args.ArgC() > 2 && sv_cheats->GetBool() &&
+		 pf_kill_enable_custom_ragdolls.GetBool() )
+	{
+		// Find the matching netname
+		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+		{
+			CTFPlayer *pPlayer = ToTFPlayer( UTIL_PlayerByIndex( i ) );
+			if ( pPlayer )
+			{
+				if ( Q_strstr( pPlayer->GetPlayerName(), cPlayerName ) )
+				{
+					pPlayer->CommitSuicideWithCustomRagdoll( iRagdollType );
+				}
+			}
+		}
+	}
+	else if ( args.ArgC() > 1 && pf_kill_enable_custom_ragdolls.GetBool() )
+	{
+		CTFPlayer *pPlayer = ToTFPlayer( UTIL_GetCommandClient() );
+		if ( pPlayer )
+		{
+			pPlayer->CommitSuicideWithCustomRagdoll( iRagdollType );
+		}
+	}
+	else
+	{
+		CTFPlayer *pPlayer = ToTFPlayer( UTIL_GetCommandClient() );
+		if ( pPlayer )
+		{
+			pPlayer->CommitSuicideWithCustomRagdoll(
+			TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_NONE );
+		}
+	}
 }

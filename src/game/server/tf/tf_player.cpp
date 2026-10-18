@@ -3890,6 +3890,21 @@ void CTFPlayer::Regenerate( bool bRefillHealthAndAmmo /*= true*/ )
 
 	if ( bRefillHealthAndAmmo )
 	{
+		//P4SS - Remove more debuffs and reset crit heals, for more
+		//parity with the resup bind
+
+		m_flLastDamageTime = 0.f;
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH );
+		}
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH_SILENT ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH_SILENT );
+		}
+
 		if ( m_Shared.InCond( TF_COND_BURNING ) )
 		{
 			m_Shared.RemoveCond( TF_COND_BURNING );
@@ -9798,6 +9813,63 @@ void CTFPlayer::CommitSuicide( bool bExplode /* = false */, bool bForce /*= fals
 	m_iSuicideCustomKillFlags = TF_DMG_CUSTOM_SUICIDE;
 
 	BaseClass::CommitSuicide( bExplode, bForce );
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Custom killbinds by RealGamerX
+//-----------------------------------------------------------------------------
+void CTFPlayer::CommitSuicideWithCustomRagdoll( int m_iCustomRagdoll /*= 0*/ )
+{
+	if ( !IsAlive() )
+		return;
+
+	CommitSuicide();
+
+	CTFRagdoll *pRagdoll = dynamic_cast<CTFRagdoll *>( m_hRagdoll.Get() );
+	if ( pRagdoll )
+	{
+		switch ( m_iCustomRagdoll )
+		{
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_BURN:
+			pRagdoll->m_bBurning = true;
+			pRagdoll->EmitSound( "Taunt.Pyro02Fire" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_FREEZE:
+			pRagdoll->m_bIceRagdoll = true;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_INCINERATE:
+			pRagdoll->m_bBecomeAsh = true;
+			pRagdoll->EmitSound( "Taunt.Pyro02Fire" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DISINTEGRATE:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_PLASMA;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DISINTEGRATE_AND_GIB:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_PLASMA_CHARGED;
+			// Cow mangler charged shot doesn't actually play the dissolve sound
+			// on its own Looks incredibly odd to just have gibs float away in
+			// silence, so we give it a sound :)
+			pRagdoll->EmitSound( "TFPlayer.Dissolve" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_MISTIFY:
+			pRagdoll->m_bCritOnHardHit = true;
+			pRagdoll->m_bGib = true;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DECAPITATE:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_HEADSHOT_DECAPITATION;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_CLOAK:
+			pRagdoll->m_bCloaked = true;
+			// Cosmetics don't remain uncloaked, but it appears to be default
+			// behavior
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_TURN_TO_GOLD:
+			pRagdoll->m_bGoldRagdoll = true;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------

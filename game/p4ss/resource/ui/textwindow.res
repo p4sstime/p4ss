@@ -16,18 +16,6 @@
 		"settitlebarvisible"	"0"
 	}
 	
-	"CustomShaderOverlay" //REQUIRES COLOR CORRECTION TO BE ENABLED. OTHERWISE WE GET A BLACKSCREEN. Someone get a coder! Force the setting on for all players?
-	{
-		"ControlName"	"ImagePanel"
-		"xpos"		    "0"
-		"ypos"		    "0"
-		"zpos"		    "-10000"
-		"wide"		    "f0"
-		"tall"		    "480"
-		"scaleimage"	"1"
-		"image"			"../shaders/sepia"
-	}
-	
 	"BGDarken"
 	{
 		"ControlName"	"ImagePanel"
@@ -47,26 +35,6 @@
 		"PaintBackgroundType"	"0"
 		"fillcolor"		"0 0 0 50"
 	}	
-	
-	"Modulate"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"		"Modulate"
-		"xpos"			"0"
-		"ypos"			"0"
-		"zpos"			"-12"
-		"wide"			"f0"
-		"tall"			"f0"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"	"0"	
-		"image"			"../hud/blank"
-		"tileImage"		"1"
-		"PaintBackgroundType"	"0"
-		"drawcolor"		"100 140 70 255"
-	}
 	
  	"MainBG"
 	{
