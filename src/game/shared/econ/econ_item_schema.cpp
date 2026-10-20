@@ -789,6 +789,7 @@ m_bActAsWeapon( false ),
 m_iDropType( 1 ),
 m_bHidden( false ),
 m_bBaseItem( false ),
+m_bModItem(false),
 m_pszItemLogClassname( NULL ),
 m_pszItemIconClassname( NULL ),
 m_pszDatabaseAuditTable( NULL ),
@@ -1582,6 +1583,7 @@ bool CEconItemDefinition::BInitFromKV( KeyValues *pKVItem, CUtlVector<CUtlString
 	// Creation data
 	m_bHidden = m_pKVItem->GetInt( "hidden", 0 ) != 0;
 	m_bBaseItem = m_pKVItem->GetInt( "baseitem", 0 ) != 0;
+	m_bModItem = m_pKVItem->GetInt("mod_pf_item", 0) != 0;	// "mod_pf_item" in items_game.txt / items_passfortress.txt
 	m_pszItemLogClassname = m_pKVItem->GetString( "item_logname", NULL );
 	m_pszItemIconClassname = m_pKVItem->GetString( "item_iconname", NULL );
 	m_pszDatabaseAuditTable = m_pKVItem->GetString( "database_audit_table", NULL );
@@ -1959,6 +1961,7 @@ CEconItemSchema::CEconItemSchema( )
 ,	m_mapAttributes( DefLessFunc(int) )
 ,	m_mapItemsSorted( DefLessFunc(int) )
 ,	m_mapBaseItems( DefLessFunc(int) )
+,	m_mapModItems(DefLessFunc(int))
 ,	m_unVersion( 0 )
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
 ,	m_pDefaultItemDefinition( NULL )
@@ -2011,6 +2014,7 @@ void CEconItemSchema::Reset( void )
 	m_mapItems.Purge();
 	m_mapItemsSorted.Purge();
 	m_mapBaseItems.Purge();
+	m_mapModItems.Purge();
 	m_mapAttributeControlledParticleSystems.Purge();
 	m_vecAttributeControlledParticleSystemsCosmetics.Purge();
 	m_vecAttributeControlledParticleSystemsWeapons.Purge();
@@ -2116,7 +2120,9 @@ bool CEconItemSchema::BInitTextBuffer( CUtlBuffer &buffer, CUtlVector<CUtlString
 
 	Reset();
 	m_pKVRawDefinition = new KeyValues( "CEconItemSchema" );
-	if ( m_pKVRawDefinition->LoadFromBuffer( NULL, buffer ) )
+//	if ( m_pKVRawDefinition->LoadFromBuffer( NULL, buffer ) )
+//	load the custom item schema instead. This, in turn, still loads the base schema (first line of our item schema is '#base items_game.txt').
+	if (m_pKVRawDefinition->LoadFromFile(g_pFullFileSystem, "scripts/items/items_passfortress.txt", "GAME"))
 	{
 		return BInitSchema( m_pKVRawDefinition, pVecErrors )
 			&& BPostSchemaInit( pVecErrors );
@@ -2757,6 +2763,7 @@ bool CEconItemSchema::BInitItems( KeyValues *pKVItems, CUtlVector<CUtlString> *p
 	m_mapItems.PurgeAndDeleteElements();
 	m_mapItemsSorted.Purge();
 	m_mapBaseItems.Purge();
+	m_mapModItems.Purge();
 	m_vecBundles.Purge();
 
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
@@ -2806,6 +2813,11 @@ bool CEconItemSchema::BInitItems( KeyValues *pKVItems, CUtlVector<CUtlString> *p
 				if ( pItemDef->IsBaseItem() )
 				{
 					m_mapBaseItems.Insert( nItemIndex, pItemDef );
+				}
+
+				if ( pItemDef->IsModItem() )
+				{
+					m_mapModItems.Insert( nItemIndex, pItemDef );
 				}
 			}
 		}

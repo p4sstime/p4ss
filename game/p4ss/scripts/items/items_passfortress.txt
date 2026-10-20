@@ -1,0 +1,35 @@
+#base items_game.txt
+
+"items_game"
+{
+	"attributes"
+	{
+	}
+	
+	"items"
+	{
+		"21000"
+		{
+			"name"				"Test"
+			"mod_pf_item"		"1"
+			"prefab"			"weapon_scattergun"
+			"item_name"			"bleeds for 8 seconds"
+			"item_description"	"bleeds for 8 seconds"
+			"item_logname"		"bleeds_for_8seconds"
+			"item_quality"		"unique"
+			"attributes"
+			{
+				"bleeding duration"
+				{
+					"attribute_class" 	"bleeding_duration"
+					"value"				"8"
+				}
+				"damage penalty"
+				{
+					"attribute_class"	"mult_dmg"
+					"value"				"0.01"
+				}
+			}
+		}
+	}
+}

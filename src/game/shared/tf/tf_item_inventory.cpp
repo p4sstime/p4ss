@@ -102,6 +102,9 @@ CTFInventoryManager::CTFInventoryManager( void )
 CTFInventoryManager::~CTFInventoryManager( void )
 {
 	m_pBaseLoadoutItems.PurgeAndDeleteElements();
+
+	// Purge our PF mod items as well.
+	m_pModLoadoutItems.PurgeAndDeleteElements();
 }
 
 //-----------------------------------------------------------------------------
@@ -111,6 +114,23 @@ void CTFInventoryManager::PostInit( void )
 {
 	BaseClass::PostInit();
 	GenerateBaseItems();
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Generate Mod Items in backpack
+//-----------------------------------------------------------------------------
+CEconItemView *CTFInventoryManager::AddModItem( int id )
+{
+	CEconItemView *pItemView = new CEconItemView;
+	CEconItem *pItem = new CEconItem;
+	pItem->m_ulID = id;
+	pItem->m_unAccountID = 0;
+	pItem->m_unDefIndex = id;
+	pItemView->Init( id, NULL ); 
+	pItemView->SetItemID( id );
+	pItemView->SetNonSOEconItem( pItem );
+	m_pModLoadoutItems.AddToTail( pItemView );
+	return pItemView;
 }
 
 //-----------------------------------------------------------------------------
@@ -135,6 +155,17 @@ void CTFInventoryManager::GenerateBaseItems( void )
 		pItem->Init( mapItems[it]->GetDefinitionIndex(), NULL );
 		m_pBaseLoadoutItems.AddToTail( pItem );
 	}
+
+	// Similarly, add our mod items from the item schema.
+	m_pModLoadoutItems.PurgeAndDeleteElements();
+	const CEconItemSchema::BaseItemDefinitionMap_t& mapItemsMod = GetItemSchema()->GetModItemDefinitionMap();
+	iStart = 0;
+	if (mapItemsMod.Count() != 0)
+	{
+		for (int it = iStart; it != mapItemsMod.InvalidIndex(); it = mapItemsMod.NextInorder(it))
+			AddModItem(mapItemsMod[it]->GetDefinitionIndex());
+		Msg("Loaded %i mod items.\n", mapItemsMod.Count());
+	}
 }
 
 #ifdef CLIENT_DLL
@@ -151,6 +182,18 @@ bool CTFInventoryManager::EquipItemInLoadout( int iClass, int iSlot, itemid_t iI
 		return m_LocalInventory.ClearLoadoutSlot( iClass, iSlot );
 
 	CEconItemView *pItem = m_LocalInventory.GetInventoryItemByItemID( iItemID );
+
+	if (iItemID < 100000)
+	{
+		int count = TFInventoryManager()->GetModItemCount();
+		for (int i = 0; i < count; i++)
+		{
+			pItem = TFInventoryManager()->GetModItem(i);
+			if (pItem && pItem->GetItemDefIndex() == iItemID)
+				break;
+		}
+	}
+
 	if ( !pItem )
 		return false;
 
@@ -208,6 +251,20 @@ int	CTFInventoryManager::GetAllUsableItemsForSlot( int iClass, int iSlot, CUtlVe
 			continue;
 
 		pList->AddToTail( m_LocalInventory.GetItem(i) );
+	}
+
+	// go through our PF mod items and verify if we can equip them at this slot.
+	iCount = m_pModLoadoutItems.Count();
+	for ( int i = 0; i < iCount; i++ )
+	{
+		CEconItemView *pItem = m_pModLoadoutItems[i];
+		CTFItemDefinition *pItemData = pItem->GetStaticData();
+		if ( !bIsAccountIndex && !pItemData->CanBeUsedByClass( iClass ) )
+			continue;
+		if ( iSlot >= 0 &&
+			 pItem->GetStaticData()->GetLoadoutSlot( iClass ) != iSlot )
+			continue;
+		pList->AddToTail( pItem );
 	}
 
 	return pList->Count();
@@ -576,25 +633,64 @@ void CTFPlayerInventory::SaveLocalLoadout( bool bReset, bool bDefaultToGC )
 //-----------------------------------------------------------------------------
 // Purpose: If we are in mod mode, we track loadout changes locally.
 //-----------------------------------------------------------------------------
-void CTFPlayerInventory::EquipLocal(uint64 ulItemID, equipped_class_t unClass, equipped_slot_t unSlot)
+void CTFPlayerInventory::EquipLocal( uint64 ulItemID, equipped_class_t unClass,
+									 equipped_slot_t unSlot )
 {
 	// These interactions normally result from a round-trip with the GC.
 	// We will never get those messages, so we do everything locally.
 
 	// Unequip whatever was previously in the slot.
+	itemid_t ulPreviousItem = m_LoadoutItems[unClass][unSlot];
+	if ( ulPreviousItem != 0 && ulPreviousItem < 100000 )
 	{
-		itemid_t ulPreviousItem = m_LoadoutItems[unClass][unSlot];
-		CEconItemView *pPreviousItem = GetInventoryItemByItemID(ulPreviousItem);
-		if (pPreviousItem) {
-			pPreviousItem->GetSOCData()->UnequipFromClass(unClass);
+		int count = TFInventoryManager()->GetModItemCount();
+		for ( int i = 0; i < count; i++ )
+		{
+			CEconItemView *pItem = TFInventoryManager()->GetModItem( i );
+			if ( pItem && pItem->GetItemDefIndex() == ulPreviousItem )
+				pItem->GetSOCData()->UnequipFromClass( unClass );
 		}
+		CEconItemView *pPreviousItem =
+		GetInventoryItemByItemID( ulPreviousItem );
+		if ( pPreviousItem )
+		{
+			pPreviousItem->GetSOCData()->UnequipFromClass( unClass );
+		}
+	}
+	else
+	{
+		CEconItemView *pPreviousItem =
+		GetInventoryItemByItemID( ulPreviousItem );
+		if ( pPreviousItem )
+			pPreviousItem->GetSOCData()->UnequipFromClass( unClass );
 	}
 
 	// Equip the new item and add it to our loadout.
-	CEconItemView *pItem = GetInventoryItemByItemID(ulItemID);
-	if ( pItem )
+	if ( ulItemID < 100000 )
 	{
-		pItem->GetSOCData()->Equip(unClass, unSlot);
+		int count = TFInventoryManager()->GetModItemCount();
+		CEconItemView *pItem;
+		for ( int i = 0; i < count; i++ )
+		{
+			pItem = TFInventoryManager()->GetModItem( i );
+			if ( pItem && pItem->GetItemDefIndex() == ulItemID )
+			{
+				pItem->GetSOCData()->Equip( unClass, unSlot );
+				break;
+			}
+		}
+		if ( !pItem )
+		{
+			pItem = TFInventoryManager()->AddModItem( ulItemID );
+			if ( pItem && pItem->GetItemDefIndex() == ulItemID )
+				pItem->GetSOCData()->Equip( unClass, unSlot );
+		}
+	}
+	else
+	{
+		CEconItemView *pItem = GetInventoryItemByItemID( ulItemID );
+		if ( pItem )
+			pItem->GetSOCData()->Equip( unClass, unSlot );
 	}
 
 	m_LoadoutItems[unClass][unSlot] = ulItemID;
@@ -758,6 +854,22 @@ CEconItemView *CTFPlayerInventory::GetItemInLoadout( int iClass, int iSlot )
 			// we need to validate their position on the server when we retrieve them.
 			if ( pItem && AreSlotsConsideredIdentical( pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot( iClass ), iSlot ) )
 				return pItem;
+
+			// check mod items
+			if (m_LoadoutItems[iClass][iSlot] < 100000)
+			{
+				int count = TFInventoryManager()->GetModItemCount();
+				for (int i = 0; i < count; i++)
+				{
+					CEconItemView* pItem = TFInventoryManager()->GetModItem(i);
+					if (pItem && pItem->GetItemDefIndex() == m_LoadoutItems[iClass][iSlot])
+					{
+						if (pItem && AreSlotsConsideredIdentical(pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot(iClass), iSlot))
+							return pItem;
+					}
+				}
+				return TFInventoryManager()->AddModItem(m_LoadoutItems[iClass][iSlot]);
+			}
 		}
 	}
 

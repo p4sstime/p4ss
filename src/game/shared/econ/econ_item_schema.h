@@ -742,6 +742,7 @@ public:
 	bool		IsImported( void ) const			{ return m_bImported; }
 	bool		IsAllowedInMatch( void ) const		{ return m_bAllowedInThisMatch; }
 	bool		IsBaseItem( void ) const			{ return m_bBaseItem; }
+	bool		IsModItem( void ) const				{ return m_bModItem; }
 	bool		HasProperName( void ) const			{ return m_bProperName; }
 	bool		ShouldAttachToHands( void ) const	{ return m_bAttachToHands; }
 	bool		ShouldAttachToHandsVMOnly( void ) const	{ return m_bAttachToHandsVMOnly; }
@@ -980,6 +981,7 @@ private:
 
 	bool			m_bHidden;
 	bool			m_bBaseItem;
+	bool			m_bModItem;
 	bool			m_bImported;
 
 	// Base item name -- used for grouping weapon functionality
@@ -1825,6 +1827,9 @@ public:
 	typedef CUtlMap<int, CEconItemDefinition*, int>	BaseItemDefinitionMap_t;
 	const BaseItemDefinitionMap_t &GetBaseItemDefinitionMap() const { return m_mapBaseItems; }
 
+	typedef CUtlMap<int, CEconItemDefinition*, int>	ModItemDefinitionMap_t;
+	const ModItemDefinitionMap_t& GetModItemDefinitionMap() const { return m_mapModItems; }
+
 	typedef CUtlDict<int> BodygroupStateMap_t;
 	const BodygroupStateMap_t  &GetDefaultBodygroupStateMap() const { return m_dictDefaultBodygroupState; }
 
@@ -1987,6 +1992,9 @@ private:
 
 	// List of all base items, is a sublist of mapItems
 	BaseItemDefinitionMap_t								m_mapBaseItems;
+
+	// List of all PF mod items, is a sublist of mapItems
+	ModItemDefinitionMap_t								m_mapModItems;
 
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
 	// What is the default item definition we'll return in the client code if we can't find the correct one?

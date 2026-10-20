@@ -34,8 +34,8 @@ WeaponData
 	"TracerEffect"		""
 
 	// Buckets.
-	"bucket"				"1"
-	"bucket_position"		"1"
+	"bucket"				"0"
+	"bucket_position"		"0"
 
 	// Animation.
 	//"viewmodel"     -viewmodel is now defined in _items_main.txt
