@@ -91,6 +91,8 @@ extern ConVar
 	p4ss_lock_max_turn_angle,
 	p4ss_passtime_lock_angle,
 
+	pf_sandman_jack_disarm,
+
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time,
 	tf_passtime_ball_dmg_immune_time;

@@ -104,9 +104,11 @@ PRECACHE_WEAPON_REGISTER( tf_projectile_stun_ball );
 #define TF_WEAPON_STUNBALL_MODEL			"models/weapons/w_models/w_baseball.mdl"
 
 #if defined( GAME_DLL )
-ConVar tf_scout_stunball_base_duration( "tf_scout_stunball_base_duration", "6.0", FCVAR_DEVELOPMENTONLY );
-ConVar tf_scout_stunball_base_speed( "tf_scout_stunball_base_speed", "3000", FCVAR_DEVELOPMENTONLY );
-ConVar sv_proj_stunball_damage( "sv_proj_stunball_damage", "15", FCVAR_DEVELOPMENTONLY );
+ConVar tf_scout_stunball_base_duration( "tf_scout_stunball_base_duration", "6.0", FCVAR_REPLICATED );
+ConVar tf_scout_stunball_base_speed( "tf_scout_stunball_base_speed", "3000", FCVAR_REPLICATED );
+ConVar sv_proj_stunball_damage( "sv_proj_stunball_damage", "50", FCVAR_REPLICATED );
+ConVar pf_sandman_moonshot_damage_multiply( "pf_sandman_moonshot_damage_multiply", "2", FCVAR_REPLICATED );
+
 #endif
 // -- TFStunBall
 
@@ -249,6 +251,8 @@ void CTFBat_Wood::GetBallDynamics( Vector& vecLoc, QAngle& vecAngles, Vector& ve
 // -- SERVER ONLY
 #endif
 
+ConVar pf_sandman_secondary_attack_cooldown( "pf_sandman_secondary_attack_cooldown", "0.5", FCVAR_REPLICATED, "Live TF2 default is 0.25. Raised for the sake of having multiple baseballs." );
+
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -273,7 +277,7 @@ void CTFBat_Wood::SecondaryAttack( void )
 
 		SetContextThink( &CTFBat_Wood::LaunchBallThink, gpGlobals->curtime + tf_scout_bat_launch_delay.GetFloat(), "LAUNCH_BALL_THINK" );
 
-		m_flNextPrimaryAttack = gpGlobals->curtime + 0.25;
+		m_flNextPrimaryAttack = gpGlobals->curtime + pf_sandman_secondary_attack_cooldown.GetFloat();
 
 #ifdef GAME_DLL
 		if ( pPlayer->m_Shared.IsStealthed() )
@@ -770,7 +774,7 @@ void CTFStunBall::ApplyBallImpactEffectOnVictim( CBaseEntity *pOther )
 	info.SetAttacker( GetOwnerEntity() );
 	info.SetInflictor( pInflictor ); 
 	info.SetWeapon( pInflictor );
-	info.SetDamage( ( flLifeTimeRatio >= 1.f ) ? GetDamage() * 1.5f : GetDamage() );
+	info.SetDamage( ( flLifeTimeRatio >= 1.f ) ? GetDamage() * pf_sandman_moonshot_damage_multiply.GetFloat() : GetDamage() );
 	info.SetDamageCustom( TF_DMG_CUSTOM_BASEBALL );
 	info.SetDamageForce( GetDamageForce() );
 	info.SetDamagePosition( GetAbsOrigin() );

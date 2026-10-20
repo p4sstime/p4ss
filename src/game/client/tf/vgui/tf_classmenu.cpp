@@ -760,7 +760,7 @@ void CTFClassMenu::SelectClass( int iClass )
 		return;
 
 
-	if ( !(iClass == 3 || iClass == 4 || iClass == 5) )
+	if ( !( iClass == 1 || iClass == 3 || iClass == 4 || iClass == 5 ) )
 		return;
 
 	DevMsg("iClass: %d\n", iClass);

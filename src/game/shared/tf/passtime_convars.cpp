@@ -93,6 +93,8 @@ PASSTIME_CONVAR( p4ss_minicrit_protection_time,   3,      "How many seconds you 
 PASSTIME_CONVAR( p4ss_lock_max_turn_angle,        90,     "Maximum angle in degrees you can turn away from locked target before unlocking. 0 to disable." );
 PASSTIME_CONVAR( p4ss_passtime_lock_angle,        15.0f,  "Maximum cone angle in degrees from crosshair for lock-on detection." );
 
+PASSTIME_CONVAR( pf_sandman_jack_disarm,        0,  "Whether or not the Sandman causes a hit JACK carrier to drop their JACK" );
+
 PASSTIME_CONVAR( tf_passtime_no_jack_armor,        1,     "Prevents ball thrower from immediately grabbing the ball." );
 PASSTIME_CONVAR( tf_passtime_no_jack_armor_time,   0.25f, "How many seconds the thrower must wait before picking up the ball again." );
 PASSTIME_CONVAR( tf_passtime_ball_dmg_immune_time, 0.25f, "How long in seconds is the ball immune to splash damage neutralising the ball");

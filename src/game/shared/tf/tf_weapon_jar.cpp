@@ -1008,9 +1008,10 @@ void CTFProjectile_Cleaver::OnHit( CBaseEntity *pOther )
 		}
 	}
 
-	// just do the bleed effect directly since the bleed
+	// PF- Remove bleed
+	// TF note - just do the bleed effect directly since the bleed
 	// attribute comes from the inflictor, which is the cleaver.
-	pPlayer->m_Shared.MakeBleed( pOwner, (CTFCleaver *)GetLauncher(), 5.f );
+	//pPlayer->m_Shared.MakeBleed( pOwner, (CTFCleaver *)GetLauncher(), 5.f );
 
 	// Give 'em a love tap.
 	const trace_t *pTrace = &CBaseEntity::GetTouchTrace();

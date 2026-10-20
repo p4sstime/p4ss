@@ -10,7 +10,7 @@ PlayerClass
 	"model_hands"		"models/weapons/c_models/c_demo_arms.mdl"
 	"localize_name"		"TF_Class_Name_Demoman"
 	"speed_max"		"280"
-	"health_max"		"175"
+	"health_max"		"200"
 	"armor_max"		"0"
 
 	// Grenades.

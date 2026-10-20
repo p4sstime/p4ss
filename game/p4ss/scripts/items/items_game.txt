@@ -820,7 +820,6 @@
 			"max_ilevel"		"15"
 			"used_by_classes"
 			{
-				"medic"	"1"
 			}
 			"static_attrs"
 			{
@@ -931,7 +930,6 @@
 			"model_player"	"models/weapons/c_models/c_bat.mdl"
 			"used_by_classes"
 			{
-				"scout"	"1"
 			}
 			"static_attrs"
 			{
@@ -992,7 +990,6 @@
 			"propername"	"1"
 			"used_by_classes"
 			{
-				"demoman"	"1"
 			}
 			"static_attrs"
 			{
@@ -1158,6 +1155,7 @@
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Bonesaw"
 			"item_name"	"#TF_Weapon_Bonesaw"
+			"item_description"	"PF_ItemDescription_Bonesaw"
 			"item_slot"	"melee"
 			"item_quality"		"unique"
 			"min_ilevel"	"1"
@@ -1220,7 +1218,98 @@
 			"mouse_pressed_sound"	"ui/item_bottle_pickup.wav"
 			"drop_sound"		"ui/item_bottle_drop.wav"
 		}
-
+		
+		"weapon_eyelander"
+		{
+			"prefab"	"weapon_sword"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_be_equipped_by_soldier_or_demo"	"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_taunt_damage"		"1"
+			}
+			"base_item_name"	"The Eyelander"
+			"item_name"	"#TF_Unique_Achievement_Sword"
+			"item_description"	"#PF_ItemDescription_Eyelander"
+			"propername"	"1"
+			"image_inventory"	"backpack/weapons/c_models/c_claymore/c_claymore"
+			"model_player"	"models/weapons/c_models/c_claymore/c_claymore.mdl"
+			"used_by_classes"
+			{
+				"demoman"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"12 -3 -10"
+			}
+			"visuals"
+			{
+				"sound_melee_miss"	"Weapon_Sword.Swing"
+				"sound_melee_hit"	"Weapon_Sword.HitFlesh"
+				"sound_melee_hit_world"	"Weapon_Sword.HitWorld"
+				"sound_burst"		"Weapon_Sword.SwingCrit"
+				"sound_special1"	"Sword.Hit"
+				"sound_special2"	"Sword.Idle"
+				"styles"
+				{
+					"0"
+					{
+						"skin_red" "0"
+						"skin_blu" "1"
+						"selectable"	"0"
+					}
+					"1"
+					{
+						"skin_red"	"2"
+						"skin_blu"	"3"
+						"selectable"	"0"
+						"image_inventory"	"backpack/weapons/c_models/c_claymore/c_claymore_gold"
+					}
+				}
+			}
+			"attributes"
+			{
+				"is_a_sword hidden"
+				{
+					"attribute_class"	"is_a_sword"
+					"value"				"72"
+				}
+				"provide on active"
+				{
+					"attribute_class"	"provide_on_active"
+					"value" "1"
+				}
+				"charge time increased"
+				{
+					"attribute_class"	"mod_charge_time"
+					"value" "0.5"
+				}
+				"charge recharge rate increased"
+				{
+					"attribute_class"	"charge_recharge_rate"
+					"value"	"1.5"
+				}
+				"crit mod disabled hidden"
+				{
+					"attribute_class"	"mult_crit_chance"
+					"value"	"0"
+				}
+				"special taunt"
+				{
+					"attribute_class"	"special_taunt"
+					"value" "1"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_knife_large_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+			"xifier_class_remap"	"eyelander"
+		}
+		
 		"weapon_claidheamohmor"
 		{
 			"prefab"	"weapon_sword"
@@ -1244,7 +1333,6 @@
 			"model_player"	"models/workshop/weapons/c_models/c_claidheamohmor/c_claidheamohmor.mdl"
 			"used_by_classes"
 			{
-				"demoman"	"1"
 			}
 			"static_attrs"
 			{
@@ -1444,12 +1532,7 @@
 				"mult charge turn control"
 				{
 					"attribute_class"	"charge_turn_control"
-					"value"			"3"
-				}
-				"max health additive bonus"
-				{
-					"attribute_class"	"add_maxhealth"
-					"value" "25"
+					"value"			"2"
 				}
 				"allowed in medieval mode"
 				{
@@ -1463,7 +1546,7 @@
 				}
 				"move speed bonus"
 				{
-					"attribute_class"	"mult_player_movespeed_shieldrequired"
+					"attribute_class"	"move speed bonus"
 					"value" "1.10"
 				}
 			}
@@ -1695,6 +1778,7 @@
 			}
 			"static_attrs"
 			{
+				"grenadelauncher explain"			"1"
 				"weapon_stattrak_module_scale"			"1"
 				"min_viewmodel_offset"					"10 0 -10"
 			}
@@ -1834,6 +1918,11 @@
 			}
 			"attributes"
 			{
+				"overheal penalty hidden"
+				{
+					"attribute_class"	"mult_medigun_overheal_amount"
+					"value"	"0"
+				}
 				"kill eater score type"
 				{
 					"attribute_class"	"kill_eater_score_type"
@@ -2009,8 +2098,6 @@
 			"model_player"	"models/weapons/c_models/c_pistol/c_pistol.mdl"
 			"used_by_classes"
 			{
-				"engineer"	"1"
-				"scout" "1"
 			}
 			"static_attrs"
 			{
@@ -2525,6 +2612,97 @@
 			"mouse_pressed_sound"	"ui/item_shovel_pickup.wav"
 			"drop_sound"		"ui/item_shovel_drop.wav"
 		}
+		
+		"weapon_force_a_nature"
+		{
+
+			"enabled"	"1"
+			"item_class"	"tf_weapon_scattergun"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"capabilities"
+			{
+				"nameable"		"1"
+				"can_collect" "1"
+			}
+			"tags"
+			{
+			}
+			"base_item_name"	"The Force-a-Nature"
+			"show_in_armory"	"1"
+			"item_type_name"	"#PF_ItemType_ForceJumper"
+			"item_name"	"#PF_ItemName_ForceJumper"
+			"item_description"	"#PF_ItemDescription_ForceJumper"
+			"item_logname"	"force_a_nature"
+			"item_iconname"	"force_a_nature"
+			"item_slot"	"primary"
+			"anim_slot"	"item2"
+			"item_quality"	"unique"
+			"propername"	"1"
+			"baseitem"		"1"
+			"min_ilevel"	"10"
+			"max_ilevel"	"10"
+			"image_inventory"	"backpack/weapons/c_models/c_double_barrel"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"model_player"	"models/weapons/c_models/c_double_barrel.mdl"
+			"attach_to_hands" "1"
+			"inspect_panel_dist" "38"
+			"used_by_classes"
+			{
+				"scout"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"10 0 -10"
+				"forcejumper explain"	"1"
+			}
+			"attributes"
+			{
+				"scattergun has knockback"
+				{
+					"attribute_class"	"set_scattergun_has_knockback"
+					"value"	"1"
+				}
+				"fire rate bonus HIDDEN"
+				{
+					"attribute_class"	"mult_postfiredelay"
+					"value" "0.5"
+				}
+				"scattergun no reload single"
+				{
+					"attribute_class"	"set_scattergun_no_reload_single"
+					"value"	"1"
+				}
+			}
+			"visuals"
+			{
+				"sound_single_shot"	"Weapon_Rocket_Jumper.Single"
+				"sound_burst"	"Weapon_Rocket_Jumper.Single"
+				"muzzle_flash"	"muzzle_shotgun_smoke"
+
+				"animation_replacement"
+				{
+					"ACT_VM_IDLE"						"ACT_ITEM2_VM_IDLE"
+					"ACT_VM_DRAW"						"ACT_ITEM2_VM_DRAW"
+					"ACT_VM_HOLSTER"					"ACT_ITEM2_VM_HOLSTER"
+					"ACT_VM_PULLBACK"					"ACT_ITEM2_VM_PULLBACK"
+					"ACT_VM_PRIMARYATTACK"				"ACT_ITEM2_VM_PRIMARYATTACK"
+					"ACT_VM_SECONDARYATTACK"			"ACT_ITEM2_VM_SECONDARYATTACK"
+					"ACT_VM_RELOAD"						"ACT_ITEM2_VM_RELOAD"
+					"ACT_VM_DRYFIRE"					"ACT_ITEM2_VM_DRYFIRE"
+					"ACT_VM_IDLE_TO_LOWERED"			"ACT_ITEM2_VM_IDLE_TO_LOWERED"
+					"ACT_VM_IDLE_LOWERED"				"ACT_ITEM2_VM_IDLE_LOWERED"
+					"ACT_VM_LOWERED_TO_IDLE"			"ACT_ITEM2_VM_LOWERED_TO_IDLE"
+					"ACT_PRIMARY_VM_INSPECT_START"		"ACT_ITEM2_VM_INSPECT_START"
+					"ACT_PRIMARY_VM_INSPECT_IDLE"		"ACT_ITEM2_VM_INSPECT_IDLE"
+					"ACT_PRIMARY_VM_INSPECT_END"		"ACT_ITEM2_VM_INSPECT_END"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_heavy_gun_pickup.wav"
+			"drop_sound"		"ui/item_heavy_gun_drop.wav"
+			"xifier_class_remap"	"force_a_nature"
+		}
 
 		"weapon_smg"
 		{
@@ -2931,7 +3109,7 @@
 		{
 			"name"	"TF_WEAPON_BAT"
 			"prefab"	"weapon_bat"
-			"baseitem" "1"
+			"baseitem" "0"
 		}
 		"1"
 		{
@@ -3032,7 +3210,7 @@
 		{
 			"name"	"TF_WEAPON_SCATTERGUN"
 			"prefab"	"weapon_scattergun"
-			"baseitem" "1"
+			"baseitem" "0"
 		}
 		"14"
 		{
@@ -3184,7 +3362,7 @@
 			"item_name"	"#TF_Weapon_Pistol"
 			"item_slot"	"secondary"
 			"item_quality"	"normal"
-			"baseitem" "1"
+			"baseitem" "0"
 			"min_ilevel"	"1"
 			"max_ilevel"	"1"
 			"attach_to_hands"	"1"
@@ -3194,7 +3372,6 @@
 			"model_player"	"models/weapons/c_models/c_pistol/c_pistol.mdl"
 			"used_by_classes"
 			{
-				"scout"	"1"
 			}
 			"mouse_pressed_sound"	"ui/item_light_gun_pickup.wav"
 			"drop_sound"		"ui/item_light_gun_drop.wav"
@@ -3525,6 +3702,148 @@
 			"prefab"	"valve weapon_ubersaw"
 			"particle_suffix"	"ubersaw"
 		}
+		
+		"44"
+		{
+			"name"	"The Sandman"
+			"prefab"	"valve"
+			"first_sale_date"	"2010/09/29"
+			"item_class"	"tf_weapon_bat_wood"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"capabilities"
+			{
+				"nameable"		"1"
+				"can_collect"	"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_posthumous_damage"	"1"
+				"can_deal_long_distance_damage"	"1"
+				"can_deal_taunt_damage" "1"
+				"can_be_festivized"		"1"
+			}
+			"show_in_armory"	"1"
+			"item_type_name"	"#TF_Weapon_Bat"
+			"item_name"	"#TF_Unique_Achievement_Bat"
+			"item_logname"	"sandman"
+			"item_iconname"	"sandman"
+			"item_slot"	"melee"
+			"item_quality"	"unique"
+			"baseitem"		"1"
+			"propername"	"1"
+			"min_ilevel"	"15"
+			"max_ilevel"	"15"
+			"inspect_panel_dist" "45"
+			"attach_to_hands"	"1"
+			"image_inventory"	"backpack/weapons/c_models/c_wooden_bat/c_wooden_bat"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"model_player"	"models/weapons/c_models/c_wooden_bat/c_wooden_bat.mdl"
+			"visuals"
+			{
+				"styles"
+				{
+					"0"
+					{
+						"skin_red"		"0"
+						"skin_blu"		"1"
+					}
+				}
+				"attached_models_festive"
+				{
+					"0"
+					{
+						"model"	"models/weapons/c_models/c_wooden_bat/c_wooden_bat_festivizer.mdl"
+					}
+				}
+			}
+			"used_by_classes"
+			{
+				"scout"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"10 0 -6"
+			}
+			"attributes"
+			{
+				"mod bat launches balls"
+				{
+					"attribute_class"	"set_weapon_mode"
+					"value"	"1"
+				}
+				"hit self on miss"
+				{
+					"attribute_class"	"hit_self_on_miss"
+					"value"	"1"
+				}
+				"no double jump"
+				{
+					"attribute_class"	"set_scout_doublejump_disabled"
+					"value"	"1"
+				}
+				"increased jump height"
+				{
+					"attribute_class"	"mod_jump_height"
+					"value" "1.25"
+				}
+				"special taunt"
+				{
+					"attribute_class"	"special_taunt"
+					"value" "1"
+				}
+				"damage bonus"
+				{
+					"attribute_class"	"mult_dmg"
+					"value"	"1.5"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_wood_pole_pickup.wav"
+			"drop_sound"		"ui/item_wood_pole_drop.wav"
+		}
+		"45"
+		{
+			"name"	"The Force-a-Nature"
+			"prefab"	"valve weapon_force_a_nature"
+			"first_sale_date"	"2010/09/29"
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_mvm_penetration_damage"	"1"
+				"can_deal_long_distance_damage"	"1"
+				"can_be_festivized"		"1"
+			}
+			"visuals"
+			{
+				"styles"
+				{
+					"0"
+					{
+						"skin_red" "0"
+						"skin_blu" "1"
+						"selectable"	"0"
+					}
+					"1"
+					{
+						"skin_red"	"2"
+						"skin_blu"	"3"
+						"selectable"	"0"
+						"image_inventory"	"backpack/weapons/c_models/c_double_barrel_gold"
+					}
+				}
+				"attached_models_festive"
+				{
+					"0"
+					{
+						"model"	"models/weapons/c_models/c_double_barrel_festivizer.mdl"
+					}
+				}
+			}
+		}
 		"128"
 		{
 			"name"	"The Equalizer"
@@ -3550,7 +3869,7 @@
 			"item_logname"	"unique_pickaxe_escape"
 			"item_slot"	"melee"
 			"item_quality"	"unique"
-			"propername"	"1"
+			"propername"	"0"
 			"min_ilevel"	"10"
 			"max_ilevel"	"10"
 			"image_inventory" "backpack/weapons/c_models/c_pickaxe/c_pickaxe_s2"
@@ -3603,6 +3922,57 @@
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
+		
+		"132"
+		{
+			"name"	"The Eyelander"
+			"prefab"	"valve weapon_eyelander"
+			"first_sale_date"	"2010/09/29"
+			"static_attrs"
+			{
+				"min_viewmodel_offset"		"10 0 -11"				
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_be_equipped_by_soldier_or_demo"	"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_taunt_damage"		"1"
+				"can_be_festivized"		"1"
+			}
+			"visuals"
+			{
+				"sound_melee_miss"	"Weapon_Sword.Swing"
+				"sound_melee_hit"	"Weapon_Sword.HitFlesh"
+				"sound_melee_hit_world"	"Weapon_Sword.HitWorld"
+				"sound_burst"		"Weapon_Sword.SwingCrit"
+				"sound_special1"	"Sword.Hit"
+				"sound_special2"	"Sword.Idle"
+				"styles"
+				{
+					"0"
+					{
+						"skin_red" "0"
+						"skin_blu" "1"
+						"selectable"	"0"
+					}
+					"1"
+					{
+						"skin_red"	"2"
+						"skin_blu"	"3"
+						"selectable"	"0"
+						"image_inventory"	"backpack/weapons/c_models/c_claymore/c_claymore_gold"
+					}
+				}
+				"attached_models_festive"
+				{
+					"0"
+					{
+						"model"	"models/weapons/c_models/c_claymore/c_claymore_festivizer.mdl"
+					}
+				}
+			}
 		}
 		"133"
 		{
@@ -3689,8 +4059,6 @@
 			"max_ilevel"	"5"
 			"used_by_classes"
 			{
-				"demoman"	"1"
-				"soldier"	"1"
 			}
 			"static_attrs"
 			{
@@ -3721,73 +4089,6 @@
 			"name"	"The Scotsman's Skullcutter"
 			"prefab"	"weapon_battleaxe"
 			"particle_suffix"	"scotsmans_skullcutter"
-		}
-		"173"
-		{
-			"name"	"The Vita-Saw"
-			"first_sale_date"	"2010/09/29"
-			"item_class"	"tf_weapon_bonesaw"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-				"can_deal_critical_damage"	"1"
-			}
-			"item_logname"	"battleneedle"
-			"item_iconname"	"battleneedle"
-			"show_in_armory"	"1"
-			"item_type_name"	"#TF_Weapon_Bonesaw"
-			"item_name"	"#TF_Unique_BattleSaw"
-			"item_description" "#TF_Unique_BattleSaw_Desc"
-			"item_slot"	"melee"
-			"image_inventory"	"backpack/workshop/weapons/c_models/c_uberneedle/c_uberneedle"
-			"image_inventory_size_w"		"128"
-			"image_inventory_size_h"		"82"
-			"inspect_panel_dist" 			"50"
-			"model_player"	"models/workshop/weapons/c_models/c_uberneedle/c_uberneedle.mdl"
-			"attach_to_hands"	"1"
-			"item_quality"	"unique"
-			"propername"	"1"
-			"min_ilevel"	"5"
-			"max_ilevel"	"5"
-			"used_by_classes"
-			{
-				"medic"	"1"
-			}
-			"static_attrs"
-			{
-				"min_viewmodel_offset"		"10 0 -12"
-			}
-			"attributes"
-			{
-				"ubercharge_preserved_on_spawn_max"
-				{
-					"attribute_class"	"ubercharge_preserved_on_spawn_max"
-					"value" "0.6"
-				}
-				"max health additive penalty"
-				{
-					"attribute_class"	"add_maxhealth"
-					"value" "-10"
-				}
-				"lunchbox adds minicrits"
-				{
-					"attribute_class"	"set_weapon_mode"
-					"value"	"2"
-				}
-			}
-			"visuals"
-			{
-				"sound_taunt"	"Taunt.MedicViolinUber"
-				"sound_melee_hit"	"Weapon_UberSaw.HitFlesh"
-			}
-			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
-			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 		}
 		"190"
 		{
@@ -3821,7 +4122,6 @@
 			"model_player"	"models/weapons/c_models/c_bat.mdl"
 			"used_by_classes"
 			{
-				"scout"	"1"
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
@@ -4469,7 +4769,6 @@
 			"attach_to_hands"	"1"
 			"used_by_classes"
 			{
-				"medic"	"1"
 			}
 			"mouse_pressed_sound"	"ui/item_light_gun_pickup.wav"
 			"drop_sound"		"ui/item_light_gun_drop.wav"
@@ -4986,11 +5285,6 @@
 			}
 			"attributes"
 			{
-				"charge recharge rate increased hidden"
-				{
-					"attribute_class"	"charge_recharge_rate"
-					"value"	"1.5"
-				}
 				"charge impact damage increased hidden"
 				{
 					"attribute_class"	"charge_impact_damage"
@@ -5076,10 +5370,10 @@
 			}
 			"attributes"
 			{
-				"fire rate penalty meleeswing"
+				"max health additive penalty"
 				{
-					"attribute_class"	"mult_postfiredelay"
-					"value"	"1.1"
+					"attribute_class"	"add_maxhealth"
+					"value" "-10"
 				}
 				"mod see enemy health"
 				{
@@ -5272,11 +5566,11 @@
 			"item_iconname"	"quake_rl"
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_RocketLauncher"
-			"item_name"	"#TF_TheOriginal"
+			"item_name"	"#PF_ItemName_PFLauncher"
 			"item_description"	"#PF_ItemDescription_PFLauncher"
 			"item_slot"	"primary"
 			"item_quality"	"unique"
-			"propername"	"1"
+			"propername"	"0"
 			"min_ilevel"	"5"
 			"max_ilevel"	"5"
 			"inspect_panel_dist" "68"
@@ -5376,7 +5670,7 @@
 			}
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Pickaxe"
-			"item_name"	"#TF_Unique_Pickaxe_EscapePlan"
+			"item_name"	"#PF_ItemName_Pickaxe"
 			"item_logname"	"unique_pickaxe_escape"
 			"item_slot"	"melee"
 			"item_quality"	"unique"
@@ -6361,7 +6655,7 @@
 			"attribute_class"	"set_scattergun_has_knockback"
 			"description_string"	"#Attrib_Scattergun_HasKnockback"
 			"description_format"	"value_is_additive"
-			"hidden"	"0"
+			"hidden"	"1"
 			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
@@ -13993,6 +14287,14 @@
 			"description_format"	"value_is_additive"
 		}
 		
+		"5006"
+		{
+			"name"					"forcejumper explain"
+			"attribute_class"		"forcejumper_explain"
+			"description_string"	"#PF_ItemExplain_ForceJumper"
+			"description_format"	"value_is_additive"
+		}
+		
 		//Hidden versions of existing stats
 
 		"5050"
@@ -14044,6 +14346,37 @@
 			"name"	"charge recharge rate increased hidden"
 			"attribute_class"	"charge_recharge_rate"
 			"description_string"	"#Attrib_ChargeRechargeRateIncreased"
+			"description_format"	"value_is_percentage"
+			"hidden"	"1"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		
+		"5055"
+		{
+			"name" "is_a_sword hidden"
+			"attribute_class" 	"is_a_sword"
+			"description_string" "#Attrib_IsASword"
+			"description_format" "value_is_additive"
+			"hidden" "1"
+			"effect_type" "neutral"
+		}
+		
+		"5056"
+		{
+			"name"	"overheal penalty hidden"
+			"attribute_class"	"mult_medigun_overheal_amount"
+			"description_string"	"#Attrib_OverhealAmount_Negative"
+			"description_format"	"value_is_inverted_percentage"
+			"hidden"	"1"
+			"effect_type"	"negative"
+			"stored_as_integer"	"0"
+		}
+		"5057"
+		{
+			"name"	"bullets per shot bonus hidden"
+			"attribute_class"	"mult_bullets_per_shot"
+			"description_string"	"#Attrib_BulletsPerShot_Bonus"
 			"description_format"	"value_is_percentage"
 			"hidden"	"1"
 			"effect_type"	"positive"

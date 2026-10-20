@@ -1200,8 +1200,12 @@ void CTFPasstimeLogic::OnBallCarrierDamaged( CTFPlayer *pPlayer, CTFPlayer *pAtt
 
 	if ( info.GetDamageCustom() == TF_DMG_CUSTOM_BASEBALL )
 	{
-		auto launch = CPasstimeGun::CalcLaunch( pPlayer, false );
-		LaunchBall(pPlayer, launch.startPos, launch.startVel );
+		if ( pf_sandman_jack_disarm.GetBool() )
+		{
+			auto launch = CPasstimeGun::CalcLaunch( pPlayer, false );
+			LaunchBall( pPlayer, launch.startPos, launch.startVel );
+		}
+		return;
 	}
 	else
 	{

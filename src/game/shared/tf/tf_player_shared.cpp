@@ -170,8 +170,8 @@ ConVar tf_scout_energydrink_regen_rate( "tf_scout_energydrink_regen_rate", "3.3"
 ConVar tf_scout_energydrink_consume_rate( "tf_scout_energydrink_consume_rate", "12.5", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED, "energy drink to use per second while boosted, from 100 max" );
 ConVar tf_scout_energydrink_activation( "tf_scout_energydrink_activation", "0.0", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED, "how long it takes for the energy buff to become active" );
 
-ConVar tf_demoman_charge_regen_rate( "tf_demoman_charge_regen_rate", "8.3", FCVAR_REPLICATED, "" );
-ConVar tf_demoman_charge_drain_time( "tf_demoman_charge_drain_time", "1.5", FCVAR_REPLICATED, "" );
+ConVar tf_demoman_charge_regen_rate( "tf_demoman_charge_regen_rate", "12.45", FCVAR_REPLICATED, "Demoman charge recharge rate, in percentage-per-second. Vanilla TF2 default is 8.3 per second (12 seconds for 100%), whereas for PF this is increased by 1.5x to 12.45 per second (9 seconds for 100%) in order to make the Splendid Screen cooldown duration the new default" );
+ConVar tf_demoman_charge_drain_time( "tf_demoman_charge_drain_time", "1.5", FCVAR_REPLICATED, "Demoman charge drain time, in seconds." );
 
 // STAGING_SPY
 ConVar tf_feign_death_duration( "tf_feign_death_duration", "3.0", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Time that feign death buffs last." );

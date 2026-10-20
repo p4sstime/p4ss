@@ -309,8 +309,11 @@ bool CTFScatterGun::Reload( void )
 }
 
 #define JUMP_SPEED	268.3281572999747f
-extern float AirBurstDamageForce( const Vector &size, float damage, float scale );
 
+// Force jump velocity
+ConVar pf_force_jump_velocity( "pf_force_jump_velocity", "-500", FCVAR_REPLICATED, "Force Jumper knockback velocity. Live TF2 Force-a-Nature is -300" );
+
+extern float AirBurstDamageForce( const Vector &size, float damage, float scale );
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -323,16 +326,18 @@ void CTFScatterGun::FireBullet( CTFPlayer *pPlayer )
 		if ( !pOwner )
 			return;
 
-		// No knockback during pre-round freeze.
-		if ( TFGameRules() && (TFGameRules()->State_Get() == GR_STATE_PREROUND) )
-			return;
+//		// No knockback during pre-round freeze.
+//		if ( TFGameRules() && (TFGameRules()->State_Get() == GR_STATE_PREROUND) )
+//			return;
 
 		// Knock the firer back!
 		if ( !(pOwner->GetFlags() & FL_ONGROUND) && !pPlayer->m_Shared.m_bScattergunJump )
 		{
-			pPlayer->m_Shared.m_bScattergunJump = true;
+			//Commented this out to allow for multiple FaN jumps in one clip
+//			pPlayer->m_Shared.m_bScattergunJump = true;
 
-			pOwner->m_Shared.StunPlayer( 0.3f, 1.f, TF_STUN_MOVEMENT | TF_STUN_MOVEMENT_FORWARD_ONLY );
+			//Commented this out to remove the temporary stun
+//			pOwner->m_Shared.StunPlayer( 0.3f, 1.f, TF_STUN_MOVEMENT | TF_STUN_MOVEMENT_FORWARD_ONLY );
 
 			float flForce = AirBurstDamageForce( pOwner->WorldAlignSize(), 60, 6.f );
 
@@ -346,7 +351,7 @@ void CTFScatterGun::FireBullet( CTFPlayer *pPlayer )
 			Vector vecAbsVelocityAsPoint = vecAbsVelocity + pOwner->GetAbsOrigin();
 			Vector vecLocalVelocity = mtxPlayer.VMul4x3Transpose( vecAbsVelocityAsPoint );
 
-			vecLocalVelocity.x = -300;
+			vecLocalVelocity.x = pf_force_jump_velocity.GetFloat();
 
 			vecAbsVelocityAsPoint = mtxPlayer.VMul4x3( vecLocalVelocity );
 			vecAbsVelocity = vecAbsVelocityAsPoint - pOwner->GetAbsOrigin();
