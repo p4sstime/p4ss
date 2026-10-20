@@ -11,6 +11,8 @@ steam_appid.txt
 
 # Ignore build artifacts
 game/p4ss_linux64
+game/srcds_linux64
+game/p4ss/gameinfo_srcds_base.txt
 game/p4ss/cfg/*
 game/p4ss/custom
 game/p4ss/GameState.txt
@@ -540,6 +542,7 @@ FodyWeavers.xsd
 
 !src/lib/public/x64/
 game/p4ss_win64.exe
+game/srcds_win64.exe
 
 src/lib/public/x64/*.lib
 
@@ -557,6 +560,8 @@ src/lib/public/linux64/vgui_controls.a
 src/lib/public/linux64/mathlib.a
 src/lib/public/linux64/raytrace.a
 src/lib/public/linux64/buildinfo.a
+src/lib/public/linux64/tier1_srv.a
+src/lib/public/linux64/mathlib_srv.a
 
 
 game/p4ss/bin/linux64/game_shader_generic_example.so

@@ -31,7 +31,7 @@ jobs:
       working-directory: ${{ github.workspace }}/src
       shell: cmd
       run: |
-        call createp4ssproject.bat
+        call createp4ssproject.bat ${{ inputs.playtest && '/define:PLAYTEST' || '' }}
         nuget restore ${{env.SOLUTION_FILE_PATH}}
         msbuild /m /v:m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
     
@@ -42,6 +42,7 @@ jobs:
         path: |
           game/p4ss/bin/x64/*.dll
           game/p4ss_win64.exe
+          game/srcds_win64.exe
         if-no-files-found: error
 
   build-linux:
@@ -67,7 +68,7 @@ jobs:
       run: |
         mkdir ~/.ccache
         solution_out="_vpc_/ninja/sdk_p4ss_${VPC_NINJA_BUILD_MODE}"
-        devtools/bin/vpc /tf /linux64 /ninja /define:PLAYTEST /define:SOURCESDK +game /mksln "$solution_out"
+        devtools/bin/vpc /tf /linux64 /ninja ${{ inputs.playtest && '/define:PLAYTEST' || '' }} /define:SOURCESDK +game /mksln "$solution_out"
         ninja -f "${solution_out}.ninja" -j $(nproc)
 
     - name: Publish game binaries
@@ -77,6 +78,7 @@ jobs:
         path: |
           game/p4ss/bin/linux64/*.so
           game/p4ss_linux64
+          game/srcds_linux64
         if-no-files-found: error
 
   package_and_publish:
