@@ -1,5 +1,9 @@
 #base items_game.txt
 
+//Non-stock PF items are placed here. For whatever reason, attempting to place stock items (baseitems) here causes some funky things to happen, so they remain in the other file.
+//The other file still contains items that are grabbed from the user's inventory, such as the PASS Time beta medal.
+//To add a new item, make sure that "mod_pf_item" "1" is there, as this tells the game that it is a mod item and not a TF2 inventory item.
+
 "items_game"
 {
 	"attributes"
@@ -8,28 +12,189 @@
 	
 	"items"
 	{
+		
 		"21000"
 		{
-			"name"				"Test"
-			"mod_pf_item"		"1"
-			"prefab"			"weapon_scattergun"
-			"item_name"			"bleeds for 8 seconds"
-			"item_description"	"bleeds for 8 seconds"
-			"item_logname"		"bleeds_for_8seconds"
-			"item_quality"		"unique"
+			"name"	"The Equalizer"
+			"mod_pf_item"	"1"
+			"prefab"	"valve"
+			"item_class"	"tf_weapon_shovel"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_be_equipped_by_soldier_or_demo"	"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_taunt_damage"		"1"
+			}
+			"show_in_armory"	"1"
+			"item_type_name"	"#TF_Weapon_Pickaxe"
+			"item_name"	"#PF_ItemName_Pickaxe"
+			"item_description"	"#PF_ItemDescription_Pickaxe"
+			"item_logname"	"unique_pickaxe_escape"
+			"item_slot"	"melee"
+			"item_quality"	"unique"
+			"propername"	"0"
+			"min_ilevel"	"10"
+			"max_ilevel"	"10"
+			"image_inventory" "backpack/weapons/c_models/c_pickaxe/c_pickaxe_s2"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"inspect_panel_dist" 				"50"			
+			"model_player"	"models/weapons/c_models/c_pickaxe/c_pickaxe_s2.mdl"
+			"attach_to_hands" "1"
+			"used_by_classes"
+			{
+				"soldier"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"		"10 -3 -11"
+			}
 			"attributes"
 			{
-				"bleeding duration"
+				"provide on active"
 				{
-					"attribute_class" 	"bleeding_duration"
-					"value"				"8"
+					"attribute_class"	"provide_on_active"
+					"value" "1"
 				}
-				"damage penalty"
+				"mod shovel speed boost"
 				{
-					"attribute_class"	"mult_dmg"
-					"value"				"0.01"
+					"attribute_class"	"set_weapon_mode"
+					"value"	"2"
+				}
+				"reduced_healing_from_medics"
+				{
+					"attribute_class"	"mult_healing_from_medics"
+					"value" "0.1"
+				}
+				"self mark for death"
+				{
+					"attribute_class"	"self_mark_for_death"
+					"value"	"1"
+				}
+				"special taunt"
+				{
+					"attribute_class"	"special_taunt"
+					"value" "1"
 				}
 			}
+			"visuals"
+			{
+				"sound_melee_miss"	"Weapon_PickAxe.Swing"
+				"sound_melee_hit"	"Weapon_PickAxe.HitFlesh"
+				"sound_burst"		"Weapon_PickAxe.SwingCrit"
+			}
+			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
+		"21001"
+		{
+			"name"	"TF_WEAPON_BOTTLE"
+			"mod_pf_item"		"1"
+			"baseitem" "0"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+			}
+			"first_sale_date"	"2010/09/29"
+			"enabled"	"1"
+			"item_class"	"tf_weapon_bottle"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"item_type_name"	"#TF_Weapon_Bottle"
+			"item_name"	"#TF_Weapon_Bottle"
+			"item_description"	"#PF_ItemDescription_Bottle"
+			"item_slot"	"melee"
+			"item_quality"	"normal"
+			"min_ilevel"	"1"
+			"max_ilevel"	"1"
+			"image_inventory"	"backpack/weapons/w_models/w_bottle"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"  
+			"inspect_panel_dist" 				"30"					
+			"model_player"	"models/weapons/c_models/c_bottle/c_bottle.mdl"
+			"attach_to_hands" "1"
+			"used_by_classes"
+			{
+				"demoman"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"10 0 -14"
+			}
+			"mouse_pressed_sound"	"ui/item_bottle_pickup.wav"
+			"drop_sound"		"ui/item_bottle_drop.wav"
+		}
+		"21002"
+		{
+			"name"	"The Ubersaw"
+			"mod_pf_item"		"1"
+			"baseitem"	"0"
+			"enabled"	"1"
+			"item_class"	"tf_weapon_bonesaw"
+			"base_item_name"	"The Ubersaw"
+			"item_logname"	"ubersaw"
+			"item_iconname"	"ubersaw"
+			"item_type_name"	"#TF_Weapon_Bonesaw"
+			"item_name"	"TF_Unique_Achievement_Bonesaw1"
+			"item_description"		"#PF_ItemDescription_Ubersaw"
+			"item_slot"	"melee"
+			"image_inventory"	"backpack/weapons/c_models/c_ubersaw/c_ubersaw"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"model_player"	"models/weapons/c_models/c_ubersaw/c_ubersaw.mdl"
+			"attach_to_hands"	"1"
+			"inspect_panel_dist" "42"
+			"propername"	"1"
+			"used_by_classes"
+			{
+				"medic"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"		"10 0 -12"
+				"weapon_stattrak_module_scale"		"0.608"
+			}
+			"attributes"
+			{
+				"add uber charge on hit"
+				{
+					"attribute_class"	"add_onhit_ubercharge"
+					"value"	"0.25"
+				}
+				"fire rate penalty meleeswing"
+				{
+					"attribute_class"	"mult_postfiredelay"
+					"value"	"1.2"
+				}
+				"lunchbox adds minicrits"
+				{
+					"attribute_class"	"set_weapon_mode"
+					"value"	"1"
+				}
+				"special taunt"
+				{
+					"attribute_class"	"special_taunt"
+					"value" "1"
+				}
+			}
+			"visuals"
+			{
+				"sound_melee_hit"	"Weapon_UberSaw.HitFlesh"
+			}
+			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+			"particle_suffix"	"ubersaw"
 		}
 	}
 }
