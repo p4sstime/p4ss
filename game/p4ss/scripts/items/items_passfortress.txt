@@ -13,7 +13,7 @@
 	"items"
 	{
 		
-		"21000"
+		"20999"
 		{
 			"name"	"The Equalizer"
 			"mod_pf_item"	"1"
@@ -93,31 +93,86 @@
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 		}
+		
+		"21000"
+		{
+			"name"	"The Iron Bomber"
+			"mod_pf_item"	"1"
+			"enabled"	"1"
+			"item_class"		"tf_weapon_grenadelauncher"
+			"baseitem" "0"
+			"item_logname"	"iron_bomber"
+			"item_iconname"	"iron_bomber"
+			"item_type_name"	"#TF_Weapon_GrenadeLauncher"
+			"item_name"		"#PF_ItemName_Bomber"
+			"item_description"	"#PF_ItemDescription_Bomber"
+			"item_slot"		"primary"
+			"anim_slot"		"secondary"
+			"propername"		"1"
+			"attach_to_hands"	"1"
+			"inspect_panel_dist" "55"
+			"image_inventory"	"backpack/workshop/weapons/c_models/c_quadball/c_quadball"
+			"model_player"	"models/workshop/weapons/c_models/c_quadball/c_quadball.mdl"
+
+			"used_by_classes"
+			{
+				"demoman"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"		"10 0 -10"				
+			}
+			"attributes"
+			{
+				"Blast radius decreased"
+				{
+					"attribute_class"	"mult_explosion_radius"
+					"value"				"0.85"
+				}
+				"grenade no bounce"
+				{
+					"attribute_class"	"grenade_no_bounce"
+					"value"	"1"
+				}
+				"custom projectile model"
+				{
+					"attribute_class"	"custom_projectile_model"
+					"value"				"models/workshop/weapons/c_models/c_quadball/w_quadball_grenade.mdl"
+				}
+				"fuse bonus"
+				{
+					"attribute_class" "fuse_mult"
+					"value" "0.7"
+				}
+			}
+			"visuals"
+			{
+				"sound_single_shot"		"Weapon_TackyGrenadier.Single"
+				"sound_burst"			"Weapon_TackyGrenadier.SingleCrit"
+				"sound_special1"		"Weapon_Airstrike.Explosion"
+				"animation_replacement"
+				{
+					"ACT_PRIMARY_VM_INSPECT_START"		"ACT_PRIMARY_ALT1_VM_INSPECT_START"
+					"ACT_PRIMARY_VM_INSPECT_IDLE"		"ACT_PRIMARY_ALT1_VM_INSPECT_IDLE"
+					"ACT_PRIMARY_VM_INSPECT_END"		"ACT_PRIMARY_ALT1_VM_INSPECT_END"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_heavy_gun_pickup.wav"
+			"drop_sound"		"ui/item_heavy_gun_drop.wav"
+			"particle_suffix"	"iron_bomber"
+		}
+		
 		"21001"
 		{
 			"name"	"TF_WEAPON_BOTTLE"
 			"mod_pf_item"		"1"
 			"baseitem" "0"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-			}
-			"first_sale_date"	"2010/09/29"
 			"enabled"	"1"
 			"item_class"	"tf_weapon_bottle"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Bottle"
 			"item_name"	"#TF_Weapon_Bottle"
 			"item_description"	"#PF_ItemDescription_Bottle"
 			"item_slot"	"melee"
-			"item_quality"	"normal"
-			"min_ilevel"	"1"
-			"max_ilevel"	"1"
 			"image_inventory"	"backpack/weapons/w_models/w_bottle"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"  
@@ -135,52 +190,186 @@
 			"mouse_pressed_sound"	"ui/item_bottle_pickup.wav"
 			"drop_sound"		"ui/item_bottle_drop.wav"
 		}
-		"21002"
+		
+		"30002"
 		{
-			"name"	"The Ubersaw"
+			"name"			"Ali Baba's Wee Booties"
 			"mod_pf_item"		"1"
-			"baseitem"	"0"
-			"enabled"	"1"
-			"item_class"	"tf_weapon_bonesaw"
-			"base_item_name"	"The Ubersaw"
-			"item_logname"	"ubersaw"
-			"item_iconname"	"ubersaw"
-			"item_type_name"	"#TF_Weapon_Bonesaw"
-			"item_name"	"TF_Unique_Achievement_Bonesaw1"
-			"item_description"		"#PF_ItemDescription_Ubersaw"
-			"item_slot"	"melee"
-			"image_inventory"	"backpack/weapons/c_models/c_ubersaw/c_ubersaw"
+			"prefab"	"weapon_demoman_boots"
+			"show_in_armory"	"1"
+			"item_type_name" 	"#TF_Wearable_Boots"
+			"item_name"		"#PF_ItemName_RocketBoots"
+			"item_description"		"#PF_ItemDescription_RocketBoots"
+			"min_ilevel"		"10"
+			"max_ilevel"		"10"
+			"image_inventory"	"backpack/workshop/player/items/demo/demo_booties/demo_booties"
+			"model_player"		"models/workshop/player/items/demo/demo_booties/demo_booties.mdl"
+		}
+
+		"30003"
+		{
+			"name"	"The Original"
+			"mod_pf_item"		"1"
+			"item_class"	"tf_weapon_rocketlauncher"
+			"craft_material_type"	"weapon"
+			"craft_class"	"weapon"
+			"capabilities"
+			{
+				"nameable"				"1"
+				"can_craft_count"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"		"1"
+				"can_deal_gib_damage"	"1"
+				"can_be_equipped_by_soldier_or_demo"	"1"
+				"can_deal_posthumous_damage"	"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_long_distance_damage"	"1"
+			}
+			"item_logname"	"quake_rl"
+			"item_iconname"	"quake_rl"
+			"show_in_armory"	"1"
+			"item_type_name"	"#TF_Weapon_RocketLauncher"
+			"item_name"	"#PF_ItemName_PFLauncher"
+			"item_description"	"#PF_ItemDescription_PFLauncher"
+			"item_slot"	"primary"
+			"item_quality"	"unique"
+			"propername"	"0"
+			"min_ilevel"	"5"
+			"max_ilevel"	"5"
+			"inspect_panel_dist" "68"
+			"image_inventory"	"backpack/workshop_partner/weapons/c_models/c_bet_rocketlauncher/c_bet_rocketlauncher"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
-			"model_player"	"models/weapons/c_models/c_ubersaw/c_ubersaw.mdl"
-			"attach_to_hands"	"1"
-			"inspect_panel_dist" "42"
-			"propername"	"1"
+			"model_player"	"models/workshop_partner/weapons/c_models/c_bet_rocketlauncher/c_bet_rocketlauncher.mdl"
+			"attach_to_hands" "1"
 			"used_by_classes"
 			{
-				"medic"	"1"
+				"soldier"	"1"
 			}
 			"static_attrs"
 			{
-				"min_viewmodel_offset"		"10 0 -12"
-				"weapon_stattrak_module_scale"		"0.608"
+				"pflauncher explain"	"1"
+				"min_viewmodel_offset"					"10 0 -5"				
 			}
 			"attributes"
 			{
-				"add uber charge on hit"
+				"centerfire projectile"
 				{
-					"attribute_class"	"add_onhit_ubercharge"
-					"value"	"0.25"
-				}
-				"fire rate penalty meleeswing"
-				{
-					"attribute_class"	"mult_postfiredelay"
-					"value"	"1.2"
-				}
-				"lunchbox adds minicrits"
-				{
-					"attribute_class"	"set_weapon_mode"
+					"attribute_class"	"centerfire_projectile"
 					"value"	"1"
+				}
+				"disable fancy class select anim"
+				{
+					"attribute_class"	"disable_fancy_class_select_anim"
+					"value"	"1"
+				}
+			}
+			"visuals"
+			{
+				"animation_replacement"
+				{
+					"ACT_VM_DRAW"	"ACT_VM_DRAW_QRL"
+					"ACT_VM_IDLE"	"ACT_VM_IDLE_QRL"
+					"ACT_VM_PULLBACK"	"ACT_VM_PULLBACK_QRL"
+					"ACT_VM_PRIMARYATTACK"	"ACT_VM_PRIMARYATTACK_QRL"
+					"ACT_VM_RELOAD"	"ACT_VM_RELOAD_QRL"
+					"ACT_RELOAD_START"	"ACT_VM_RELOAD_START_QRL"
+					"ACT_RELOAD_FINISH"	"ACT_VM_RELOAD_FINISH_QRL"
+					"ACT_MP_RELOAD_STAND_PRIMARY"	"ACT_MP_RELOAD_STAND_PRIMARY3"
+					"ACT_MP_RELOAD_CROUCH_PRIMARY"	"ACT_MP_RELOAD_CROUCH_PRIMARY3"
+					"ACT_MP_RELOAD_AIRWALK_PRIMARY"	"ACT_MP_RELOAD_AIRWALK_PRIMARY3"
+					"ACT_MP_RELOAD_STAND_PRIMARY_LOOP"	"ACT_MP_RELOAD_STAND_PRIMARY3_LOOP"
+					"ACT_MP_RELOAD_CROUCH_PRIMARY_LOOP"	"ACT_MP_RELOAD_CROUCH_PRIMARY3_LOOP"
+					"ACT_MP_RELOAD_AIRWALK_PRIMARY_LOOP"	"ACT_MP_RELOAD_AIRWALK_PRIMARY3_LOOP"
+					"ACT_MP_RELOAD_STAND_PRIMARY_END"	"ACT_MP_RELOAD_STAND_PRIMARY3_END"
+					"ACT_MP_RELOAD_CROUCH_PRIMARY_END"	"ACT_MP_RELOAD_CROUCH_PRIMARY3_END"
+					"ACT_MP_RELOAD_AIRWALK_PRIMARY_END"	"ACT_MP_RELOAD_AIRWALK_PRIMARY3_END"
+					"ACT_MP_RELOAD_SWIM_PRIMARY"	"ACT_MP_RELOAD_SWIM_PRIMARY3"
+					"ACT_PRIMARY_VM_INSPECT_START"		"ACT_PRIMARY_ALT1_VM_INSPECT_START"
+					"ACT_PRIMARY_VM_INSPECT_IDLE"		"ACT_PRIMARY_ALT1_VM_INSPECT_IDLE"
+					"ACT_PRIMARY_VM_INSPECT_END"		"ACT_PRIMARY_ALT1_VM_INSPECT_END"
+				}
+				"sound_single_shot"		"Weapon_QuakeRPG.Single"
+				"sound_burst"			"Weapon_QuakeRPG.SingleCrit"
+				"sound_deploy"			"Weapon_QuakeRPG.Draw"
+				"sound_reload"			"Weapon_QuakeRPG.Reload"
+				"sound_special1"		"Weapon_QuakeRPG.Explode"
+			}
+			"mouse_pressed_sound"	"ui/item_heavy_gun_pickup.wav"
+			"drop_sound"		"ui/item_heavy_gun_drop.wav"
+		}
+		
+		"30004"
+		{
+			"name"	"The Eyelander"
+			"mod_pf_item"	"1"
+			"enabled"	"1"
+			"item_class"	"tf_weapon_sword"
+			"item_type_name"	"#TF_Weapon_Sword"
+			"item_slot"	"melee"
+			"anim_slot"	"item1"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"attach_to_hands"	"1"
+			
+			"base_item_name"	"The Eyelander"
+			"item_name"	"#TF_Unique_Achievement_Sword"
+			"item_description"	"#PF_ItemDescription_Eyelander"
+			"propername"	"1"
+			"image_inventory"	"backpack/weapons/c_models/c_claymore/c_claymore"
+			"model_player"	"models/weapons/c_models/c_claymore/c_claymore.mdl"
+			"used_by_classes"
+			{
+				"demoman"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"				"10 0 -11"	
+			}
+			"visuals"
+			{
+				"sound_melee_miss"	"Weapon_Sword.Swing"
+				"sound_melee_hit"	"Weapon_Sword.HitFlesh"
+				"sound_melee_hit_world"	"Weapon_Sword.HitWorld"
+				"sound_burst"		"Weapon_Sword.SwingCrit"
+				"sound_special1"	"Sword.Hit"
+				"sound_special2"	"Sword.Idle"
+				
+				"animation_replacement"
+				{
+					"ACT_MELEE_VM_INSPECT_START"	"ACT_SPECIAL_VM_INSPECT_START"
+					"ACT_MELEE_VM_INSPECT_IDLE"		"ACT_SPECIAL_VM_INSPECT_IDLE"
+					"ACT_MELEE_VM_INSPECT_END"		"ACT_SPECIAL_VM_INSPECT_END"
+				}
+			}
+			"attributes"
+			{
+				"is_a_sword hidden"
+				{
+					"attribute_class"	"is_a_sword"
+					"value"				"72"
+				}
+				"provide on active"
+				{
+					"attribute_class"	"provide_on_active"
+					"value" "1"
+				}
+				"charge time increased"
+				{
+					"attribute_class"	"mod_charge_time"
+					"value" "0.5"
+				}
+				"charge recharge rate increased"
+				{
+					"attribute_class"	"charge_recharge_rate"
+					"value"	"1.5"
+				}
+				"crit mod disabled hidden"
+				{
+					"attribute_class"	"mult_crit_chance"
+					"value"	"0"
 				}
 				"special taunt"
 				{
@@ -188,13 +377,9 @@
 					"value" "1"
 				}
 			}
-			"visuals"
-			{
-				"sound_melee_hit"	"Weapon_UberSaw.HitFlesh"
-			}
-			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"mouse_pressed_sound"	"ui/item_knife_large_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
-			"particle_suffix"	"ubersaw"
+			"xifier_class_remap"	"eyelander"
 		}
 	}
 }
