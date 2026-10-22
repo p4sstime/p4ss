@@ -820,7 +820,7 @@ int main( int argc, char *argv[] )
 	}
 
 	char szExecutable[8192];
-	snprintf(szExecutable, sizeof(szExecutable), "%s/tf.sh", szGameInstallDir );
+	snprintf(szExecutable, sizeof(szExecutable), "%s/hl2.sh", szGameInstallDir );
 
 	std::vector<char *> new_argv;
 
