@@ -303,7 +303,7 @@ static bool GetGameInstallDir( const char *pRootDir, int argc, char **argv, char
 
 	const std::string szGameInfoPath = std::string( pRootDir ) + "/" SRCDS_GAME "/gameinfo.txt";
 	const std::string szBaseGameInfoPath = std::string( pRootDir ) + "/" SRCDS_GAME "/gameinfo_srcds_base.txt";
-	const std::string replace_word = "|appid_440|";
+	const std::string replace_word = "|appid_";
 
 	std::ifstream gameInfoFile( szGameInfoPath, std::ios::binary );
 	std::string gameInfo( ( std::istreambuf_iterator<char>( gameInfoFile ) ), std::istreambuf_iterator<char>() );
@@ -333,7 +333,8 @@ static bool GetGameInstallDir( const char *pRootDir, int argc, char **argv, char
 		size_t pos = 0;
 		while ( ( pos = line.find( replace_word, pos ) ) != std::string::npos )
 		{
-			line.replace( pos, replace_word.size(), "\"" + gamePathOverride + "/" );
+			size_t end = line.find( '|', pos + replace_word.size() ) + 1;
+			line.replace( pos, end - pos, "\"" + gamePathOverride + "/" );
 			line += "\""; // path might have space in it... enclose in quotes
 			pos += replace_word.size();
 		}
