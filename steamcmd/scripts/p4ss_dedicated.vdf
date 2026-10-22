@@ -18,16 +18,6 @@
 				"DepotPath" "." // mapped into the root of the depot
 				"recursive" "1" // include all subfolders
 			}
-			"FileMapping"
-			{
-				"LocalPath" "./p4ss/playtest_gameinfo.txt"
-				"DepotPath" "./p4ss/gameinfo.txt"
-			}
-			"FileMapping"
-			{
-				"LocalPath" "./p4ss/playtest_steam.inf"
-				"DepotPath" "./p4ss/steam.inf"
-			}
 			"FileExclusion" "bin/*"
 			"FileExclusion" "p4ss_linux64*"
 			"FileExclusion" "p4ss_win64*"
@@ -36,8 +26,6 @@
 			"FileExclusion" "srcds.sh"
 			"FileExclusion" "p4ss/bin/*"
 			"FileExclusion" "p4ss/linux64/*"
-			"FileExclusion" "p4ss/gameinfo.txt"
-			"FileExclusion" "p4ss/steam.inf"
 		}
 		"3717643"
 		{

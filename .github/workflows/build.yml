@@ -109,4 +109,5 @@ jobs:
           steam_username: pfbuilder
 
       - run: steamcmd +login pfbuilder +run_app_build ${{ github.workspace }}/steamcmd/scripts/${{ inputs.playtest && 'p4ss_build_playtest.vdf' || 'p4ss_build.vdf' }} +quit
+      - run: cp game/p4ss/playtest_gameinfo.txt game/p4ss/gameinfo.txt && cp game/p4ss/playtest_steam.inf game/p4ss/steam.inf
       - run: steamcmd +login pfbuilder +run_app_build ${{ github.workspace }}/steamcmd/scripts/p4ss_dedicated.vdf +quit
