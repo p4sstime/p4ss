@@ -69,10 +69,12 @@ void DisableFloatingHealthCallback( IConVar *var, const char *oldString, float o
 		pTargetID->InvalidateLayout();
 	}
 }
-ConVar tf_hud_target_id_disable_floating_health( "tf_hud_target_id_disable_floating_health", "0", FCVAR_ARCHIVE, "Set to disable floating health bar", DisableFloatingHealthCallback );
+ConVar tf_hud_target_id_disable_floating_health( "tf_hud_target_id_disable_floating_health", "1", FCVAR_ARCHIVE, "Set to disable floating health bar", DisableFloatingHealthCallback );
 ConVar tf_hud_target_id_alpha( "tf_hud_target_id_alpha", "100", FCVAR_ARCHIVE, "Alpha value of target id background, default 100" );
 ConVar tf_hud_target_id_offset( "tf_hud_target_id_offset", "0", FCVAR_ARCHIVE, "RES file Y offset for target id" );
 ConVar tf_hud_target_id_show_avatars( "tf_hud_target_id_show_avatars", "2", FCVAR_ARCHIVE, "Display Steam avatars on TargetID when using floating health icons.  1 = everyone, 2 = friends only." );
+ConVar pf_disable_targetid( "pf_disable_targetid", "1", FCVAR_ARCHIVE, "Disables Target IDs, which were made somewhat redundant by our new health bars and name tags" );
+ConVar pf_disable_targetid_except_spectate( "pf_disable_targetid_except_spectate", "1", FCVAR_ARCHIVE, "When pf_disable_targetid is 1, still show target ID while spectating" );
 
 
 bool ShouldHealthBarBeVisible( CBaseEntity *pTarget, CTFPlayer *pLocalPlayer )
@@ -503,6 +505,21 @@ bool CTargetID::IsValidIDTarget( int nEntIndex, float flOldTargetRetainFOV, floa
 //-----------------------------------------------------------------------------
 bool CTargetID::ShouldDraw( void )
 {
+
+	if ( pf_disable_targetid.GetBool() )
+	{
+		C_TFPlayer *pLocalTFPlayer = C_TFPlayer::GetLocalTFPlayer();
+		if ( !pLocalTFPlayer || pLocalTFPlayer->GetObserverMode() <= OBS_MODE_NONE )
+		{
+			return false;
+		}
+		
+		if ( !pf_disable_targetid_except_spectate.GetBool() )
+		{
+			return false;
+		}
+	}
+
 	if ( !CHudElement::ShouldDraw() )
 	{
 		UpdateFloatingHealthIconVisibility( false );
@@ -1358,7 +1375,6 @@ void CSpectatorTargetID::PerformLayout( void )
 		}
 	}
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: 
