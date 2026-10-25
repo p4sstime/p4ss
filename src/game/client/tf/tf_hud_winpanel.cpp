@@ -96,15 +96,6 @@ void CTFWinPanel::SetVisible( bool state )
 	if ( state == IsVisible() )
 		return;
 
-	if ( state )
-	{
-		HideLowerPriorityHudElementsInGroup( "mid" );
-	}
-	else
-	{
-		UnhideLowerPriorityHudElementsInGroup( "mid" );
-	}
-
 	BaseClass::SetVisible( state );
 }
 
@@ -445,6 +436,10 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 			}
 		}
 
+		// PF FANCY ANIMATION
+		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence(
+		this, "WinPanelAnimate" );
+
 		// get the current & previous team scores
 		int iBlueTeamPrevScore = event->GetInt( "blue_score_prev", 0 );
 		int iRedTeamPrevScore = event->GetInt( "red_score_prev", 0 );
@@ -540,54 +535,6 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 			pPlayerScore->SetVisible( bShow );
 		}
 
-		// Top killstreak
-		const int nMaxKillStreaks = 1;
-		for ( int i = 1; i <= nMaxKillStreaks; ++i )
-		{
-			char szPlayerIndexVal[64]="", szPlayerScoreVal[64]="";
-			Q_snprintf( szPlayerIndexVal, ARRAYSIZE( szPlayerIndexVal ), "killstreak_player_%d", i );
-			Q_snprintf( szPlayerScoreVal, ARRAYSIZE( szPlayerScoreVal ), "killstreak_player_%d_count", i );
-			int iPlayerIndex = event->GetInt( szPlayerIndexVal, 0 );
-			int iCount = event->GetInt( szPlayerScoreVal, 0 );
-			
-			vgui::Label *pKillStreakPlayerName = dynamic_cast<Label *>( FindChildByName( CFmtStr( "KillStreakPlayer%dName", i ) ) );
-			vgui::Label *pKillStreakPlayerClass = dynamic_cast<Label *>( FindChildByName( CFmtStr( "KillStreakPlayer%dClass", i ) ) );
-			vgui::Label *pKillStreakPlayerScore = dynamic_cast<Label *>( FindChildByName( CFmtStr( "KillStreakPlayer%dScore", i ) ) );
-			if ( !pKillStreakPlayerName || !pKillStreakPlayerClass || !pKillStreakPlayerScore )
-				continue;
-
-			bool bShow = iCount > 0;
-			if ( bShow )
-			{
-				CAvatarImagePanel *pPlayerAvatar = dynamic_cast<CAvatarImagePanel *>( FindChildByName( CFmtStr( "KillStreakPlayer%dAvatar", i ) ) );
-				if ( pPlayerAvatar )
-				{
-					pPlayerAvatar->SetShouldScaleImage( true );
-					pPlayerAvatar->SetShouldDrawFriendIcon( false );
-
-					CBasePlayer *pPlayer = UTIL_PlayerByIndex( iPlayerIndex );
-					pPlayerAvatar->SetPlayer( pPlayer );
-					pPlayerAvatar->SetVisible( true );
-				}
-
-				// set the player labels to team color
-				Color clr = g_PR->GetTeamColor( g_PR->GetTeam( iPlayerIndex ) );				
-				pKillStreakPlayerName->SetFgColor( clr );
-				pKillStreakPlayerClass->SetFgColor( clr );
-				pKillStreakPlayerScore->SetFgColor( clr );
-
-				// set label contents
-				pKillStreakPlayerName->SetText( g_PR->GetPlayerName( iPlayerIndex ) );
-				pKillStreakPlayerClass->SetText( g_aPlayerClassNames[g_TF_PR->GetPlayerClass( iPlayerIndex )] );
-				pKillStreakPlayerScore->SetText( CFmtStr( "%d", iCount ) );
-			}
-
-			// show or hide labels for this player position
-			pKillStreakPlayerName->SetVisible( bShow );
-			pKillStreakPlayerClass->SetVisible( bShow );
-			pKillStreakPlayerScore->SetVisible( bShow );
-		}
-
 		UpdateTeamInfo();
 
 		m_bShouldBeVisible = true;
@@ -654,6 +601,9 @@ void CTFWinPanel::OnThink()
 		}
 
 		// play a sound
+		// 
+		// PF - maybe make this only play when using match hud and mp_winlimit is not 0?
+		// 
 		CLocalPlayerFilter filter;
 		C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "Hud.EndRoundScored" );
 
