@@ -424,7 +424,7 @@ void CTFGameStats::ResetKillHistory( CTFPlayer *pPlayer )
 void CTFGameStats::ResetRoundStats()
 {
 	for ( int i = 0; i < ARRAYSIZE( m_aPlayerStats ); i++ )
-	{		
+	{
 		m_aPlayerStats[i].statsCurrentRound.Reset();
 	}
 	m_currentRoundRed.Reset();
