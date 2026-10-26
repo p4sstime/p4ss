@@ -23,7 +23,7 @@
 "blank"						"=========================="
 "blank"						"#TF_Title"
 "blank"						"=========================="
-"resupply"						"#Keybind_Instant_Resupply"
+"+resupply"						"#Keybind_Instant_Resupply"
 "changeclass"					"#Valve_Change_Class"
 "changeteam"					"#Valve_Change_Team"
 "open_charinfo_direct"			"#TF_Open_Charinfo"
