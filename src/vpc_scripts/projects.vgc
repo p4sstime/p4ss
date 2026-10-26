@@ -65,6 +65,11 @@ $Project "launcher_main"
 	"launcher_main\launcher_main_mod_tf.vpc" [$TF]
 }
 
+$Project "srcds"
+{
+	"launcher_main\launcher_main_srcds.vpc"
+}
+
 $Project "mathlib"
 {
 	"mathlib\mathlib.vpc"

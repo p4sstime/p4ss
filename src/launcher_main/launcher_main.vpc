@@ -42,13 +42,14 @@ $Configuration
 	$Compiler
 	{
 		$PreprocessorDefinitions	"$BASE;MOD_LAUNCHER" [$MOD_LAUNCHER]
+		$PreprocessorDefinitions	"$BASE;SRCDS" [$SRCDS]
 		$ForceIncludes				" "
 	}
 
 	$Linker
 	{
 		// $SystemLibraries				"SDL2" [$MOD_LAUNCHER && $LINUXALL]
-		$SystemLibraries				"SDL2" [$LINUXALL] // lucy: this doesn't link on Linux with mod_launcher disabled?
+		$SystemLibraries				"SDL2" [$LINUXALL && !$SRCDS] // lucy: this doesn't link on Linux with mod_launcher disabled?
 	}
 }
 

@@ -23,6 +23,9 @@
 			"FileExclusion" "bin/*" // exclude linux64 binaries
 			"FileExclusion" "p4ss_linux64*"
 			"FileExclusion" "p4ss_win64*"
+			"FileExclusion" "srcds_linux64*"
+			"FileExclusion" "srcds_win64*"
+			"FileExclusion" "srcds.sh"
 			"FileExclusion" "p4ss/bin/*"
 			"FileExclusion" "p4ss/linux64/*"
 		}
@@ -38,6 +41,16 @@
 			{
 				"LocalPath" "p4ss_linux64" // all files from contentroot folder
 				"DepotPath" "." // mapped into the root of the depot
+			}
+			"FileMapping"
+			{
+				"LocalPath" "srcds_linux64"
+				"DepotPath" "."
+			}
+			"FileMapping"
+			{
+				"LocalPath" "srcds.sh"
+				"DepotPath" "."
 			}
 			"FileMapping"
 			{
@@ -59,6 +72,11 @@
 			{
 				"LocalPath" "p4ss_win64.exe" // all files from contentroot folder
 				"DepotPath" "." // mapped into the root of the depot
+			}
+			"FileMapping"
+			{
+				"LocalPath" "srcds_win64.exe"
+				"DepotPath" "."
 			}
 			"FileMapping"
 			{
