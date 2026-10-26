@@ -979,7 +979,7 @@ float CNextLevelIssue::GetQuorumRatio( void )
 //-----------------------------------------------------------------------------
 // Purpose: Extend the current level
 //-----------------------------------------------------------------------------
-ConVar sv_vote_issue_extendlevel_allowed( "sv_vote_issue_extendlevel_allowed", "1", FCVAR_NONE, "Can players call votes to set the next level?" );
+ConVar sv_vote_issue_extendlevel_allowed( "sv_vote_issue_extendlevel_allowed", "0", FCVAR_NONE, "Can players call votes to set the next level?" );
 ConVar sv_vote_issue_extendlevel_quorum( "sv_vote_issue_extendlevel_quorum", "0.6", FCVAR_NONE, "What is the ratio of voters needed to reach quorum?" );
 
 //-----------------------------------------------------------------------------
@@ -1474,13 +1474,13 @@ float CTeamAutoBalanceIssue::GetQuorumRatio( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Enable/Disable tf_classlimit
+// Purpose: Enable/Disable tf_classlimit. Made development only in favor of using pf_classlimit_*
 //-----------------------------------------------------------------------------
-ConVar sv_vote_issue_classlimits_allowed( "sv_vote_issue_classlimits_allowed", "0", FCVAR_NONE, "Can players call votes to enable or disable per-class limits?" );
-ConVar sv_vote_issue_classlimits_allowed_mvm( "sv_vote_issue_classlimits_allowed_mvm", "0", FCVAR_NONE, "Can players call votes in Mann-Vs-Machine to enable or disable per-class limits?" );
-ConVar sv_vote_issue_classlimits_max( "sv_vote_issue_classlimits_max", "4", FCVAR_NONE, "Maximum number of players (per-team) that can be any one class.", true, 1.f, false, 16.f );
-ConVar sv_vote_issue_classlimits_max_mvm( "sv_vote_issue_classlimits_max_mvm", "2", FCVAR_NONE, "Maximum number of players (per-team) that can be any one class.", true, 1.f, false, 16.f );
-ConVar sv_vote_issue_classlimits_cooldown( "sv_vote_issue_classlimits_cooldown", "300", FCVAR_NONE, "Minimum time before another classlimits vote can occur (in seconds)." );
+ConVar sv_vote_issue_classlimits_allowed( "sv_vote_issue_classlimits_allowed", "0", FCVAR_DEVELOPMENTONLY, "Can players call votes to enable or disable per-class limits?" );
+ConVar sv_vote_issue_classlimits_allowed_mvm( "sv_vote_issue_classlimits_allowed_mvm", "0", FCVAR_DEVELOPMENTONLY, "Can players call votes in Mann-Vs-Machine to enable or disable per-class limits?" );
+ConVar sv_vote_issue_classlimits_max( "sv_vote_issue_classlimits_max", "4", FCVAR_DEVELOPMENTONLY, "Maximum number of players (per-team) that can be any one class.", true, 1.f, false, 16.f );
+ConVar sv_vote_issue_classlimits_max_mvm( "sv_vote_issue_classlimits_max_mvm", "2", FCVAR_DEVELOPMENTONLY, "Maximum number of players (per-team) that can be any one class.", true, 1.f, false, 16.f );
+ConVar sv_vote_issue_classlimits_cooldown( "sv_vote_issue_classlimits_cooldown", "300", FCVAR_DEVELOPMENTONLY, "Minimum time before another classlimits vote can occur (in seconds)." );
 
 //-----------------------------------------------------------------------------
 // Purpose: 

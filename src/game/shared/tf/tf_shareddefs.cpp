@@ -215,15 +215,15 @@ int GetClassIndexFromString( const char *pClassName, int nLastClassIndex/*=TF_LA
 int iRemapIndexToClass[TF_CLASS_MENU_BUTTONS] =
 {
 	0,
-		TF_CLASS_SCOUT,
 		TF_CLASS_SOLDIER,
-		TF_CLASS_PYRO,
 		TF_CLASS_DEMOMAN,
-		TF_CLASS_HEAVYWEAPONS,
-		TF_CLASS_ENGINEER,
 		TF_CLASS_MEDIC,
-		TF_CLASS_SNIPER,
-		TF_CLASS_SPY,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
 		0,
 		0,
 		TF_CLASS_RANDOM
