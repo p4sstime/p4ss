@@ -86,6 +86,7 @@ CTFWeaponBaseGrenadeProj::CTFWeaponBaseGrenadeProj()
 	m_flDestroyableTime = 0.0f;
 	m_bIsMerasmusGrenade = false;
 	m_iDestroyableHitCount = 0;
+	m_bPipeCuePlayed = false;
 #endif
 }
 
@@ -308,6 +309,7 @@ void CTFWeaponBaseGrenadeProj::Spawn( void )
 
 	// Setup the think and touch functions (see CBaseEntity).
 	SetThink( &CTFWeaponBaseGrenadeProj::DetonateThink );
+	m_bPipeCuePlayed = false;
 	CReliableBroadcastRecipientFilter filter;
 		soundCuePipeTimer = CSoundEnvelopeController::GetController().SoundCreate( 
 			filter, entindex(), "Passtime.SoundCueForPipe" );
@@ -475,12 +477,13 @@ void CTFWeaponBaseGrenadeProj::DetonateThink( void )
 		return;
 	}
 
-	if ( gpGlobals->curtime > m_flDetonateTime - 0.4f && gpGlobals->curtime <= m_flDetonateTime - 0.3f)
+	if ( !m_bPipeCuePlayed && gpGlobals->curtime >= m_flDetonateTime - 0.4f )
 	{
 		CSoundEnvelopeController::GetController().Play( soundCuePipeTimer, 1, PITCH_NORM);
+		m_bPipeCuePlayed = true;
 	}
 	
-	SetNextThink( gpGlobals->curtime + 0.1 );
+	SetNextThink( gpGlobals->curtime + 0.2 );
 }
 
 //-----------------------------------------------------------------------------
