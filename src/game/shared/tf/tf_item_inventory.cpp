@@ -126,6 +126,22 @@ CEconItemView *CTFInventoryManager::AddModItem( int id )
 	pItem->m_ulID = id;
 	pItem->m_unAccountID = 0;
 	pItem->m_unDefIndex = id;
+
+	// When implementing the Mod Items from a tutorial, I ran into a snag here.
+	// 
+	// Tutorial instructed me to place:
+	// pItemView->Init( id, AE_USE_SCRIPT_VALUE, AE_USE_SCRIPT_VALUE, false );
+	// 
+	// This caused a compile issue because it could not take 4 arguments, possibly
+	// due to other nuking to econ items we had done elsewhere in the codebase (ask Azzy),
+	// and hopefully not due to a mistake I had made.
+	// The only way I could get the game to launch was by reducing it to 2 arguments.
+	// This worked, but I have no idea what this code is responsible for.
+	// For all I know it could be related to the Mod Item minmode viewmodel bug,
+	// or maybe this causes another issue elsewhere, or maybe it's nothing.
+	// Too bad! LGTM
+	// -Sun-shaped Welshman
+
 	pItemView->Init( id, NULL ); 
 	pItemView->SetItemID( id );
 	pItemView->SetNonSOEconItem( pItem );

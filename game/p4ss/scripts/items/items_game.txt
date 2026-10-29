@@ -220,19 +220,9 @@
 		}
 		"promo"
 		{
-			"craft_class"			""
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
-			}
 		}
 		"halloween"
 		{
-			"craft_class"			""
 			"capabilities"
 			{
 				"can_craft_count" 	"0"
@@ -242,7 +232,6 @@
 
 		"dummy_item"
 		{
-			"show_in_armory"	"0"
 			"item_class"	"craft_item"
 			"image_inventory"	"backpack/crafting/pile_of_junk"
 		}
@@ -255,20 +244,11 @@
 			"triangle_budget_lod2"	"700"
 			"qc_template"			"scripts/itemtest_qc_template_misc.txt"
 			"loadondemand"			"1"
-			"capabilities"
-			{
-				"nameable"			"1"
-				"can_craft_if_purchased"	"1"
-			}
-			"show_in_armory"		"1"
 			"item_class"			"tf_wearable"
-			"item_quality"			"unique"
 			"item_slot"				"misc"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"drop_type"				"none"
-			"craft_class"			"hat"
-			"craft_material_type"	"hat"
 			"mouse_pressed_sound" 	"ui/item_default_pickup.wav"
 			"drop_sound" 		"ui/item_default_drop.wav"
 		}
@@ -349,19 +329,10 @@
 			{
 				"is_taunt_item"	"1"
 			}
-			"capabilities"
-			{
-				"nameable"		"1"
-				"can_craft_count"	"1"
-				"can_craft_if_purchased"	"1"
-				"can_unusualify"	"1"
-			}
-			"show_in_armory"	"1"
 			"armory_desc"		"action tauntenabler"
 			"item_class"		"no_entity"
 			"item_type_name"	"#TF_TauntEnabler"
 			"item_slot"			"taunt"
-			"item_quality"		"unique"
 			"attributes"
 			{
 				"kill eater score type"
@@ -436,11 +407,9 @@
 		{
 			"item_class"	"craft_item"
 			"item_type_name"	"#TF_RobotPart_Type"
-			"show_in_armory"	"0"
 			"image_inventory"	"backpack/crafting/mvm_robits_01"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
-			"item_quality"	"unique"
 			"propername" "0"
 			"mouse_pressed_sound"	"ui/item_metal_scrap_pickup.wav"
 			"drop_sound"		"ui/item_metal_scrap_drop.wav"
@@ -454,17 +423,13 @@
 			"prefab"		"base_misc"
 			"loadondemand"	"1"
 			"item_class"	"tf_wearable"
-			"craft_class"		""	
-			"craft_material_type"	""				
 			"capabilities"
 			{
 			}
-			"show_in_armory"	"0"
 			"armory_remap"		"Tournament Medal (Armory)"
 			"item_type_name"	"#TF_Wearable_TournamentMedal"
 			"item_slot"	"misc"
 			"equip_region"	"medal"
-			"item_quality"	"unique"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"drop_type"	"none"
@@ -479,14 +444,6 @@
 				"spy" "1"
 				"engineer" "1"
 				"pyro" "1"
-			}
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
 			}
 			"mouse_pressed_sound"	"ui/item_metal_tiny_pickup.wav"
 			"drop_sound"		"ui/item_metal_tiny_drop.wav"
@@ -558,14 +515,7 @@
 			{
 				"type"	"powerup_bottle"
 			}
-			"capabilities"
-			{
-				"nameable"		"1"
-				"usable"		"1"
-				"can_craft_count"	"1"
-			}
 			"loadondemand"			"1"
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_UsableItem"
 			"item_name"	"#TF_Usable_PowerupBottle"
 			"item_description"	"#TF_Usable_PowerupBottle_Desc"
@@ -573,7 +523,6 @@
 			"image_inventory"	"backpack/player/items/all_class/powerupbottle"
 			"image_inventory_size_w"	"128"
 			"image_inventory_size_h"	"82"
-			"item_quality"		"unique"
 			"model_player"	"models/player/items/mvm_loot/all_class/mvm_flask_generic.mdl"
 			"armory_desc" "action"
 			"used_by_classes"
@@ -588,31 +537,12 @@
 				"engineer" "1"
 				"pyro" "1"
 			}
-			"attributes"
-			{
-				"powerup charges"
-				{
-					"attribute_class"	"powerup_charges"
-					"value"	"0"
-				}
-				"powerup max charges"
-				{
-					"attribute_class"	"powerup_max_charges"
-					"value"	"3"
-				}
-				"powerup duration"
-				{
-					"attribute_class"	"powerup_duration"
-					"value"	"5"
-				}
-			}
 			"mouse_pressed_sound"	"ui/item_bottle_pickup.wav"
 			"drop_sound"		"ui/item_bottle_drop.wav"
 		}
 
 		"no_craft"
 		{
-			"craft_class"			""
 		}
 
 		"marketable"
@@ -625,9 +555,6 @@
 
 		"halloween2013"
 		{
-			"first_sale_date"		"2013/10/27"
-			"craft_class"			""
-			"craft_material_type"	""
 			"tags"
 			{
 				"halloween2013_community"	"1"
@@ -643,15 +570,9 @@
 			"anim_slot" "MELEE_ALLCLASS"
 			"attach_to_hands"	"1"
 			"act_as_weapon"		"1"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"show_in_armory"	"0"
 			"image_inventory"			"backpack/crafting/diary_book"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
-			"item_quality"	"unique"
 			"propername" "0"
 			"model_player"	""
 			"used_by_classes"
@@ -699,7 +620,6 @@
 		"spell_base"
 		{
 			"item_class"	"tool"
-			"craft_class"	"tool"
 			"expiration_date"	"2014-11-11 01:00:00"	 
 			"tool"
 			{
@@ -709,13 +629,11 @@
 					"can_card_upgrade" "1"
 				}
 			}
-			"show_in_armory"	"0"
 			"item_type_name"	"#TF_SpellTool"
 			"image_inventory"	"backpack/player/items/crafting/flask_florence"
 			"image_inventory_overlay"	"backpack/player/items/crafting/flask_florence_paintcolor"
 			"image_inventory_size_w""128"
 			"image_inventory_size_h""96"
-			"item_quality"		"unique"
 			"mouse_pressed_sound"	"ui/item_paper_pickup.wav"
 			"drop_sound"		"ui/item_paper_pickup.wav"
 		}
@@ -745,16 +663,10 @@
 		{
 			"prefab"		"base_misc"
 			"item_class"	"tf_wearable"
-			"capabilities"
-			{
-				"nameable"			"1"
-			}
 			"item_type_name"	"#TF_VoodooCursedSoul_Type"
-			"show_in_armory"	"0"
 			"armory_remap"		"Voodoo-Cursed Soul (Armory)"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
-			"item_quality"	"unique"
 			"propername" "0"
 			"item_slot"	"misc"
 			"equip_region"	"zombie_body"
@@ -792,13 +704,9 @@
 		{
 			"enabled"	"1"
 			"item_class"	"tf_weapon_sword"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Sword"
 			"item_slot"	"melee"
 			"anim_slot"	"item1"
-			"item_quality"	"unique"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"attach_to_hands"	"1"
@@ -817,23 +725,11 @@
 		{
 			"enabled"	"1"
 			"item_class"	"tf_weapon_bonesaw"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-				"can_deal_critical_damage"	"1"
-			}
 			"base_item_name"	"TF_WEAPON_BONESAW"
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Bonesaw"
 			"item_name"	"#TF_Weapon_Bonesaw"
 			"item_description"	"PF_ItemDescription_Bonesaw"
 			"item_slot"	"melee"
-			"item_quality"		"unique"
 			"image_inventory"	"backpack/weapons/c_models/c_bonesaw/c_bonesaw"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -850,7 +746,6 @@
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
-			"xifier_class_remap"	"weapon_bonesaw"
 		}
 	
 
@@ -858,20 +753,6 @@
 		{
 			"enabled"	"1"
 			"item_class"	"tf_weapon_crossbow"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-				"can_deal_posthumous_damage"	"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_long_distance_damage"	"1"
-				"can_heal_allies"		"1"
-			}
 			"base_item_name"	"The Crusader's Crossbow"
 			"item_type_name"	"#PF_ItemType_Medicbow"
 			"item_name"	"#PF_ItemName_Medicbow"
@@ -879,7 +760,6 @@
 			"item_logname"	"crusaders_crossbow"
 			"item_iconname"	"crusaders_crossbow"
 			"item_slot"	"primary"
-			"item_quality"	"normal"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_crusaders_crossbow/c_crusaders_crossbow"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -921,27 +801,17 @@
 			}
 			"mouse_pressed_sound"	"ui/item_light_gun_pickup.wav"
 			"drop_sound"		"ui/item_light_gun_drop.wav"
-			"xifier_class_remap"	"crusaders_crossbow"
 		}
 
 		"weapon_demoman_boots"
 		{
 			"enabled"		"1"
 			"item_class"		"tf_wearable"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name" 	"#TF_Wearable_Boots"
-			"capabilities"
-			{
-				"nameable"		"1"
-				"can_craft_count"	"1"
-			}
 			"base_item_name"	"The Bootlegger"
-			"show_in_armory"	"1"
 			"item_slot"		"primary"
 			"equip_region"	"feet"
 			"anim_slot"		"FORCE_NOT_USED"
-			"item_quality"		"unique"
 			"propername"	"0"
 			"act_as_wearable" "1"
 			"drop_type"	"none"
@@ -985,26 +855,15 @@
 
 		"weapon_medigun"
 		{
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_heal_allies"		"1"
-			}
 			"base_item_name"	"TF_WEAPON_MEDIGUN"
 			"inspect_panel_dist" "70"
 			"enabled"	"1"
 			"item_class"	"tf_weapon_medigun"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Medigun"
 			"item_name"	"#TF_Weapon_Medigun"
 			"item_description"	"#PF_ItemDescription_Medigun"
 			"item_slot"	"secondary"
 			"equip_region"	"medigun_backpack"
-			"item_quality"	"normal"
 			"baseitem" "0"
 			"image_inventory"	"backpack/weapons/c_models/c_medigun/c_medigun"
 			"image_inventory_size_w"		"128"
@@ -1059,30 +918,14 @@
 
 		"weapon_rocketlauncher"
 		{
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_gib_damage"	"1"
-				"can_deal_damage"		"1"
-				"can_be_equipped_by_soldier_or_demo"	"1"
-				"can_deal_posthumous_damage"	"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_long_distance_damage"	"1"
-			}
 			"base_item_name"	"TF_WEAPON_ROCKETLAUNCHER"
 			"enabled"	"1"
 			"item_class"	"tf_weapon_rocketlauncher"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_RocketLauncher"
 			// "item_name"	"#TF_Weapon_RocketLauncher"
 			"item_name"	"#TF_Weapon_RocketLauncher"
 			"item_description"	"#PF_ItemDescription_RocketLauncher"
 			"item_slot"	"primary"
-			"item_quality"	"normal"
 			"baseitem" "0"
 			"image_inventory"	"backpack/weapons/w_models/w_rocketlauncher"
 			"image_inventory_size_w"		"128"
@@ -1112,24 +955,12 @@
 
 		"weapon_shovel"
 		{
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-			}
-			"first_sale_date"	"2010/09/29"
 			"enabled"	"0"
 			"item_class"	"tf_weapon_shovel"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_Shovel"
 			"item_name"	"#TF_Weapon_Shovel"
 			"item_description"	"#PF_ItemDescription_Shovel"
 			"item_slot"	"melee"
-			"item_quality"	"normal"
 			"image_inventory"	"backpack/weapons/w_models/w_shovel"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -1170,22 +1001,9 @@
 		{
 			"enabled"	"1"
 			"item_class"	"tf_weapon_bonesaw"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_taunt_damage"		"1"
-			}
 			"base_item_name"	"The Ubersaw"
 			"item_logname"	"ubersaw"
 			"item_iconname"	"ubersaw"
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Bonesaw"
 			"item_name"	"#TF_Unique_Achievement_Bonesaw1"
 			"item_slot"	"melee"
@@ -1195,7 +1013,6 @@
 			"model_player"	"models/weapons/c_models/c_ubersaw/c_ubersaw.mdl"
 			"attach_to_hands"	"1"
 			"inspect_panel_dist" "42"
-			"item_quality"	"unique"
 			"propername"	"1"
 			"used_by_classes"
 			{
@@ -1246,7 +1063,6 @@
 			"item_class"	"tf_wearable"
 			"item_name"	"#TF_Default_ItemDef"
 			"item_slot"	"melee"
-			"item_quality"	"normal"
 		}
 
 
@@ -1257,7 +1073,6 @@
 			"item_type_name"	"#TF_Spellbook_Type"
 			"item_name"			"#TF_Spellbook_Basic"
 			"item_description"	"#TF_SpellBook_Basic_Desc"
-			"item_quality"		"normal"
 			"baseitem" 			"1"
 			"image_inventory"	"backpack/props_halloween/hwn_spellbook_magazine"
 		}
@@ -1265,20 +1080,13 @@
 		{
 			"name"		"TF_WEAPON_GRAPPLINGHOOK"
 			"item_class"	"tf_weapon_grapplinghook"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"baseitem" "1"
+			"baseitem" "0"
 			"item_type_name"	"#TF_Weapon_GrapplingHook"
 			"item_name"	"#TF_Weapon_GrapplingHook"
 			"item_description"	"#TF_Weapon_GrapplingHook_desc"
 			"item_logname"	"grappling_hook"
 			"item_iconname"	"grappling_hook"
 			"item_slot"	"action"
-			"item_quality"	"normal"
 			"image_inventory"	"backpack/weapons/c_models/c_grappling_hook/c_grappling_hook"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -1328,7 +1136,6 @@
 			}
 			"mouse_pressed_sound"	"ui/item_light_gun_pickup.wav"
 			"drop_sound"		"ui/item_light_gun_drop.wav"
-			"xifier_class_remap"	"grappling_hook"
 		}
 		
 
@@ -1424,24 +1231,6 @@
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"model_player"	"models/weapons/c_models/c_wooden_bat/c_wooden_bat.mdl"
-			"visuals"
-			{
-				"styles"
-				{
-					"0"
-					{
-						"skin_red"		"0"
-						"skin_blu"		"1"
-					}
-				}
-				"attached_models_festive"
-				{
-					"0"
-					{
-						"model"	"models/weapons/c_models/c_wooden_bat/c_wooden_bat_festivizer.mdl"
-					}
-				}
-			}
 			"used_by_classes"
 			{
 				"scout"	"1"
@@ -1491,7 +1280,6 @@
 		{
 			"name"	"TF_WEAPON_ROCKETLAUNCHER"
 			"prefab"	"weapon_rocketlauncher"
-			"xifier_class_remap"	"rocket_launcher"
 			"baseitem" "1"
 		}
 		
@@ -1499,22 +1287,14 @@
 		{
 			"name"			"The Gunboats"
 			"enabled"	"1"
-			"first_sale_date"	"2010/09/29"
 			"item_class"		"tf_wearable"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"loadondemand" "1"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
 			"item_type_name" 	"#TF_Wearable_Boots"
 			"item_name"		"#TF_Unique_Blast_Boots"
 			"item_description"		"#PF_ItemDescription_Gunboats"
 			"item_slot"		"secondary"
 			"equip_region"	"feet"
 			"anim_slot"		"FORCE_NOT_USED"
-			"item_quality"		"normal"
 			"baseitem"	"1"
 			"propername"	"1"
 			"image_inventory"	"backpack/weapons/c_models/c_rocketboots_soldier"
@@ -1553,30 +1333,14 @@
 		"25006"
 		{
 			"name"	"TF_WEAPON_GRENADELAUNCHER"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"		"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_gib_damage"	"1"
-				"can_deal_posthumous_damage"	"1"
-				"can_deal_long_distance_damage"	"1"
-				"can_be_equipped_by_soldier_or_demo"	"1"
-			}
 			"base_item_name"	"TF_WEAPON_GRENADELAUNCHER"
 			"enabled"	"0"
 			"item_class"	"tf_weapon_grenadelauncher"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name"	"#TF_Weapon_GrenadeLauncher"
 			"item_name"	"#TF_Weapon_GrenadeLauncher"
 			"item_description"	"#PF_ItemDescription_GrenadeLauncher"
 			"item_slot"	"primary"
 			"anim_slot"	"secondary"
-			"item_quality"	"normal"
 			"baseitem" "0"
 			"image_inventory"	"backpack/weapons/w_models/w_grenadelauncher"
 			"image_inventory_size_w"		"128"
@@ -1603,20 +1367,7 @@
 		"25007"
 		{
 			"name"			"The Splendid Screen"
-			"first_sale_date"	"2011/03/21"
 			"item_class"		"tf_wearable_demoshield"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-				"can_craft_count"	"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-			}
-			// "show_in_armory"	"1"
 			"baseitem"	"1"
 			"item_type_name" 	"#TF_Wearable_Shield"
 			"item_logname" "demoshield"
@@ -1626,7 +1377,6 @@
 			"item_slot"		"secondary"
 			"equip_region"	"arms"
 			"anim_slot"		"FORCE_NOT_USED"
-			"item_quality"		"normal"
 			"propername"	"0"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_persian_shield/c_persian_shield"
 			"image_inventory_size_w"		"128"
@@ -1691,22 +1441,7 @@
 		"25008"
 		{
 			"name"	"The Ullapool Caber"
-			"first_sale_date"	"2010/12/08"
 			"item_class"	"tf_weapon_stickbomb"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"		"1"
-				"can_deal_gib_damage"	"1"
-				"can_be_equipped_by_soldier_or_demo"	"1"
-				"can_deal_taunt_damage"		"1"
-			}
-			// "show_in_armory"	"1"
 			"baseitem" "1"
 			"item_type_name"	"#TF_Weapon_StickBomb"
 			"item_name"	"#PF_ItemName_Boomstick"
@@ -1714,7 +1449,6 @@
 			"item_logname"	"ullapool_caber"
 			"item_iconname"	"ullapool_caber"
 			"item_slot"	"melee"
-			"item_quality"	"normal"
 			"propername"	"1"
 			"image_inventory" "backpack/workshop/weapons/c_models/c_caber/c_caber"
 			"image_inventory_size_w"		"128"
@@ -1761,29 +1495,13 @@
 		"25009"
 		{
 			"name"	"The Crusader's Crossbow"
-			"first_sale_date"	"2010/12/08"
 			"prefab" "weapon_crusaders_crossbow paintkit_base"
 			"particle_suffix"	"crusaders_crossbow"
 			"baseitem"	"1"
-			"tags"
-			{
-				"can_be_festivized"		"1"
-			}
-			"visuals"
-			{
-				"attached_models_festive"
-				{
-					"0"
-					{
-						"model"	"models/workshop/weapons/c_models/c_crusaders_crossbow/c_crusaders_crossbow_festivizer.mdl"
-					}
-				}
-			}
 		}
 		"25010"
 		{
 			"name"	"TF_WEAPON_MEDIGUN"
-			"first_sale_date"	"2010/09/29"
 			"prefab"	"weapon_medigun"
 			"baseitem" "1"
 		}
@@ -1799,31 +1517,14 @@
 		{
 			"name"	"The Ubersaw"
 			"mod_pf_item"		"1"
-			"first_sale_date"	"2010/09/29"
 			"prefab"	"valve weapon_ubersaw paintkit_base"
 			"particle_suffix"	"ubersaw"
-			"tags"
-			{
-				"can_be_festivized"		"1"
-			}
-			"visuals"
-			{
-				"attached_models_festive"
-				{
-					"0"
-					{
-						"model"	"models/weapons/c_models/c_ubersaw/c_ubersaw_festivizer.mdl"
-					}
-				}
-			}
-			"xifier_class_remap"	"ubersaw"
 		}
 
 		"1133"
 		{
 			"name"					"Powerup Strength"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Strength"
 			"item_description"		"#TF_Powerup_Strength_Desc"
 			"image_inventory"		"Effects/powerup_strength_hud"
@@ -1833,7 +1534,6 @@
 		{
 			"name"					"Powerup Haste"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Haste"
 			"item_description"		"#TF_Powerup_Haste_Desc"
 			"image_inventory"		"Effects/powerup_haste_hud"
@@ -1843,7 +1543,6 @@
 		{
 			"name"					"Powerup Regen"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Regen"
 			"item_description"		"#TF_Powerup_Regen_Desc"
 			"image_inventory"		"Effects/powerup_regen_hud"
@@ -1853,7 +1552,6 @@
 		{
 			"name"					"Powerup Resist"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Resist"
 			"item_description"		"#TF_Powerup_Resist_Desc"
 			"image_inventory"		"Effects/powerup_resist_hud"
@@ -1863,7 +1561,6 @@
 		{
 			"name"					"Powerup Vampire"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Vampire"
 			"item_description"		"#TF_Powerup_Vampire_Desc"
 			"image_inventory"		"Effects/powerup_vampire_hud"
@@ -1873,7 +1570,6 @@
 		{
 			"name"					"Powerup Reflect"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Reflect"
 			"item_description"		"#TF_Powerup_Reflect_Desc"
 			"image_inventory"		"Effects/powerup_reflect_hud"
@@ -1883,7 +1579,6 @@
 		{
 			"name"					"Powerup Precision"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Precision"
 			"item_description"		"#TF_Powerup_Precision_Desc"
 			"image_inventory"		"Effects/powerup_precision_hud"
@@ -1893,7 +1588,6 @@
 		{
 			"name"					"Powerup Agility"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Agility"
 			"item_description"		"#TF_Powerup_Agility_Desc"
 			"image_inventory"		"Effects/powerup_agility_hud"
@@ -1903,7 +1597,6 @@
 		{
 			"name"					"Powerup Knockout"
 			"item_class"			"saxxy"
-			"craft_material_type"	""
 			"item_name"				"#TF_Powerup_Knockout"
 			"item_description"		"#TF_Powerup_Knockout_Desc"
 			"image_inventory"		"Effects/powerup_knockout_hud"
@@ -1916,15 +1609,12 @@
 			{
 			}
 			"item_class"	"tf_weapon_passtime_gun"
-			"craft_class"	""	
-			"craft_material_type"	"" 
 			"item_type_name"	"#Weapon_Passtime_Gun"
 			"item_name"	"#Weapon_Passtime_Gun"
 			"item_slot"	"utility"
-			"anim_slot"	"MELEE_ALLCLASS"
+			"anim_slot"	"PASSTIME_BALL"
 			"attach_to_hands"	"1"
 			"hidden"	"1"
-			"item_quality"	"normal"
 			"baseitem"	"1"
 			"image_inventory"	"backpack/weapons/w_models/w_wrench"
 			"image_inventory_size_w"		"128"
@@ -1956,20 +1646,12 @@
 			"prefab"		"base_hat"
 			"hidden"	"0"
 			"item_class"	"tf_wearable"
-			"craft_class"	""		
-			"craft_material_type"	""	
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
 			"loadondemand" "1"
-			"show_in_armory"	"1"
 			"item_type_name" "#TF_Wearable_Hat"
 			"item_name"	"#TF_CivilianGradeJACKHat"
 			"item_description"	"#TF_CivilianGradeJACKHat_Desc"
 			"item_slot"	"head"
 			"equip_region"	"hat"
-			"item_quality"	"unique"
 			"image_inventory"	"backpack/workshop_partner/player/items/all_class/jackhead/demo_jackhead"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -1990,14 +1672,6 @@
 				"engineer" "1"
 				"pyro" "1"
 			}
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
-			}
 			"visuals"
 			{
 				"player_bodygroups"
@@ -2015,20 +1689,12 @@
 			"prefab"		"base_hat"
 			"hidden"	"0"
 			"item_class"	"tf_wearable"
-			"craft_class"	""		
-			"craft_material_type"	""	
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
 			"loadondemand" "1"
-			"show_in_armory"	"1"
 			"item_type_name" "#TF_Wearable_Hat"
 			"item_name"	"#TF_MilitaryGradeJACKHat"
 			"item_description"	"#TF_MilitaryGradeJACKHat_Desc"
 			"item_slot"	"head"
 			"equip_region"	"hat"
-			"item_quality"	"unique"
 			"image_inventory"	"backpack/workshop_partner/player/items/all_class/jackhead/demo_jackhead_digicamo"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -2049,14 +1715,6 @@
 				"engineer" "1"
 				"pyro" "1"
 			}
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
-			}
 			"visuals"
 			{
 				"player_bodygroups"
@@ -2075,19 +1733,11 @@
 			"loadondemand"	"1"
 			"hidden"	"0"
 			"item_class"	"tf_wearable"
-			"craft_class"	""		
-			"craft_material_type"	""	
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"show_in_armory"	"1"
 			"item_type_name" "#TF_Wearable_Pin"
 			"item_name"	"#TF_PASSTimeMiniatureHalfJACK"
 			"item_description"	"#TF_PASSTimeMiniatureHalfJACK_Desc"
 			"item_slot"	"misc"
 			"equip_region"	"medal"
-			"item_quality"	"unique"
 			"image_inventory"	"backpack/workshop_partner/player/items/all_class/jackbadge/jackbadge"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -2105,14 +1755,6 @@
 				"engineer" "1"
 				"pyro" "1"
 			}
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
-			}
 			"mouse_pressed_sound"	"ui/item_metal_tiny_pickup.wav"
 			"drop_sound"		"ui/item_metal_tiny_drop.wav"
 		}
@@ -2123,19 +1765,11 @@
 			"loadondemand"	"1"
 			"hidden"	"0"
 			"item_class"	"tf_wearable"
-			"craft_class"	""		
-			"craft_material_type"	""	
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"show_in_armory"	"1"
 			"item_type_name" "#TF_Wearable_Pin"
 			"item_name"	"#TF_PASSTimeEarlyParticipationPin"
 			"item_description"	"#TF_PASSTimeEarlyParticipationPin_Desc"
 			"item_slot"	"misc"
 			"equip_region"	"medal"
-			"item_quality"	"unique"
 			"image_inventory"	"backpack/workshop_partner/player/items/all_class/jackbadge/jackbadge_limited"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -2152,14 +1786,6 @@
 				"spy" "1"
 				"engineer" "1"
 				"pyro" "1"
-			}
-			"attributes"
-			{
-				"cannot trade"
-				{
-					"attribute_class"	"cannot_trade"
-					"value"				"1"
-				}
 			}
 			"mouse_pressed_sound"	"ui/item_metal_tiny_pickup.wav"
 			"drop_sound"		"ui/item_metal_tiny_drop.wav"
@@ -2531,48 +2157,6 @@
 			"armory_desc"	"on_kill"
 			"stored_as_integer"	"0"
 		}
-		"32"
-		{
-			"name"	"slow enemy on hit"
-			"attribute_class"	"mult_onhit_enemyspeed"
-			"description_string"	"#Attrib_Slow_Enemy_OnHit"
-			"description_format"	"value_is_additive_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"armory_desc"	"on_hit"
-			"stored_as_integer"	"0"
-		}
-		"33"
-		{
-			"name"	"set cloak is feign death"
-			"attribute_class"	"set_weapon_mode"
-			"description_string"	"#Attrib_CloakIsFeignDeath"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"neutral"
-			"armory_desc"	"cloak_type"
-			"stored_as_integer"	"0"
-		}
-		"34"
-		{
-			"name"	"mult cloak meter consume rate"
-			"attribute_class"	"mult_cloak_meter_consume_rate"
-			"description_string"	"#Attrib_CloakMeterConsumeRate"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"35"
-		{
-			"name"	"mult cloak meter regen rate"
-			"attribute_class"	"mult_cloak_meter_regen_rate"
-			"description_string"	"#Attrib_CloakMeterRegenRate"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
 		"36"
 		{
 			"name"	"spread penalty"
@@ -2712,16 +2296,6 @@
 			"description_format"	"value_is_additive"
 			"hidden"	"0"
 			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"50"
-		{
-			"name"	"absorb damage while cloaked"
-			"attribute_class"	"unimplemented_absorb_dmg_while_cloaked"
-			"description_string"	"#Attrib_AbsorbDmgWhileCloaked"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
 		"51"
@@ -3055,46 +2629,6 @@
 			"hidden"	"0"
 			"effect_type"	"negative"
 			"armory_desc"	"on_wearer"
-			"stored_as_integer"	"0"
-		}
-		"82"
-		{
-			"name"	"cloak consume rate increased"
-			"attribute_class"	"mult_cloak_meter_consume_rate"
-			"description_string"	"#Attrib_CloakConsumeRate_Increased"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"83"
-		{
-			"name"	"cloak consume rate decreased"
-			"attribute_class"	"mult_cloak_meter_consume_rate"
-			"description_string"	"#Attrib_CloakConsumeRate_Decreased"
-			"description_format"	"value_is_inverted_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"84"
-		{
-			"name"	"cloak regen rate increased"
-			"attribute_class"	"mult_cloak_meter_regen_rate"
-			"description_string"	"#Attrib_CloakRegenRate_Increased"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"85"
-		{
-			"name"	"cloak regen rate decreased"
-			"attribute_class"	"mult_cloak_meter_regen_rate"
-			"description_string"	"#Attrib_CloakRegenRate_Decreased"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"negative"
 			"stored_as_integer"	"0"
 		}
 		"86"
@@ -3712,16 +3246,6 @@
 			"effect_type"	"neutral"
 			"stored_as_integer"	"0"
 		}
-		"146"
-		{
-			"name"	"damage applies to sappers"
-			"attribute_class"	"set_dmg_apply_to_sapper"
-			"description_string"	"#Attrib_DmgAppliesToSappers"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
 		"147"
 		{
 			"name"	"Wrench index"
@@ -3782,88 +3306,6 @@
 			"hidden"	"1"
 			"effect_type"	"positive"
 			"stored_as_integer"	"1"
-		}
-		"153"
-		{
-			"name"	"cannot trade"
-			"attribute_class"	"cannot_trade"
-			"description_string"	"#Attrib_CannotTrade"
-			"description_format"	"value_is_additive"
-			"hidden"	"1"
-			"effect_type"	"neutral"
-			"stored_as_integer"	"0"
-		}
-		"154"
-		{
-			"name"	"disguise on backstab"
-			"attribute_class"	"set_disguise_on_backstab"
-			"description_string"	"#Attrib_DisguiseOnBackstab"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"155"
-		{
-			"name"	"cannot disguise"
-			"attribute_class"	"set_cannot_disguise"
-			"description_string"	"#Attrib_CannotDisguise"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"156"
-		{
-			"name"	"silent killer"
-			"attribute_class"	"set_silent_killer"
-			"description_string"	"#Attrib_SilentKiller"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"157"
-		{
-			"name"	"disguise speed penalty"
-			"attribute_class"	"disguise_speed_penalty"
-			"description_string"	"#Attrib_DisguiseSpeedPenalty"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"158"
-		{
-			"name"	"add cloak on kill"
-			"attribute_class"	"add_cloak_on_kill"
-			"description_string"	"#Attrib_AddCloakOnKill"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"159"
-		{
-			"name"	"SET BONUS: cloak blink time penalty"
-			"attribute_class"	"cloak_blink_time_penalty"
-			"description_string"	"#Attrib_CloakBlinkTimePenalty"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"is_set_bonus"	"1"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"160"
-		{
-			"name"	"SET BONUS: quiet unstealth"
-			"attribute_class"	"set_quiet_unstealth"
-			"description_string"	"#Attrib_QuietUnstealth"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"is_set_bonus"	"1"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
 		}
 		"161"
 		{
@@ -8880,16 +8322,6 @@
 			"description_format"	"value_is_additive"
 			"hidden"	"1"
 			"stored_as_integer"	"1"
-		}
-		"816"
-		{
-			"name"	"mod_disguise_consumes_cloak"
-			"attribute_class"	"mod_disguise_consumes_cloak"
-			"description_string"	"#Attrib_DisguiseConsumesCloak"
-			"description_format"	"value_is_additive"
-			"hidden"	"0"
-			"stored_as_integer"	"1"
-			"effect_type"	"negative"
 		}
 		"817"
 		{

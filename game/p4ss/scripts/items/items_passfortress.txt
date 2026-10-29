@@ -19,29 +19,12 @@
 			"mod_pf_item"	"1"
 			"prefab"	"valve"
 			"item_class"	"tf_weapon_shovel"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
-			"capabilities"
-			{
-				"nameable"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"			"1"
-				"can_be_equipped_by_soldier_or_demo"	"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_taunt_damage"		"1"
-			}
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_Pickaxe"
 			"item_name"	"#PF_ItemName_Pickaxe"
 			"item_description"	"#PF_ItemDescription_Pickaxe"
 			"item_logname"	"unique_pickaxe_escape"
 			"item_slot"	"melee"
-			"item_quality"	"unique"
 			"propername"	"0"
-			"min_ilevel"	"10"
-			"max_ilevel"	"10"
 			"image_inventory" "backpack/weapons/c_models/c_pickaxe/c_pickaxe_s2"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
@@ -196,12 +179,9 @@
 			"name"			"Ali Baba's Wee Booties"
 			"mod_pf_item"		"1"
 			"prefab"	"weapon_demoman_boots"
-			"show_in_armory"	"1"
 			"item_type_name" 	"#TF_Wearable_Boots"
 			"item_name"		"#PF_ItemName_RocketBoots"
 			"item_description"		"#PF_ItemDescription_RocketBoots"
-			"min_ilevel"		"10"
-			"max_ilevel"		"10"
 			"image_inventory"	"backpack/workshop/player/items/demo/demo_booties/demo_booties"
 			"model_player"		"models/workshop/player/items/demo/demo_booties/demo_booties.mdl"
 		}
@@ -211,33 +191,13 @@
 			"name"	"The Original"
 			"mod_pf_item"		"1"
 			"item_class"	"tf_weapon_rocketlauncher"
-			"craft_material_type"	"weapon"
-			"craft_class"	"weapon"
-			"capabilities"
-			{
-				"nameable"				"1"
-				"can_craft_count"		"1"
-			}
-			"tags"
-			{
-				"can_deal_damage"		"1"
-				"can_deal_gib_damage"	"1"
-				"can_be_equipped_by_soldier_or_demo"	"1"
-				"can_deal_posthumous_damage"	"1"
-				"can_deal_critical_damage"	"1"
-				"can_deal_long_distance_damage"	"1"
-			}
 			"item_logname"	"quake_rl"
 			"item_iconname"	"quake_rl"
-			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_RocketLauncher"
 			"item_name"	"#PF_ItemName_PFLauncher"
 			"item_description"	"#PF_ItemDescription_PFLauncher"
 			"item_slot"	"primary"
-			"item_quality"	"unique"
 			"propername"	"0"
-			"min_ilevel"	"5"
-			"max_ilevel"	"5"
 			"inspect_panel_dist" "68"
 			"image_inventory"	"backpack/workshop_partner/weapons/c_models/c_bet_rocketlauncher/c_bet_rocketlauncher"
 			"image_inventory_size_w"		"128"
@@ -380,6 +340,6 @@
 			"mouse_pressed_sound"	"ui/item_knife_large_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 			"xifier_class_remap"	"eyelander"
-		}
+		}	
 	}
 }
