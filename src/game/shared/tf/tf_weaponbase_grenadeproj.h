@@ -150,6 +150,7 @@ private:
 	bool					m_bIsMerasmusGrenade;
 
 	CSoundPatch				*soundCuePipeTimer;
+	bool					m_bPipeCuePlayed;
 
 #endif
 };
