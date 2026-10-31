@@ -72,6 +72,19 @@ namespace
 	static char const * const kShootOkSound          = "Passtime.Throw";
 	static char const * const kPassOkSound           = "Passtime.Throw";
 	static char const * const kHalloweenBallModel    = "models/passtime/ball/passtime_ball_halloween.mdl";
+
+	enum class EPassTargetSource { None, Search, ClientCmd };
+
+	EPassTargetSource GetPassTargetSource( CTFPlayer *pOwner )
+	{
+		if ( !pOwner->m_Shared.HasPasstimeBall() || pf_nolock.GetBool() )
+			return EPassTargetSource::None;
+#ifdef GAME_DLL
+		if ( !pOwner->IsBot() )
+			return EPassTargetSource::ClientCmd;
+#endif
+		return EPassTargetSource::Search;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -416,6 +429,29 @@ bool CPasstimeGun::SendWeaponAnim( int actBase )
 	return BaseClass::SendWeaponAnim( actBase );
 }
 
+#ifdef GAME_DLL
+//-----------------------------------------------------------------------------
+void CPasstimeGun::SyncPassTargetFromClient( CTFPlayer *pOwner )
+{
+	const CUserCmd *pCmd = pOwner->GetCurrentUserCommand();
+	CTFPlayer *pNewTarget = pCmd && pCmd->passtime_lock_target > 0 ? ToTFPlayer( UTIL_PlayerByIndex( pCmd->passtime_lock_target ) ) : nullptr;
+	if ( pNewTarget && !BValidPassTarget( pOwner, pNewTarget ) )
+		pNewTarget = nullptr;
+
+	if ( pNewTarget == pOwner->m_Shared.GetPasstimePassTarget() )
+		return;
+
+	pOwner->m_Shared.SetPasstimePassTarget( pNewTarget );
+	if ( pNewTarget )
+	{
+		CRecipientFilter filter;
+		filter.MakeReliable();
+		filter.AddRecipient( pNewTarget );
+		EmitSound( filter, pNewTarget->entindex(), kTargetHightlightSound );
+	}
+}
+#endif
+
 //-----------------------------------------------------------------------------
 void CPasstimeGun::ItemPostFrame()
 {
@@ -444,13 +480,8 @@ void CPasstimeGun::ItemPostFrame()
 	//
 	// Update pass target
 	//
-#ifdef GAME_DLL
-	bool bShouldUpdateTarget = pOwner->IsBot();
-#else
-	bool bShouldUpdateTarget = true;
-#endif
-	
-	if ( bShouldUpdateTarget && pOwner->m_Shared.HasPasstimeBall() && !pf_nolock.GetBool() )
+	EPassTargetSource eTargetSource = GetPassTargetSource( pOwner );
+	if ( eTargetSource == EPassTargetSource::Search )
 	{
 		Vector vecEyePos, vecEyeDir;
 		pOwner->EyePositionAndVectors( &vecEyePos, &vecEyeDir, 0, 0 );
@@ -626,6 +657,12 @@ void CPasstimeGun::ItemPostFrame()
 			m_attack.LatchUp();
 		}
 	}
+#ifdef GAME_DLL
+	else if ( eTargetSource == EPassTargetSource::ClientCmd )
+	{
+		SyncPassTargetFromClient( pOwner );
+	}
+#endif
 	else
 	{
 		//

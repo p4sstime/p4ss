@@ -106,6 +106,9 @@ protected:
 	C_PasstimeBounceReticle *m_pBounceReticle;
 #endif
 	void Throw( CTFPlayer *pOwner );
+#ifdef GAME_DLL
+	void SyncPassTargetFromClient( CTFPlayer *pOwner );
+#endif
 
 	enum EThrowState
 	{
