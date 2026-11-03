@@ -18,13 +18,13 @@ commit_rows() {
 
 scope_rows() {
   commit_rows
-  echo "Valid scopes:"
+  echo "${BOLD}Valid scopes:${RESET}"
   print_rows "${SCOPE_ROWS[@]}" | sed 's/^/  /'
 }
 
 type_rows() {
   commit_rows
-  echo "Valid types:"
+  echo "${BOLD}Valid types:${RESET}"
   echo "  $TYPES"
 }
 
