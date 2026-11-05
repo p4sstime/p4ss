@@ -317,7 +317,6 @@ private:
 	CUtlVector<char> m_vecStrings;
 };
 
-
 //-----------------------------------------------------------------------------
 // Purpose: Sets whether the KeyValues system should use an arbitrarily growable
 //	string table. See the comment in the header for more info.
@@ -461,6 +460,8 @@ void KeyValues::Init()
 	
 	m_bHasEscapeSequences = false;
 	m_bEvaluateConditionals = true;
+	m_bLocalStorage = false;
+	m_pStringTable = NULL;
 
 	// for future proof
 	memset( unused, 0, sizeof(unused) );
@@ -528,7 +529,10 @@ void KeyValues::ChainKeyValue( KeyValues* pChain )
 //-----------------------------------------------------------------------------
 const char *KeyValues::GetName( void ) const
 {
-	return s_pfGetStringForSymbol( m_iKeyName );
+	if ( m_bLocalStorage )
+		return m_pStringTable->GetStringForSymbol( m_iKeyName );
+	else
+		return s_pfGetStringForSymbol( m_iKeyName );
 }
 
 //-----------------------------------------------------------------------------
@@ -1001,7 +1005,9 @@ KeyValues *KeyValues::FindKey(const char *keyName, bool bCreate)
 	}
 
 	// lookup the symbol for the search string
-	HKeySymbol iSearchStr = s_pfGetSymbolForString( searchStr, bCreate );
+	HKeySymbol iSearchStr = m_bLocalStorage
+		? m_pStringTable->GetSymbolForString( searchStr, bCreate )
+		: s_pfGetSymbolForString( searchStr, bCreate );
 
 	if ( iSearchStr == INVALID_KEY_SYMBOL )
 	{
@@ -1730,7 +1736,10 @@ void KeyValues::SetFloat( const char *keyName, float value )
 
 void KeyValues::SetName( const char * setName )
 {
-	m_iKeyName = s_pfGetSymbolForString( setName, true );
+	if ( m_bLocalStorage )
+		m_iKeyName = m_pStringTable->GetSymbolForString( setName );
+	else
+		m_iKeyName = s_pfGetSymbolForString( setName, true );
 }
 
 //-----------------------------------------------------------------------------
