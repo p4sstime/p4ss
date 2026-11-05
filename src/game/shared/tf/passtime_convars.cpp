@@ -92,6 +92,7 @@ PASSTIME_CONVAR( p4ss_heal_on_pass_flight_time,   2,      "How many seconds betw
 PASSTIME_CONVAR( p4ss_minicrit_protection_time,   3,      "How many seconds you are protected from minicrits after picking up the ball." );
 PASSTIME_CONVAR( p4ss_lock_max_turn_angle,        90,     "Maximum angle in degrees you can turn away from locked target before unlocking. 0 to disable." );
 PASSTIME_CONVAR( p4ss_passtime_lock_angle,        15.0f,  "Maximum cone angle in degrees from crosshair for lock-on detection." );
+PASSTIME_CONVAR( p4ss_ball_seek_ignore_chargespeed,  1,      "Ignores charge speed when calculating how fast the ball should magnet to the player." );
 
 PASSTIME_CONVAR( tf_passtime_no_jack_armor,        1,     "Prevents ball thrower from immediately grabbing the ball." );
 PASSTIME_CONVAR( tf_passtime_no_jack_armor_time,   0.25f, "How many seconds the thrower must wait before picking up the ball again." );

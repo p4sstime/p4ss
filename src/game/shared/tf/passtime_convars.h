@@ -90,6 +90,7 @@ extern ConVar
 	p4ss_minicrit_protection_time,
 	p4ss_lock_max_turn_angle,
 	p4ss_passtime_lock_angle,
+	p4ss_ball_seek_ignore_chargespeed,
 
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time,
