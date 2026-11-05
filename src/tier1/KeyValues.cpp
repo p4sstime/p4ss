@@ -529,7 +529,7 @@ void KeyValues::ChainKeyValue( KeyValues* pChain )
 //-----------------------------------------------------------------------------
 const char *KeyValues::GetName( void ) const
 {
-	if ( m_bLocalStorage )
+	if ( m_pStringTable )
 		return m_pStringTable->GetStringForSymbol( m_iKeyName );
 	else
 		return s_pfGetStringForSymbol( m_iKeyName );
@@ -1005,7 +1005,7 @@ KeyValues *KeyValues::FindKey(const char *keyName, bool bCreate)
 	}
 
 	// lookup the symbol for the search string
-	HKeySymbol iSearchStr = m_bLocalStorage
+	HKeySymbol iSearchStr = m_pStringTable
 		? m_pStringTable->GetSymbolForString( searchStr, bCreate )
 		: s_pfGetSymbolForString( searchStr, bCreate );
 
@@ -1736,7 +1736,7 @@ void KeyValues::SetFloat( const char *keyName, float value )
 
 void KeyValues::SetName( const char * setName )
 {
-	if ( m_bLocalStorage )
+	if ( m_pStringTable )
 		m_iKeyName = m_pStringTable->GetSymbolForString( setName );
 	else
 		m_iKeyName = s_pfGetSymbolForString( setName, true );
@@ -1817,7 +1817,10 @@ void KeyValues::CopyKeyValuesFromRecursive( const KeyValues& rootSrc )
 //-----------------------------------------------------------------------------
 void KeyValues::CopyKeyValue( const KeyValues& src, size_t tmpBufferSizeB, char* tmpBuffer )
 {
-	m_iKeyName = src.GetNameSymbol();
+	if ( src.m_pStringTable )
+		SetName( src.GetName() );
+	else
+		m_iKeyName = src.GetNameSymbol();
 
 	if ( src.m_pSub )
 		return;
