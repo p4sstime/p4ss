@@ -97,7 +97,7 @@ bool CPasstimeBallControllerPlayerSeek::Seek( CPasstimeBall *ball, CTFPlayer *pT
 
 	Vector targetvel = pTarget->EyePosition() - ballpos;
 	targetvel.NormalizeInPlace();
-	targetvel *= pTarget->TeamFortress_CalculateMaxSpeed() * 
+	targetvel *= pTarget->TeamFortress_CalculateMaxSpeed( p4ss_ball_seek_ignore_chargespeed.GetBool() ) *
 		tf_passtime_ball_seek_speed_factor.GetFloat();
 	
 	Vector currentvel;
