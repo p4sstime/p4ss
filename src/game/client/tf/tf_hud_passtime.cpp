@@ -1849,6 +1849,11 @@ void CTFHudPasstime::OnTick()
 {
 	if ( m_pTeamScore ) 
 	{
-		m_pTeamScore->SetVisible( IsVisible() );
+		bool bShowTeamScore = IsVisible();
+		if ( TFGameRules() && TFGameRules()->IsInTraining() )
+		{
+			bShowTeamScore = false;
+		}
+		m_pTeamScore->SetVisible( bShowTeamScore );
 	}
 }

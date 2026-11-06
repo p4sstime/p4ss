@@ -342,7 +342,7 @@ CBasePlayer *BotPutInServer( bool bTargetDummy, bool bFrozen, int iTeam, int iCl
 	}
 	else
 	{
-		Q_snprintf( botname, sizeof( botname ), "Bot%02i", BotNumber );
+		Q_snprintf( botname, sizeof( botname ), "Bot%i", BotNumber );
 	}
 
 	edict_t *pEdict = engine->CreateFakeClient( botname );
@@ -464,8 +464,9 @@ CON_COMMAND_F( bot, "Add a bot.", FCVAR_NONE )
 	// Ok, spawn all the bots.
 	while ( --count >= 0 )
 	{
-		// What class do they want?
-		int iClass = g_pServerBenchmark->RandomInt( 1, TF_CLASS_COUNT-2 ); // -2 so we skip the Civilian class
+		// What class do they want? Only pick randomly between PF classes please
+		int validClasses[] = { TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN,
+		TF_CLASS_MEDIC }; int iClass = validClasses[g_pServerBenchmark->RandomInt( 0, 2 )];
 		char const *pVal = args.FindArg( "-class" );
 		if ( pVal )
 		{

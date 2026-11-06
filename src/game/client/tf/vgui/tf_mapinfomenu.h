@@ -22,6 +22,7 @@ class CTFMapInfoMenu : public vgui::Frame, public IViewPortPanel
 {
 private:
 	DECLARE_CLASS_SIMPLE( CTFMapInfoMenu, vgui::Frame );
+	MESSAGE_FUNC( OnLoadMapData, "LoadMapData" );
 
 public:
 	CTFMapInfoMenu( IViewPort *pViewPort );

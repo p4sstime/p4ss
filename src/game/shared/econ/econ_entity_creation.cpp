@@ -38,13 +38,13 @@ CItemGeneration::CItemGeneration( void )
 //-----------------------------------------------------------------------------
 // Purpose: Generate a random item matching the specified criteria
 //-----------------------------------------------------------------------------
-CBaseEntity *CItemGeneration::GenerateRandomItem( CItemSelectionCriteria *pCriteria, const Vector &vecOrigin, const QAngle &vecAngles, const char* pszOverrideClassName )
+CBaseEntity *CItemGeneration::GenerateRandomItem( CItemSelectionCriteria *pCriteria, const Vector &vecOrigin, const QAngle &vecAngles, const char* pszOverrideClassName, int classNum )
 {
 	int iChosenItem = ItemSystem()->GenerateRandomItem( pCriteria );
 	if ( iChosenItem == INVALID_ITEM_DEF_INDEX )
 		return NULL;
 
-	return SpawnItem( iChosenItem, vecOrigin, vecAngles, pszOverrideClassName );
+	return SpawnItem( iChosenItem, vecOrigin, vecAngles, pszOverrideClassName, classNum );
 }
 
 //-----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ CBaseEntity *CItemGeneration::GenerateBaseItem( struct baseitemcriteria_t *pCrit
 //-----------------------------------------------------------------------------
 // Purpose: Create a new instance of the chosen item
 //-----------------------------------------------------------------------------
-CBaseEntity *CItemGeneration::SpawnItem( int iChosenItem, const Vector &vecAbsOrigin, const QAngle &vecAbsAngles, const char *pszOverrideClassName )
+CBaseEntity *CItemGeneration::SpawnItem( int iChosenItem, const Vector &vecAbsOrigin, const QAngle &vecAbsAngles, const char *pszOverrideClassName, const int classNum )
 {
 	CEconItemDefinition *pData = ItemSystem()->GetStaticDataForItemByDefIndex( iChosenItem );
 	if ( !pData )
@@ -104,6 +104,7 @@ CBaseEntity *CItemGeneration::SpawnItem( int iChosenItem, const Vector &vecAbsOr
 		if ( !pszOverrideClassName )
 			return NULL;
 
+		pszOverrideClassName = TranslateWeaponEntForClass(pszOverrideClassName, classNum);
 		pItem = CreateEntityByName( pszOverrideClassName );
 	}
 

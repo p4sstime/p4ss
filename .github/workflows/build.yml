@@ -2,7 +2,15 @@ name: Build P4SS
 
 on:
   workflow_dispatch: 
-
+    inputs:
+      publish:
+        description: 'Publish to Steam?'
+        type: boolean
+        default: false
+      playtest:
+        description: 'Playtest app?'
+        type: boolean
+        default: true
 env:
   SOLUTION_FILE_PATH: p4ss.sln
 
@@ -14,7 +22,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.1.0
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
@@ -23,7 +31,7 @@ jobs:
       working-directory: ${{ github.workspace }}/src
       shell: cmd
       run: |
-        call createp4ssproject.bat
+        call createp4ssproject.bat ${{ inputs.playtest && '/define:PLAYTEST' || '' }}
         nuget restore ${{env.SOLUTION_FILE_PATH}}
         msbuild /m /v:m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
     
@@ -34,6 +42,7 @@ jobs:
         path: |
           game/p4ss/bin/x64/*.dll
           game/p4ss_win64.exe
+          game/srcds_win64.exe
         if-no-files-found: error
 
   build-linux:
@@ -46,7 +55,7 @@ jobs:
       VPC_ENABLE_CCACHE: 1
       CCACHE_SLOPPINESS: pch_defines,time_macros
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.1.0
 
     - uses: hendrikmuhs/ccache-action@v1.2
       with:
@@ -59,14 +68,46 @@ jobs:
       run: |
         mkdir ~/.ccache
         solution_out="_vpc_/ninja/sdk_p4ss_${VPC_NINJA_BUILD_MODE}"
-        devtools/bin/vpc /tf /linux64 /ninja /define:PLAYTEST /define:SOURCESDK +game /mksln "$solution_out"
+        devtools/bin/vpc /tf /linux64 /ninja ${{ inputs.playtest && '/define:PLAYTEST' || '' }} /define:SOURCESDK +game /mksln "$solution_out"
+        ninja -f "${solution_out}.ninja" -j $(nproc)
+
+    - name: Build dedicated server
+      working-directory: ${{ github.workspace }}/src
+      shell: bash
+      run: |
+        ln -sf replay_common.a lib/common/linux64/replay_common_srv.a
+        solution_out="_vpc_/ninja/sdk_dedicated_${VPC_NINJA_BUILD_MODE}"
+        devtools/bin/vpc /tf /linux64 /ninja /dedicated /define:SOURCESDK +dedicated /mksln "$solution_out"
         ninja -f "${solution_out}.ninja" -j $(nproc)
 
     - name: Publish game binaries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: 'bin-linux'
         path: |
           game/p4ss/bin/linux64/*.so
           game/p4ss_linux64
+          game/srcds_linux64
         if-no-files-found: error
+
+  package_and_publish:
+    needs: [build, build-linux]
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.1.0
+      - uses: actions/download-artifact@v8.0.0
+        with:
+          path: game
+          pattern: bin-*
+          merge-multiple: true
+
+      - uses: Lordfirespeed/setup-steamcmd@v2.0.2
+      - uses: Lordfirespeed/auth-steamcmd@v1.0.1
+        with:
+          steam_config_vdf: ${{secrets.STEAM_CONFIG_VDF}}
+          steam_username: pfbuilder
+
+      - run: steamcmd +login pfbuilder +run_app_build ${{ github.workspace }}/steamcmd/scripts/${{ inputs.playtest && 'p4ss_build_playtest.vdf' || 'p4ss_build.vdf' }} +quit
+      - run: cp game/p4ss/playtest_gameinfo.txt game/p4ss/gameinfo.txt && cp game/p4ss/playtest_steam.inf game/p4ss/steam.inf
+      - run: steamcmd +login pfbuilder +run_app_build ${{ github.workspace }}/steamcmd/scripts/p4ss_dedicated.vdf +quit

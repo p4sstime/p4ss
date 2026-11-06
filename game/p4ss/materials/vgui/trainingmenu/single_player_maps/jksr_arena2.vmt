@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/trainingmenu/single_player_maps/jksr_arena2"
+	"$translucent" 1
+}

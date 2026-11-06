@@ -105,7 +105,8 @@
 		"ControlName"	"CExLabel"
 		"fieldName"		"BlueScore"
 		"xpos"			"0"
-		"ypos"			"0"
+		"ypos"			"0"	[!$POSIX] //Windows
+		"ypos"			"-2"	[$POSIX] //Linux
 		"xpos_minmode"	"-1"
 		"ypos_minmode"	"0"
 		"zpos"			"8"
@@ -150,7 +151,8 @@
 		"ControlName"	"CExLabel"
 		"fieldName"		"RedScore"
 		"xpos"			"0"
-		"ypos"			"0"
+		"ypos"			"0"	[!$POSIX] //Windows
+		"ypos"			"-2"	[$POSIX] //Linux
 		"xpos_minmode"	"-1"
 		"ypos_minmode"	"0"
 		"zpos"			"8"
@@ -195,7 +197,8 @@
 		"ControlName"	"CExLabel"
 		"fieldName"		"BluTeamName"
 		"xpos"			"-5"
-		"ypos"			"0"
+		"ypos"			"0"	[!$POSIX] //Windows
+		"ypos"			"-1"	[$POSIX] //Linux
 		"zpos"			"7"
 		"wide"			"41"
 		"tall"			"23"
@@ -240,7 +243,8 @@
 		"ControlName"	"CExLabel"
 		"fieldName"		"RedTeamName"
 		"xpos"			"-5"
-		"ypos"			"0"
+		"ypos"			"0"	[!$POSIX] //Windows
+		"ypos"			"-1"	[$POSIX] //Linux
 		"zpos"			"7"
 		"wide"			"41"
 		"tall"			"23"
