@@ -77,7 +77,7 @@
 	"LearnButton"
 	{
 		"label" 		"Learn" 
-		"command" 		"#TF_Training_SelectMode"
+		"command" 		"offlinepractice"
 		"subimage" 		""
 	}
 	
@@ -108,6 +108,12 @@
 		"label" 		"D"
 		"command" 		"url https://passtime.tf"
 		"tooltip"		"passtime.tf"
+	}
+	
+	"ForumButton"
+	{
+		"command" 		"url https://forum.passtime.tf/"
+		"tooltip"		"Forums"
 	}
 	
 	//only shows in-game

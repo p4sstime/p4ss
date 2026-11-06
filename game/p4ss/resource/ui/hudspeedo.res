@@ -1,4 +1,4 @@
-"Resource/UI/HudSpeedo.res"
+"resource/ui/hudspeedo.res"
 {
 	"background"
 	{

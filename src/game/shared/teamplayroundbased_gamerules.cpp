@@ -203,7 +203,8 @@ ConVar mp_tournament( "mp_tournament", "0", FCVAR_REPLICATED | FCVAR_NOTIFY );
 ConVar mp_tournament_post_match_period( "mp_tournament_post_match_period", "90", FCVAR_REPLICATED, "The amount of time (in seconds) before the server resets post-match.", true, 5, true, 300 );
 
 #if defined( TF_CLIENT_DLL ) || defined( TF_DLL )
-ConVar mp_highlander( "mp_highlander", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Allow only 1 of each player class type." );
+//Highlander is not relevant to PF. Dev-only for the time being, we should probably nuke it eventually
+ConVar mp_highlander( "mp_highlander", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY, "Allow only 1 of each player class type." );
 #endif
 #ifdef TF_DLL
 extern ConVar tf_competitive_preround_duration;
@@ -1170,9 +1171,12 @@ bool CTeamplayRoundBasedRules::CheckTimeLimit( bool bAllowEnd /*= true*/ )
 
 	if ( ( mp_timelimit.GetInt() > 0 && CanChangelevelBecauseOfTimeLimit() ) || m_bChangelevelAfterStalemate )
 	{
-		// If there's less than 5 minutes to go, just switch now. This avoids the problem
+		// TF2 DEV NOTE: If there's less than 5 minutes to go, just switch now. This avoids the problem
 		// of sudden death modes starting shortly after a new round starts.
-		const int iMinTime = 5;
+		// P4SS: Set this to zero minutes. Sudden death is not relevant in this mod. It isn't even relevant in TF2 anymore.
+		// We'd rather fully exhaust the server timer all the way down to 0 seconds remaining before switching maps.
+
+		const int iMinTime = 0;
 		bool bSwitchDueToTime = ( mp_timelimit.GetInt() > iMinTime && GetTimeLeft() < (iMinTime * 60) );
 
 		if ( IsInTournamentMode() == true  )

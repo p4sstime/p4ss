@@ -899,18 +899,34 @@ void ClientModeTFNormal::FireGameEvent( IGameEvent *event )
 
 		engine->FlashWindow();
 
+		//P4SS: This sound now plays regardless (See below comment)
+		vgui::surface() -> PlaySound( "passtime/whistle.wav" );
+		
 		{
-			// If minimized, Blink and play noise
-			if ( engine->IsActiveApp() )
-			{
-				vgui::surface()->PlaySound( "ui/vote_started.wav" );
-			}
-			else
-			{
-				char fullpath[ 512 ];
-				g_pFullFileSystem->RelativePathToFullPath( "sound/ui/vote_started.wav", "GAME", fullpath, sizeof( fullpath ) );
-				PlayOutOfGameSound( fullpath );
-			}
+			// P4SS: This bit of code was previously responsible for playing a sound when the client is
+			// minimized. However, this presumably broke when the SteamPipe update moved all the .wav files
+			// into .vpks, which means Windows can no longer find the files to play them.
+			// 
+			// 
+			// 
+			// Also, when the client is open, it would play the vote start sound. That one worked fine.
+			// 
+			// Instead, let's just play the whistle sound regardless. If you're on windowed mode,
+			// you can still hear the whistle. If not, you still get a taskbar notification.
+			
+			//	If minimized, Blink and play noise
+			// 
+			//	if ( engine->IsActiveApp() )
+			//	{
+			//		vgui::surface()->PlaySound( "passtime/whistle.wav" );
+			//	}
+			// 
+			//	else
+			//	{
+			//		char fullpath[ 512 ];
+			//		g_pFullFileSystem->RelativePathToFullPath( "sound/p4ss/jack/ball_impact.wav", "GAME", fullpath, sizeof( fullpath ) );
+			//		PlayOutOfGameSound( fullpath );
+			//	}
 		}
 
 		m_bPendingRichPresenceUpdate = true;

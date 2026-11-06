@@ -100,6 +100,9 @@ const wchar_t *CTFTips::GetRandomTip( int &iClassUsed )
 {
 	Init();
 
+	// P4SS - Disabled abuse report tip to prevent random class selection. Commented out with /*  */
+
+	/*
 	// Chance of reminding players about the Abuse Reporter.
 	// The chance is very high for the first 20 hours of play since newbies get picked on a lot.
 	int abuseHintChance = 3;
@@ -114,6 +117,7 @@ const wchar_t *CTFTips::GetRandomTip( int &iClassUsed )
 		iClassUsed = RandomInt( TF_FIRST_NORMAL_CLASS, TF_LAST_NORMAL_CLASS );
 		return GetAbuseReportTip();
 	}
+	*/
 
 	// pick a random tip
 	int iTip = RandomInt( 0, m_iTipCountAll-1 );

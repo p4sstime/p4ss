@@ -45,6 +45,7 @@ Scheme
 		"PartyMember6"	"255 133 255 255"
 		
 		"White"				"235 235 235 255"
+		"WhiteSolid"		"255 255 255 255"
 		"Red"				"192 28 0 140"
 		"RedSolid"			"192 28 0 255"
 		"Blue"				"0 28 162 140"
@@ -94,7 +95,7 @@ Scheme
 		"HudTimerProgressWarning"	"240 30 30 255"
 
 		// training
-		"HudTrainingHint"			"212 160 23 255"
+		"HudTrainingHint"			"152 191 101 255"
 		
 		"TanDark"				"117 107 94 255"
 		"Tan"					"176 165 141 255"
@@ -214,9 +215,11 @@ Scheme
 		"PureWhite"				"255 255 255 255"
 		"PureBlack"				"0 0 0 255"
 		"PFGrey" 				"32 32 32 180"
+		"PFGreyOpaque" 				"32 32 32 255"
 		"PFGreen"				"152 191 101 255"
 		"PFDarkGreen"			"62 76 41 255"
 		"PFGreenDim" 			"152 191 101 128"
+		"PFGreenDimSolid" 			"92 116 61 255" //Dim doesn't mean TRANSPARENT you MUPPET
 		"PFWhite"				"255 255 246 255"
 		
 		"PFBluTeam"                "72 121 171 255"
@@ -270,9 +273,9 @@ Scheme
 		Button.TextColor				"TanLight"
 		Button.BgColor					"TanDark"
 		Button.ArmedTextColor			"TanLight"
-		Button.ArmedBgColor				"PFGreenDim"
+		Button.ArmedBgColor				"PFGreenDimSolid"
 		Button.SelectedTextColor		"TanLight"
-		Button.SelectedBgColor			"PFGreenDim"
+		Button.SelectedBgColor			"PFGreenDimSolid"
 		Button.DepressedTextColor		"Black"
 		Button.DepressedBgColor			"PFGreen"
 
@@ -661,7 +664,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"44"
 				"tall_lodef"	"52"
 				"weight"	"500"
@@ -674,7 +677,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"35"
 				"tall_lodef"	"40"
 				"weight"	"500"
@@ -710,7 +713,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"30"
 				"weight"	"500"
 				"additive"	"0"
@@ -753,7 +756,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -764,7 +767,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"18"
 				"weight"	"500"
 				"additive"	"0"
@@ -813,7 +816,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"16"
 				"weight"	"500"
 				"additive"	"0"
@@ -824,7 +827,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -835,7 +838,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -870,7 +873,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"additive"	"0"
@@ -881,7 +884,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"4"
 				"weight"	"500"
 				"additive"	"0"
@@ -892,7 +895,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"10"
 				"weight"	"500"
 				"additive"	"0"
@@ -903,7 +906,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"16"
 				"weight"	"500"
 				"additive"	"0"
@@ -914,7 +917,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"0"
 				"additive"	"0"
@@ -936,7 +939,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"6"
 				"weight"	"0"
 				"additive"	"0"
@@ -1428,9 +1431,8 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat SemiBold"
-				"tall"		"8"
-				"tall_hidef"	"10"
-				"tall_lodef"	"14"
+				"tall"	"11"	[!$POSIX] //Windows
+				"tall"	"10"	[$POSIX]  //Linux
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"
@@ -1442,8 +1444,6 @@ Scheme
 			{
 				"name"		"Montserrat SemiBold"
 				"tall"		"12"
-				"tall_hidef"	"12"
-				"tall_lodef"	"12"
 				"weight"	"400"
 				"additive"	"0"
 				"antialias" "1"
@@ -1878,24 +1878,21 @@ Scheme
 			}
 		}		
 		
-		InstructionalText
+		"InstructionalText"
 		{
 			"1"
 			{
-				"name"		"Verdana"
-				"tall"		"11"  [!$OSX]
-				"tall"		"9"  [$OSX]
-				"weight"	"800"
-				"additive"	"0"
-				"antialias" 	"1"
+				"name"	"Montserrat SemiBold"
+				"tall"	"13"	[!$POSIX] //Windows
+				"tall"	"12"	[$POSIX]  //Linux
 			}
-		}		
+		}	
 		
 		MatchmakingDialogTitle
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"36"
 				"tall_lodef"		"28"
 				"weight"	"500"
@@ -1905,7 +1902,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"30"
 				"tall_lodef"		"22"
 				"weight"	"500"
@@ -1991,7 +1988,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"36"
 				"weight"	"500"
 				"additive"	"0"
@@ -2198,7 +2195,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"500"
 				"additive"	"0"
@@ -2209,7 +2206,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"9"
 				"weight"	"500"
 				"blur"		"3"
@@ -2664,7 +2661,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"additive"	"0"
@@ -2675,7 +2672,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -2699,7 +2696,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -2728,7 +2725,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"14"
 				"weight"	"500"
 				"additive"	"0"
@@ -2739,7 +2736,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"24"
 				"weight"	"500"
 				"additive"	"0"
@@ -2776,7 +2773,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"antialias" 	"1"
@@ -2787,7 +2784,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"11"
 				"weight"	"500"
 				"blur"		"3"
@@ -2800,7 +2797,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"TF2 Build"
+				"name"		"Montserrat Black"
 				"tall"		"12"
 				"weight"	"500"
 				"additive"	"0"
@@ -2882,7 +2879,8 @@ Scheme
 			"1"
 			{
 				"name"	"Minecart LCD"
-				"tall"	"38"
+				"tall"	"38"	[!$POSIX] //Windows
+				"tall"	"35"	[$POSIX]  //Linux
 			}
 		}
 		
@@ -2891,7 +2889,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"14"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"12"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta16"
@@ -2899,7 +2898,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta18"
@@ -2907,7 +2907,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"18"
+				"tall"	"18"	[!$POSIX] //Windows
+				"tall"	"16"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta20"
@@ -2915,7 +2916,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta24"
@@ -2923,7 +2925,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"24"
+				"tall"	"24"	[!$POSIX] //Windows
+				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta28"
@@ -2931,7 +2934,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"28"
+				"tall"	"28"	[!$POSIX] //Windows
+				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta32"
@@ -2939,7 +2943,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"32"
+				"tall"	"32"	[!$POSIX] //Windows
+				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
 		"Compacta36"
@@ -2947,7 +2952,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT"
-				"tall"	"36"
+				"tall"	"36"	[!$POSIX] //Windows
+				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
 		
@@ -2956,7 +2962,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"14"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"12"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack16"
@@ -2964,7 +2971,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack20"
@@ -2972,7 +2980,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack24"
@@ -2980,7 +2989,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"24"
+				"tall"	"24"	[!$POSIX] //Windows
+				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack28"
@@ -2988,7 +2998,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"28"
+				"tall"	"28"	[!$POSIX] //Windows
+				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack32"
@@ -2996,7 +3007,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"32"
+				"tall"	"32"	[!$POSIX] //Windows
+				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack36"
@@ -3004,7 +3016,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"36"
+				"tall"	"36"	[!$POSIX] //Windows
+				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack40"
@@ -3012,7 +3025,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"40"
+				"tall"	"40"	[!$POSIX] //Windows
+				"tall"	"37"	[$POSIX]  //Linux
 			}
 		}
 		"CompactaBlack44"
@@ -3020,7 +3034,8 @@ Scheme
 			"1"
 			{
 				"name"	"Compacta BT Black"
-				"tall"	"44"
+				"tall"	"44"	[!$POSIX] //Windows
+				"tall"	"41"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack10Shadow"
@@ -3037,7 +3052,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"11"
+				"tall"	"11"	[!$POSIX] //Windows
+				"tall"	"10"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3046,7 +3062,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"12"
+				"tall"	"12"	[!$POSIX] //Windows
+				"tall"	"11"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack12Shadow"
@@ -3054,7 +3071,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"12"
+				"tall"	"12"	[!$POSIX] //Windows
+				"tall"	"11"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3063,7 +3081,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"14"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"13"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack14Shadow"
@@ -3071,7 +3090,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"14"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"13"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3080,7 +3100,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3089,7 +3110,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack20Shadow"
@@ -3097,7 +3119,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 				"antialias" 	"1"
 			}
@@ -3107,7 +3130,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 				"additive"	"1"
 				"antialias" 	"1"
 			}
@@ -3117,7 +3141,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"22"
+				"tall"	"22"	[!$POSIX] //Windows
+				"tall"	"20"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack24"
@@ -3125,7 +3150,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"24"
+				"tall"	"24"	[!$POSIX] //Windows
+				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack26"
@@ -3133,7 +3159,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"26"
+				"tall"	"26"	[!$POSIX] //Windows
+				"tall"	"24"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack28"
@@ -3141,7 +3168,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"28"
+				"tall"	"28"	[!$POSIX] //Windows
+				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack32"
@@ -3149,7 +3177,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"32"
+				"tall"	"32"	[!$POSIX] //Windows
+				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack34"
@@ -3157,7 +3186,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"34"
+				"tall"	"34"	[!$POSIX] //Windows
+				"tall"	"31"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack36"
@@ -3165,7 +3195,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"36"
+				"tall"	"36"	[!$POSIX] //Windows
+				"tall"	"33"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack40"
@@ -3173,7 +3204,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"40"
+				"tall"	"40"	[!$POSIX] //Windows
+				"tall"	"37"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack40Shadow"
@@ -3181,7 +3213,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"40"
+				"tall"	"40"	[!$POSIX] //Windows
+				"tall"	"37"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3190,7 +3223,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"44"
+				"tall"	"44"	[!$POSIX] //Windows
+				"tall"	"41"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack48"
@@ -3198,7 +3232,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"48"
+				"tall"	"48"	[!$POSIX] //Windows
+				"tall"	"45"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack52"
@@ -3206,7 +3241,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"52"
+				"tall"	"52"	[!$POSIX] //Windows
+				"tall"	"49"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack56"
@@ -3214,7 +3250,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"56"
+				"tall"	"56"	[!$POSIX] //Windows
+				"tall"	"53"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratBlack64"
@@ -3222,7 +3259,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Black"
-				"tall"	"64"
+				"tall"	"64"	[!$POSIX] //Windows
+				"tall"	"60"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold12"
@@ -3230,7 +3268,17 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"12"
+				"tall"	"12"	[!$POSIX] //Windows
+				"tall"	"11"	[$POSIX]  //Linux
+			}
+		}
+		"MontserratSemibold14"
+		{
+			"1"
+			{
+				"name"	"Montserrat SemiBold"
+				"tall"	"14"	[!$POSIX] //Windows
+				"tall"	"13"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold16"
@@ -3238,7 +3286,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold16Shadow"
@@ -3246,7 +3295,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 				"dropshadow"	"1"
 			}
 		}
@@ -3255,7 +3305,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold20"
@@ -3263,7 +3314,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold24"
@@ -3271,7 +3323,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"24"
+				"tall"	"24"	[!$POSIX] //Windows
+				"tall"	"22"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold28"
@@ -3279,7 +3332,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"28"
+				"tall"	"28"	[!$POSIX] //Windows
+				"tall"	"26"	[$POSIX]  //Linux
 			}
 		}
 		"MontserratSemibold32"
@@ -3287,7 +3341,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat SemiBold"
-				"tall"	"32"
+				"tall"	"32"	[!$POSIX] //Windows
+				"tall"	"30"	[$POSIX]  //Linux
 			}
 		}
 		
@@ -3314,7 +3369,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"12"
+				"tall"	"12"	[!$POSIX] //Windows
+				"tall"	"10"	[$POSIX]  //Linux
 				"antialias" "1"
 			}
 		}
@@ -3323,7 +3379,8 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"16"
+				"tall"	"16"	[!$POSIX] //Windows
+				"tall"	"14"	[$POSIX]  //Linux
 				"antialias" "1"
 			}
 		}
@@ -3332,65 +3389,9 @@ Scheme
 			"1"
 			{
 				"name"	"Montserrat Light"
-				"tall"	"20"
+				"tall"	"20"	[!$POSIX] //Windows
+				"tall"	"18"	[$POSIX]  //Linux
 				"antialias" "1"
-			}
-		}
-		"MenuGlyphs12"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"12"
-			}
-		}
-		
-		"MenuGlyphs16"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"16"
-			}
-		}
-		"MenuGlyphs20"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"20"
-			}
-		}
-		"MenuGlyphs24"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"24"
-			}
-		}
-		"MenuGlyphs28"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"28"
-			}
-		}
-		"MenuGlyphs32"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"32"
-			}
-		}
-		"MenuGlyphs36"
-		{
-			"1"
-			{
-				"name"	"Bobby's TF2 Glyphs"
-				"tall"	"36"
 			}
 		}
 		
@@ -3439,7 +3440,8 @@ Scheme
 			"1"
 			{
 				"name"		"Montserrat Black"
-				"tall"		"16"
+				"tall"		"16"	[!$POSIX] //Windows
+				"tall"		"14"	[$POSIX]  //Linux
 				"weight"	"400"
 				"additive"	"1"
 				"antialias" "1"
@@ -6244,7 +6246,7 @@ Scheme
 		"6" 
 		{
 			"font" "resource/tf2build.ttf"
-			"name" "TF2 Build"
+			"name" "Montserrat Black"
 			"russian"
 			{
 				"range" "0x0000 0xFFFF"
@@ -6340,32 +6342,27 @@ Scheme
 				"font"	"resource/fonts/compacta-bt-black.ttf"
 				"name"	"Compacta BT Black"
 		}
-		"20"	//Glyphs font
-		{
-				"font"	"resource/fonts/tf2-glyphs.ttf"
-				"name"	"Bobby's TF2 Glyphs"
-		}
-		"21"
+		"20"
 		{
 				"font"	"resource/fonts/futura-condensed-demi.ttf"
 				"name"	"Futura Condensed Demi Regular"
 		}
-		"22"
+		"21"
 		{
 				"font"	"resource/fonts/montserrat-black.ttf"
 				"name"	"Montserrat Black"
 		}
-		"23"
+		"22"
 		{
 				"font"	"resource/fonts/montserrat-semibold.ttf"
 				"name"	"Montserrat SemiBold"
 		}
-		"24"
+		"23"
 		{
 				"font"	"resource/fonts/montserrat-light.ttf"
 				"name"	"Montserrat Light"
 		}
-		"25"
+		"24"
 		{
 				"font"	"resource/fonts/minecart-lcd.ttf"
 				"name"	"Minecart LCD"

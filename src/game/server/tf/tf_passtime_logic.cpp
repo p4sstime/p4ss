@@ -92,11 +92,11 @@ static const CCountdownAnnouncer::TimeSounds sCountdownSoundsRoundBegin = {
 	"Announcer.RoundBegins60seconds",
 	"Announcer.RoundBegins30seconds",
 	"Announcer.RoundBegins10seconds",
-	"Announcer.RoundBegins5seconds",
-	"Announcer.RoundBegins4seconds",
-	"Announcer.RoundBegins3seconds",
-	"Announcer.RoundBegins2seconds",
-	"Announcer.RoundBegins1seconds",
+	"Passtime.Ball.Countdown.1",
+	"Passtime.Ball.Countdown.1",
+	"Passtime.Ball.Countdown.1",
+	"Passtime.Ball.Countdown.1",
+	"Passtime.Ball.Countdown.2",
 };
 
 //-----------------------------------------------------------------------------
@@ -738,11 +738,14 @@ void CTFPasstimeLogic::Precache()
 //	PrecacheScriptSound( "sf14.Merasmus.Soccer.GoalRed" );
 //	PrecacheScriptSound( "sf14.Merasmus.Soccer.GoalBlue" );
 
-	//testing
+	//P4SS
 	PrecacheScriptSound( "Passtime.Merasmus.Deathbomb" );
 	PrecacheScriptSound( "Passtime.Merasmus.Why" );
+	PrecacheScriptSound( "Passtime.Merasmus.Overtime" );
 
-	PrecacheScriptSound( "Passtime.Merasmus.Overtime");
+	PrecacheScriptSound( "Passtime.Ball.Countdown.1" );
+	PrecacheScriptSound( "Passtime.Ball.Countdown.2" );
+
 	PrecacheScriptSound( "Passtime.AskForBall" );
 
 	// secret room stuff

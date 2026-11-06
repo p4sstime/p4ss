@@ -241,6 +241,18 @@ struct MapInfo_t
 };
 
 static MapInfo_t s_ValveMaps[] = {
+	//PF
+	{ "pass_arena2", "Arena2", "#Gametype_Passtime" },
+	{ "pass_arena2_classic", "Arena2 Classic", "#Gametype_Passtime" },
+	{ "pass_stadium", "Stadium", "#Gametype_Passtime" },
+	{ "pass_stonework", "Stonework", "#Gametype_Passtime" },
+	{ "pass_plexiglass", "Plexiglass", "#Gametype_Passtime" },
+	{ "pass_boutique", "Plexiglass", "#Gametype_Passtime" },
+	{ "tr_throwing_grounds", "Throwing Grounds", "#Gametype_Training" },
+	{ "tr_stadium_surf", "Stadium (Surf)", "#Gametype_Training" },
+	{ "jksr_arena2", "Arena2 (JKSR)", "#Gametype_Jacksercise" },
+	
+	//TF2
 	{ "ctf_2fort",	"2Fort",		"#Gametype_CTF" },
 	{ "cp_dustbowl",	"Dustbowl",		"#TF_AttackDefend" },
 	{ "cp_granary",	"Granary",		"#Gametype_CP" },
@@ -711,6 +723,9 @@ ConVar tf_player_drop_bonus_ducks( "tf_player_drop_bonus_ducks", "-1", FCVAR_REP
 
 ConVar tf_allow_player_name_change( "tf_allow_player_name_change", "1", FCVAR_NOTIFY, "Allow player name changes." );
 
+//P4SS: Custom killbinds
+ConVar pf_kill_enable_custom_ragdolls( "pf_kill_enable_custom_ragdolls", "1", FCVAR_REPLICATED, "Allow players to use custom ragdolls with pf_kill" );
+
 ConVar tf_weapon_criticals_distance_falloff( "tf_weapon_criticals_distance_falloff", "0", FCVAR_CHEAT, "Critical weapon damage will take distance into account." );
 ConVar tf_weapon_minicrits_distance_falloff( "tf_weapon_minicrits_distance_falloff", "0", FCVAR_CHEAT, "Mini-crit weapon damage will take distance into account." );
 
@@ -791,19 +806,16 @@ ConVar mp_tournament_prevent_team_switch_on_readyup( "mp_tournament_prevent_team
 ConVar mp_windifference( "mp_windifference", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Score difference between teams before server changes maps", true, 0, false, 0 );
 ConVar mp_windifference_min( "mp_windifference_min", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Minimum score needed for mp_windifference to be applied", true, 0, false, 0 );
 
-ConVar tf_tournament_classlimit_scout( "tf_tournament_classlimit_scout", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Scouts.\n" );
-ConVar tf_tournament_classlimit_sniper( "tf_tournament_classlimit_sniper", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Snipers.\n" );
-ConVar tf_tournament_classlimit_soldier( "tf_tournament_classlimit_soldier", "3", FCVAR_REPLICATED, "Tournament mode per-team class limit for Soldiers.\n" );
-ConVar tf_tournament_classlimit_demoman( "tf_tournament_classlimit_demoman", "1", FCVAR_REPLICATED, "Tournament mode per-team class limit for Demomenz.\n" );
-ConVar tf_tournament_classlimit_medic( "tf_tournament_classlimit_medic", "1", FCVAR_REPLICATED, "Tournament mode per-team class limit for Medics.\n" );
-ConVar tf_tournament_classlimit_heavy( "tf_tournament_classlimit_heavy", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Heavies.\n" );
-ConVar tf_tournament_classlimit_pyro( "tf_tournament_classlimit_pyro", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Pyros.\n" );
-ConVar tf_tournament_classlimit_spy( "tf_tournament_classlimit_spy", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Spies.\n" );
-ConVar tf_tournament_classlimit_engineer( "tf_tournament_classlimit_engineer", "0", FCVAR_REPLICATED, "Tournament mode per-team class limit for Engineers.\n" );
+ConVar pf_classlimit_soldier( "pf_classlimit_soldier", "3", FCVAR_REPLICATED, "Per-team class limit for Soldiers.\n" );
+ConVar pf_classlimit_demoman( "pf_classlimit_demoman", "1", FCVAR_REPLICATED, "Per-team class limit for Demomen.\n" );
+ConVar pf_classlimit_medic( "pf_classlimit_medic", "1", FCVAR_REPLICATED, "Per-team class limit for Medics.\n" );
+
 ConVar tf_tournament_classchange_allowed( "tf_tournament_classchange_allowed", "1", FCVAR_REPLICATED, "Allow players to change class while the game is active?.\n" );
 ConVar tf_tournament_classchange_ready_allowed( "tf_tournament_classchange_ready_allowed", "1", FCVAR_REPLICATED, "Allow players to change class after they are READY?.\n" );
 
-ConVar tf_classlimit( "tf_classlimit", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Limit on how many players can be any class (i.e. tf_class_limit 2 would limit 2 players per class).\n", true, 0.f, false, 0.f );
+//Legacy TF command, making it dev only in favor of using pf_classlimit_*
+ConVar tf_classlimit( "tf_classlimit", "0", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED | FCVAR_NOTIFY, "Limit on how many players can be any class (i.e. tf_class_limit 2 would limit 2 players per class).\n", true, 0.f, false, 0.f );
+
 ConVar tf_player_movement_restart_freeze( "tf_player_movement_restart_freeze", "1", FCVAR_REPLICATED, "When set, prevent player movement during round restart" );
 
 ConVar tf_autobalance_ask_candidates_maxtime( "tf_autobalance_ask_candidates_maxtime", "10", FCVAR_REPLICATED );
@@ -852,7 +864,7 @@ ConVar tf_arena_force_class( "tf_arena_force_class", "0", FCVAR_REPLICATED | FCV
 ConVar tf_arena_change_limit( "tf_arena_change_limit", "1", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Number of times players can change their class when mp_force_random_class is being used." );
 ConVar tf_arena_override_cap_enable_time( "tf_arena_override_cap_enable_time", "-1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Overrides the time (in seconds) it takes for the capture point to become enable, -1 uses the level designer specified time." );
 ConVar tf_arena_override_team_size( "tf_arena_override_team_size", "0", FCVAR_REPLICATED, "Overrides the maximum team size in arena mode. Set to zero to keep the default behavior of 1/3 maxplayers.");
-ConVar tf_arena_first_blood( "tf_arena_first_blood", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Rewards the first player to get a kill each round." );
+ConVar tf_arena_first_blood( "tf_arena_first_blood", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Rewards the first player to get a kill each round." );
 extern ConVar tf_arena_preround_time;
 extern ConVar tf_arena_max_streak;
 #if defined( _DEBUG ) || defined( STAGING_ONLY )
@@ -915,7 +927,35 @@ ConVar tf_grapplinghook_enable( "tf_grapplinghook_enable", "0", FCVAR_REPLICATED
 
 #ifdef GAME_DLL
 CUtlString s_strNextMvMPopFile;
-CON_COMMAND_F( tf_mvm_popfile, "Change to a target popfile for MvM", FCVAR_GAMEDLL )
+
+static int PopfileCompletion( char const *partial, char commands[ COMMAND_COMPLETION_MAXITEMS ][ COMMAND_COMPLETION_ITEM_LENGTH ] )
+{
+	int matches = 0;
+
+	partial += ARRAYSIZE( "tf_mvm_popfile " ) - 1;
+	const int partialLen = V_strlen( partial );
+
+	if ( TFGameRules() && g_pPopulationManager )
+	{
+		CUtlVector< CUtlString > shortNames;
+		g_pPopulationManager->FindDefaultPopulationFileShortNames( shortNames );
+
+		shortNames.Sort( CUtlString::SortCaseInsensitive );
+
+		for ( int i = 0; i < shortNames.Count() && matches < COMMAND_COMPLETION_MAXITEMS; ++i )
+		{
+			const char *popfile = shortNames[ i ];
+			if ( partialLen == 0 || !V_strncasecmp( popfile, partial, partialLen ) )
+			{
+				V_snprintf( commands[ matches++ ], COMMAND_COMPLETION_ITEM_LENGTH, "tf_mvm_popfile %s", popfile );
+			}
+		}
+	}
+
+	return matches;
+}
+
+CON_COMMAND_F_COMPLETION( tf_mvm_popfile, "Change to a target popfile for MvM", FCVAR_GAMEDLL, PopfileCompletion )
 {
 	// Listenserver host or rcon access only!
 	if ( !UTIL_IsCommandIssuedByServerAdmin() )
@@ -1083,7 +1123,7 @@ static Vector s_BotSpawnPosition;
 
 ConVar tf_gravetalk( "tf_gravetalk", "1", FCVAR_NOTIFY, "Allows living players to hear dead players using text/voice chat.", true, 0, true, 1 );
 
-ConVar tf_ctf_bonus_time ( "tf_ctf_bonus_time", "10", FCVAR_NOTIFY, "Length of team crit time for CTF capture." );
+ConVar tf_ctf_bonus_time ( "tf_ctf_bonus_time", "0", FCVAR_NOTIFY, "Length of team crit time for CTF capture." );
 
 #ifdef _DEBUG
 ConVar mp_scrambleteams_debug( "mp_scrambleteams_debug", "0", FCVAR_NONE, "Debug spew." );
@@ -1109,6 +1149,10 @@ ConVar tf_competitive_required_late_join_timeout( "tf_competitive_required_late_
                                                   "How long to wait for late joiners in matches requiring full player counts before canceling the match" );
 ConVar tf_competitive_required_late_join_confirm_timeout( "tf_competitive_required_late_join_confirm_timeout", "30", FCVAR_DEVELOPMENTONLY,
                                                           "How long to wait for the GC to confirm we're in the late join pool before canceling the match" );
+
+ConVar tf_ready_countdown_reduce_per_player( "tf_ready_countdown_reduce_per_player", "30", FCVAR_NONE, "How many seconds we should reduce the countdown timer by per player readying up" );
+ConVar tf_ready_countdown_minimum( "tf_ready_countdown_minimum", "60", FCVAR_NONE, "When players ready up never reduce the countdown timer below this number of seconds" );
+
 #endif // GAME_DLL
 
 ConVar tf_gamemode_community ( "tf_gamemode_community", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
@@ -2377,14 +2421,17 @@ void CTFGameRules::PlayerReadyStatus_UpdatePlayerState( CTFPlayer *pTFPlayer, bo
 	{
 		if ( IsMannVsMachineMode() )
 		{
+			int nReadyCountdownMinimum = tf_ready_countdown_minimum.GetFloat();
+			int nReadyCountdownReducePerPlayer = tf_ready_countdown_reduce_per_player.GetFloat();
+
 			// Reduce timer as each player hits Ready, but only once per-player
-			if ( !m_bPlayerReadyBefore[nEntIndex] && m_flRestartRoundTime > gpGlobals->curtime + 60.f )
+			if ( !m_bPlayerReadyBefore[nEntIndex] && m_flRestartRoundTime > gpGlobals->curtime + nReadyCountdownMinimum )
 			{
-				float flReduceBy = 30.f;
-				if ( m_flRestartRoundTime < gpGlobals->curtime + 90.f )
+				float flReduceBy = nReadyCountdownReducePerPlayer;
+				if ( m_flRestartRoundTime < gpGlobals->curtime + nReadyCountdownReducePerPlayer + nReadyCountdownMinimum )
 				{
-					// Never reduce below 60 seconds remaining
-					flReduceBy = m_flRestartRoundTime - gpGlobals->curtime - 60.f;
+					// Never reduce below tf_ready_countdown_minimum seconds remaining
+					flReduceBy = m_flRestartRoundTime - gpGlobals->curtime - nReadyCountdownMinimum;
 				}
 
 				m_flRestartRoundTime -= flReduceBy;
@@ -10705,7 +10752,7 @@ void CTFGameRules::ClientDisconnected( edict_t *pClient )
 // Falling damage stuff.
 #define TF_PLAYER_MAX_SAFE_FALL_SPEED	650		
 
-ConVar tf_fall_damage_disablespread( "tf_fall_damage_disablespread", "0", FCVAR_NONE );
+ConVar tf_fall_damage_disablespread( "tf_fall_damage_disablespread", "1", FCVAR_NONE );
 
 float CTFGameRules::FlPlayerFallDamage( CBasePlayer *pPlayer )
 {
@@ -14746,35 +14793,25 @@ void CTFGameRules::GetTeamGlowColor( int nTeam, float &r, float &g, float &b )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
+//PF - This is where we have removed access to the other classes.
+//The game treats their classlimits as 0 even outside of Tournament mode.
 int CTFGameRules::GetClassLimit( int iClass )
 {
-	if ( IsInTournamentMode() || IsPasstimeMode() )
+	switch ( iClass )
 	{
-		switch ( iClass )
-		{
-		case TF_CLASS_SCOUT: return tf_tournament_classlimit_scout.GetInt(); break;
-		case TF_CLASS_SNIPER: return tf_tournament_classlimit_sniper.GetInt(); break;
-		case TF_CLASS_SOLDIER: return tf_tournament_classlimit_soldier.GetInt(); break;
-		case TF_CLASS_DEMOMAN: return tf_tournament_classlimit_demoman.GetInt(); break;
-		case TF_CLASS_MEDIC: return tf_tournament_classlimit_medic.GetInt(); break;
-		case TF_CLASS_HEAVYWEAPONS: return tf_tournament_classlimit_heavy.GetInt(); break;
-		case TF_CLASS_PYRO: return tf_tournament_classlimit_pyro.GetInt(); break;
-		case TF_CLASS_SPY: return tf_tournament_classlimit_spy.GetInt(); break;
-		case TF_CLASS_ENGINEER: return tf_tournament_classlimit_engineer.GetInt(); break;
-		default:
-			break;
-		}
+	case TF_CLASS_SCOUT: return 0; break;
+	case TF_CLASS_SNIPER: return 0; break;
+	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt(); break;
+	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt(); break;
+	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt(); break;
+	case TF_CLASS_HEAVYWEAPONS: return 0; break;
+	case TF_CLASS_PYRO: return 0; break;
+	case TF_CLASS_SPY: return 0; break;
+	case TF_CLASS_ENGINEER: return 0; break;
+	default:
+		break;
 	}
-	else if ( IsInHighlanderMode() )
-	{
-		return 1;
-	}
-	else if ( tf_classlimit.GetInt() )
-	{
-		return tf_classlimit.GetInt();
-	}
-
-	return NO_CLASS_LIMIT;
 }
 
 //-----------------------------------------------------------------------------
@@ -16138,6 +16175,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 
 	// we haven't found a "friendly" map name, so let's just clean up what we have
 	if ( !Q_strncmp( pszSrc, "cp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "sp_", 3 ) ||
+		 !Q_strncmp( pszSrc, "tr_", 3 ) ||
 		 !Q_strncmp( pszSrc, "tc_", 3 ) ||
 		 !Q_strncmp( pszSrc, "pl_", 3 ) ||
 		 !Q_strncmp( pszSrc, "ad_", 3 ) ||
@@ -16153,6 +16192,8 @@ const char *GetMapDisplayName( const char *mapName, bool bTitleCase /* = false *
 		pszSrc +=  4;
 	}
 	else if ( !Q_strncmp( szTempName, "koth_", 5 ) ||
+			  !Q_strncmp( pszSrc,	  "jksr_", 5 ) ||
+			  !Q_strncmp( pszSrc,  	  "jump_", 5 ) ||
 			  !Q_strncmp( szTempName, "pass_", 5 ) )
 	{
 		pszSrc +=  5;
@@ -16273,10 +16314,30 @@ const char *GetMapType( const char *mapName )
 		{
 			return "#Gametype_MVM";
 		}
+
+		//Relevant to PF
 		else if ( !Q_strnicmp( mapName, "pass_", 5 ) )
 		{
 			return "#GameType_Passtime";
 		}
+		else if ( !Q_strnicmp( mapName, "jksr_", 5 ) )
+		{
+			return "#GameType_Jacksercise";
+		}
+		else if ( !Q_strnicmp( mapName, "sp_", 3 ) )
+		{
+			return "#GameType_StreetPASS";
+		}
+		else if ( !Q_strnicmp( mapName, "jump_", 5 ) )
+		{
+			return "#GameType_Jump";
+		}
+		else if ( !Q_strnicmp( mapName, "tr_", 3 ) )
+		{
+			return "#GameType_Training";
+		}
+
+		//Back to TF stuff
 		else if ( !Q_strnicmp( mapName, "rd_", 3 ) )
 		{
 			return "#Gametype_RobotDestruction";
