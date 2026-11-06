@@ -281,7 +281,6 @@ ConVar sv_vote_late_join_time( "sv_vote_late_join_time", "90", FCVAR_NONE, "Grac
 ConVar sv_vote_late_join_cooldown( "sv_vote_late_join_cooldown", "300", FCVAR_NONE, "Length of the vote-creation cooldown when joining the server after the grace period has expired" );
 
 ConVar	pf_mute_rocket_jump_groan	( "pf_mute_rocket_jump_groan","1", FCVAR_USERINFO, "Mutes rocket jump pain groan on client side." );
-
 extern ConVar tf_voice_command_suspension_mode;
 extern ConVar tf_feign_death_duration;
 extern ConVar spec_freeze_time;
@@ -9901,12 +9900,6 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 				// Reset duck in air on self rocket impulse.
 				m_Shared.SetAirDucked( 0 );
 
-				if ( m_flCtapSoundExpiryTime > 0.0f && gpGlobals->curtime <= m_flCtapSoundExpiryTime )
-				{
-					m_flCtapSoundExpiryTime = -1.0f;
-
-					EmitSound( "TFPlayer.Ctap" );
-				}
 			}
 			else
 			{
@@ -9931,6 +9924,17 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 			// Reset duck in air on self grenade impulse.
 			m_Shared.SetAirDucked( 0 );
 		}
+		if ( ( info.GetDamageType() & DMG_BLAST ) && m_flCtapSoundExpiryTime > 0.0f && gpGlobals->curtime <= m_flCtapSoundExpiryTime )
+		{
+			m_flCtapSoundExpiryTime = -1.0f;
+
+			if ( atoi( engine->GetClientConVarValue( entindex(), "pf_ctap_feedback" ) ) )
+			{
+				CSingleUserRecipientFilter filter( this );
+				EmitSound( filter, entindex(), "TFPlayer.Ctap" );
+			}
+		}
+
 		// Precision removes self damage so we don't want push force from damage
 		if ( m_Shared.GetCarryingRuneType() == RUNE_PRECISION )
 		{

@@ -223,7 +223,7 @@ ConVar tf_romevision_opt_in( "tf_romevision_opt_in", "0", FCVAR_ARCHIVE, "Enable
 ConVar tf_romevision_skip_prompt( "tf_romevision_skip_prompt", "0", FCVAR_ARCHIVE, "If nonzero, skip the prompt about sharing Romevision." );
 
 ConVar tf_chat_particle( "tf_chat_particle", "1", FCVAR_ARCHIVE, "Show typing bubble above player heads" );
-
+ConVar pf_ctap_feedback( "pf_ctap_feedback", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "Plays a sound when you perform a ctap jump." );
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 #define BOMB_HAT_MODEL		"models/props_lakeside_event/bomb_temp_hat.mdl"
 #define BOMBONOMICON_MODEL  "models/props_halloween/bombonomicon.mdl"
@@ -3644,7 +3644,7 @@ C_TFPlayer::C_TFPlayer() :
 	m_vEyeGlowColor1.Zero();
 	m_vEyeGlowColor2.Zero();
 	m_flNextSheenStartTime = 0;
-	
+
 	m_pTeleporterEffect = NULL;
 	m_pBurningSound = NULL;
 	m_pBurningEffect = NULL;
