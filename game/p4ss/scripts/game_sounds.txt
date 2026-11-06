@@ -945,7 +945,7 @@
 
 "TV.Tune"
 {
-	"channel"		"CHAN_STATIC"
+	"channel"		"CHAN_VOICE"
 	"volume"		"1"
 	"pitch"		"100"
 	"soundlevel"  	"SNDLVL_NONE"
