@@ -14810,7 +14810,7 @@ int CTFGameRules::GetClassLimit( int iClass )
 	case TF_CLASS_SPY: return 0; break;
 	case TF_CLASS_ENGINEER: return 0; break;
 	default:
-		break;
+		return 0;
 	}
 }
 

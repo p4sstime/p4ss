@@ -44,8 +44,8 @@ extern ConVar tf_medigun_autoheal;
 extern ConVar cl_autorezoom;
 extern ConVar cl_autoreload;
 
-//Was not sure where else to put this.
 extern ConVar pf_use_shortnames;
+const char *GetPlayerShortname( int iPlayerIndex );
 
 enum EBonusEffectFilter_t
 {

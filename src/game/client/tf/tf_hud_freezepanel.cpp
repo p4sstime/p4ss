@@ -51,19 +51,6 @@ extern float g_flFreezeFlash;
 
 extern ConVar hud_freezecamhide;
 
-const char *GetPlayerFreezecamName( int iPlayerIndex )
-{
-	if ( pf_use_shortnames.GetBool() )
-	{
-		static char szShortName[MAX_PLAYER_NAME_LENGTH];
-		const wchar_t *wszShortName = GetPlayerShortName( iPlayerIndex );
-		g_pVGuiLocalize->ConvertUnicodeToANSI( wszShortName, szShortName,
-											   sizeof( szShortName ) );
-		return szShortName;
-	}
-	return g_PR->GetPlayerName( iPlayerIndex );
-}
-
 bool IsTakingAFreezecamScreenshot( void )
 {
 	// Don't draw in freezecam, or when the game's not running
@@ -413,7 +400,7 @@ void CTFFreezePanel::FireGameEvent( IGameEvent * event )
 					}
 				}
 
-				m_pBasePanel->SetDialogVariable( "killername", GetPlayerFreezecamName( m_iKillerIndex ) );
+				m_pBasePanel->SetDialogVariable( "killername", GetPlayerShortname( m_iKillerIndex ) );
 
 				if ( m_pAvatar )
 				{
@@ -447,7 +434,7 @@ void CTFFreezePanel::FireGameEvent( IGameEvent * event )
 					item.SetInitialized( true );
 					item.SetItemOriginOverride( kEconItemOrigin_Invalid );
 
-					m_pItemPanel->SetDialogVariable( "killername", GetPlayerFreezecamName( m_iKillerIndex ) );
+					m_pItemPanel->SetDialogVariable( "killername", GetPlayerShortname( m_iKillerIndex ) );
 					m_pItemPanel->SetItem( &item );
 					m_pItemPanel->SetVisible( true );
 				}
@@ -468,10 +455,10 @@ void CTFFreezePanel::FireGameEvent( IGameEvent * event )
 								CBasePlayer *pOriginalOwner = GetPlayerByAccountID( pItemToShow->GetAccountID() );
 								bool bOriginalOwner = !pOriginalOwner || pOriginalOwner == pKiller;
 								pItemLabel->SetText( bOriginalOwner ? "#FreezePanel_Item" : "#FreezePanel_ItemOtherOwner" );
-								m_pItemPanel->SetDialogVariable( "ownername", pOriginalOwner ? GetPlayerFreezecamName( pOriginalOwner->entindex() ) : "" );
+								m_pItemPanel->SetDialogVariable( "ownername", pOriginalOwner ? GetPlayerShortname( pOriginalOwner->entindex() ) : "" );
 							}
 
-							m_pItemPanel->SetDialogVariable( "killername", GetPlayerFreezecamName( m_iKillerIndex ) );
+							m_pItemPanel->SetDialogVariable( "killername", GetPlayerShortname( m_iKillerIndex ) );
 							m_pItemPanel->SetItem( pItemToShow );
 							m_pItemPanel->SetVisible( true );
 						}
@@ -492,7 +479,7 @@ void CTFFreezePanel::FireGameEvent( IGameEvent * event )
 				{
 					m_iKillerIndex = pTFPlayerKiller->entindex();
 
-					m_pBasePanel->SetDialogVariable( "killername", GetPlayerFreezecamName( m_iKillerIndex ) );
+					m_pBasePanel->SetDialogVariable( "killername", GetPlayerShortname( m_iKillerIndex ) );
 
 					if ( m_pAvatar )
 					{
@@ -1141,7 +1128,7 @@ int	CTFFreezePanel::HudElementKeyInput( int down, ButtonCode_t keynum, const cha
 				//Set the screenshot name
 				if ( m_iKillerIndex <= MAX_PLAYERS )
 				{
-					const char *pszKillerName = GetPlayerFreezecamName( m_iKillerIndex );
+					const char *pszKillerName = GetPlayerShortname( m_iKillerIndex );
 
 					if ( pszKillerName )
 					{
