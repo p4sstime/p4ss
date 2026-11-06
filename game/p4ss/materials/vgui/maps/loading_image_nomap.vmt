@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture"	"vgui/maps/loading_image_nomap"
+	"%keywords"		"passtime,p4ss,tf"
+	"$$ignorez"		1
+	"$translucent"	1
+	"$vertexcolor"	1
+}

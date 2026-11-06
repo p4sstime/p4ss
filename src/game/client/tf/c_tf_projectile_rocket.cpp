@@ -15,6 +15,10 @@ BEGIN_NETWORK_TABLE( C_TFProjectile_Rocket, DT_TFProjectile_Rocket )
 	RecvPropBool( RECVINFO( m_bCritical ) ),
 END_NETWORK_TABLE()
 
+//PF ROCKET TRAILS TOGGLE
+static ConVar pf_legacy_rocket_trails( "pf_legacy_rocket_trails", "0",
+FCVAR_CLIENTDLL, "Use the non-team-colored rocket trail for all teams" );
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -128,17 +132,35 @@ void C_TFProjectile_Rocket::CreateTrails( void )
 
 	if ( m_bCritical )
 	{
-		switch( GetTeamNumber() )
+		if ( pf_legacy_rocket_trails.GetBool() ) // check for legacy TF rockets
 		{
-		case TF_TEAM_BLUE:
-			pEffect = ParticleProp()->Create( "critical_rocket_blue", PATTACH_ABSORIGIN_FOLLOW );
-			break;
-		case TF_TEAM_RED:
-			pEffect = ParticleProp()->Create( "critical_rocket_red", PATTACH_ABSORIGIN_FOLLOW );
-			break;
-		default:
-			pEffect = ParticleProp()->Create( "eyeboss_projectile", PATTACH_ABSORIGIN_FOLLOW );
-			break;
+			switch( GetTeamNumber() )
+			{
+			case TF_TEAM_BLUE:
+				pEffect = ParticleProp()->Create( "critical_rocket_blue", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			case TF_TEAM_RED:
+				pEffect = ParticleProp()->Create( "critical_rocket_red", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			default:
+				pEffect = ParticleProp()->Create( "eyeboss_projectile", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			}
+		}
+		else //use PF crockets 
+		{
+			switch( GetTeamNumber() )
+			{
+			case TF_TEAM_BLUE:
+				pEffect = ParticleProp()->Create( "critical_rocket_blue_pf", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			case TF_TEAM_RED:
+				pEffect = ParticleProp()->Create( "critical_rocket_red_pf", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			default:
+				pEffect = ParticleProp()->Create( "eyeboss_projectile", PATTACH_ABSORIGIN_FOLLOW );
+				break;
+			}
 		}
 	}
 }
@@ -147,17 +169,32 @@ void C_TFProjectile_Rocket::CreateTrails( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
+
 const char *C_TFProjectile_Rocket::GetTrailParticleName( void )
 {
-	if ( GetLauncher() )
+	if ( GetLauncher() ) //if we ever have a rocket jumper for some reason, prioritize this first
 	{
 		int iNoSelfBlastDamage = 0;
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( GetLauncher(), iNoSelfBlastDamage, no_self_blast_dmg );
+		CALL_ATTRIB_HOOK_INT_ON_OTHER( GetLauncher(), iNoSelfBlastDamage,
+									   no_self_blast_dmg );
 		if ( iNoSelfBlastDamage )
 		{
 			return "rockettrail_RocketJumper";
 		}
 	}
-	
-	return "rockettrail"; 
+
+	if ( pf_legacy_rocket_trails.GetBool() ) //then check for legacy TF rocket trails
+	{
+		return "rockettrail";
+	}
+
+	switch( GetTeamNumber() ) //otherwise, use PF team-colored trails
+	{
+	case TF_TEAM_BLUE:
+		return "rockettrail_pf_blue";
+	case TF_TEAM_RED:
+		return "rockettrail_pf_red";
+	default:
+		return "rockettrail";
+	}
 }

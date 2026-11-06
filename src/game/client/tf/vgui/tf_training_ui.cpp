@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+﻿//========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose:
 //
@@ -38,17 +38,15 @@ enum GameMode_t	// Supported game modes for offline practice
 {
 	MODE_INVALID = -1,
 
-	MODE_CP,
-	MODE_KOTH,
-	MODE_PL,
+	MODE_JKSR,
+	MODE_JUMP,
 
 	NUM_GAME_MODES
 };
 
 static const char *gs_pGameModeTokens[ NUM_GAME_MODES ] = {
-	"#Gametype_CP",
-	"#Gametype_Koth",
-	"#Gametype_Escort",
+	"#Gametype_Jacksercise_ALLCAPS",
+	"#Gametype_Jump_ALLCAPS",
 };
 
 //------------------------------------------------------------------------------------------------------
@@ -201,32 +199,32 @@ void Training_MarkClassComplete( int iClass, int iStage )
 	}
 
 	// Unlock next class if necessary
-	const int iLastTrainingClass = TF_CLASS_ENGINEER;
+	const int iLastTrainingClass = TF_CLASS_SPY;
 	if ( iClass != iLastTrainingClass )
 	{
 		const int aNextClasses[ TF_CLASS_COUNT ] = {
-			-1,						// TF_CLASS_UNDEFINED
-			-1,						// TF_CLASS_SCOUT
-		    -1,						// TF_CLASS_SNIPER
-		    TF_CLASS_DEMOMAN,		// TF_CLASS_SOLDIER
-			TF_CLASS_SPY,			// TF_CLASS_DEMOMAN
-			-1,						// TF_CLASS_MEDIC
-			-1,						// TF_CLASS_HEAVYWEAPONS
-			-1,						// TF_CLASS_PYRO
-			TF_CLASS_ENGINEER,		// TF_CLASS_SPY
-			-1,						// TF_CLASS_ENGINEER		
+			-1,                    // TF_CLASS_UNDEFINED
+			TF_CLASS_PYRO,         // TF_CLASS_SCOUT → unlocks PYRO
+			TF_CLASS_SPY,          // TF_CLASS_SNIPER → unlocks SPY
+			TF_CLASS_DEMOMAN,      // TF_CLASS_SOLDIER → unlocks DEMOMAN
+			TF_CLASS_MEDIC,        // TF_CLASS_DEMOMAN → unlocks MEDIC
+			TF_CLASS_SCOUT,        // TF_CLASS_MEDIC → unlocks SCOUT
+			TF_CLASS_ENGINEER,     // TF_CLASS_HEAVYWEAPONS → unlocks ENGINEER
+			TF_CLASS_HEAVYWEAPONS, // TF_CLASS_PYRO → unlocks HEAVY
+			TF_CLASS_ENGINEER,     // TF_CLASS_SPY → unlocks ENGINEER
+			TF_CLASS_SNIPER,       // TF_CLASS_ENGINEER → unlocks SNIPER
 		};
 		const int aUnlockRequirements[ TF_CLASS_COUNT ] = {
-			-1,						// TF_CLASS_UNDEFINED
-			-1,						// TF_CLASS_SCOUT
-		    -1,						// TF_CLASS_SNIPER
-		     2,						// TF_CLASS_SOLDIER	- must beat 2 stages to complete soldier training
-			 1,						// TF_CLASS_DEMOMAN
-			-1,						// TF_CLASS_MEDIC
-			-1,						// TF_CLASS_HEAVYWEAPONS
-			-1,						// TF_CLASS_PYRO
-			 1,						// TF_CLASS_SPY
-			-1,						// TF_CLASS_ENGINEER		
+			-1,  // TF_CLASS_UNDEFINED
+			 1,  // TF_CLASS_SCOUT
+			 1,  // TF_CLASS_SNIPER
+			 1,  // TF_CLASS_SOLDIER - We have removed the second stage.
+			 1,  // TF_CLASS_DEMOMAN
+			 1,  // TF_CLASS_MEDIC
+			 1,  // TF_CLASS_HEAVYWEAPONS
+			 1,  // TF_CLASS_PYRO
+			 1,  // TF_CLASS_SPY
+			 1,  // TF_CLASS_ENGINEER
 		};
 		const int iNextClass = aNextClasses[ iClass ];
 		const bool bCurrentClassCompleted = iStage >= aUnlockRequirements[ iClass ];
@@ -262,14 +260,14 @@ void CL_Training_LevelShutdown()
 int Training_GetNumCoursesForClass( int iClass )
 {
 	static int s_aClassCourses[ TF_CLASS_COUNT ] = {
-		0,		// TF_CLASS_UNDEFINED
-		0,		// TF_CLASS_SCOUT
-	    0,		// TF_CLASS_SNIPER
-	    2,		// TF_CLASS_SOLDIER
+		1,		// TF_CLASS_UNDEFINED
+		1,		// TF_CLASS_SCOUT
+	    1,		// TF_CLASS_SNIPER
+	    1,		// TF_CLASS_SOLDIER
 		1,		// TF_CLASS_DEMOMAN
-		0,		// TF_CLASS_MEDIC
-		0,		// TF_CLASS_HEAVYWEAPONS
-		0,		// TF_CLASS_PYRO
+		1,		// TF_CLASS_MEDIC
+		1,		// TF_CLASS_HEAVYWEAPONS
+		1,		// TF_CLASS_PYRO
 		1,		// TF_CLASS_SPY
 		1,		// TF_CLASS_ENGINEER		
 	};
@@ -292,7 +290,7 @@ int Training_GetNumCourses()
 		s_bComputed = true;
 	}
 
-	AssertMsg( s_nTotal == 5, "Number of total courses is incorrect - should be soldier (2) + demo (1) + spy (1) + engy (1)" );
+	AssertMsg( s_nTotal == 9, "Number of total courses is incorrect - should be 1 for each class" );
 
 	return s_nTotal;
 }
@@ -343,11 +341,12 @@ void Training_Init()
 
 	const int TRAINING_CLASS_ATTACK_DEFEND = 15;
 
-	// Add an explicit check for attack/defend
-	if ( ( fProgressOld & ( 1 << TRAINING_CLASS_ATTACK_DEFEND ) ) != 0 )
-	{
-		aProgress[ TF_CLASS_SOLDIER ] = 2;
-	}
+	// PF: We're nuking tr_dustbowl
+	// TF: Add an explicit check for attack/defend
+	//if ( ( fProgressOld & ( 1 << TRAINING_CLASS_ATTACK_DEFEND ) ) != 0 )
+	//{
+	//	aProgress[ TF_CLASS_SOLDIER ] = 2;
+	//}
 
 	// Soldier should always be at least 0
 	aProgress[ TF_CLASS_SOLDIER ] = MAX( aProgress[ TF_CLASS_SOLDIER ], 0 );
@@ -828,10 +827,10 @@ public:
 
 		if ( m_pImagePanel && m_pSelectButton )
 		{
-			const int nMargin = XRES( 10 );
-			const int nButtonStartY = YRES( 215 );
+			const int nMargin = XRES( 5 );		//Margin on the left and right of the image and button
+			const int nButtonStartY = YRES( 70 ); //The height of the class image appears to be tied with the button ypos
 
-			m_pImagePanel->SetBounds( nMargin, YRES( 20 ), GetWide() - 2 * nMargin, nButtonStartY - YRES( 40 ) );
+			m_pImagePanel->SetBounds( nMargin, YRES( 5 ), GetWide() - 2 * nMargin, nButtonStartY - YRES( 5 ) );
 
 			int aButtonBounds[4] = {
 				nMargin, nButtonStartY, GetWide() - nMargin * 2, (int)YRES( 25 )
@@ -916,15 +915,20 @@ DECLARE_BUILD_FACTORY( CBasicTraining_ClassPanel );
 
 enum Consts_t
 {
-	NUM_CLASS_PANELS = 4,
+	NUM_CLASS_PANELS = 9,
 };
 
 const char *g_pClassPanelNames[ NUM_CLASS_PANELS ] =
 {
 	"SoldierPanel",
 	"DemoPanel",
-	"SpyPanel",
-	"EngineerPanel"
+	"MedicPanel",
+	"ScoutPanel",
+	"PyroPanel",
+	"HeavyPanel",
+	"EngineerPanel",
+	"SniperPanel",
+	"SpyPanel"
 };
 
 class CBasicTraining_ClassSelectionPanel : public CTrainingBasePanel
@@ -973,11 +977,19 @@ public:
 		BaseClass::PerformLayout();
 
 		const int nWidth = GetWide();
-		const int nClassPanelW = nWidth / NUM_CLASS_PANELS;
-		const int nClassPanelH = YRES( 260 );
+		const int nClassPanelW = nWidth / 3; //Take all 9 panels and divide it by 3... We don't want any more panels, right?
+		const int nClassPanelH = YRES( 100 );
 
 		const int aTrainingClasses[ NUM_CLASS_PANELS ] = {
-			TF_CLASS_SOLDIER, TF_CLASS_DEMOMAN, TF_CLASS_SPY, TF_CLASS_ENGINEER
+		TF_CLASS_SOLDIER,
+		TF_CLASS_DEMOMAN,
+		TF_CLASS_MEDIC,
+		TF_CLASS_SCOUT,
+		TF_CLASS_PYRO,
+		TF_CLASS_HEAVYWEAPONS,
+		TF_CLASS_ENGINEER,
+		TF_CLASS_SNIPER,
+		TF_CLASS_SPY, 
 		};
 
 
@@ -985,9 +997,13 @@ public:
 		{
 			CBasicTraining_ClassPanel *pCurClassPanel = m_PanelInfos[ i ].m_pPanel;
 
+			//PF 3x3 rows
+			const int nRow = i / 3;
+			const int nCol = i % 3;
+
 			pCurClassPanel->SetBounds(
-				i * nClassPanelW,
-				0,
+				nCol * nClassPanelW,
+				nRow * nClassPanelH,
 				nClassPanelW,
 				nClassPanelH
 			);
@@ -1062,7 +1078,8 @@ public:
 		EditablePanel *pOverlayPanel = dynamic_cast< EditablePanel * >( FindChildByName( "OverlayPanel" ) );
 		if ( pOverlayPanel && m_iClass >= TF_FIRST_NORMAL_CLASS && m_iClass < TF_LAST_NORMAL_CLASS )
 		{
-			pOverlayPanel->SetDialogVariable( "classname", g_pVGuiLocalize->Find( g_aPlayerClassNames[ m_iClass ] ) );
+			CFmtStr fmtClassNameToken( "TR_ClassInfo_Classname_%s", m_szClassName );
+			pOverlayPanel->SetDialogVariable( "classname", g_pVGuiLocalize->Find( fmtClassNameToken.Access() ) );
 
 			CFmtStr fmtDescToken( "TR_ClassInfo_%s", m_szClassName );
 			pOverlayPanel->SetDialogVariable( "description", g_pVGuiLocalize->Find( fmtDescToken.Access() ) );
@@ -1084,14 +1101,14 @@ public:
 		ImagePanel *pClassImage = dynamic_cast< ImagePanel * >( FindChildByName( "ClassImage" ) );
 		if ( pClassImage )
 		{
-			CFmtStr fmtImageName( "training/class_%s_on", m_szClassName );
+			CFmtStr fmtImageName( "trainingmenu/course_images_big_vertical/class_%s", m_szClassName );
 			pClassImage->SetImage( fmtImageName.Access() );
 		}
 
 		ImagePanel *pClassIconImage = dynamic_cast< ImagePanel * >( FindChildByName( "ClassIconImage" ) );
 		if ( pClassIconImage )
 		{
-			CFmtStr fmtImageName( "training/class_icon_%s", m_szClassName );
+			CFmtStr fmtImageName( "trainingmenu/class_icons/icon_%s", m_szClassName );
 			pClassIconImage->SetImage( fmtImageName.Access() );
 		}
 
@@ -1106,32 +1123,28 @@ public:
 		NavigateTo();
 	}
 
+	//NOTE FOR PF
+	// The game pulls these images from
+	// materials/backpack/weapons/w_models/w_<weaponname>.vmt
 	void GetWeaponPath( int iClass, int iWeapon, CFmtStr &fmtOut )	// iWeapon is in [0,2]
 	{
 		static const char *s_pWeaponNames[ TF_CLASS_COUNT ][ 3 ] = {
 			{ NULL, NULL, NULL },	// TF_CLASS_UNDEFINED
-			{ NULL, NULL, NULL },	// TF_CLASS_SCOUT
-			{ NULL, NULL, NULL },	// TF_CLASS_SNIPER
-			{ "rocketlauncher", "shotgun", "shovel" },		// TF_CLASS_SOLDIER
-			{ "grenadelauncher", "stickybomb_launcher", "bottle" },	// TF_CLASS_DEMOMAN,
-			{ NULL, NULL, NULL },	// TF_CLASS_MEDIC
-			{ NULL, NULL, NULL },	// TF_CLASS_HEAVYWEAPONS
-			{ NULL, NULL, NULL },	// TF_CLASS_PYRO
-			{ "revolver", "c_spy_watch", "knife", },		// TF_CLASS_SPY,
-			{ "shotgun", "pistol", "wrench" },				// TF_CLASS_ENGINEER,		
+			{ "pf_grenades", "pf_shield", "pf_boomstick" },	// TF_CLASS_SCOUT
+			{ "pf_boots", "pf_shield", "pf_boomstick" },	// TF_CLASS_SNIPER
+			{ "rocketlauncher", "gunboats", "shovel" },		// TF_CLASS_SOLDIER
+			{ "pf_grenades", "pf_shield", "pf_boomstick" },	// TF_CLASS_DEMOMAN,
+			{ "pf_medicprimary", "medigun", "bonesaw"},	// TF_CLASS_MEDIC
+			{ "rocketlauncher", "gunboats", "shovel" }, // TF_CLASS_HEAVYWEAPONS
+			{ "pf_medicprimary", "medigun", "bonesaw" },	   // TF_CLASS_PYRO
+			{ "rocketlauncher", "gunboats", "shovel" }, // TF_CLASS_SPY,
+			{ "rocketlauncher", "gunboats", "shovel" },	// TF_CLASS_ENGINEER	
 		};
 
 		Assert( iClass >= TF_FIRST_NORMAL_CLASS && iClass < TF_CLASS_COUNT );
 		Assert( iWeapon >= 0 && iWeapon < 3 );
 
-		if ( iClass == TF_CLASS_SPY && iWeapon == 1 )
-		{
-			fmtOut.sprintf( "../backpack/weapons/c_models/c_spy_watch/parts/c_spy_watch" );
-		}
-		else
-		{
-			fmtOut.sprintf( "../backpack/weapons/w_models/w_%s", s_pWeaponNames[ iClass ][ iWeapon ] );
-		}
+		fmtOut.sprintf( "../backpack/weapons/w_models/w_%s", s_pWeaponNames[ iClass ][ iWeapon ] );
 	}
 
 	virtual bool ShouldShowGradient() const
@@ -1164,13 +1177,33 @@ public:
 		{
 			m_iClass = TF_CLASS_DEMOMAN;
 		}
-		else if ( FStrEq( pClassName, "spy" ) )
+		else if ( FStrEq( pClassName, "medic" ) )
 		{
-			m_iClass = TF_CLASS_SPY;
+			m_iClass = TF_CLASS_MEDIC;
+		}
+		else if ( FStrEq( pClassName, "scout" ) )
+		{
+			m_iClass = TF_CLASS_SCOUT;
+		}
+		else if ( FStrEq( pClassName, "pyro" ) )
+		{
+			m_iClass = TF_CLASS_PYRO;
+		}
+		else if ( FStrEq( pClassName, "heavyweapons" ) )
+		{
+			m_iClass = TF_CLASS_HEAVYWEAPONS;
 		}
 		else if ( FStrEq( pClassName, "engineer" ) )
 		{
 			m_iClass = TF_CLASS_ENGINEER;
+		}
+		else if ( FStrEq( pClassName, "sniper" ) )
+		{
+			m_iClass = TF_CLASS_SNIPER;
+		}
+		else if ( FStrEq( pClassName, "spy" ) )
+		{
+			m_iClass = TF_CLASS_SPY;
 		}
 		else
 		{
@@ -1274,7 +1307,7 @@ public:
 private:
 	enum Consts_t
 	{
-		NUM_PRACTICE_MODES = 3,
+		NUM_PRACTICE_MODES = 2,
 	};
 
 	struct PracticeModeInfo_t
@@ -1370,7 +1403,7 @@ public:
 		{
 			Assert( m_iPage >= 0 && m_iPage < GetMapCount() );
 
-			CFmtStr fmtMapImageBasePath( "training/screenshots/%s.vmt", pCurMapInfo->m_strName.Get() );
+			CFmtStr fmtMapImageBasePath( "trainingmenu/single_player_maps/%s.vmt", pCurMapInfo->m_strName.Get() );
 			m_pMapImagePanel->SetImage( fmtMapImageBasePath.Access() );
 		}
 
@@ -1496,13 +1529,12 @@ public:
 		if ( !pSelectedMapInfo )
 			return false;
 
-		int nQuota = 1;
-		int iDifficulty = 0;
-		GetControlValues( &nQuota, &iDifficulty );
-
-		// the player count in the dialog includes the human player, so decrease the bot count by one
+		// Bots disabled for offline practice because they don't apply to Jacksercise or jump
+		// They wouldn't work well for pass time either
+		// Removed bot quota and bot configuration
+		
 		ConVarRef tf_bot_quota( "tf_bot_quota" );
-		tf_bot_quota.SetValue( nQuota - 1 );
+		tf_bot_quota.SetValue( 0 );
 
 		ConVarRef tf_bot_quota_mode( "tf_bot_quota_mode" );
 		tf_bot_quota_mode.SetValue( "normal" );
@@ -1511,10 +1543,10 @@ public:
 		tf_bot_auto_vacate.SetValue( 0 );
 
 		ConVarRef tf_bot_difficulty( "tf_bot_difficulty" );
-		tf_bot_difficulty.SetValue( iDifficulty );
+		tf_bot_difficulty.SetValue( 0 );
 
 		ConVarRef tf_bot_offline_practice( "tf_bot_offline_practice" );
-		tf_bot_offline_practice.SetValue( 1 );
+		tf_bot_offline_practice.SetValue( 0 );
 
 		tf_training_client_message.SetValue( TRAINING_CLIENT_MESSAGE_WATCHING_INTRO_MOVIE );
 
@@ -1686,17 +1718,13 @@ private:
 
 	GameMode_t GetGameModeFromMapName( const char *pMapName )
 	{
-		if ( !V_strnicmp( pMapName, "cp", 2 ) )
+		if ( !V_strnicmp( pMapName, "jksr", 4 ) )
 		{
-			return MODE_CP;
+			return MODE_JKSR;
 		}
-		else if ( !V_strnicmp( pMapName, "koth", 4 ) )
+		else if ( !V_strnicmp( pMapName, "jump", 4 ) )
 		{
-			return MODE_KOTH;
-		}
-		else if ( !V_strnicmp( pMapName, "pl", 2 ) )
-		{
-			return MODE_PL;
+			return MODE_JUMP;
 		}
 
 		AssertMsg( 0, "Should never get here!" );
@@ -1940,14 +1968,19 @@ public:
 		if ( !pData )
 			return;
 
-		// Override for soldier - if target practice is complete, start from
-		const int iClass = GetClassFromData( pData );
-		int nProgress = Training_GetClassProgress( iClass );
-		if ( iClass == TF_CLASS_SOLDIER && nProgress >= 1 )
-		{
-			ConfirmContinue();
-			return;
-		}
+		// TF: Override for soldier - if target practice is complete, start from tr_dustbowl
+		// PF: Problem for PASS Fortress is: We have more than 1 stage where Soldier is the designated class.
+		// So, even on Heavy's level slot, choosing him would still prompt the decision to play level 1 or 2
+		// because we are about to spawn as Soldier.
+		// I am nuking this 'for now'. One level per 'class' in terms of how the game code treats it.
+		
+		//const int iClass = GetClassFromData( pData );
+		//int nProgress = Training_GetClassProgress( iClass );
+		//if ( iClass == TF_CLASS_SOLDIER && nProgress >= 1 )
+		//{
+		//	ConfirmContinue();
+		//	return;
+	//	}
 
 		m_bStartTraining = true;
 		m_bContinue = false;
@@ -1966,7 +1999,7 @@ public:
 		const char *pMapName = pData->GetString( "map", NULL );
 		if ( m_bContinue )
 		{
-			pMapName = "tr_dustbowl";
+			pMapName = "tr_stadium_surf";
 		}
 
 		if ( pMapName )
@@ -2050,7 +2083,7 @@ public:
 
 			// exec
 			engine->ClientCmd_Unrestricted( fmtMapCommand.Access() );
-		}
+			}
 
 		Close();
 	}
@@ -2180,9 +2213,28 @@ void CL_ShowTrainingDialog( const CCommand &args )
 
 CON_COMMAND( cl_training_class_unlock_all, "Unlock all training" )
 {
-	for ( int i = TF_FIRST_NORMAL_CLASS; i < TF_LAST_NORMAL_CLASS; ++i )
+	// PF - The original code for this was unlocking classes in the TF order, but since we have a custom
+	// order for the training progression, we need to
+	// unlock in that order instead. Otherwise, we will overwrite progress
+	// values and not unlock all classes.
+
+	// My hope is that this code is so awful that I'm never allowed to write UI code again
+
+	const int aUnlockOrder[ 9 ] = {
+		TF_CLASS_SOLDIER,
+		TF_CLASS_DEMOMAN,
+		TF_CLASS_MEDIC,
+		TF_CLASS_SCOUT,
+		TF_CLASS_PYRO,
+		TF_CLASS_HEAVYWEAPONS,
+		TF_CLASS_ENGINEER,
+		TF_CLASS_SNIPER,
+		TF_CLASS_SPY,
+	};
+
+	for ( int i = 0; i < ARRAYSIZE( aUnlockOrder ); ++i )
 	{
-		Training_MarkClassComplete( i, 100 );
+		Training_MarkClassComplete( aUnlockOrder[ i ], 100 );
 	}
 }
 

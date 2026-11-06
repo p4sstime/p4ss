@@ -369,12 +369,12 @@
 		"team1_grow_dir" "west"
 		"team1_base_x"	"c-82"
 		"team1_base_x_minmode"	"c-40"
-		"team1_max_expand"	"253"
+		"team1_max_expand"	"233"
 
 		"team2_grow_dir" "east"
 		"team2_base_x"	"c82"
 		"team2_base_x_minmode"	"c40"
-		"team2_max_expand"	"253"
+		"team2_max_expand"	"233"
 
 		"playerpanels_kv"
 		{

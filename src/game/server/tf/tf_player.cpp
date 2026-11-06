@@ -2661,6 +2661,8 @@ void CTFPlayer::PrecacheMvM()
 	PrecacheModel( "models/items/currencypack_large.mdl" );
 
 	PrecacheModel( "models/bots/tw2/boss_bot/twcarrier_addon.mdl" );
+    
+	PrecacheModel( "models/player/gibs/gibs_bolt.mdl" );
 
 	PrecacheParticleSystem( "bot_impact_light" );
 	PrecacheParticleSystem( "bot_impact_heavy" );
@@ -3890,6 +3892,21 @@ void CTFPlayer::Regenerate( bool bRefillHealthAndAmmo /*= true*/ )
 
 	if ( bRefillHealthAndAmmo )
 	{
+		//P4SS - Remove more debuffs and reset crit heals, for more
+		//parity with the resup bind
+
+		m_flLastDamageTime = 0.f;
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH );
+		}
+
+		if ( m_Shared.InCond( TF_COND_MARKEDFORDEATH_SILENT ) )
+		{
+			m_Shared.RemoveCond( TF_COND_MARKEDFORDEATH_SILENT );
+		}
+
 		if ( m_Shared.InCond( TF_COND_BURNING ) )
 		{
 			m_Shared.RemoveCond( TF_COND_BURNING );
@@ -8726,7 +8743,15 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 				pRandomInternalOrgan->KeyValue( "origin", buf );
 				Q_snprintf( buf, sizeof( buf ), "%.10f %.10f %.10f", GetAbsAngles().x, GetAbsAngles().y, GetAbsAngles().z );
 				pRandomInternalOrgan->KeyValue( "angles", buf );
-				pRandomInternalOrgan->KeyValue( "model", "models/player/gibs/random_organ.mdl" );
+				if ( TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS && BloodColor() == DONT_BLEED && TFObjectiveResource()->GetMvMEventPopfileType() != MVM_EVENT_POPFILE_HALLOWEEN )
+				{
+					//robots don't have spleens....
+					pRandomInternalOrgan->KeyValue( "model", "models/player/gibs/gibs_bolt.mdl" );
+				}
+				else
+				{
+					pRandomInternalOrgan->KeyValue( "model", "models/player/gibs/random_organ.mdl" );
+				}
 				pRandomInternalOrgan->KeyValue( "fademindist", "-1" );
 				pRandomInternalOrgan->KeyValue( "fademaxdist", "0" );
 				pRandomInternalOrgan->KeyValue( "fadescale", "1" );
@@ -9801,6 +9826,63 @@ void CTFPlayer::CommitSuicide( bool bExplode /* = false */, bool bForce /*= fals
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Custom killbinds by RealGamerX
+//-----------------------------------------------------------------------------
+void CTFPlayer::CommitSuicideWithCustomRagdoll( int m_iCustomRagdoll /*= 0*/ )
+{
+	if ( !IsAlive() )
+		return;
+
+	CommitSuicide();
+
+	CTFRagdoll *pRagdoll = dynamic_cast<CTFRagdoll *>( m_hRagdoll.Get() );
+	if ( pRagdoll )
+	{
+		switch ( m_iCustomRagdoll )
+		{
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_BURN:
+			pRagdoll->m_bBurning = true;
+			pRagdoll->EmitSound( "Taunt.Pyro02Fire" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_FREEZE:
+			pRagdoll->m_bIceRagdoll = true;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_INCINERATE:
+			pRagdoll->m_bBecomeAsh = true;
+			pRagdoll->EmitSound( "Taunt.Pyro02Fire" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DISINTEGRATE:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_PLASMA;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DISINTEGRATE_AND_GIB:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_PLASMA_CHARGED;
+			// Cow mangler charged shot doesn't actually play the dissolve sound
+			// on its own Looks incredibly odd to just have gibs float away in
+			// silence, so we give it a sound :)
+			pRagdoll->EmitSound( "TFPlayer.Dissolve" );
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_MISTIFY:
+			pRagdoll->m_bCritOnHardHit = true;
+			pRagdoll->m_bGib = true;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_DECAPITATE:
+			pRagdoll->m_iDamageCustom = TF_DMG_CUSTOM_HEADSHOT_DECAPITATION;
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_CLOAK:
+			pRagdoll->m_bCloaked = true;
+			// Cosmetics don't remain uncloaked, but it appears to be default
+			// behavior
+			break;
+		case TF_KILLBIND_CUSTOM_RAGDOLL_TYPE_TURN_TO_GOLD:
+			pRagdoll->m_bGoldRagdoll = true;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : &info - 
 // Output : int
@@ -10013,7 +10095,7 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 			}
 		}
 
-		if ( TFGameRules()->GameModeUsesUpgrades() )
+		if ( TFGameRules()->IsMannVsMachineMode() )
 		{
 			if ( GetTeamNumber() == TF_TEAM_PVE_INVADERS )
 			{
@@ -10310,7 +10392,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 			{
 				int iExplosiveShot = 0;
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pTFAttacker, iExplosiveShot, explosive_sniper_shot );
-				if ( iExplosiveShot )
+				if ( iExplosiveShot && !m_Shared.IsInvulnerable() )
 				{
 					pSniper->ExplosiveHeadShot( pTFAttacker, this );
 				}
@@ -14167,7 +14249,16 @@ void CTFPlayer::PainSound( const CTakeDamageInfo &info )
 			TFPlayerClassData_t *pData = GetPlayerClass()->GetData();
 			if ( pData )
 			{
-				EmitSound( pData->GetDeathSound( DEATH_SOUND_GENERIC ) );
+				int nDeathSound = DEATH_SOUND_GENERIC;
+				if ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS )
+				{
+					nDeathSound = DEATH_SOUND_GENERIC_MVM;
+					if ( IsMiniBoss() )
+					{
+						nDeathSound = DEATH_SOUND_GENERIC_GIANT_MVM;
+					}
+				}
+				EmitSound( pData->GetDeathSound( nDeathSound ) );
 			}
 		}
 		return;
