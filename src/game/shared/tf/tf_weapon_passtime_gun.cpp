@@ -72,6 +72,19 @@ namespace
 	static char const * const kShootOkSound          = "Passtime.Throw";
 	static char const * const kPassOkSound           = "Passtime.Throw";
 	static char const * const kHalloweenBallModel    = "models/passtime/ball/passtime_ball_halloween.mdl";
+
+	enum class EPassTargetSource { None, Search, ClientCmd };
+
+	EPassTargetSource GetPassTargetSource( CTFPlayer *pOwner )
+	{
+		if ( !pOwner->m_Shared.HasPasstimeBall() || pf_nolock.GetBool() )
+			return EPassTargetSource::None;
+#ifdef GAME_DLL
+		if ( !pOwner->IsBot() )
+			return EPassTargetSource::ClientCmd;
+#endif
+		return EPassTargetSource::Search;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -416,6 +429,29 @@ bool CPasstimeGun::SendWeaponAnim( int actBase )
 	return BaseClass::SendWeaponAnim( actBase );
 }
 
+#ifdef GAME_DLL
+//-----------------------------------------------------------------------------
+void CPasstimeGun::SyncPassTargetFromClient( CTFPlayer *pOwner )
+{
+	const CUserCmd *pCmd = pOwner->GetCurrentUserCommand();
+	CTFPlayer *pNewTarget = pCmd && pCmd->passtime_lock_target > 0 ? ToTFPlayer( UTIL_PlayerByIndex( pCmd->passtime_lock_target ) ) : nullptr;
+	if ( pNewTarget && !BValidPassTarget( pOwner, pNewTarget ) )
+		pNewTarget = nullptr;
+
+	if ( pNewTarget == pOwner->m_Shared.GetPasstimePassTarget() )
+		return;
+
+	pOwner->m_Shared.SetPasstimePassTarget( pNewTarget );
+	if ( pNewTarget )
+	{
+		CRecipientFilter filter;
+		filter.MakeReliable();
+		filter.AddRecipient( pNewTarget );
+		EmitSound( filter, pNewTarget->entindex(), kTargetHightlightSound );
+	}
+}
+#endif
+
 //-----------------------------------------------------------------------------
 void CPasstimeGun::ItemPostFrame()
 {
@@ -444,13 +480,8 @@ void CPasstimeGun::ItemPostFrame()
 	//
 	// Update pass target
 	//
-#ifdef GAME_DLL
-	bool bShouldUpdateTarget = pOwner->IsBot();
-#else
-	bool bShouldUpdateTarget = true;
-#endif
-	
-	if ( bShouldUpdateTarget && pOwner->m_Shared.HasPasstimeBall() && !pf_nolock.GetBool() )
+	EPassTargetSource eTargetSource = GetPassTargetSource( pOwner );
+	if ( eTargetSource == EPassTargetSource::Search )
 	{
 		Vector vecEyePos, vecEyeDir;
 		pOwner->EyePositionAndVectors( &vecEyePos, &vecEyeDir, 0, 0 );
@@ -626,6 +657,12 @@ void CPasstimeGun::ItemPostFrame()
 			m_attack.LatchUp();
 		}
 	}
+#ifdef GAME_DLL
+	else if ( eTargetSource == EPassTargetSource::ClientCmd )
+	{
+		SyncPassTargetFromClient( pOwner );
+	}
+#endif
 	else
 	{
 		//
@@ -908,8 +945,14 @@ void CPasstimeGun::Throw( CTFPlayer *pOwner )
 		pPassTarget = ToTFPlayer( pOwner->m_Shared.GetPasstimePassTarget() );
 	}
 	
+	CPasstimeBall *pCarriedBall = g_pPasstimeLogic->GetCarriedBall( pOwner );
+	if ( !pCarriedBall )
+	{
+		return;
+	}
+
 	const LaunchParams& launch = CalcLaunch( pOwner, pPassTarget != 0 );
-	g_pPasstimeLogic->LaunchBall( pOwner, launch.startPos, launch.startVel );
+	g_pPasstimeLogic->LaunchBall( pCarriedBall, pOwner, launch.startPos, launch.startVel );
 
 	CPASAttenuationFilter pasFilter( pOwner );
 	pOwner->EmitSound( pasFilter, pOwner->entindex(), kShootOkSound );
@@ -918,7 +961,7 @@ void CPasstimeGun::Throw( CTFPlayer *pOwner )
 		++CTF_GameStats.m_passtimeStats.summary.nTotalPassesStarted;
 		m_ballController.SetTargetSpeed( tf_passtime_mode_homing_speed.GetFloat() );
 		auto isCharged = (m_fChargeBeginTime > 0) && (GetCurrentCharge() >= 1);
-		m_ballController.StartHoming( g_pPasstimeLogic->GetBall(), pPassTarget, isCharged );
+		m_ballController.StartHoming( pCarriedBall, pPassTarget, isCharged );
 		if ( CTFPlayer *pPlayerPassTarget = ToTFPlayer( pPassTarget ) )
 		{
 			char pszSound[64];
@@ -1009,6 +1052,20 @@ bool CPasstimeGun::BValidPassTarget( CTFPlayer *pSource, CTFPlayer *pTarget, Hud
 		return false;
 	}
 
+	if ( g_pPasstimeLogic )
+	{
+		CPasstimeBall *pSourceBall = g_pPasstimeLogic->GetCarriedBall( pSource );
+		if ( pSourceBall && pSourceBall->IsPracticeBall() )
+		{
+			return false;
+		}
+
+		if ( g_pPasstimeLogic->GetCarriedBall( pTarget ) )
+		{
+			return false;
+		}
+	}
+
 	bool bTargetDisguised = pTarget->m_Shared.InCond( TF_COND_DISGUISED );
 	int iTargetTeam = pTarget->GetTeamNumber();
 	int iSourceTeam = pSource ? pSource->GetTeamNumber() : iTargetTeam;
@@ -1039,6 +1096,24 @@ bool CPasstimeGun::BValidPassTarget( CTFPlayer *pSource, CTFPlayer *pTarget, Hud
 
 //-----------------------------------------------------------------------------
 #ifdef CLIENT_DLL
+class CTraceFilterIgnorePasstimeBalls : public CTraceFilterSimple
+{
+public:
+	CTraceFilterIgnorePasstimeBalls( C_BaseEntity *pPassEnt, int collisionGroup )
+		: CTraceFilterSimple( pPassEnt, collisionGroup ) {}
+
+	virtual bool ShouldHitEntity( IHandleEntity *pHandleEntity, int contentsMask ) OVERRIDE
+	{
+		C_BaseEntity *pEntity = EntityFromEntityHandle( pHandleEntity );
+		if ( pEntity && dynamic_cast<C_PasstimeBall*>( pEntity ) )
+		{
+			return false;
+		}
+		return CTraceFilterSimple::ShouldHitEntity( pHandleEntity, contentsMask );
+	}
+};
+
+//-----------------------------------------------------------------------------
 void CPasstimeGun::UpdateThrowArch()
 {
 	C_TFPlayer *pOwner = ToTFPlayer( GetOwnerEntity() );
@@ -1058,6 +1133,8 @@ void CPasstimeGun::UpdateThrowArch()
 		return;
 	}
 
+	CPasstimeBall *pCarriedBall = g_pPasstimeLogic ? g_pPasstimeLogic->GetCarriedBall( pOwner ) : nullptr;
+
 	const LaunchParams& launchParams = CalcLaunch( pOwner, false );
 
 	// Simple euler integration.
@@ -1072,7 +1149,7 @@ void CPasstimeGun::UpdateThrowArch()
 
 	Vector vecStart, vecEnd;
 	trace_t tr;
-	CTraceFilterSimple traceFilter( pOwner, COLLISION_GROUP_NONE );
+	CTraceFilterIgnorePasstimeBalls traceFilter( pOwner, COLLISION_GROUP_NONE );
 	const int iMaxTraces = 100; // is this insane?
 	for ( int iPoint = 0; iPoint < iMaxTraces; ++iPoint )
 	{
@@ -1091,7 +1168,7 @@ void CPasstimeGun::UpdateThrowArch()
 
 		if ( tr.DidHit() )
 		{	
-			m_pBounceReticle->Show( tr.endpos, tr.plane.normal );
+			m_pBounceReticle->Show( tr.endpos, tr.plane.normal, pOwner->GetTeamNumber(), pCarriedBall );
 			break;
 
 			// commented out code trying to guess bounce
