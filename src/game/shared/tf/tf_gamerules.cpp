@@ -2624,6 +2624,7 @@ CTFGameRules::CTFGameRules()
 	: m_mapTeleportLocations( DefLessFunc(string_t) )
 	, m_bMapCycleNeedsUpdate( false )
 	, m_bMapForcedTruceDuringBossFight( false )
+	, m_bIsJumpMap( false )
 	, m_flNextHalloweenGiftUpdateTime( -1 )
 #else
 	: m_bRecievedBaseline( false )
@@ -3390,6 +3391,9 @@ void CTFGameRules::Activate()
 	m_bPlayingSpecialDeliveryMode.Set( false );
 	m_bPlayingRobotDestructionMode.Set( false );
 	m_bPowerupMode.Set( false );
+#ifdef GAME_DLL
+	m_bIsJumpMap = MapHasPrefix( STRING( gpGlobals->mapname ), "jump_" );
+#endif
 
 	m_redPayloadToPush = NULL;
 	m_bluePayloadToPush = NULL;
