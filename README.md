@@ -14,7 +14,6 @@ Prerequisites:
 
 Requirements:
  - Steam
- - Source SDK 2013 Multiplayer installed via Steam
  - Team Fortress 2
  - Visual Studio 2022 with the following workload and components:
    - Desktop development with C++:
@@ -61,7 +60,7 @@ Prerequisites:
 - Steam
 - podman (latest is fine, restart after installing)
 - Team Fortress 2
-- Source SDK Base 2013 Multiplayer
+- Steam Linux Runtime 3.0
 
 
 Clone this repository, then run:
