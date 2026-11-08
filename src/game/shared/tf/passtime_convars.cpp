@@ -97,6 +97,6 @@ PASSTIME_CONVAR( tf_passtime_no_jack_armor,        1,     "Prevents ball thrower
 PASSTIME_CONVAR( tf_passtime_no_jack_armor_time,   0.25f, "How many seconds the thrower must wait before picking up the ball again." );
 PASSTIME_CONVAR( tf_passtime_ball_dmg_immune_time, 0.25f, "How long in seconds is the ball immune to splash damage neutralising the ball");
 
-PASSTIME_CONVAR( tf_passtime_ctap_helper,                   1,     "Enables or disables CTap buffer assist" );
-PASSTIME_CONVAR( tf_passtime_ctap_window_min,               0.050f, "Minimum duration in seconds for ctap window." );
-PASSTIME_CONVAR( tf_passtime_ctap_window_max,               0.100f, "Maximum duration in seconds for ctap window." );
+PASSTIME_CONVAR( pf_ctap_helper,                   1,     "Enables or disables CTap buffer assist" );
+PASSTIME_CONVAR( pf_ctap_window_min,               0.050f, "Minimum duration in seconds for ctap window." );
+PASSTIME_CONVAR( pf_ctap_window_max,               0.100f, "Maximum duration in seconds for ctap window." );

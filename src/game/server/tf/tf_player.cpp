@@ -3087,10 +3087,10 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 
 	if ( bJumpJustPressed && ( GetFlags() & FL_ONGROUND ) )
 	{
-		if ( tf_passtime_ctap_helper.GetBool() && m_flLastDuckPressTime > 0.0f )
+		if ( pf_ctap_helper.GetBool() && m_flLastDuckPressTime > 0.0f )
 		{
 			float flDuckToJump = gpGlobals->curtime - m_flLastDuckPressTime;
-			if ( flDuckToJump >= tf_passtime_ctap_window_min.GetFloat() && flDuckToJump <= tf_passtime_ctap_window_max.GetFloat() )
+			if ( flDuckToJump >= pf_ctap_window_min.GetFloat() && flDuckToJump <= pf_ctap_window_max.GetFloat() )
 			{
 				m_bCtapJumpPending = true;
 			}
