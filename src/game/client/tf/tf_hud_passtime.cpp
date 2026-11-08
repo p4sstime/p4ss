@@ -309,7 +309,7 @@ void CTFHudPasstimePassNotify::ApplySchemeSettings( vgui::IScheme *pScheme )
 void CTFHudPasstimePassNotify::OnTick()
 {
 	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( !pLocalPlayer || !g_pPasstimeLogic || !g_pPasstimeLogic->GetBall() ) 
+	if ( !pLocalPlayer || !g_pPasstimeLogic || !g_pPasstimeLogic->GetGameBall() ) 
 	{
 		// nothing can work
 		if ( m_pTextBox )
@@ -329,7 +329,7 @@ void CTFHudPasstimePassNotify::OnTick()
 		return;
 	}
 
-	C_PasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+	C_PasstimeBall *pBall = g_pPasstimeLogic->GetRelevantBallForPlayer( pLocalPlayer );
 	CTFPlayer *pBallCarrier = pBall ? pBall->GetCarrier() : NULL;
 	if ( !pBallCarrier ) 
 	{
@@ -1023,8 +1023,8 @@ void CTFHudPasstimeBallStatus::ApplySchemeSettings( IScheme *pScheme )
 		m_pBallPowerMeterFinalSection->SetWide( iFinalSectionWidth );
 		m_pBallPowerMeterFinalSection->SetPos( m_pBallPowerMeterFinalSection->GetXPos() + (m_iBallPowerMeterFillWidth - iFinalSectionWidth), m_pBallPowerMeterFinalSection->GetYPos() );
 	}
-	m_iPrevBallPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() )
-		? g_pPasstimeLogic->GetBall()->GetBallPower()
+	m_iPrevBallPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetGameBall() )
+		? g_pPasstimeLogic->GetGameBall()->GetBallPower()
 		: 0;
 	
 	// find the left/right markers in the res files
@@ -1142,8 +1142,8 @@ static float CalcProgressFrac( const Vector& vecOrigin )
 // FIXME copypasta with tf_passtime_logic.cpp
 static float CalcBallProgressFrac()
 {
-	Assert( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() && (g_pPasstimeLogic->GetNumSections() > 0) );
-	CPasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+	Assert( g_pPasstimeLogic && g_pPasstimeLogic->GetGameBall() && (g_pPasstimeLogic->GetNumSections() > 0) );
+	CPasstimeBall *pBall = g_pPasstimeLogic->GetGameBall();
 	CTFPlayer *pCarrier = pBall->GetCarrier();
 	return CalcProgressFrac( pCarrier 
 		? pCarrier->GetNetworkOrigin()
@@ -1220,8 +1220,8 @@ void CTFHudPasstimeBallStatus::OnTickHidden()
 			m_pPlayerIcons[i]->SetVisible( false );
 	}
 
-	m_iPrevBallPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() )
-		? g_pPasstimeLogic->GetBall()->GetBallPower()
+	m_iPrevBallPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetGameBall() )
+		? g_pPasstimeLogic->GetGameBall()->GetBallPower()
 		: 0;
 
 	HideGoalIcons();
@@ -1268,8 +1268,8 @@ void CTFHudPasstimeBallStatus::OnTickVisible( C_TFPlayer *pLocalPlayer, C_Passti
 	}
 	{
 		// update the power bar
-		int iCurPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() )
-			? g_pPasstimeLogic->GetBall()->GetBallPower()
+		int iCurPower = ( g_pPasstimeLogic && g_pPasstimeLogic->GetGameBall() )
+			? g_pPasstimeLogic->GetGameBall()->GetBallPower()
 			: 0;
 		int iThreshold = tf_passtime_powerball_threshold.GetInt();
 		int iAlpha = (iCurPower > iThreshold)
@@ -1533,7 +1533,7 @@ void CTFHudPasstimeBallStatus::OnTick()
 	m_pEventText->Tick();
 
 	// I wish there were a reliable way to do this in an event-driven way instead of every frame
-	C_PasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+	C_PasstimeBall *pBall = g_pPasstimeLogic->GetGameBall();
 	if ( !BShouldDraw() || !pBall ) 
 	{
 		OnTickHidden();
@@ -1613,7 +1613,7 @@ bool CTFHudPasstimeBallStatus::TryForceBallFree()
 		return false;
 	}
 
-	C_PasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+	C_PasstimeBall *pBall = g_pPasstimeLogic->GetGameBall();
 	if ( !m_bInitialized || !pBall ) 
 	{
 		return false;

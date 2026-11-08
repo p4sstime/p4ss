@@ -259,7 +259,7 @@ bool C_PasstimeBallReticle::Update()
 		C_PasstimeBall *pBall = g_pPasstimeLogic->GetBall( i );
 		int iA = i * 2;
 		int iB = i * 2 + 1;
-		if ( !pBall )
+		if ( !pBall || g_pPasstimeLogic->BHiddenFromLocalPlayer( pBall ) )
 		{
 			SetAlpha( iA, 0 );
 			SetAlpha( iB, 0 );
@@ -289,9 +289,11 @@ bool C_PasstimeBallReticle::Update()
 		SetNormal( iB, -MainViewForward() );
 
 		Color teamColor = GetPasstimeJackHudColor( pTarget->GetTeamNumber(), pBall );
-		auto bHomingActive = pBall->GetHomingTarget() != nullptr;
-		auto bTargeted = pLocalPlayer->m_Shared.IsTargetedForPasstimePass();
-		auto iAlpha = ( bHomingActive || bTargeted )
+		// only the ball locked onto the local player (homing to them, or its holder's pass target) is highlighted
+		C_TFPlayer *pCarrier = pBall->GetCarrier();
+		auto bFocused = ( pBall->GetHomingTarget() == pLocalPlayer )
+			|| ( pCarrier && pCarrier->m_Shared.GetPasstimePassTarget() == pLocalPlayer );
+		auto iAlpha = bFocused
 			? (int)( (fmodf( gpGlobals->curtime * 3.0f, 1.0f )) * 255 )
 			: 180;
 
@@ -301,7 +303,7 @@ bool C_PasstimeBallReticle::Update()
 		auto flDist = (vecTargetPos - MainViewOrigin()).Length();
 		auto flScale = RemapValClamped( flDist, 768.0f, 4096.0f, 1.0f, 3.0f );
 		flScale *= k_flBallReticleSize;
-		if ( bHomingActive || bTargeted )
+		if ( bFocused )
 		{
 			flScale *= 2;
 		}
@@ -328,7 +330,7 @@ C_PasstimeGoalReticle::C_PasstimeGoalReticle( C_FuncPasstimeGoal *pGoal )
 //-----------------------------------------------------------------------------
 bool C_PasstimeGoalReticle::Update()
 {
-	if ( !g_pPasstimeLogic || !g_pPasstimeLogic->GetBall() )
+	if ( !g_pPasstimeLogic || !g_pPasstimeLogic->GetGameBall() )
 	{
 		return false;
 	}
@@ -340,7 +342,7 @@ bool C_PasstimeGoalReticle::Update()
 	}
 
 	// don't show if ball isn't being carried by local player
-	auto *pEnt = g_pPasstimeLogic->GetBall()->GetCarrier();
+	auto *pEnt = g_pPasstimeLogic->GetGameBall()->GetCarrier();
 	if ( !pEnt )
 	{
 		return false;
@@ -459,23 +461,19 @@ void C_PasstimePassReticle::ReloadSprites()
 
 bool C_PasstimePassReticle::Update()
 {
-	if ( !g_pPasstimeLogic || !g_pPasstimeLogic->GetBall() )
+	if ( !g_pPasstimeLogic )
 	{
 		return false;
 	}
 
-	auto *pBallCarrier = g_pPasstimeLogic->GetBall()->GetCarrier();
+	C_PasstimeBall *pCarriedBall = IsLocalPlayerSpectator()
+		? g_pPasstimeLogic->GetGameBall()
+		: g_pPasstimeLogic->GetCarriedBall( ToTFPlayer( C_BasePlayer::GetLocalPlayer() ) );
+	auto *pBallCarrier = pCarriedBall ? pCarriedBall->GetCarrier() : nullptr;
 	if ( !pBallCarrier )
 	{
 		return false;
 	}
-
-	if ( !IsLocalPlayerSpectator() && (pBallCarrier != C_BasePlayer::GetLocalPlayer()) )
-	{
-		return false;
-	}
-	
-	C_PasstimeBall *pCarriedBall = g_pPasstimeLogic->GetCarriedBall( pBallCarrier );
 
 	SetAllNormals( -MainViewForward() );
 
@@ -1021,7 +1019,7 @@ bool C_PasstimeBallPredictionReticle::Update()
         C_PasstimeBall *pBall = g_pPasstimeLogic->GetBall( i );
         int iA = i * 2;
         int iB = i * 2 + 1;
-        if ( !pBall || pBall->IsEffectActive(EF_NODRAW) || pBall->GetCarrier() || !pBall->GetPrevCarrier() )
+        if ( !pBall || g_pPasstimeLogic->BHiddenFromLocalPlayer( pBall ) || pBall->IsEffectActive(EF_NODRAW) || pBall->GetCarrier() || !pBall->GetPrevCarrier() )
         {
             SetAlpha( iA, 0 );
             SetAlpha( iB, 0 );

@@ -43,7 +43,7 @@ extern ConVar hud_fastswitch;
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_CLIENTCLASS_DT( C_TFPasstimeLogic, DT_TFPasstimeLogic, CTFPasstimeLogic )
-	RecvPropInt( RECVINFO( m_iNumBalls ), 4 ),
+	RecvPropInt( RECVINFO( m_iNumBalls ), 6 ),
 	RecvPropArray3( RECVINFO_ARRAY( m_hBalls ), RecvPropEHandle( RECVINFO( m_hBalls[0] ) ) ),
 	RecvPropArray( RecvPropVector( RECVINFO( m_trackPoints[0] ) ), m_trackPoints ),
 	RecvPropInt( RECVINFO( m_iNumSections ) ),
@@ -82,6 +82,76 @@ C_PasstimeBall *C_TFPasstimeLogic::GetBall( int i ) const
 
 	C_BaseEntity *pEnt = m_hBalls[i].Get();
 	return pEnt ? assert_cast<C_PasstimeBall*>( pEnt ) : nullptr;
+}
+
+//-----------------------------------------------------------------------------
+C_PasstimeBall *C_TFPasstimeLogic::GetGameBall() const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		C_PasstimeBall *pBall = GetBall( i );
+		if ( pBall && !pBall->IsPracticeBall() )
+		{
+			return pBall;
+		}
+	}
+	return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+C_PasstimeBall *C_TFPasstimeLogic::GetTrainingBallForPlayer( C_TFPlayer *pPlayer ) const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		C_PasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->IsPracticeBall() && ( pBall->GetOwner() == pPlayer ) )
+		{
+			return pBall;
+		}
+	}
+	return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+C_PasstimeBall *C_TFPasstimeLogic::GetOwnTrainingBall() const
+{
+	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		C_PasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->IsPracticeBall() && ( pBall->GetOwner() == pLocalPlayer ) )
+		{
+			return pBall;
+		}
+	}
+	return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// other players' training balls are never shown to the local player
+bool C_TFPasstimeLogic::BHiddenFromLocalPlayer( C_PasstimeBall *pBall ) const
+{
+	return pBall && pBall->IsPracticeBall() && ( pBall->GetOwner() != C_TFPlayer::GetLocalTFPlayer() );
+}
+
+//-----------------------------------------------------------------------------
+C_PasstimeBall *C_TFPasstimeLogic::GetRelevantBallForPlayer( C_TFPlayer *pPlayer ) const
+{
+	C_PasstimeBall *pOwnTraining = GetOwnTrainingBall();
+	if ( pOwnTraining && !pOwnTraining->GetCarrier() )
+	{
+		return pOwnTraining;
+	}
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		C_PasstimeBall *pBall = GetBall( i );
+		if ( pBall && pPlayer && ( pBall->GetHomingTarget() == pPlayer ) )
+		{
+			return pBall;
+		}
+	}
+	C_PasstimeBall *pCarried = GetCarriedBall( pPlayer );
+	return pCarried ? pCarried : GetGameBall();
 }
 
 //-----------------------------------------------------------------------------
@@ -164,7 +234,7 @@ void C_TFPasstimeLogic::DestroyBeam( int i, C_PasstimeBall *pBall )
 //-----------------------------------------------------------------------------
 void C_TFPasstimeLogic::UpdateBeams()
 {
-	C_PasstimeBall *pBall = GetBall();
+	C_PasstimeBall *pBall = GetGameBall();
 	if ( !pBall )
 	{
 		return;
@@ -180,16 +250,13 @@ void C_TFPasstimeLogic::UpdateBeams()
 	const char *pEffectName = "passtime_beam";
 	CParticleProperty *pParticles = pBall->ParticleProp();
 
+	const float flPackRange = tf_passtime_pack_range.GetFloat();
 	for ( int i = 1; i <= MAX_PLAYERS; ++i )
 	{
-		if ( !m_bPlayerIsPackMember[i] )
-		{
-			DestroyBeam( i, pBall );
-			continue;
-		}
-
-		CTFPlayer *pPlayer = (CTFPlayer*) UTIL_PlayerByIndex( i );
-		if ( !pPlayer || ( pPlayer == pCarrier ) || !pPlayer->IsAlive() )
+		CTFPlayer *pPlayer = m_bPlayerIsPackMember[i] ? (CTFPlayer*) UTIL_PlayerByIndex( i ) : nullptr;
+		if ( !pPlayer || ( pPlayer == pCarrier ) || !pPlayer->IsAlive()
+			|| ( pPlayer->GetTeamNumber() != pCarrier->GetTeamNumber() )
+			|| ( pPlayer->GetAbsOrigin().DistToSqr( pCarrier->GetAbsOrigin() ) > flPackRange * flPackRange ) )
 		{
 			DestroyBeam( i, pBall );
 			continue;
@@ -213,7 +280,7 @@ void C_TFPasstimeLogic::GetTrackPoints( Vector (&points)[16] )
 //-----------------------------------------------------------------------------
 bool C_TFPasstimeLogic::GetImportantEntities( C_PasstimeBall **ppBall, C_TFPlayer **ppCarrier, C_TFPlayer **ppHomingTarget ) const
 {
-	C_PasstimeBall *pBall = GetBall();
+	C_PasstimeBall *pBall = GetGameBall();
 	if ( !pBall )
 	{
 		return false;
@@ -256,10 +323,22 @@ bool C_TFPasstimeLogic::GetBallReticleTarget( C_BaseEntity **ppEnt, bool *bHomin
 	C_PasstimeBall *pBestBall = nullptr;
 	float flBestDist = FLT_MAX;
 
+	// the local player's own training ball takes priority over everything else
+	C_PasstimeBall *pOwnTraining = GetOwnTrainingBall();
+	if ( pOwnTraining && !pOwnTraining->GetCarrier() && !(pOwnTraining->GetEffects() & EF_NODRAW) )
+	{
+		*ppEnt = pOwnTraining;
+		if ( bHomingActive )
+		{
+			*bHomingActive = pOwnTraining->GetHomingTarget() != nullptr;
+		}
+		return true;
+	}
+
 	for ( int i = 0; i < m_iNumBalls; ++i )
 	{
 		C_PasstimeBall *pBall = GetBall( i );
-		if ( !pBall )
+		if ( !pBall || BHiddenFromLocalPlayer( pBall ) )
 		{
 			continue;
 		}

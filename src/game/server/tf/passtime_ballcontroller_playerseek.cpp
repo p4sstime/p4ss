@@ -22,13 +22,12 @@ namespace {
 //-----------------------------------------------------------------------------
 CPasstimeBallControllerPlayerSeek::CPasstimeBallControllerPlayerSeek() 
 	: CPasstimeBallController( kPriority ) // low priority
-	, m_fEnableTime( 0 )
 {}
 
 //-----------------------------------------------------------------------------
 bool CPasstimeBallControllerPlayerSeek::Apply( CPasstimeBall *ball )
 {
-	if ( gpGlobals->curtime < m_fEnableTime )
+	if ( gpGlobals->curtime < ball->GetMagnetEnableTime() )
 		return false;
 
 	return Seek( ball, FindTarget( ball ) );
@@ -39,6 +38,10 @@ CTFPlayer *CPasstimeBallControllerPlayerSeek::FindTarget( CPasstimeBall *pBall )
 {
 	CTFPlayer *pTarget = 0;
 	if ( !pBall )
+		return pTarget;
+
+	// a training ball only magnetizes once it's neutral (landed), not while its owner's throw is in flight
+	if ( pBall->IsPracticeBall() && pBall->GetThrower() )
 		return pTarget;
 
 	const Vector& ballOrigin = pBall->GetAbsOrigin();
@@ -70,13 +73,13 @@ CTFPlayer *CPasstimeBallControllerPlayerSeek::FindTarget( CPasstimeBall *pBall )
 		if ( g_pPasstimeLogic->GetCarriedBall( pPlayer ) )
 			continue; // don't magnet to players already holding a ball
 
-		// Practice balls are owner-only; regular balls use normal pickup rules.
+		// Practice balls are owner-only and follow the same zone/state rules as pickup.
 		if ( pBall->IsPracticeBall() )
 		{
-			if ( !pBall->CanPlayerInteract( pPlayer ) )
+			if ( !pBall->CanPlayerInteract( pPlayer ) || !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, pBall ) )
 				continue;
 		}
-		else if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer ) )
+		else if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, pBall ) )
 		{
 			continue; // can't pick it up
 		}
@@ -130,5 +133,5 @@ void CPasstimeBallControllerPlayerSeek::OnBallSpawned( CPasstimeBall *ball )
 	// NOTE: this hack is the only thing that prevents players from picking up 
 	// balls immediately after they were thrown (including by nearby unrelated
 	// players)
-	m_fEnableTime = gpGlobals->curtime + 0.25f;
+	ball->SetMagnetEnableTime( gpGlobals->curtime + 0.25f );
 }

@@ -61,6 +61,8 @@ public:
 
 	void ResetTrail();
 	void HideTrail();
+	void RetireBall();
+	void RemoveAfterTrail();
 	void UpdateTrailColor();
 
 	void CreateMagnetSound();
@@ -68,6 +70,7 @@ public:
 	void KillMagnetSound();
 
 	void MoveTo( const Vector &pos, const Vector &vel );
+	void TeleportTo( const Vector &pos, const Vector &vel );
 	void MoveToSpawner( const Vector &pos );
 
 	void SetStateOutOfPlay();
@@ -91,6 +94,8 @@ public:
 	CTFPlayer *GetLastHomingTarget() const;
 
 	float GetAirtimeSec() const;
+	float GetMagnetEnableTime() const { return m_flMagnetEnableTime; }
+	void SetMagnetEnableTime( float flTime ) { m_flMagnetEnableTime = flTime; }
 	float GetAirtimeDistance() const;
 	float GetThrowerCanPickupTime() const;
 	float GetBallDmgImmuneTime() const;
@@ -104,9 +109,9 @@ private:
 	void DefaultThink();
 	void TouchPlayer( CTFPlayer *pPlayer );
 	void BlockReflect( CTFPlayer *pPlayer, const Vector& origin, const Vector& ballvel );
-	void BlockDamage( CTFPlayer *pPlayer, const Vector& ballvel );
 	bool BIgnorePlayer( CTFPlayer *pPlayer );
 	void OnCollision();
+	void BounceOffHolder();
 	void UpdateLagCompensationHistory();
 	void SetThrower( CTFPlayer *pPlayer );
 	void OnBecomeNotCarried();
@@ -137,7 +142,8 @@ private:
 	CSoundPatch *m_pCloseToTarget;
 	CBaseEntity *m_pPlayerToucher;
 	CPasstimeBallControllerPlayerSeek m_playerSeek;
-	bool m_bTouchedSinceSpawn;
+	bool m_bInGame;
+	float m_flMagnetEnableTime;
 	float m_flLastCollisionTime;
 	float m_flAirtimeDistance;
 	Vector m_vecPrevOrigin; // note: C_BaseEntity has m_vecOldOrigin in client code only

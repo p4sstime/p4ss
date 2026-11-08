@@ -31,10 +31,14 @@ public:
 	virtual void ClientThink() OVERRIDE;
 	virtual void PostDataUpdate( DataUpdateType_t updateType ) OVERRIDE;
 
-	enum { kMaxPasstimeBalls = 8 };
+	enum { kMaxPasstimeBalls = 8, kMaxTrainingBalls = 32 };
 
-	C_PasstimeBall *GetBall() const { return GetBall( 0 ); }
 	C_PasstimeBall *GetBall( int i ) const;
+	C_PasstimeBall *GetGameBall() const;
+	C_PasstimeBall *GetRelevantBallForPlayer( C_TFPlayer *pPlayer ) const;
+	C_PasstimeBall *GetOwnTrainingBall() const;
+	C_PasstimeBall *GetTrainingBallForPlayer( C_TFPlayer *pPlayer ) const;
+	bool BHiddenFromLocalPlayer( C_PasstimeBall *pBall ) const;
 	C_PasstimeBall *GetCarriedBall( C_TFPlayer *pPlayer ) const;
 	int GetBallCount() const { return m_iNumBalls; }
 	void GetTrackPoints( Vector (&points)[16] );
@@ -64,7 +68,7 @@ private:
 	bool m_bPlayerIsPackMember[MAX_PLAYERS_ARRAY_SAFE];
 
 	CNetworkVar( int, m_iNumBalls );
-	CNetworkArray( EHANDLE, m_hBalls, kMaxPasstimeBalls );
+	CNetworkArray( EHANDLE, m_hBalls, kMaxPasstimeBalls + kMaxTrainingBalls );
 
 	CNetworkArray( Vector, m_trackPoints, 16 );
 	CNetworkVar( int, m_iNumSections );

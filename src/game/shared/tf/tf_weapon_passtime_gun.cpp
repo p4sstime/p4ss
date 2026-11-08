@@ -1064,6 +1064,11 @@ bool CPasstimeGun::BValidPassTarget( CTFPlayer *pSource, CTFPlayer *pTarget, Hud
 		{
 			return false;
 		}
+
+		if ( g_pPasstimeLogic->GetTrainingBallForPlayer( pSource ) || g_pPasstimeLogic->GetTrainingBallForPlayer( pTarget ) )
+		{
+			return false;
+		}
 	}
 
 	bool bTargetDisguised = pTarget->m_Shared.InCond( TF_COND_DISGUISED );

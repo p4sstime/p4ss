@@ -15763,7 +15763,7 @@ void CTFPlayer::CheckObserverSettings()
 
 		if ( TFGameRules()->IsPasstimeMode() && g_pPasstimeLogic && (GetObserverMode() == OBS_MODE_POI)  )
 		{
-			CPasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+			CPasstimeBall *pBall = g_pPasstimeLogic->GetGameBall();
 			if ( !pBall || ((m_hObserverTarget.Get() == pBall) && pBall->BOutOfPlay()) )
 			{
 				FindInitialObserverTarget();

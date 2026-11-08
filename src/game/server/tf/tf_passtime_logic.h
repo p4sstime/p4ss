@@ -40,7 +40,7 @@ public:
 	virtual int UpdateTransmitState() OVERRIDE;
 	virtual void FireGameEvent( IGameEvent *pEvent ) OVERRIDE;
 
-	enum { kMaxPasstimeBalls = 8 };
+	enum { kMaxPasstimeBalls = 8, kMaxTrainingBalls = 32 };
 
 	void LaunchBall( CPasstimeBall *pBall, CTFPlayer *pPlayer, const Vector &pos, const Vector &vel );
 	void EjectBall( CPasstimeBall *pBall, CTFPlayer *pPlayer, CTFPlayer *pAttacker );
@@ -48,9 +48,13 @@ public:
 
 	bool BCanPlayerPickUpBall( CTFPlayer *pPlayer, HudNotification_t *pReason = 0 ) const;
 	bool BCanPlayerPickUpBall( CTFPlayer *pPlayer, CPasstimeBall *pBall, HudNotification_t *pReason = 0 ) const;
-	CPasstimeBall *GetBall() const;
 	CPasstimeBall *GetBall( int i ) const;
+	CPasstimeBall *GetGameBall() const;
 	int GetBallCount() const { return m_iNumBalls; }
+	int GetGameBallCount() const;
+	int GetTrainingBallCount() const { return m_iNumBalls - GetGameBallCount(); }
+	bool BAnyGameBallInPlay( CPasstimeBall *pIgnore = nullptr ) const;
+	CPasstimeBallSpawn *ClaimSpawnerForBall( CPasstimeBall *pIgnore );
 	CPasstimeBall *GetCarriedBall( CTFPlayer *pPlayer ) const;
 	CPasstimeBall *GetRelevantBallForPlayer( CTFPlayer *pPlayer ) const;
 	void RegisterBall( CPasstimeBall *pBall );
@@ -105,6 +109,8 @@ private:
 	void StealBall( CPasstimeBall *pBall, CTFPlayer *pFrom, CTFPlayer *pTo );
 	void LaunchBall( CTFPlayer *pPlayer, const Vector &pos, const Vector &vel );
 	void ThinkExpiredTimer();
+	void PauseRoundTimerIfNoGameBallInPlay( CPasstimeBall *pBall );
+	void ResumeRoundTimer();
 	void EndRoundExpiredTimer();
 	void CrowdReactionSound( int iTeam );
 
@@ -122,8 +128,11 @@ private:
 
 	CUtlVector< std::pair<CTFPlayer*, float> > m_ballLastPassTimes;
 	CUtlVector< std::pair<CTFPlayer*, float> > m_ballLastHeldTimes;
-	CUtlVector< EHANDLE > m_hBallsToRespawn;
+	int m_iBallsToRespawn;
 	CCountdownAnnouncer *m_pRespawnCountdown;
+	CCountdownAnnouncer *m_pOvertimeCountdown;
+	int m_iSpawnerCursor;
+	float m_flLastClaimTime;
 	int m_iBallSpawnCountdownSec;
 	float m_flNextCrowdReactionTime;
 	float m_flLastBallSpawnSoundTime;
@@ -159,7 +168,7 @@ private:
 	CUtlVector<CSteamID> m_SecretRoom_playersThatTouchedRoom;
 	
 	// netvars
-	CNetworkArray( EHANDLE, m_hBalls, kMaxPasstimeBalls );
+	CNetworkArray( EHANDLE, m_hBalls, kMaxPasstimeBalls + kMaxTrainingBalls );
 	CNetworkVar( int, m_iNumBalls );
 	CNetworkArray( Vector, m_trackPoints, 16 );
 	CNetworkVar( int, m_iNumSections );

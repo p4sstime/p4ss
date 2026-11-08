@@ -39,6 +39,16 @@ static const char *GetBallImageForTeam( int iTeam )
 	};
 }
 
+//-----------------------------------------------------------------------------
+static const char *GetBallImageForTarget( C_BaseEntity *pTarget )
+{
+	if ( !pTarget->IsPlayer() && assert_cast<C_PasstimeBall*>( pTarget )->IsPracticeBall() )
+	{
+		return "../passtime/hud/passtime_ball_offscreen_training";
+	}
+	return GetBallImageForTeam( pTarget->GetTeamNumber() );
+}
+
 
 //=============================================================================
 // CTFHudPasstimeOffscreenArrow
@@ -322,14 +332,7 @@ C_BaseEntity *CTFHudPasstimeBallOffscreenArrow::PreparePaint(
 	if ( pImage )
 	{
 		// setimage will ignore redundant calls
-		if ( pTarget )
-		{
-			pImage->SetImage( GetBallImageForTeam( pTarget->GetTeamNumber() ) );
-		}
-		else
-		{
-			pImage->SetImage( "../passtime/hud/passtime_ball" );
-		}
+		pImage->SetImage( pTarget ? GetBallImageForTarget( pTarget ) : "../passtime/hud/passtime_ball" );
 	}
 
 	return pTarget;
