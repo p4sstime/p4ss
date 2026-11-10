@@ -14800,17 +14800,17 @@ int CTFGameRules::GetClassLimit( int iClass )
 {
 	switch ( iClass )
 	{
-	case TF_CLASS_SCOUT: return 0; break;
-	case TF_CLASS_SNIPER: return 0; break;
-	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt(); break;
-	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt(); break;
-	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt(); break;
-	case TF_CLASS_HEAVYWEAPONS: return 0; break;
-	case TF_CLASS_PYRO: return 0; break;
-	case TF_CLASS_SPY: return 0; break;
-	case TF_CLASS_ENGINEER: return 0; break;
+	case TF_CLASS_SCOUT: return 0;
+	case TF_CLASS_SNIPER: return 0;
+	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt();
+	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt();
+	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt();
+	case TF_CLASS_HEAVYWEAPONS: return 0;
+	case TF_CLASS_PYRO: return 0;
+	case TF_CLASS_SPY: return 0;
+	case TF_CLASS_ENGINEER: return 0;
 	default:
-		break;
+		return 0;
 	}
 }
 
