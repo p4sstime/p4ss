@@ -1583,7 +1583,10 @@ public:
 	
 	bool m_bWantsResupply;			// Tracks if player is holding +resupply
 private:
-
+	float m_flLastDuckPressTime;
+	float m_flLastJumpPressTime;
+	bool m_bCtapJumpPending;
+	float m_flCtapSoundExpiryTime;
 };
 
 //-----------------------------------------------------------------------------

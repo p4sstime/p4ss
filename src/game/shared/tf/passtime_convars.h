@@ -94,7 +94,11 @@ extern ConVar
 
 	tf_passtime_no_jack_armor,
 	tf_passtime_no_jack_armor_time,
-	tf_passtime_ball_dmg_immune_time;
+	tf_passtime_ball_dmg_immune_time,
+
+	pf_ctap_helper,
+	pf_ctap_window_min,
+	pf_ctap_window_max;
     
     enum class EPasstimeExperiment_Telepass { 
 	None,

@@ -35,3 +35,12 @@
 	"soundlevel"	"SNDLVL_74dB"
 	"wave"		")weapons/stickybomblauncher_det.wav"
 }
+
+"TFPlayer.Ctap"
+{
+	"channel"		"CHAN_STATIC"
+	"volume"		"0.8"
+	"pitch"			"PITCH_NORM"
+	"soundlevel"	"SNDLVL_NORM"
+	"wave"			"weapons/push_impact.wav"
+}

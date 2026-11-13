@@ -196,6 +196,7 @@ ConVar tf_damageforcescale_pyro_jump( "tf_damageforcescale_pyro_jump", "8.5", FC
 ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 
 
+
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 ConVar tf_damage_multiplier_blue( "tf_damage_multiplier_blue", "1.0", FCVAR_CHEAT, "All incoming damage to a blue player is multiplied by this value" );
 ConVar tf_damage_multiplier_red( "tf_damage_multiplier_red", "1.0", FCVAR_CHEAT, "All incoming damage to a red player is multiplied by this value" );
@@ -280,7 +281,6 @@ ConVar sv_vote_late_join_time( "sv_vote_late_join_time", "90", FCVAR_NONE, "Grac
 ConVar sv_vote_late_join_cooldown( "sv_vote_late_join_cooldown", "300", FCVAR_NONE, "Length of the vote-creation cooldown when joining the server after the grace period has expired" );
 
 ConVar	pf_mute_rocket_jump_groan	( "pf_mute_rocket_jump_groan","1", FCVAR_USERINFO, "Mutes rocket jump pain groan on client side." );
-
 extern ConVar tf_voice_command_suspension_mode;
 extern ConVar tf_feign_death_duration;
 extern ConVar spec_freeze_time;
@@ -894,6 +894,10 @@ CTFPlayer::CTFPlayer()
 	m_bHudClassAutoKill = false;
 	m_bMedigunAutoHeal  = false;
 	m_bWantsResupply    = false;
+	m_flLastDuckPressTime = -1.0f;
+	m_flLastJumpPressTime = -1.0f;
+	m_bCtapJumpPending = false;
+	m_flCtapSoundExpiryTime = -1.0f;
 
 	m_vecLastDeathPosition = Vector( FLT_MAX, FLT_MAX, FLT_MAX );
 
@@ -2837,6 +2841,7 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheScriptSound( "TFPlayer.ReCharged" );
 	PrecacheScriptSound( "Camera.SnapShot" );
 	PrecacheScriptSound( "TFPlayer.Dissolve" );
+	PrecacheScriptSound( "TFPlayer.Ctap" );
 
 	PrecacheScriptSound( "Saxxy.TurnGold" );
 
@@ -3072,7 +3077,43 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 		}
 	}
 
+	bool bDuckJustPressed = ( ucmd->buttons & IN_DUCK ) && !( m_nButtons & IN_DUCK );
+	bool bJumpJustPressed = ( ucmd->buttons & IN_JUMP ) && !( m_nButtons & IN_JUMP );
+
+	if ( bDuckJustPressed )
+	{
+		m_flLastDuckPressTime = gpGlobals->curtime;
+	}
+
+	if ( bJumpJustPressed && ( GetFlags() & FL_ONGROUND ) )
+	{
+		if ( pf_ctap_helper.GetBool() && m_flLastDuckPressTime > 0.0f )
+		{
+			float flDuckToJump = gpGlobals->curtime - m_flLastDuckPressTime;
+			if ( flDuckToJump >= pf_ctap_window_min.GetFloat() && flDuckToJump <= pf_ctap_window_max.GetFloat() )
+			{
+				m_bCtapJumpPending = true;
+			}
+		}
+	}
+
 	BaseClass::PlayerRunCommand( ucmd, moveHelper );
+
+	if ( m_bCtapJumpPending )
+	{
+		m_bCtapJumpPending = false;
+		if ( !( GetFlags() & FL_ONGROUND ) )
+		{
+			AddFlag( FL_DUCKING );
+			m_Local.m_bDucked = true;
+			m_Local.m_bDucking = false;
+			m_Local.m_flDucktime = 0.0f;
+			SetCollisionBounds( VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX );
+			SetViewOffset( VEC_DUCK_VIEW_SCALED( this ) );
+
+			m_flCtapSoundExpiryTime = gpGlobals->curtime + 0.25f;
+		}
+	}
 
 	// try to play taunt remap on input after updating user command
 	if ( IsTaunting() && m_flNextAllowTauntRemapInputTime >= 0.f && m_flNextAllowTauntRemapInputTime <= gpGlobals->curtime )
@@ -3457,6 +3498,11 @@ void CTFPlayer::Spawn()
 
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
+
+	m_flLastDuckPressTime = -1.0f;
+	m_flLastJumpPressTime = -1.0f;
+	m_bCtapJumpPending = false;
+	m_flCtapSoundExpiryTime = -1.0f;
 
 	// We have to clear this early, so that the sword knows its max health in ManageRegularWeapons below
 	m_Shared.SetDecapitations( 0 );
@@ -9935,6 +9981,7 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 
 				// Reset duck in air on self rocket impulse.
 				m_Shared.SetAirDucked( 0 );
+
 			}
 			else
 			{
@@ -9959,6 +10006,17 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 			// Reset duck in air on self grenade impulse.
 			m_Shared.SetAirDucked( 0 );
 		}
+		if ( ( info.GetDamageType() & DMG_BLAST ) && m_flCtapSoundExpiryTime > 0.0f && gpGlobals->curtime <= m_flCtapSoundExpiryTime )
+		{
+			m_flCtapSoundExpiryTime = -1.0f;
+
+			if ( atoi( engine->GetClientConVarValue( entindex(), "pf_ctap_feedback" ) ) )
+			{
+				CSingleUserRecipientFilter filter( this );
+				EmitSound( filter, entindex(), "TFPlayer.Ctap" );
+			}
+		}
+
 		// Precision removes self damage so we don't want push force from damage
 		if ( m_Shared.GetCarryingRuneType() == RUNE_PRECISION )
 		{
