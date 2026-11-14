@@ -16,6 +16,10 @@
 #include "voice_common.h"
 #include "vgui_avatarimage.h"
 
+#ifdef TF_CLIENT_DLL
+#include "c_tf_player.h"
+#endif
+
 ConVar *sv_alltalk = NULL;
 
 //=============================================================================
@@ -359,7 +363,15 @@ void CHudVoiceStatus::Paint()
 
 		c[3] = 128;
 
+#ifdef TF_CLIENT_DLL
+#ifdef TF_CLIENT_DLL
+		const char *pName = g_PR ? GetPlayerShortname(playerId) : "unknown";
+#else
 		const char *pName = g_PR ? g_PR->GetPlayerName(playerId) : "unknown";
+#endif
+#else
+		const char *pName = g_PR ? g_PR->GetPlayerName(playerId) : "unknown";
+#endif
 		wchar_t szconverted[ 64 ];
 
 		// Add the location, if any
