@@ -810,7 +810,7 @@ static const char *GetExecutableModName( char *pszExePath )
 
 #define ERR_RUNTIME "Make sure that Source SDK Base 2013 Multiplayer is using the default compatibility tool"
 
-static void WarnIfNotSteamRuntime()
+static bool IsSniperRuntime()
 {
 	bool bSniper = false;
 	FILE *pFile = fopen( "/etc/os-release", "r" );
@@ -823,7 +823,12 @@ static void WarnIfNotSteamRuntime()
 	if ( pFile )
 		fclose( pFile );
 
-	if ( bSniper )
+	return bSniper;
+}
+
+static void WarnIfNotSteamRuntime()
+{
+	if ( IsSniperRuntime() )
 		return;
 
 	const char *pszCompatTool = getenv( "STEAM_COMPAT_TOOL_PATH" );
