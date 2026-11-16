@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 #include <limits.h>
+#include <errno.h>
 #include <string.h>
 #include <unistd.h>
 #define MAX_PATH PATH_MAX
@@ -807,24 +808,29 @@ static const char *GetExecutableModName( char *pszExePath )
 	return s_szFinalFilename;
 }
 
-static bool IsSniperRuntime()
-{
-	FILE *fp = fopen( "/etc/os-release", "r" );
-	if ( !fp )
-		return false;
+#define ERR_RUNTIME "Make sure that Source SDK Base 2013 Multiplayer is using the default compatibility tool"
 
+static void WarnIfNotSteamRuntime()
+{
 	bool bSniper = false;
+	FILE *pFile = fopen( "/etc/os-release", "r" );
 	char szLine[256];
-	while ( fgets( szLine, sizeof( szLine ), fp ) )
+	while ( pFile && fgets( szLine, sizeof( szLine ), pFile ) )
 	{
-		if ( !strcmp( szLine, "VERSION_CODENAME=sniper\n" ) )
-		{
+		if ( strstr( szLine, "VERSION_CODENAME=sniper" ) || strstr( szLine, "VERSION_CODENAME=\"sniper\"" ) )
 			bSniper = true;
-			break;
-		}
 	}
-	fclose( fp );
-	return bSniper;
+	if ( pFile )
+		fclose( pFile );
+
+	if ( bSniper )
+		return;
+
+	const char *pszCompatTool = getenv( "STEAM_COMPAT_TOOL_PATH" );
+	fprintf( stderr, "Warning: Not running inside Steam Linux Runtime (sniper).\n" );
+	if ( pszCompatTool && *pszCompatTool )
+		fprintf( stderr, "Using Steam Play compatibility tool: %s\n", pszCompatTool );
+	fputs( ERR_RUNTIME "\n", stderr );
 }
 
 int main( int argc, char *argv[] )
@@ -904,6 +910,8 @@ int main( int argc, char *argv[] )
 
 	new_argv.push_back(NULL);
 
+	WarnIfNotSteamRuntime();
+
 	// lucy: To stop me from accidentally
 	// updating my SDL version.
 	// ...The reason we don't support this is because
@@ -916,7 +924,10 @@ int main( int argc, char *argv[] )
 
 	execvp( szExecutable, new_argv.data() );
 
-	return 0;
+	char szError[8192 + 1024];
+	snprintf( szError, sizeof( szError ), "Failed to start the game (%s): %s\n\n" ERR_RUNTIME, szExecutable, strerror( errno ) );
+	MessageBox( 0, szError, "Launcher Error", MB_OK );
+	return 1;
 }
 
 #endif // SRCDS
