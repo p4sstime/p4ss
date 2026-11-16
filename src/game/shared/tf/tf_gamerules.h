@@ -501,6 +501,8 @@ public:
 	void			SetMapForcedTruceDuringBossFight( bool bState ){ m_bMapForcedTruceDuringBossFight = bState; }
 	bool			IsMapForcedTruceDuringBossFight( void ){ return m_bMapForcedTruceDuringBossFight; }
 
+	bool			IsJumpMap( void ) const { return m_bIsJumpMap; }
+
 	void			CreateSoldierStatue();
 
 	virtual void	BroadcastSound( int iTeam, const char *sound, int iAdditionalSoundFlags = 0, CBasePlayer *pPlayer = NULL ) override;
@@ -1053,6 +1055,7 @@ private:
 	CountdownTimer m_doomsdayTicketsTimer;	// Used on sd_doomsday_event to nag players about picking up the tickets
 
 	bool m_bMapForcedTruceDuringBossFight;
+	bool m_bIsJumpMap;
 	float m_flNextHalloweenGiftUpdateTime;
 #else
 
