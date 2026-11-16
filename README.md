@@ -60,7 +60,9 @@ Prerequisites:
 - Steam
 - podman (latest is fine, restart after installing)
 - Team Fortress 2
-- Steam Linux Runtime 3.0
+- Steam Linux Runtime 3.0 (sniper): in Steam, open Library, switch the filter to Tools, and install it
+
+The launcher re-runs itself inside this runtime, so it must be installed before you start the mod.
 
 
 Clone this repository, then run:
