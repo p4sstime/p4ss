@@ -23,6 +23,7 @@ $Group "game"
 	"matsys_controls"
 	"raytrace"
 	"server"
+	"srcds"
 	"tier1"
 	"vgui_controls"
 }
@@ -50,6 +51,7 @@ $Group "everything"
 	"raytrace"
 	"server"
 	"serverplugin_empty"
+	"srcds"
 	"tgadiff"
 	"tier1"
 	"vbsp"
@@ -73,6 +75,7 @@ $Group "dedicated"
 {
 	"mathlib"
 	"server"
+	"srcds"
 	"tier1"
 }
 

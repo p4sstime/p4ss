@@ -472,7 +472,7 @@ CTFClassMenu::CTFClassMenu( IViewPort *pViewPort )
 	m_mouseoverButtons.RemoveAll();
 
 	m_iClassMenuKey = BUTTON_CODE_INVALID;
-	m_iCurrentClassIndex = TF_CLASS_HEAVYWEAPONS;
+	m_iCurrentClassIndex = TF_CLASS_SOLDIER;
 
 #ifdef _X360
 	m_pFooter = new CTFFooter( this, "Footer" );

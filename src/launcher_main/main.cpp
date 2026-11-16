@@ -17,6 +17,7 @@
 #include <dlfcn.h>
 #include <limits.h>
 #include <string.h>
+#include <unistd.h>
 #define MAX_PATH PATH_MAX
 #endif
 
@@ -24,6 +25,8 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <iterator>
 
 #include "tier0/basetypes.h"
 
@@ -66,7 +69,9 @@ static auto Launcher_GetProcAddress( HMODULE hHandle, const char *pszName )
 }
 #else
 #include <dlfcn.h>
+#ifndef SRCDS
 #include <SDL2/SDL.h>
+#endif
 
 static void* Launcher_LoadModule( const char *pszPath )
 {
@@ -83,23 +88,11 @@ static void *Launcher_GetProcAddress( void *pHandle, const char *pszName )
 	return dlsym( pHandle, pszName );
 }
 
+#ifdef SRCDS
+#define MessageBox( x, text, title, y) fprintf( stderr, "%s\n", text )
+#else
 #define MessageBox( x, text, title, y) SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, title, text, NULL )
 #endif
-
-static const AppId_t k_unSDK2013MPAppId = 440;
-
-#ifdef MOD_LAUNCHER
-static const AppId_t k_unMyModAppid = MOD_APPID;
-#else
-static const AppId_t k_unMyModAppid = k_unSDK2013MPAppId;
-#endif
-
-static bool s_bInittedSteam = false;
-
-#ifdef _WIN32
-static HMODULE s_SteamModule;
-#else
-static void *s_SteamModule;
 
 #define WRAP( fn, ret, ... ) \
 	ret __real_##fn(__VA_ARGS__); \
@@ -120,6 +113,24 @@ extern "C"
         return CALL(fopen64)( path, mode );
     }
 }
+#endif
+
+#ifndef SRCDS
+static const AppId_t k_unSDK2013MPAppId = 440;
+static const AppId_t k_unSniperRuntimeAppId = 1628350;
+
+#ifdef MOD_LAUNCHER
+static const AppId_t k_unMyModAppid = MOD_APPID;
+#else
+static const AppId_t k_unMyModAppid = k_unSDK2013MPAppId;
+#endif
+
+static bool s_bInittedSteam = false;
+
+#ifdef _WIN32
+static HMODULE s_SteamModule;
+#else
+static void *s_SteamModule;
 #endif
 
 static void UnloadSteam()
@@ -188,7 +199,7 @@ static bool LoadSteam( const char *pRootDir )
 	return true;
 }
 
-static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize )
+static bool GetSteamAppInstallDir( const char *pRootDir, AppId_t unAppId, char *pszBuf, int nBufSize )
 {
 	if ( !LoadSteam( pRootDir ) )
 	{
@@ -217,14 +228,19 @@ static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize 
 	}
 
 	uint32_t unLength = 0;
-	if ( pSteamApps->BIsAppInstalled( k_unSDK2013MPAppId ) )
+	if ( pSteamApps->BIsAppInstalled( unAppId ) )
 	{
-		unLength = pSteamApps->GetAppInstallDir( k_unSDK2013MPAppId, pszBuf, nBufSize );
+		unLength = pSteamApps->GetAppInstallDir( unAppId, pszBuf, nBufSize );
 	}
 
 	UnloadSteam();
 
-	if ( unLength == 0 )
+	return unLength != 0;
+}
+
+static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize )
+{
+	if ( !GetSteamAppInstallDir( pRootDir, k_unSDK2013MPAppId, pszBuf, nBufSize ) )
 	{
 		MessageBox( 0, "Team Fortress 2 (440) must be installed to launch this mod.", "Launcher Error", MB_OK );
 		return false;
@@ -232,6 +248,120 @@ static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize 
 
 	return true;
 }
+#else
+#define SRCDS_GAME "p4ss"
+
+#ifdef _WIN32
+#define DEDICATED_DLL_PATH	"%s\\" PLATFORM_BIN_DIR "\\dedicated.dll"
+#else
+#define DEDICATED_DLL_PATH	"%s/" PLATFORM_BIN_DIR "/dedicated_srv.so"
+#endif
+
+static const char *GetParmValue( int argc, char **argv, const char *pszParm )
+{
+	for ( int i = 1; i + 1 < argc; i++ )
+	{
+		if ( !strcmp( argv[i], pszParm ) )
+			return argv[i + 1];
+	}
+
+	return NULL;
+}
+
+static bool IsTFInstallDir( const std::string &dir )
+{
+	char szDedicatedPath[4096];
+	snprintf( szDedicatedPath, sizeof( szDedicatedPath ), DEDICATED_DLL_PATH, dir.c_str() );
+	return std::ifstream( szDedicatedPath ).good();
+}
+
+// No Steam client to resolve |appid_440| on a dedicated server, so point it at the TF2 DS install
+static bool GetGameInstallDir( const char *pRootDir, int argc, char **argv, char *pszBuf, int nBufSize )
+{
+	std::string gamePathOverride;
+
+	const char *pszTFPath = GetParmValue( argc, argv, "-tf_path" );
+	if ( pszTFPath )
+	{
+		gamePathOverride = pszTFPath;
+	}
+	else
+	{
+		std::string TestPaths[] = { ".", "../Team Fortress 2 Dedicated Server", "../tf2ds", "../tf2_ds", "../Team Fortress 2", "../tf2" };
+		for ( auto &path : TestPaths )
+		{
+			std::string testDir = std::string( pRootDir ) + "/" + path;
+			if ( IsTFInstallDir( testDir ) )
+			{
+				gamePathOverride = testDir;
+				break;
+			}
+		}
+	}
+
+	if ( gamePathOverride.empty() || !IsTFInstallDir( gamePathOverride ) )
+	{
+		MessageBox( 0, "Unable to locate the TF2 dedicated server (232250).\nSet -tf_path <tf2 ds path> in launch options.", "Launcher Error", MB_OK );
+		return false;
+	}
+
+	snprintf( pszBuf, nBufSize, "%s", gamePathOverride.c_str() );
+
+	const std::string szGameInfoPath = std::string( pRootDir ) + "/" SRCDS_GAME "/gameinfo.txt";
+	const std::string szBaseGameInfoPath = std::string( pRootDir ) + "/" SRCDS_GAME "/gameinfo_srcds_base.txt";
+	const std::string replace_word = "|appid_";
+
+	std::ifstream gameInfoFile( szGameInfoPath, std::ios::binary );
+	std::string gameInfo( ( std::istreambuf_iterator<char>( gameInfoFile ) ), std::istreambuf_iterator<char>() );
+	gameInfoFile.close();
+
+	// Keep the original around, Steam puts it back on updates
+	if ( gameInfo.find( replace_word ) != std::string::npos )
+	{
+		std::ofstream baseFile( szBaseGameInfoPath, std::ios::binary );
+		baseFile << gameInfo;
+	}
+
+	std::ifstream srcFile( szBaseGameInfoPath );
+	if ( !srcFile.is_open() )
+	{
+		MessageBox( 0, "Failed to patch gameinfo.txt", "Launcher Error", MB_OK );
+		return false;
+	}
+
+	std::string patched;
+	std::string line;
+	while ( std::getline( srcFile, line ) )
+	{
+		if ( !line.empty() && line.back() == '\r' )
+			line.pop_back();
+
+		size_t pos = 0;
+		while ( ( pos = line.find( replace_word, pos ) ) != std::string::npos )
+		{
+			size_t end = line.find( '|', pos + replace_word.size() ) + 1;
+			line.replace( pos, end - pos, "\"" + gamePathOverride + "/" );
+			line += "\""; // path might have space in it... enclose in quotes
+			pos += replace_word.size();
+		}
+
+		patched += line + "\n";
+	}
+
+	// Other servers might be running from this install
+	if ( patched != gameInfo )
+	{
+		std::ofstream dstFile( szGameInfoPath, std::ios::binary );
+		if ( !( dstFile << patched ) )
+		{
+			MessageBox( 0, "Failed to patch gameinfo.txt", "Launcher Error", MB_OK );
+			return false;
+		}
+	}
+
+	return true;
+}
+#endif
 
 
 
@@ -449,7 +579,28 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	char* pRootDir = GetBaseDir( moduleName );
 	const char *pBinaryGameDir = pRootDir;
 	char szGameInstallDir[4096];
+#ifdef SRCDS
+	// dedicated reads the process command line, not lpCmdLine
+	if ( !GetParmValue( __argc, __argv, "-game" ) )
+	{
+		_snprintf( szBuffer, sizeof( szBuffer ), "%s -game \"%s\\" SRCDS_GAME "\"", GetCommandLineA(), pRootDir );
+		szBuffer[sizeof( szBuffer ) - 1] = '\0';
+
+		STARTUPINFO si = { sizeof( si ) };
+		PROCESS_INFORMATION pi;
+		if ( !CreateProcess( moduleName, szBuffer, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) )
+			return 1;
+
+		DWORD dwExitCode = 1;
+		WaitForSingleObject( pi.hProcess, INFINITE );
+		GetExitCodeProcess( pi.hProcess, &dwExitCode );
+		return (int)dwExitCode;
+	}
+
+	if ( !GetGameInstallDir( pRootDir, __argc, __argv, szGameInstallDir, 4096 ) )
+#else
 	if ( !GetGameInstallDir( pRootDir, szGameInstallDir, 4096 ) )
+#endif
 	{
 		return 1;
 	}
@@ -458,7 +609,13 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	SetEnvironmentVariableA( "SDK_EXEC_DIR", szGameInstallDir );
 
+#ifdef SRCDS
+#define LAUNCHER_DLL_PATH	"%s\\" PLATFORM_BIN_DIR "\\dedicated.dll"
+#define LAUNCHER_MAIN		"DedicatedMain"
+#else
 #define LAUNCHER_DLL_PATH	"%s\\" PLATFORM_BIN_DIR "\\launcher.dll"
+#define LAUNCHER_MAIN		"LauncherMain"
+#endif
 #define LAUNCHER_PATH		"%s\\" PLATFORM_BIN_DIR
 
 	_snprintf( szBuffer, sizeof( szBuffer ), "PATH=" LAUNCHER_PATH ";%s", pBinaryGameDir, pPath );
@@ -486,7 +643,7 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		return 0;
 	}
 
-	LauncherMain_t main = (LauncherMain_t)GetProcAddress( launcher, "LauncherMain" );
+	LauncherMain_t main = (LauncherMain_t)GetProcAddress( launcher, LAUNCHER_MAIN );
 	return main( hInstance, hPrevInstance, lpCmdLine, nCmdShow );
 }
 
@@ -567,6 +724,47 @@ static void WaitForDebuggerConnect( int argc, char *argv[], int time )
 
 #endif // !LINUX
 
+#ifdef SRCDS
+
+int main( int argc, char *argv[] )
+{
+	char moduleName[MAX_PATH] = {};
+	if ( !GetExePath( moduleName, sizeof( moduleName ) - 1 ) )
+	{
+		return 1;
+	}
+
+	char* pRootDir = GetBaseDir( moduleName );
+
+	char szGameInstallDir[4096];
+	if ( !GetGameInstallDir( pRootDir, argc, argv, szGameInstallDir, sizeof( szGameInstallDir ) ) )
+	{
+		return 1;
+	}
+
+	setenv( "SDK_EXEC_DIR", szGameInstallDir, 1 );
+
+	char szDedicatedPath[4096];
+	snprintf( szDedicatedPath, sizeof( szDedicatedPath ), "%s/" PLATFORM_BIN_DIR "/dedicated_srv.so", szGameInstallDir );
+
+	void *pDedicated = Launcher_LoadModule( szDedicatedPath );
+	if ( !pDedicated )
+	{
+		fprintf( stderr, "Failed to load %s: %s\nRun srcds.sh with -tf_path <TF2 dedicated server (232250) dir>.\n", szDedicatedPath, dlerror() );
+		return 1;
+	}
+
+	LauncherMain_t pfnDedicatedMain = (LauncherMain_t)Launcher_GetProcAddress( pDedicated, "DedicatedMain" );
+	if ( !pfnDedicatedMain )
+	{
+		MessageBox( 0, "Couldn't find DedicatedMain", "Launcher Error", MB_OK );
+		return 1;
+	}
+
+	return pfnDedicatedMain( argc, argv );
+}
+
+#else
 
 static const char *GetExecutableModName( char *pszExePath )
 {
@@ -609,6 +807,26 @@ static const char *GetExecutableModName( char *pszExePath )
 	return s_szFinalFilename;
 }
 
+static bool IsSniperRuntime()
+{
+	FILE *fp = fopen( "/etc/os-release", "r" );
+	if ( !fp )
+		return false;
+
+	bool bSniper = false;
+	char szLine[256];
+	while ( fgets( szLine, sizeof( szLine ), fp ) )
+	{
+		if ( !strcmp( szLine, "VERSION_CODENAME=sniper\n" ) )
+		{
+			bSniper = true;
+			break;
+		}
+	}
+	fclose( fp );
+	return bSniper;
+}
+
 int main( int argc, char *argv[] )
 {
 	char moduleName[MAX_PATH];
@@ -627,8 +845,34 @@ int main( int argc, char *argv[] )
 		return 1;
 	}
 
+	if ( !IsSniperRuntime() )
+	{
+		char szSniperDir[4096];
+		if ( !GetSteamAppInstallDir( pRootDir, k_unSniperRuntimeAppId, szSniperDir, sizeof( szSniperDir ) ) )
+		{
+			MessageBox( 0, "Steam Linux Runtime 3.0 (sniper) is not installed.\nInstall it from Steam (Library > Tools), then relaunch.", "Launcher Error", MB_OK );
+			return 1;
+		}
+
+		char szRunInSniper[8192];
+		snprintf( szRunInSniper, sizeof( szRunInSniper ), "%s/run-in-sniper", szSniperDir );
+
+		std::vector<char *> sniper_argv;
+		sniper_argv.push_back( szRunInSniper );
+		sniper_argv.push_back( (char *)"--" );
+		sniper_argv.push_back( moduleName );
+		for ( int i = 1; i < argc; i++ )
+		{
+			sniper_argv.push_back( argv[i] );
+		}
+		sniper_argv.push_back( NULL );
+
+		execvp( szRunInSniper, sniper_argv.data() );
+		return 1;
+	}
+
 	char szExecutable[8192];
-	snprintf(szExecutable, sizeof(szExecutable), "%s/hl2.sh", szGameInstallDir );
+	snprintf(szExecutable, sizeof(szExecutable), "%s/tf.sh", szGameInstallDir );
 
 	std::vector<char *> new_argv;
 
@@ -674,6 +918,8 @@ int main( int argc, char *argv[] )
 
 	return 0;
 }
+
+#endif // SRCDS
 
 #else
 #error

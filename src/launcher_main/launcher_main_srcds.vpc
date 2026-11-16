@@ -1,0 +1,9 @@
+$Macro OUTBINNAME "srcds"
+
+$Conditional "SRCDS" "1"
+
+$Include "launcher_main.vpc"
+
+$Project "Launcher Main (srcds)"
+{
+}

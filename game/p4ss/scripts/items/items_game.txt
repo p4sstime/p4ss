@@ -1414,23 +1414,12 @@
 		{
 			"enabled"		"1"
 			"item_class"		"tf_wearable"
-			"craft_class"	"weapon"
-			"craft_material_type"	"weapon"
 			"item_type_name" 	"#TF_Wearable_Boots"
-			"capabilities"
-			{
-				"nameable"		"1"
-				"can_craft_count"	"1"
-			}
 			"base_item_name"	"The Bootlegger"
-			"show_in_armory"	"1"
 			"item_slot"		"primary"
 			"equip_region"	"feet"
 			"anim_slot"		"FORCE_NOT_USED"
-			"item_quality"		"unique"
 			"propername"	"0"
-			"min_ilevel"		"10"
-			"max_ilevel"		"10"
 			"act_as_wearable" "1"
 			"drop_type"	"none"
 			"used_by_classes"
@@ -1442,12 +1431,7 @@
 				"mult charge turn control"
 				{
 					"attribute_class"	"charge_turn_control"
-					"value"			"3"
-				}
-				"max health additive bonus"
-				{
-					"attribute_class"	"add_maxhealth"
-					"value" "25"
+					"value"			"2"
 				}
 				"allowed in medieval mode"
 				{
@@ -1459,9 +1443,9 @@
 					"attribute_class"	"kill_refills_meter"
 					"value"			"0.25"
 				}
-				"move speed bonus shield required"
+				"move speed bonus"
 				{
-					"attribute_class"	"mult_player_movespeed_shieldrequired"
+					"attribute_class"	"move speed bonus"
 					"value" "1.10"
 				}
 			}

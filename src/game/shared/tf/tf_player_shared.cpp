@@ -3360,8 +3360,12 @@ void CTFPlayerShared::OnAddDisguised( void )
 void CTFPlayerShared::OnAddDemoCharge( void )
 {
 #ifdef CLIENT_DLL
-	m_pOuter->StopSound( "DemoCharge.ChargeCritOn" );
-	m_pOuter->EmitSound( "DemoCharge.ChargeCritOn" );
+	bool bFirstPrediction = !m_pOuter->GetPredictable() || ( prediction->IsFirstTimePredicted() && !m_bSyncingConditions );
+	if ( bFirstPrediction )
+	{
+		m_pOuter->StopSound( "DemoCharge.ChargeCritOn" );
+		m_pOuter->EmitSound( "DemoCharge.ChargeCritOn" );
+	}
 	UpdateCritBoostEffect();
 #endif // CLIENT_DLL
 }
@@ -6946,8 +6950,12 @@ void CTFPlayerShared::OnRemoveOverhealed( void )
 void CTFPlayerShared::OnRemoveDemoCharge( void )
 {
 #ifdef CLIENT_DLL
-	m_pOuter->StopSound( "DemoCharge.ChargeCritOn" );
-	m_pOuter->EmitSound( "DemoCharge.ChargeCritOff" );
+	bool bFirstPrediction = !m_pOuter->GetPredictable() || ( prediction->IsFirstTimePredicted() && !m_bSyncingConditions );
+	if ( bFirstPrediction )
+	{
+		m_pOuter->StopSound( "DemoCharge.ChargeCritOn" );
+		m_pOuter->EmitSound( "DemoCharge.ChargeCritOff" );
+	}
 	UpdateCritBoostEffect();
 #endif // CLIENT_DLL
 }
@@ -8311,6 +8319,8 @@ void CTFPlayerShared::CompleteDisguise( void )
 	// Update the player model and skin.
 	m_pOuter->UpdateModel();
 	m_pOuter->ClearExpression();
+
+	RemoveDisguiseWeapon();
 
 	FindDisguiseTarget();
 
