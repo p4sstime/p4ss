@@ -116,7 +116,8 @@ extern "C"
 #endif
 
 #ifndef SRCDS
-static const AppId_t k_unSDK2013MPAppId = 243750;
+static const AppId_t k_unSDK2013MPAppId = 440;
+static const AppId_t k_unSniperRuntimeAppId = 1628350;
 
 #ifdef MOD_LAUNCHER
 static const AppId_t k_unMyModAppid = MOD_APPID;
@@ -198,7 +199,7 @@ static bool LoadSteam( const char *pRootDir )
 	return true;
 }
 
-static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize )
+static bool GetSteamAppInstallDir( const char *pRootDir, AppId_t unAppId, char *pszBuf, int nBufSize )
 {
 	if ( !LoadSteam( pRootDir ) )
 	{
@@ -227,16 +228,21 @@ static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize 
 	}
 
 	uint32_t unLength = 0;
-	if ( pSteamApps->BIsAppInstalled( k_unSDK2013MPAppId ) )
+	if ( pSteamApps->BIsAppInstalled( unAppId ) )
 	{
-		unLength = pSteamApps->GetAppInstallDir( k_unSDK2013MPAppId, pszBuf, nBufSize );
+		unLength = pSteamApps->GetAppInstallDir( unAppId, pszBuf, nBufSize );
 	}
 
 	UnloadSteam();
 
-	if ( unLength == 0 )
+	return unLength != 0;
+}
+
+static bool GetGameInstallDir( const char *pRootDir, char *pszBuf, int nBufSize )
+{
+	if ( !GetSteamAppInstallDir( pRootDir, k_unSDK2013MPAppId, pszBuf, nBufSize ) )
 	{
-		MessageBox( 0, "Source SDK 2013 Multiplayer (243750) must be installed to launch this mod.", "Launcher Error", MB_OK );
+		MessageBox( 0, "Team Fortress 2 (440) must be installed to launch this mod.", "Launcher Error", MB_OK );
 		return false;
 	}
 
@@ -801,6 +807,26 @@ static const char *GetExecutableModName( char *pszExePath )
 	return s_szFinalFilename;
 }
 
+static bool IsSniperRuntime()
+{
+	FILE *fp = fopen( "/etc/os-release", "r" );
+	if ( !fp )
+		return false;
+
+	bool bSniper = false;
+	char szLine[256];
+	while ( fgets( szLine, sizeof( szLine ), fp ) )
+	{
+		if ( !strcmp( szLine, "VERSION_CODENAME=sniper\n" ) )
+		{
+			bSniper = true;
+			break;
+		}
+	}
+	fclose( fp );
+	return bSniper;
+}
+
 int main( int argc, char *argv[] )
 {
 	char moduleName[MAX_PATH];
@@ -819,8 +845,34 @@ int main( int argc, char *argv[] )
 		return 1;
 	}
 
+	if ( !IsSniperRuntime() )
+	{
+		char szSniperDir[4096];
+		if ( !GetSteamAppInstallDir( pRootDir, k_unSniperRuntimeAppId, szSniperDir, sizeof( szSniperDir ) ) )
+		{
+			MessageBox( 0, "Steam Linux Runtime 3.0 (sniper) is not installed.\nInstall it from Steam (Library > Tools), then relaunch.", "Launcher Error", MB_OK );
+			return 1;
+		}
+
+		char szRunInSniper[8192];
+		snprintf( szRunInSniper, sizeof( szRunInSniper ), "%s/run-in-sniper", szSniperDir );
+
+		std::vector<char *> sniper_argv;
+		sniper_argv.push_back( szRunInSniper );
+		sniper_argv.push_back( (char *)"--" );
+		sniper_argv.push_back( moduleName );
+		for ( int i = 1; i < argc; i++ )
+		{
+			sniper_argv.push_back( argv[i] );
+		}
+		sniper_argv.push_back( NULL );
+
+		execvp( szRunInSniper, sniper_argv.data() );
+		return 1;
+	}
+
 	char szExecutable[8192];
-	snprintf(szExecutable, sizeof(szExecutable), "%s/hl2.sh", szGameInstallDir );
+	snprintf(szExecutable, sizeof(szExecutable), "%s/tf.sh", szGameInstallDir );
 
 	std::vector<char *> new_argv;
 

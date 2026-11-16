@@ -22,22 +22,31 @@ namespace {
 //-----------------------------------------------------------------------------
 CPasstimeBallControllerPlayerSeek::CPasstimeBallControllerPlayerSeek() 
 	: CPasstimeBallController( kPriority ) // low priority
-	, m_fEnableTime( 0 )
 {}
 
 //-----------------------------------------------------------------------------
 bool CPasstimeBallControllerPlayerSeek::Apply( CPasstimeBall *ball )
 {
-	if ( gpGlobals->curtime < m_fEnableTime )
+	if ( gpGlobals->curtime < ball->GetMagnetEnableTime() )
 		return false;
 
-	return Seek( ball, FindTarget( ball->GetThrower(), ball->GetAbsOrigin() ) );
+	return Seek( ball, FindTarget( ball ) );
 }
 
 //-----------------------------------------------------------------------------
-CTFPlayer *CPasstimeBallControllerPlayerSeek::FindTarget( CTFPlayer *pIgnorePlayer, const Vector& ballOrigin ) const
+CTFPlayer *CPasstimeBallControllerPlayerSeek::FindTarget( CPasstimeBall *pBall ) const
 {
-	CTFPlayer *pTarget = 0;	
+	CTFPlayer *pTarget = 0;
+	if ( !pBall )
+		return pTarget;
+
+	// a training ball only magnetizes once it's neutral (landed), not while its owner's throw is in flight
+	if ( pBall->IsPracticeBall() && pBall->GetThrower() )
+		return pTarget;
+
+	const Vector& ballOrigin = pBall->GetAbsOrigin();
+	CTFPlayer *pIgnorePlayer = pBall->GetThrower();
+
 	float closestPlayerDist = tf_passtime_ball_seek_range.GetFloat();
 	closestPlayerDist *= closestPlayerDist; // avoid some sqrts
 
@@ -61,8 +70,19 @@ CTFPlayer *CPasstimeBallControllerPlayerSeek::FindTarget( CTFPlayer *pIgnorePlay
 		if ( pPlayer->m_Shared.InCond( TF_COND_DISGUISED ) )
 			continue; // don't seek any disguised people
 
-		if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer ) )
+		if ( g_pPasstimeLogic->GetCarriedBall( pPlayer ) )
+			continue; // don't magnet to players already holding a ball
+
+		// Practice balls are owner-only and follow the same zone/state rules as pickup.
+		if ( pBall->IsPracticeBall() )
+		{
+			if ( !pBall->CanPlayerInteract( pPlayer ) || !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, pBall ) )
+				continue;
+		}
+		else if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, pBall ) )
+		{
 			continue; // can't pick it up
+		}
 
 		trace_t trace;
 		UTIL_TraceLine( ballOrigin, eyepos, MASK_PLAYERSOLID, &traceFilter, &trace );
@@ -97,7 +117,7 @@ bool CPasstimeBallControllerPlayerSeek::Seek( CPasstimeBall *ball, CTFPlayer *pT
 
 	Vector targetvel = pTarget->EyePosition() - ballpos;
 	targetvel.NormalizeInPlace();
-	targetvel *= pTarget->TeamFortress_CalculateMaxSpeed() * 
+	targetvel *= pTarget->TeamFortress_CalculateMaxSpeed( p4ss_ball_seek_ignore_chargespeed.GetBool() ) *
 		tf_passtime_ball_seek_speed_factor.GetFloat();
 	
 	Vector currentvel;
@@ -113,5 +133,5 @@ void CPasstimeBallControllerPlayerSeek::OnBallSpawned( CPasstimeBall *ball )
 	// NOTE: this hack is the only thing that prevents players from picking up 
 	// balls immediately after they were thrown (including by nearby unrelated
 	// players)
-	m_fEnableTime = gpGlobals->curtime + 0.25f;
+	ball->SetMagnetEnableTime( gpGlobals->curtime + 0.25f );
 }

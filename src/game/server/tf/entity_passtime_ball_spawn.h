@@ -35,6 +35,7 @@ private:
 
 	COutputEvent m_onSpawnBall;
 	bool m_bDisabled;
+	float m_flLastBallSpawnTime;
 };
 
 #endif // ENTITY_PASSTIME_BALL_SPAWN_H  

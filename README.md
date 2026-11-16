@@ -14,7 +14,6 @@ Prerequisites:
 
 Requirements:
  - Steam
- - Source SDK 2013 Multiplayer installed via Steam
  - Team Fortress 2
  - Visual Studio 2022 with the following workload and components:
    - Desktop development with C++:
@@ -61,7 +60,7 @@ Prerequisites:
 - Steam
 - podman (latest is fine, restart after installing)
 - Team Fortress 2
-- Source SDK Base 2013 Multiplayer
+- Steam Linux Runtime 3.0
 
 
 Clone this repository, then run:
@@ -81,6 +80,21 @@ Then:
 ./game/p4ss_linux64
 ```
 and you're up and running!
+
+## Contributing
+
+The `development` branch is used for new branches and pull requests.
+For releases, `development` is merged into `master`.
+
+Commits and pull request titles must follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/): `<type>(<scope>)[!]: <description>`.
+Valid scopes are listed in [scripts/lint/scopes.txt](./scripts/lint/scopes.txt).
+
+Pull requests must link an issue (`Closes #123`).
+
+If you fork this repository, enable the linter by running:
+```bash
+git config core.hooksPath githooks
+```
 
 ## How can I help?
 
