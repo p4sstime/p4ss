@@ -38,9 +38,22 @@ public:
 	virtual void Deflected( CBaseEntity *pDeflectedBy, Vector& vecDir ) OVERRIDE;
 	virtual bool ShouldCollide( int collisionGroup, int contentsMask ) const OVERRIDE;
 	virtual int UpdateTransmitState() OVERRIDE;
+	virtual void UpdateOnRemove() OVERRIDE;
 
 	CTFPlayer *GetCarrier() const;
 	CTFPlayer *GetPrevCarrier() const;
+	CTFPlayer *GetOwner() const;
+	void SetOwner( CTFPlayer *pOwner );
+	bool IsPracticeBall() const;
+	bool CanPlayerInteract( CTFPlayer *pPlayer ) const;
+	int GetBallPower() const;
+	void SetBallPower( int iPower );
+	float GetPackSpeed() const;
+	void SetPackSpeed( float flSpeed );
+	float GetLastReceived() const;
+	void SetLastReceived( float flTime );
+	bool IsProtActive() const;
+	void SetProtActive( bool bActive );
 	CTFPlayer *GetThrower() const;
 	CTFPlayer *GetLastThrower() const;
 	int GetCollisionCount() const;
@@ -48,12 +61,16 @@ public:
 
 	void ResetTrail();
 	void HideTrail();
+	void RetireBall();
+	void RemoveAfterTrail();
+	void UpdateTrailColor();
 
 	void CreateMagnetSound();
 	bool GetActiveMagnetSound();
 	void KillMagnetSound();
 
 	void MoveTo( const Vector &pos, const Vector &vel );
+	void TeleportTo( const Vector &pos, const Vector &vel );
 	void MoveToSpawner( const Vector &pos );
 
 	void SetStateOutOfPlay();
@@ -77,6 +94,8 @@ public:
 	CTFPlayer *GetLastHomingTarget() const;
 
 	float GetAirtimeSec() const;
+	float GetMagnetEnableTime() const { return m_flMagnetEnableTime; }
+	void SetMagnetEnableTime( float flTime ) { m_flMagnetEnableTime = flTime; }
 	float GetAirtimeDistance() const;
 	float GetThrowerCanPickupTime() const;
 	float GetBallDmgImmuneTime() const;
@@ -90,9 +109,9 @@ private:
 	void DefaultThink();
 	void TouchPlayer( CTFPlayer *pPlayer );
 	void BlockReflect( CTFPlayer *pPlayer, const Vector& origin, const Vector& ballvel );
-	void BlockDamage( CTFPlayer *pPlayer, const Vector& ballvel );
 	bool BIgnorePlayer( CTFPlayer *pPlayer );
 	void OnCollision();
+	void BounceOffHolder();
 	void UpdateLagCompensationHistory();
 	void SetThrower( CTFPlayer *pPlayer );
 	void OnBecomeNotCarried();
@@ -123,7 +142,8 @@ private:
 	CSoundPatch *m_pCloseToTarget;
 	CBaseEntity *m_pPlayerToucher;
 	CPasstimeBallControllerPlayerSeek m_playerSeek;
-	bool m_bTouchedSinceSpawn;
+	bool m_bInGame;
+	float m_flMagnetEnableTime;
 	float m_flLastCollisionTime;
 	float m_flAirtimeDistance;
 	Vector m_vecPrevOrigin; // note: C_BaseEntity has m_vecOldOrigin in client code only
@@ -132,6 +152,9 @@ private:
 	float m_flIdleRespawnTime;
 	float m_flThrowerCanPickupTime; // jack armor prevention
 	float m_flBallDmgImmuneTime; // instant splash prevention
+	float m_flLastReceived;
+	float m_flPackSpeed;
+	bool m_bProtActive;
 
 	CUtlVector<CBaseEntity*> m_mapGoals; 
 
@@ -151,6 +174,8 @@ private:
 	CNetworkHandle( CTFPlayer, m_hLastHomingTarget );
 	CNetworkHandle( CTFPlayer, m_hCarrier );
 	CNetworkHandle( CTFPlayer, m_hPrevCarrier );
+	CNetworkHandle( CTFPlayer, m_hOwner );
+	CNetworkVar( int, m_iBallPower );
 };
 
 #endif // TF_PASSTIME_BALL_H  

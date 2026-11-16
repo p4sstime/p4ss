@@ -15,6 +15,7 @@
 #include "tf_shareddefs.h"
 #include "tf_player.h"
 #include "vcollide_parse.h"
+#include "collisionutils.h"
 #include "SpriteTrail.h"
 #include "soundenvelope.h"
 #include "soundent.h"
@@ -29,6 +30,7 @@
 static const float s_flPickupDist = 1000.f;
 static const float s_flBlockDist = 30.0f;
 static const float s_flClearDist = 50.0f;
+static const float kTrailLifetimeSec = 3.0f; // matches SetLifeTime in ResetTrail
 static const char *s_pHalloweenBallModel = "models/passtime/ball/passtime_ball_halloween.mdl";
 
 //-----------------------------------------------------------------------------
@@ -92,6 +94,14 @@ private:
 
 	void OnTouch( CBaseEntity *pOther ) 
 	{
+		if ( m_pBall->IsPracticeBall() )
+		{
+			CTFPlayer *pPlayer = ToTFPlayer( pOther );
+			if ( pPlayer && pPlayer != m_pBall->GetOwner() )
+			{
+				return;
+			}
+		}
 		m_pBall->OnTouch( pOther );
 	}
 };
@@ -105,6 +115,8 @@ IMPLEMENT_SERVERCLASS_ST( CPasstimeBall, DT_PasstimeBall )
 	SendPropEHandle( SENDINFO(m_hLastHomingTarget)),
 	SendPropEHandle(SENDINFO(m_hCarrier)),
 	SendPropEHandle(SENDINFO(m_hPrevCarrier)),
+	SendPropEHandle(SENDINFO(m_hOwner)),
+	SendPropInt(SENDINFO(m_iBallPower), 8),
 END_SEND_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -128,6 +140,15 @@ CPasstimeBall::CPasstimeBall()
 	m_bTrailActive = false;
 	m_pCloseToTarget = 0;
 	m_bPanacea = true;
+	m_hOwner = NULL;
+	m_iBallPower = 0;
+	m_flLastReceived = 0.0f;
+	m_flPackSpeed = 0.0f;
+	m_bProtActive = false;
+	m_bInGame = false;
+	m_flMagnetEnableTime = 0;
+	m_iCollisionCount = 0;
+	m_flLastCollisionTime = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -162,6 +183,64 @@ CTFPlayer *CPasstimeBall::GetThrower() const
 CTFPlayer *CPasstimeBall::GetLastThrower() const 
 { 
 	return m_hLastThrower.Get(); 
+}
+
+//-----------------------------------------------------------------------------
+CTFPlayer *CPasstimeBall::GetOwner() const
+{
+	return m_hOwner.Get();
+}
+
+//-----------------------------------------------------------------------------
+void CPasstimeBall::SetOwner( CTFPlayer *pOwner )
+{
+	m_hOwner = pOwner;
+}
+
+//-----------------------------------------------------------------------------
+float CPasstimeBall::GetPackSpeed() const { return m_flPackSpeed; }
+void CPasstimeBall::SetPackSpeed( float flSpeed ) { m_flPackSpeed = flSpeed; }
+float CPasstimeBall::GetLastReceived() const { return m_flLastReceived; }
+void CPasstimeBall::SetLastReceived( float flTime ) { m_flLastReceived = flTime; }
+bool CPasstimeBall::IsProtActive() const { return m_bProtActive; }
+void CPasstimeBall::SetProtActive( bool bActive ) { m_bProtActive = bActive; }
+
+//-----------------------------------------------------------------------------
+bool CPasstimeBall::IsPracticeBall() const
+{
+	return m_hOwner.Get() != NULL;
+}
+
+//-----------------------------------------------------------------------------
+bool CPasstimeBall::CanPlayerInteract( CTFPlayer *pPlayer ) const
+{
+	if ( !IsPracticeBall() )
+	{
+		return true;
+	}
+	return pPlayer == GetOwner();
+}
+
+//-----------------------------------------------------------------------------
+int CPasstimeBall::GetBallPower() const
+{
+	return m_iBallPower;
+}
+
+//-----------------------------------------------------------------------------
+void CPasstimeBall::SetBallPower( int iPower )
+{
+	m_iBallPower = iPower;
+}
+
+//-----------------------------------------------------------------------------
+void CPasstimeBall::UpdateOnRemove()
+{
+	if ( g_pPasstimeLogic )
+	{
+		g_pPasstimeLogic->UnregisterBall( this );
+	}
+	BaseClass::UpdateOnRemove();
 }
 
 //-----------------------------------------------------------------------------
@@ -271,8 +350,11 @@ void CPasstimeBall::ChangeTeam( int iTeam )
 
 	if ( m_bTrailActive )
 	{
-		const char *pszTrailEffectName = GetTrailEffectForTeam( iTeam );
+		// Practice balls always tint the neutral trail, never a team-colored one.
+		int iTrailTeam = IsPracticeBall() ? TEAM_UNASSIGNED : iTeam;
+		const char *pszTrailEffectName = GetTrailEffectForTeam( iTrailTeam );
 		m_pTrail->SetModel( pszTrailEffectName );
+		UpdateTrailColor();
 	}
 
 	if ( iTeam == TEAM_UNASSIGNED )
@@ -424,8 +506,13 @@ void CPasstimeBall::Spawn()
 //-----------------------------------------------------------------------------
 void CPasstimeBall::SetIdleRespawnTime() 
 {
+	// only balls a player has interacted with since their last spawn can go idle
 	auto *pTimer = TFGameRules()->GetActiveRoundTimer();
-	if ( !pTimer ) return;
+	if ( !m_bInGame || IsPracticeBall() || !pTimer )
+	{
+		m_flIdleRespawnTime = 0;
+		return;
+	}
 	auto ts = pTimer->GetTimerState();
 	auto grs = TFGameRules()->State_Get();
 	m_flIdleRespawnTime = ((grs == GR_STATE_RND_RUNNING) && (ts == RT_STATE_NORMAL))
@@ -448,6 +535,24 @@ bool CPasstimeBall::ShouldCollide( int iCollisionGroup, int iContentsMask ) cons
 	// to impart physics forces on itself when a player blocks it, since the player
 	// will set velocity to zero due to being "stuck" on the ball, even though the
 	// ball won't actually prevent the player from moving through it.
+	if ( IsPracticeBall() )
+	{
+		// training balls only interact with the world: no players, weapons, projectiles or pushes
+		switch ( iCollisionGroup )
+		{
+		case COLLISION_GROUP_PLAYER:
+		case COLLISION_GROUP_PLAYER_MOVEMENT:
+		case COLLISION_GROUP_WEAPON:
+		case COLLISION_GROUP_PROJECTILE:
+		case COLLISION_GROUP_PUSHAWAY:
+		case TFCOLLISION_GROUP_ROCKETS:
+		case TFCOLLISION_GROUP_ROCKET_BUT_NOT_WITH_OTHER_ROCKETS:
+		case TF_COLLISIONGROUP_GRENADES:
+			return false;
+		}
+		return true;
+	}
+
 	return (iCollisionGroup != COLLISION_GROUP_PLAYER_MOVEMENT);
 }
 
@@ -459,7 +564,7 @@ void CPasstimeBall::ResetTrail()
 	// a reasonable amount of time.
 	HideTrail();
 
-	const char *pszTrailEffect = GetTrailEffectForTeam( GetTeamNumber() );
+	const char *pszTrailEffect = GetTrailEffectForTeam( IsPracticeBall() ? TEAM_UNASSIGNED : GetTeamNumber() );
 	Vector origin = GetAbsOrigin();
 	float flStartRadius = tf_passtime_ball_sphere_radius.GetFloat() * 2;
 	float flEndRadius = tf_passtime_ball_sphere_radius.GetFloat() * 3;
@@ -471,6 +576,8 @@ void CPasstimeBall::ResetTrail()
 	m_pTrail->SetEndWidth( flEndRadius );
 	m_pTrail->SetTextureResolution( 1 );
 	m_pTrail->SetLifeTime( 3.0f );
+
+	UpdateTrailColor();
 
 	m_bTrailActive = true;
 }
@@ -491,6 +598,52 @@ void CPasstimeBall::HideTrail()
 	PhysCallbackRemove( m_pTrail->NetworkProp() );
 	m_pTrail = nullptr;
 	m_bTrailActive = false;
+}
+
+//-----------------------------------------------------------------------------
+// Leaves the ball out of the game but keeps it alive until its trail has faded.
+// Removing the ball while its trail is attached would delete the trail, and
+// detaching the trail mid-life makes it jump toward the world origin.
+void CPasstimeBall::RetireBall()
+{
+	SetStateOutOfPlay();
+	if ( g_pPasstimeLogic )
+	{
+		g_pPasstimeLogic->UnregisterBall( this );
+	}
+	if ( !m_bTrailActive )
+	{
+		UTIL_Remove( this );
+		return;
+	}
+
+	SetThink( &CPasstimeBall::RemoveAfterTrail );
+	SetNextThink( gpGlobals->curtime + kTrailLifetimeSec );
+}
+
+//-----------------------------------------------------------------------------
+void CPasstimeBall::RemoveAfterTrail()
+{
+	UTIL_Remove( this );
+}
+
+//-----------------------------------------------------------------------------
+void CPasstimeBall::UpdateTrailColor()
+{
+	if ( !m_pTrail )
+	{
+		return;
+	}
+
+	// Training ball: gold while carried/thrown, natural (neutral) when on the ground.
+	if ( IsPracticeBall() && (GetCarrier() || GetThrower()) )
+	{
+		m_pTrail->SetColor( 0xE7, 0xB5, 0x3B );
+	}
+	else
+	{
+		m_pTrail->SetColor( 255, 255, 255 );
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -526,7 +679,10 @@ void CPasstimeBall::OnBecomeNotCarried()
 		pCarrier->m_Shared.RemoveCond( TF_COND_SPEED_BOOST, true );
 		pCarrier->m_Shared.RemoveCond( TF_COND_PASSTIME_INTERCEPTION, true );
 		pCarrier->TeamFortress_SetSpeed();
-		PasstimeGameEvents::BallFree( pCarrier->entindex() ).Fire();
+		if ( !IsPracticeBall() )
+		{
+			PasstimeGameEvents::BallFree( pCarrier->entindex() ).Fire();
+		}
 	}
 
 	//
@@ -564,6 +720,8 @@ void CPasstimeBall::SetStateFree()
 	//
 	// Change state
 	//
+	CTFPlayer *pThrower = m_hCarrier;
+
 	m_eState = STATE_FREE;
 	OnBecomeNotCarried();
 
@@ -578,10 +736,10 @@ void CPasstimeBall::SetStateFree()
 	SetMoveType( MOVETYPE_VPHYSICS );
 	SetSolid( SOLID_VPHYSICS );
 	SetSolidFlags( FSOLID_NOT_STANDABLE );
-	SetThrower( m_hCarrier );
+	SetThrower( pThrower );
 	
 	// Set cooldown for jack armor prevention
-	if ( tf_passtime_no_jack_armor.GetBool() && m_hCarrier )
+	if ( tf_passtime_no_jack_armor.GetBool() && pThrower )
 	{
 		m_flThrowerCanPickupTime = gpGlobals->curtime + tf_passtime_no_jack_armor_time.GetFloat();
 	}
@@ -662,10 +820,6 @@ void CPasstimeBall::SetStateOutOfPlay()
 	TFGameRules()->SetObjectiveObserverTarget( 0 );
 	VPhysicsGetObject()->EnableGravity( false );
 
-	// 
-	// Trail management
-	//
-	HideTrail();
 
 	//
 	// Sounds
@@ -718,7 +872,7 @@ void CPasstimeBall::SetStateCarried( CTFPlayer *pCarrier )
 	pCarrier->RemoveDisguise();
 	pCarrier->EndClassSpecialSkill(); // abort demo charge
 	pCarrier->m_Shared.SetHasPasstimeBall( true );
-	if ( pCarrier != m_hPrevCarrier )
+	if ( !IsPracticeBall() && pCarrier != m_hPrevCarrier )
 	{
 		float fPassTimeLength = gpGlobals->realtime - g_pPasstimeLogic->GetLastPassTime(pCarrier);
 		pCarrier->m_Shared.AddCond( TF_COND_SPEED_BOOST, tf_passtime_speedboost_on_get_ball_time.GetFloat() );
@@ -760,7 +914,7 @@ void CPasstimeBall::SetStateCarried( CTFPlayer *pCarrier )
 	//
 	// Unique to this state
 	//
-	m_bTouchedSinceSpawn = true;
+	m_bInGame = true;
 	SetLocalOrigin( Vector( 0,0,0 ) ); // because SetParent(pCarrier)
 
 	// 
@@ -799,13 +953,15 @@ void CPasstimeBall::SetStateCarried( CTFPlayer *pCarrier )
 	m_hLastThrower = 0; // Clear jack armor cooldown when someone picks up ball
 	m_flThrowerCanPickupTime = 0;
 	ChangeTeam( pCarrier->GetTeamNumber() );
+	UpdateTrailColor();
 }
 
 //-----------------------------------------------------------------------------
 void CPasstimeBall::MoveToSpawner( const Vector &pos )
 { 
-	MoveTo( pos, Vector( 0,0,0 ) );
-	m_bTouchedSinceSpawn = false;
+	TeleportTo( pos, Vector( 0,0,0 ) );
+	m_bInGame = false;
+	m_iCollisionCount = 0;
 	m_hPrevCarrier = 0;
 	m_hLastThrower = 0; // Clear jack armor cooldown on respawn
 	m_flThrowerCanPickupTime = 0;
@@ -825,6 +981,17 @@ int CPasstimeBall::UpdateTransmitState()
 		return BaseClass::UpdateTransmitState();
 	}
 	return SetTransmitState(FL_EDICT_ALWAYS);
+}
+
+//-----------------------------------------------------------------------------
+// a trail draws from its creation point, so a teleport (spawner placement) needs a new trail
+void CPasstimeBall::TeleportTo( const Vector &pos, const Vector &vecVel )
+{
+	MoveTo( pos, vecVel );
+	if ( m_bTrailActive )
+	{
+		ResetTrail();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -854,7 +1021,7 @@ void CPasstimeBall::MoveTo( const Vector &pos, const Vector &vecVel )
 //-----------------------------------------------------------------------------
 bool CPasstimeBall::BShouldPanicRespawn() const
 {
-	if ( !TFGameRules()
+	if ( IsPracticeBall() || !TFGameRules()
 		|| ( TFGameRules()->State_Get() != GR_STATE_RND_RUNNING )
 		|| ( m_eState != STATE_FREE ) )
 	{
@@ -883,7 +1050,7 @@ void CPasstimeBall::DefaultThink()
 
 	if ( BShouldPanicRespawn() )
 	{
-		g_pPasstimeLogic->RespawnBall();
+		g_pPasstimeLogic->RespawnBall( this );
 		return;
 	}
 
@@ -906,14 +1073,14 @@ void CPasstimeBall::DefaultThink()
 			SetWinstrat( true );
 		}
 
-		if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pCarrier, &ejectReason ) )
+		if ( !g_pPasstimeLogic->BCanPlayerPickUpBall( pCarrier, this, &ejectReason ) )
 		{
 			if ( ejectReason && TFGameRules() ) 
 			{
 				CSingleUserReliableRecipientFilter filter( pCarrier );
 				TFGameRules()->SendHudNotification( filter, ejectReason );
 			}
-			g_pPasstimeLogic->EjectBall( pCarrier, pCarrier );
+			g_pPasstimeLogic->EjectBall( this, pCarrier, pCarrier );
 			SetIdleRespawnTime(); // have to do this here because need to guarantee it happens for no ball zones
 			EmitSound( "Passtime.BallDropped");
 			return;
@@ -941,7 +1108,7 @@ void CPasstimeBall::DefaultThink()
 
 		pPhysObj->Wake(); // NEVER SLEEP
 
-		//m_playerSeek.SetIsEnabled( !m_bTouchedSinceSpawn );`
+		//m_playerSeek.SetIsEnabled( !m_bInGame );`
 		CPasstimeBallController::ApplyTo( this );
 	}
 }
@@ -1156,18 +1323,24 @@ void CPasstimeBall::TouchPlayer( CTFPlayer *pPlayer )
 		return;
 	}
 
-	//
-	// Is this player close enough to hit it?
-	// TODO is this still necessary since we use actual physics touching now?
-	//
+	if ( !IsPracticeBall() )
 	{
-		const Vector& vecMyOrigin = GetAbsOrigin();
-		const Vector& vecOtherOrigin = pPlayer->GetAbsOrigin();
-		const Vector vecOtherHead = vecOtherOrigin + Vector( 0, 0, pPlayer->BoundingRadius() + 8 );
-		float t = 0;
-		const float flDist = CalcDistanceToLineSegment( vecMyOrigin, vecOtherOrigin, vecOtherHead, &t );
-		if ( (flDist > s_flBlockDist) && (flDist > s_flPickupDist) )
+		// players with a training ball in the world are passed through entirely
+		if ( g_pPasstimeLogic->GetTrainingBallForPlayer( pPlayer ) )
 		{
+			return;
+		}
+
+		// a loose game ball touching a game-ball holder bounces off them and goes neutral
+		if ( g_pPasstimeLogic->GetCarriedBall( pPlayer ) )
+		{
+			IPhysicsObject *pPhysObj = VPhysicsGetObject();
+			Vector vecVel;
+			pPhysObj->GetVelocity( &vecVel, 0 );
+			if ( vecVel.Dot( GetAbsOrigin() - pPlayer->WorldSpaceCenter() ) < 0 )
+			{
+				BounceOffHolder();
+			}
 			return;
 		}
 	}
@@ -1180,7 +1353,7 @@ void CPasstimeBall::TouchPlayer( CTFPlayer *pPlayer )
 	bool bCanPickUp = false;
 	{
 		HudNotification_t cantPickUpReason;
-		bCanPickUp = g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, &cantPickUpReason );
+		bCanPickUp = g_pPasstimeLogic->BCanPlayerPickUpBall( pPlayer, this, &cantPickUpReason );
 		if ( cantPickUpReason )
 		{
 			CSingleUserReliableRecipientFilter filter( pPlayer );
@@ -1190,24 +1363,19 @@ void CPasstimeBall::TouchPlayer( CTFPlayer *pPlayer )
 
 	if ( bCanPickUp )
 	{
-		m_bTouchedSinceSpawn = true;
+		m_bInGame = true;
 		g_pPasstimeLogic->OnPlayerTouchBall( pPlayer, this );
 	}
 	else if ( !bSameTeam )
 	{
 		// can't pick it up and not on the same team = block
 
-		// NOTE: BlockDamage has to come after BlockReflect in order for 
-		// the reflection to work right. BlockDamage might apply a force
-		// to the player, which will taint the reflection vector.
-		// NOTE: because some of these functions might change the ball's
-		// velocity, get it once and then pass it to each.
 		IPhysicsObject* pPhysObj = VPhysicsGetObject();
 		Vector vecBallVel; 
 		pPhysObj->GetVelocity( &vecBallVel, 0 );
 
 		BlockReflect( pPlayer, pPlayer->GetAbsOrigin(), vecBallVel );
-		BlockDamage( pPlayer, vecBallVel );
+		pPlayer->m_Shared.OnSpyTouchedByEnemy();
 
 		if ( GetThrower() )
 		{
@@ -1221,6 +1389,31 @@ void CPasstimeBall::TouchPlayer( CTFPlayer *pPlayer )
 		m_flAirtimeDistance = 0;
 		m_flLastCollisionTime = gpGlobals->curtime;
 	}
+}
+
+//-----------------------------------------------------------------------------
+// Physical contact with a player holding a game ball: neutralize and bounce off
+// their collision hull, same bounce as grenades (CTFWeaponBaseGrenadeProj::BounceOff).
+static const float s_flHolderBounceRestitution = 0.2f;
+
+void CPasstimeBall::BounceOffHolder()
+{
+	if ( GetTeamNumber() != TEAM_UNASSIGNED )
+	{
+		ChangeTeam( TEAM_UNASSIGNED );
+	}
+
+	IPhysicsObject *pPhysObj = VPhysicsGetObject();
+	Vector vecVel;
+	pPhysObj->GetVelocity( &vecVel, 0 );
+	vecVel *= -s_flHolderBounceRestitution;
+	pPhysObj->SetVelocity( &vecVel, 0 );
+
+	CPasstimeBallController::DisableOn( this );
+	m_iCollisionCount++;
+	SetThrower( 0 );
+	m_flAirtimeDistance = 0;
+	m_flLastCollisionTime = gpGlobals->curtime;
 }
 
 //-----------------------------------------------------------------------------
@@ -1261,28 +1454,10 @@ void CPasstimeBall::BlockReflect( CTFPlayer *pPlayer, const Vector& vecBallOrigi
 }
 
 //-----------------------------------------------------------------------------
-void CPasstimeBall::BlockDamage( CTFPlayer *pPlayer, const Vector& vecBallVel )
+static bool IsBallCollision( int index, const gamevcollisionevent_t *pEvent )
 {
-	const float flSpeed = vecBallVel.Length();
-	const float flDamageSpeed = 1000;
-	
-	pPlayer->m_Shared.OnSpyTouchedByEnemy();
-
-	if ( flSpeed >= flDamageSpeed )
-	{
-		CTakeDamageInfo di;
-		di.SetAttacker( GetThrower() );
-		di.SetDamage( 1 );
-		di.SetDamageType( DMG_CLUB );
-		di.SetInflictor( this );
-		di.SetDamagePosition( GetAbsOrigin() );
-		di.SetDamageForce( vecBallVel ); // needs to be set to nonzero
-		if ( flSpeed > 1200 )
-		{
-			di.AddDamageType( DMG_CRITICAL );
-		}
-		pPlayer->TakeDamage( di );
-	}
+	CBaseEntity *pOther = static_cast<CBaseEntity *>( pEvent->pObjects[!index]->GetGameData() );
+	return pOther && ( dynamic_cast<CPasstimeBall*>( pOther ) != nullptr );
 }
 
 //-----------------------------------------------------------------------------
@@ -1330,6 +1505,7 @@ void CPasstimeBall::OnTouch( CBaseEntity *pOther )
 	CTFPlayer *pPlayer = ToTFPlayer( pOther );
 	if ( !BIgnorePlayer( pPlayer ) )
 	{
+		m_bInGame = true;
 		TouchPlayer( pPlayer );
 	}
 }
@@ -1344,8 +1520,13 @@ void CPasstimeBall::VPhysicsCollision( int index, gamevcollisionevent_t *pEvent 
 		return;
 	}
 
-	if ( g_pPasstimeLogic && (g_pPasstimeLogic->GetBall() == this) 
-		&& g_pPasstimeLogic->OnBallCollision( this, index, pEvent )
+	// balls only bump each other physically; they never count as bounces or ground hits
+	if ( IsBallCollision( index, pEvent ) )
+	{
+		return;
+	}
+
+	if ( g_pPasstimeLogic && g_pPasstimeLogic->OnBallCollision( this, index, pEvent )
 		&& IsGroundCollision( index, pEvent ) )
 	{
 		OnCollision();
@@ -1364,10 +1545,8 @@ void CPasstimeBall::OnCollision()
 	{
 		SetThrower( 0 );
 		m_bPanacea = false;
-		if ( m_bTouchedSinceSpawn )
-		{
-			SetIdleRespawnTime();
-		}
+		// Training balls should not idle-respawn, only regular game balls.
+		SetIdleRespawnTime();
 	}
 	m_hBlocker.Term();
 	SetLastHomingTarget(0);
@@ -1379,17 +1558,38 @@ int	CPasstimeBall::OnTakeDamage( const CTakeDamageInfo &info )
 {
 	CTFPlayer *ballThrower = GetThrower();
 
-	if ( !tf_passtime_ball_takedamage.GetBool() || gpGlobals->curtime < GetBallDmgImmuneTime())
+	bool bOwnerAttacker = IsPracticeBall() && ToTFPlayer( info.GetAttacker() ) == GetOwner();
+
+	// a player with a training ball in the world can't affect game balls at all
+	CTFPlayer *pAttackerPlayer = ToTFPlayer( info.GetAttacker() );
+	if ( !IsPracticeBall() && pAttackerPlayer && g_pPasstimeLogic && g_pPasstimeLogic->GetTrainingBallForPlayer( pAttackerPlayer ) )
+	{
+		return 0;
+	}
+
+	// Practice balls are protected from everyone except their owner.
+	if ( IsPracticeBall() && !bOwnerAttacker )
+	{
+		return 0;
+	}
+
+	if ( !tf_passtime_ball_takedamage.GetBool() && !bOwnerAttacker )
 	{
 		// this can happen if the cvar is disabled after the ball has spawned
 		return 0;
 	}
 
-	if ( !m_bTouchedSinceSpawn && (GetCollisionCount() == 0) )
+	if ( gpGlobals->curtime < GetBallDmgImmuneTime() && !bOwnerAttacker )
+	{
+		return 0;
+	}
+
+	if ( !m_bInGame && (GetCollisionCount() == 0) )
 	{
 		++CTF_GameStats.m_passtimeStats.summary.nTotalBallSpawnShots;
 	}
 
+	m_bInGame = true;
 	if ( TFGameRules()->IsPasstimeMode() )
 	{
 		CPasstimeBallController::BallDamaged( this );
@@ -1456,7 +1656,7 @@ int	CPasstimeBall::OnTakeDamage( const CTakeDamageInfo &info )
 			}
 
 			// P4SS: this may cause issues later for things like pipes but we will try it out and see
-			if ( distance < 10.0f || info.GetDamageType() & DMG_MELEE )
+			if ( !IsPracticeBall() && ( distance < 10.0f || info.GetDamageType() & DMG_MELEE ) )
 			{
 				if ( didSplashGoal && attackerPlayer && ballThrower && attackerPlayer->GetTeamNumber() != ballThrower->GetTeamNumber() )
 				{
@@ -1467,7 +1667,7 @@ int	CPasstimeBall::OnTakeDamage( const CTakeDamageInfo &info )
 					PasstimeGameEvents::BallDirected( attackerPlayer->entindex(), inflictor->entindex(), weaponname ).Fire();				
 				}
 
-			} else if ( didSplashGoal && attackerPlayer && ballThrower && attackerPlayer->GetTeamNumber() != ballThrower->GetTeamNumber() ) { // ball splash
+			} else if ( !IsPracticeBall() && didSplashGoal && attackerPlayer && ballThrower && attackerPlayer->GetTeamNumber() != ballThrower->GetTeamNumber() ) { // ball splash
 					PasstimeGameEvents::BallSplashed( attackerPlayer->entindex(), weaponname, false ).Fire();
 			} 
 		}
@@ -1518,6 +1718,10 @@ void CPasstimeBall::SetWinstrat( bool isWinstrat ) { m_bWinstrat = isWinstrat; }
 void CPasstimeBall::Deflected(CBaseEntity *pDeflectedBy, Vector& vecDir )
 {
 	NOTE_UNUSED( pDeflectedBy );
+	if ( IsPracticeBall() )
+	{
+		return;
+	}
 	IPhysicsObject* pPhysObj = VPhysicsGetObject();
 	if ( !pPhysObj )
 	{

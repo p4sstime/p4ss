@@ -45,12 +45,12 @@ CTFPasstimeLogic *g_pPasstimeLogic;
 LINK_ENTITY_TO_CLASS( passtime_logic, CTFPasstimeLogic );
 PRECACHE_REGISTER( passtime_logic );
 IMPLEMENT_SERVERCLASS_ST( CTFPasstimeLogic, DT_TFPasstimeLogic )
-	SendPropEHandle( SENDINFO( m_hBall ) ),
+	SendPropInt( SENDINFO( m_iNumBalls ), 6, SPROP_UNSIGNED ),
+	SendPropArray3( SENDINFO_ARRAY3( m_hBalls ), SendPropEHandle( SENDINFO_ARRAY( m_hBalls ) ) ),
 	SendPropArray( SendPropVector( SENDINFO_ARRAY( m_trackPoints ), -1, SPROP_COORD_MP_INTEGRAL ), m_trackPoints ),
 	SendPropInt( SENDINFO( m_iNumSections ) ),
 	SendPropInt( SENDINFO( m_iCurrentSection ) ),
 	SendPropFloat( SENDINFO( m_flMaxPassRange ) ),
-	SendPropInt( SENDINFO( m_iBallPower ), 8 ),
 	SendPropFloat( SENDINFO( m_flPackSpeed ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_bPlayerIsPackMember ), SendPropInt( SENDINFO_ARRAY( m_bPlayerIsPackMember ), 1, SPROP_UNSIGNED ) ),
 END_SEND_TABLE()
@@ -107,7 +107,313 @@ static bool IsGamestatePlayable()
 }
 
 //-----------------------------------------------------------------------------
-CPasstimeBall *CTFPasstimeLogic::GetBall() const { return m_hBall; }
+CPasstimeBall *CTFPasstimeLogic::GetGameBall() const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && !pBall->IsPracticeBall() )
+		{
+			return pBall;
+		}
+	}
+	return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+int CTFPasstimeLogic::GetGameBallCount() const
+{
+	int iCount = 0;
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		iCount += ( pBall && !pBall->IsPracticeBall() );
+	}
+	return iCount;
+}
+
+//-----------------------------------------------------------------------------
+bool CTFPasstimeLogic::BAnyGameBallInPlay( CPasstimeBall *pIgnore ) const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && ( pBall != pIgnore ) && !pBall->IsPracticeBall() && !pBall->BOutOfPlay() )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// Picks a spawner that has no game ball on it and hasn't released one recently,
+// so balls released together don't spawn inside each other. Falls back to less
+// strict picks when every spawner is busy.
+CPasstimeBallSpawn *CTFPasstimeLogic::ClaimSpawnerForBall( CPasstimeBall *pIgnore )
+{
+	const float kOccupiedDistSqr = 64.0f * 64.0f;
+	const float kSpawnerCooldownSec = 0.5f;
+	const auto &allSpawns = IPasstimeBallSpawnAutoList::AutoList();
+	const int iCount = allSpawns.Count();
+	if ( iCount == 0 )
+	{
+		return nullptr;
+	}
+
+	auto bReady = [&]( CPasstimeBallSpawn *pSpawner ) -> bool
+	{
+		if ( !pSpawner->IsEnabled() || ( gpGlobals->curtime - pSpawner->m_flLastBallSpawnTime < kSpawnerCooldownSec ) )
+		{
+			return false;
+		}
+		for ( int j = 0; j < m_iNumBalls; ++j )
+		{
+			CPasstimeBall *pBall = GetBall( j );
+			if ( pBall && ( pBall != pIgnore ) && !pBall->IsPracticeBall()
+				&& ( pBall->GetAbsOrigin().DistToSqr( pSpawner->GetAbsOrigin() ) < kOccupiedDistSqr ) )
+			{
+				return false;
+			}
+		}
+		return true;
+	};
+
+	// the first spawn of a burst is random, the rest step through the spawners in order
+	const bool bBurstStart = ( gpGlobals->curtime - m_flLastClaimTime ) > kSpawnerCooldownSec;
+	int iChosen = -1;
+	if ( bBurstStart )
+	{
+		CUtlVector<int> vecReady;
+		for ( int i = 0; i < iCount; ++i )
+		{
+			if ( bReady( static_cast<CPasstimeBallSpawn*>( allSpawns[i] ) ) )
+			{
+				vecReady.AddToTail( i );
+			}
+		}
+		if ( vecReady.Count() )
+		{
+			iChosen = vecReady[RandomInt( 0, vecReady.Count() - 1 )];
+		}
+	}
+	else
+	{
+		for ( int i = 0; i < iCount && iChosen < 0; ++i )
+		{
+			int iIndex = ( m_iSpawnerCursor + i ) % iCount;
+			if ( bReady( static_cast<CPasstimeBallSpawn*>( allSpawns[iIndex] ) ) )
+			{
+				iChosen = iIndex;
+			}
+		}
+	}
+	if ( iChosen < 0 )
+	{
+		// every spawner is busy, so overlap is allowed
+		iChosen = RandomInt( 0, iCount - 1 );
+	}
+
+	CPasstimeBallSpawn *pChosen = static_cast<CPasstimeBallSpawn*>( allSpawns[iChosen] );
+	pChosen->m_flLastBallSpawnTime = gpGlobals->curtime;
+	m_flLastClaimTime = gpGlobals->curtime;
+	m_iSpawnerCursor = ( iChosen + 1 ) % iCount;
+	return pChosen;
+}
+
+//-----------------------------------------------------------------------------
+CPasstimeBall *CTFPasstimeLogic::GetBall( int i ) const
+{
+	if ( ( i < 0 ) || ( i >= m_iNumBalls ) )
+	{
+		return nullptr;
+	}
+	CBaseEntity *pEnt = m_hBalls[i].Get();
+	return pEnt ? assert_cast<CPasstimeBall*>( pEnt ) : nullptr;
+}
+
+//-----------------------------------------------------------------------------
+CPasstimeBall *CTFPasstimeLogic::GetCarriedBall( CTFPlayer *pPlayer ) const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->GetCarrier() == pPlayer )
+		{
+			return pBall;
+		}
+	}
+	return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+CPasstimeBall *CTFPasstimeLogic::GetRelevantBallForPlayer( CTFPlayer *pPlayer ) const
+{
+	CPasstimeBall *pCarried = GetCarriedBall( pPlayer );
+	if ( pCarried )
+	{
+		return pCarried;
+	}
+	return GetGameBall();
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::RegisterBall( CPasstimeBall *pBall )
+{
+	if ( !pBall )
+	{
+		return;
+	}
+	if ( pBall->IsPracticeBall() ? ( GetTrainingBallCount() >= kMaxTrainingBalls ) : ( GetGameBallCount() >= kMaxPasstimeBalls ) )
+	{
+		return;
+	}
+	// avoid duplicates
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		if ( GetBall( i ) == pBall )
+		{
+			return;
+		}
+	}
+	m_hBalls.Set( m_iNumBalls, pBall );
+	++m_iNumBalls;
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::UnregisterBall( CPasstimeBall *pBall )
+{
+	if ( !pBall )
+	{
+		return;
+	}
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		if ( GetBall( i ) != pBall )
+		{
+			continue;
+		}
+		int iLast = m_iNumBalls - 1;
+		if ( i != iLast )
+		{
+			m_hBalls.Set( i, m_hBalls.Get( iLast ) );
+		}
+		m_hBalls.Set( iLast, (CBaseEntity*)NULL );
+		--m_iNumBalls;
+		return;
+	}
+}
+
+//-----------------------------------------------------------------------------
+CPasstimeBall *CTFPasstimeLogic::SpawnGameBall( const Vector &vecOrigin, const QAngle &angles )
+{
+	CPasstimeBall *pBall = CPasstimeBall::Create( vecOrigin, angles );
+	if ( !pBall )
+	{
+		return nullptr;
+	}
+	pBall->SetOwner( NULL );
+	RegisterBall( pBall );
+	return pBall;
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::SpawnPracticeBallForPlayer( CTFPlayer *pPlayer )
+{
+	if ( !pPlayer )
+	{
+		return;
+	}
+	DestroyPracticeBallsForPlayer( pPlayer );
+	if ( GetTrainingBallCount() >= kMaxTrainingBalls )
+	{
+		return;
+	}
+	CPasstimeBall *pBall = CPasstimeBall::Create( pPlayer->GetAbsOrigin(), QAngle( 0, 0, 0 ) );
+	if ( !pBall )
+	{
+		return;
+	}
+	pBall->SetOwner( pPlayer );
+	RegisterBall( pBall );
+	pBall->ChangeTeam( TEAM_UNASSIGNED );
+	pBall->SetStateCarried( pPlayer );
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::DestroyPracticeBallsForPlayer( CTFPlayer *pPlayer )
+{
+	for ( int i = m_iNumBalls - 1; i >= 0; --i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->GetOwner() == pPlayer )
+		{
+			if ( pBall->GetCarrier() == pPlayer )
+			{
+				pPlayer->m_Shared.SetHasPasstimeBall( false );
+			}
+			pBall->RetireBall();
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+CPasstimeBall *CTFPasstimeLogic::GetTrainingBallForPlayer( CTFPlayer *pPlayer ) const
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->GetOwner() == pPlayer )
+			return pBall;
+	}
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
+CON_COMMAND_F( pf_training_ball_give, "Gives you a training ball.", FCVAR_CHEAT )
+{
+	if ( !UTIL_IsCommandIssuedByServerAdmin() )
+		return;
+
+	if ( !pf_training_ball_enabled.GetBool() )
+	{
+		Msg( "Training ball is disabled.\n" );
+		return;
+	}
+
+	CBasePlayer *pCmdPlayer = UTIL_GetCommandClient();
+	if ( !pCmdPlayer )
+		return;
+
+	CTFPlayer *pPlayer = ToTFPlayer( pCmdPlayer );
+	if ( !pPlayer || !g_pPasstimeLogic )
+		return;
+
+	CPasstimeBall *pCarried = g_pPasstimeLogic->GetCarriedBall( pPlayer );
+	if ( pCarried && !pCarried->IsPracticeBall() )
+	{
+		g_pPasstimeLogic->EjectBall( pCarried, pPlayer, pPlayer );
+	}
+
+	g_pPasstimeLogic->SpawnPracticeBallForPlayer( pPlayer );
+}
+
+//-----------------------------------------------------------------------------
+CON_COMMAND_F( pf_training_ball_remove, "Removes your personal training ball.", FCVAR_CHEAT )
+{
+	if ( !UTIL_IsCommandIssuedByServerAdmin() )
+		return;
+
+	CBasePlayer *pCmdPlayer = UTIL_GetCommandClient();
+	if ( !pCmdPlayer )
+		return;
+
+	CTFPlayer *pPlayer = ToTFPlayer( pCmdPlayer );
+	if ( !pPlayer || !g_pPasstimeLogic )
+		return;
+
+	g_pPasstimeLogic->DestroyPracticeBallsForPlayer( pPlayer );
+}
 
 //-----------------------------------------------------------------------------
 CTFPasstimeLogic::CTFPasstimeLogic() 
@@ -117,7 +423,12 @@ CTFPasstimeLogic::CTFPasstimeLogic()
 	m_SecretRoom_state = SecretRoomState::None;
 	memset( m_SecretRoom_slottedPlayers, 0, sizeof( m_SecretRoom_slottedPlayers ) );
 
+	m_iNumBalls = 0;
+	m_iSpawnerCursor = 0;
+	m_iBallsToRespawn = 0;
+	m_flLastClaimTime = -1000.0f;
 	m_flNextCrowdReactionTime = 0.0f;
+	m_flLastBallSpawnSoundTime = -1.0f;
 	m_nPackMemberBits = 0;
 	m_nPrevPackMemberBits = 0;
 }
@@ -131,6 +442,7 @@ CTFPasstimeLogic::~CTFPasstimeLogic()
 	// this has been a problem in the client code.
 	g_pPasstimeLogic = NULL;
 	delete m_pRespawnCountdown;
+	delete m_pOvertimeCountdown;
 }
 
 //-----------------------------------------------------------------------------
@@ -156,6 +468,7 @@ void CTFPasstimeLogic::Spawn()
 	//PF - Removed halloween changes
 	const auto *pCountdownSounds = &sCountdownSoundsRoundBegin;
 	m_pRespawnCountdown = new CCountdownAnnouncer( pCountdownSounds );
+	m_pOvertimeCountdown = new CCountdownAnnouncer( pCountdownSounds );
 
 
 	SetContextThink( &CTFPasstimeLogic::PostSpawn, gpGlobals->curtime, "postspawn" );
@@ -302,12 +615,19 @@ void CTFPasstimeLogic::PostSpawn()
 }
 
 //-----------------------------------------------------------------------------
-bool CTFPasstimeLogic::AddBallPower( int iPower )
+bool CTFPasstimeLogic::AddBallPower( CPasstimeBall *pBall, int iPower )
 {
+	if ( !pBall )
+	{
+		return false;
+	}
+
 	int iThreshold = tf_passtime_powerball_threshold.GetInt();
-	bool bWasAboveThreshold = m_iBallPower > iThreshold;
-	m_iBallPower = clamp( m_iBallPower + iPower, 0, 100 );
-	bool bIsAboveThreshold = m_iBallPower > iThreshold;
+	int iOldPower = pBall->GetBallPower();
+	bool bWasAboveThreshold = iOldPower > iThreshold;
+	pBall->SetBallPower( clamp( iOldPower + iPower, 0, 100 ) );
+	int iNewPower = pBall->GetBallPower();
+	bool bIsAboveThreshold = iNewPower > iThreshold;
 	if ( bWasAboveThreshold && !bIsAboveThreshold ) 
 	{
 		m_onBallPowerDown.FireOutput( this, this );
@@ -331,33 +651,55 @@ bool CTFPasstimeLogic::AddBallPower( int iPower )
 }
 
 //-----------------------------------------------------------------------------
-void CTFPasstimeLogic::ClearBallPower()
+void CTFPasstimeLogic::ClearBallPower( CPasstimeBall *pBall )
 {
-	AddBallPower( -m_iBallPower );
+	if ( !pBall )
+	{
+		pBall = GetGameBall();
+	}
+	if ( pBall )
+	{
+		pBall->SetBallPower( 0 );
+	}
+}
+
+//-----------------------------------------------------------------------------
+bool CTFPasstimeLogic::IsAnyBallAbovePowerThreshold() const
+{
+	int iThreshold = tf_passtime_powerball_threshold.GetInt();
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && pBall->GetBallPower() > iThreshold )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::BallPower_PowerThink()
 {
-	CPasstimeBall *pBall = GetBall();
-	if ( !IsGamestatePlayable() || !pBall )
-	{
-		SetContextThink( &CTFPasstimeLogic::BallPower_PowerThink, 
-			gpGlobals->curtime, "BallPower_PowerThink" );
-		return;
-	}
-
-	float flTickTime = (pBall->GetTeamNumber() == TEAM_UNASSIGNED)
-		? tf_passtime_powerball_decaysec_neutral.GetFloat()
-		: tf_passtime_powerball_decaysec.GetFloat();
-
 	SetContextThink( &CTFPasstimeLogic::BallPower_PowerThink,
-		gpGlobals->curtime + flTickTime, "BallPower_PowerThink" );
+		gpGlobals->curtime + 1.0f, "BallPower_PowerThink" );
 
-
-	if ( !pBall->GetHomingTarget() )
+	for ( int i = 0; i < m_iNumBalls; ++i )
 	{
-		AddBallPower( -tf_passtime_powerball_decayamount.GetInt() );
+		CPasstimeBall *pBall = GetBall( i );
+		if ( !pBall || !IsGamestatePlayable() )
+		{
+			continue;
+		}
+
+		float flTickTime = (pBall->GetTeamNumber() == TEAM_UNASSIGNED)
+			? tf_passtime_powerball_decaysec_neutral.GetFloat()
+			: tf_passtime_powerball_decaysec.GetFloat();
+
+		if ( !pBall->GetHomingTarget() )
+		{
+			AddBallPower( pBall, -tf_passtime_powerball_decayamount.GetInt() );
+		}
 	}
 }
 
@@ -444,10 +786,7 @@ void CTFPasstimeLogic::BallPower_PackThink()
 	m_nPrevPackMemberBits = m_nPackMemberBits;
 	m_nPackMemberBits = 0;
 	
-	CTFPlayer *pCarrier = GetBallCarrier();
-
-	// Check if pack speed is active
-	if ( tf_passtime_pack_range.GetFloat() <= 0 || !IsGamestatePlayable() || !pCarrier )
+	if ( tf_passtime_pack_range.GetFloat() <= 0 || !IsGamestatePlayable() )
 	{
 		m_nPackMemberBits = 0; // redundant assignment for clarity
 		ReplicatePackMemberBits();
@@ -455,47 +794,73 @@ void CTFPasstimeLogic::BallPower_PackThink()
 		return;
 	}
 
-	// Find the pack members
-	m_nPackMemberBits = CalcPackMemberBits( pCarrier );
-	ReplicatePackMemberBits();
-	
-	// Find the maximum MaxSpeed of the pack
-	bool bHasNearbyTeammate = false;
-	float flMaxMaxSpeed = -1;
-	uint64 nMask = 1;
-	for ( int i = 1; i <= MAX_PLAYERS; ++i, nMask <<= 1 )
+	float flGlobalMaxMaxSpeed = -1;
+
+	for ( int iBall = 0; iBall < m_iNumBalls; ++iBall )
 	{
-		if ( m_nPackMemberBits & nMask )
+		CPasstimeBall *pBall = GetBall( iBall );
+		if ( !pBall )
 		{
-			CTFPlayer *pPlayer = (CTFPlayer*)UTIL_PlayerByIndex( i );
-			if ( pPlayer && pPlayer->IsAlive() )
+			continue;
+		}
+
+		CTFPlayer *pCarrier = pBall->GetCarrier();
+		if ( !pCarrier || pBall->IsPracticeBall() )
+		{
+			continue;
+		}
+
+		// Find the pack members for this ball
+		uint64 nThisBallPackBits = CalcPackMemberBits( pCarrier );
+		m_nPackMemberBits |= nThisBallPackBits;
+
+		// Find the maximum MaxSpeed of the pack
+		bool bHasNearbyTeammate = false;
+		float flMaxMaxSpeed = -1;
+		uint64 nMask = 1;
+		for ( int i = 1; i <= MAX_PLAYERS; ++i, nMask <<= 1 )
+		{
+			if ( nThisBallPackBits & nMask )
 			{
-				bHasNearbyTeammate = bHasNearbyTeammate || ( pPlayer != pCarrier );
-				flMaxMaxSpeed = MAX( flMaxMaxSpeed, pPlayer->TeamFortress_CalculateMaxSpeed() );
+				CTFPlayer *pPlayer = (CTFPlayer*)UTIL_PlayerByIndex( i );
+				if ( pPlayer && pPlayer->IsAlive() )
+				{
+					bHasNearbyTeammate = bHasNearbyTeammate || ( pPlayer != pCarrier );
+					flMaxMaxSpeed = MAX( flMaxMaxSpeed, pPlayer->TeamFortress_CalculateMaxSpeed() );
+				}
 			}
+		}
+
+		if ( flMaxMaxSpeed >= 0 )
+		{
+			flGlobalMaxMaxSpeed = MAX( flGlobalMaxMaxSpeed, flMaxMaxSpeed );
+		}
+
+		// Mini-crit conditions
+		float flLastReceived = pBall->GetLastReceived();
+		bool bProtActive = pBall->IsProtActive();
+		if ( flLastReceived + p4ss_minicrit_protection_time.GetFloat() < gpGlobals->curtime || 
+			( pCarrier->InAirDueToExplosion() && ( flLastReceived + 0.15f < gpGlobals->curtime ) ) )
+		{
+			pBall->SetProtActive( false );
+			pCarrier->m_Shared.AddCond( TF_COND_PASSTIME_PENALTY_DEBUFF, TICK_INTERVAL * 2 );
+		}
+		else if (bHasNearbyTeammate)
+		{
+			pBall->SetProtActive( true );
+			m_flPackSpeed = MAX( m_flPackSpeed, flMaxMaxSpeed );
+		}
+		else if (!bHasNearbyTeammate && !bProtActive)
+		{
+			pCarrier->m_Shared.AddCond( TF_COND_PASSTIME_PENALTY_DEBUFF, TICK_INTERVAL * 2 );
+		}
+		else
+		{
+			m_flPackSpeed = MAX( m_flPackSpeed, flMaxMaxSpeed );
 		}
 	}
 
-	// Mini-crit conditions
-	if ( m_flBallLastReceived + p4ss_minicrit_protection_time.GetFloat() < gpGlobals->curtime || 
-		( pCarrier->InAirDueToExplosion() && ( m_flBallLastReceived + 0.15f < gpGlobals->curtime ) ) )
-	{
-		m_bProtActive = false;
-		pCarrier->m_Shared.AddCond( TF_COND_PASSTIME_PENALTY_DEBUFF, TICK_INTERVAL * 2 );
-	}
-	else if (bHasNearbyTeammate)
-	{
-		m_bProtActive = true;
-		m_flPackSpeed = flMaxMaxSpeed;
-	}
-	else if (!bHasNearbyTeammate && !m_bProtActive)
-	{
-		pCarrier->m_Shared.AddCond( TF_COND_PASSTIME_PENALTY_DEBUFF, TICK_INTERVAL * 2 );
-	}
-	else
-	{
-		m_flPackSpeed = flMaxMaxSpeed;
-	}
+	ReplicatePackMemberBits();
 
 	// Now tell all the relevant players to refresh their maxspeed
 	SetSpeedOnFlaggedPlayers( m_nPackMemberBits | m_nPrevPackMemberBits );
@@ -506,12 +871,6 @@ void CTFPasstimeLogic::BallPower_PackHealThink()
 {
 	SetContextThink( &CTFPasstimeLogic::BallPower_PackHealThink, gpGlobals->curtime + 1, "packheal" );
 	if (tf_passtime_pack_hp_per_sec.GetFloat() <= 0) return;
-
-	CTFPlayer *pCarrier = GetBallCarrier();
-	if ( !pCarrier )
-	{
-		return;
-	}
 
 	uint64 nMask = 1;
 	uint64 nPackMemberBits = m_nPackMemberBits;
@@ -524,7 +883,7 @@ void CTFPasstimeLogic::BallPower_PackHealThink()
 		}
 
 		CTFPlayer *pPlayer = (CTFPlayer*)UTIL_PlayerByIndex( i );
-		if ( !pPlayer || ( pPlayer == pCarrier ) || !pPlayer->IsAlive() )
+		if ( !pPlayer || !pPlayer->IsAlive() )
 		{
 			continue;
 		}
@@ -571,14 +930,18 @@ void CTFPasstimeLogic::FireGameEvent( IGameEvent *pEvent )
 		// this only happens when mp_stalemate_enable is on
 		CTF_GameStats.m_passtimeStats.summary.nRoundMaxSec = 
 			TFGameRules()->GetActiveRoundTimer()->GetTimeRemaining();
-		RespawnBall();
+		RespawnAllBalls();
 	}
 	else if ( !V_strcmp( pEventName, "teamplay_setup_finished" ) )
 	{
-		// respawn the ball even though it already exists so that it doesn't
-		// catch any rotation from any spawn box it might be sitting in that
+		// respawn the balls even though they already exist so that they don't
+		// catch any rotation from any spawn box they might be sitting in that
 		// hasn't opened yet.
-		SpawnBallAtRandomSpawner();
+		int iCount = clamp( pf_ball_count.GetInt(), 1, kMaxPasstimeBalls );
+		for ( int i = GetGameBallCount(); i < iCount; ++i )
+		{
+			SpawnBallAtRandomSpawner();
+		}
 	}
 }
 
@@ -587,7 +950,7 @@ void CTFPasstimeLogic::FireGameEvent( IGameEvent *pEvent )
 // For stats
 float CTFPasstimeLogic::CalcProgressFrac() const
 {
-	if ( !GetBall() || (m_iNumSections == 0) )
+	if ( !GetGameBall() || (m_iNumSections == 0) )
 	{
 		return 0;
 	}
@@ -597,7 +960,7 @@ float CTFPasstimeLogic::CalcProgressFrac() const
 	//
 	Vector vecOrigin;
 	{
-		CPasstimeBall *pBall = GetBall();
+		CPasstimeBall *pBall = GetGameBall();
 		CTFPlayer *pCarrier = pBall->GetCarrier();
 		vecOrigin = pCarrier 
 			? pCarrier->GetAbsOrigin()
@@ -644,10 +1007,13 @@ float CTFPasstimeLogic::CalcProgressFrac() const
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::BallHistSampleThink()
 {
-	CPasstimeBall *pBall = m_hBall;
-	if ( IsGamestatePlayable() && pBall && !pBall->BOutOfPlay() )
+	for ( int i = 0; i < m_iNumBalls; ++i )
 	{
-		CTF_GameStats.m_passtimeStats.AddBallFracSample( CalcProgressFrac() );
+		CPasstimeBall *pBall = GetBall( i );
+		if ( IsGamestatePlayable() && pBall && !pBall->BOutOfPlay() )
+		{
+			CTF_GameStats.m_passtimeStats.AddBallFracSample( CalcProgressFrac() );
+		}
 	}
 
 	SetContextThink( &CTFPasstimeLogic::BallHistSampleThink, gpGlobals->curtime + 0.125f, "BallHistSampleThink" );
@@ -681,9 +1047,9 @@ static void MapEventStat( CBaseEntity *pActivator, CPasstimeBall *pBall, int *pT
 }
 
 //-----------------------------------------------------------------------------
-CTFPlayer *CTFPasstimeLogic::GetBallCarrier() const
+CTFPlayer *CTFPasstimeLogic::GetBallCarrier( CPasstimeBall *pBall ) const
 {
-	const CPasstimeBall *pBall = m_hBall.Get();
+	pBall = pBall ? pBall : GetGameBall();
 	if ( !pBall )
 	{
 		return nullptr;
@@ -694,7 +1060,7 @@ CTFPlayer *CTFPasstimeLogic::GetBallCarrier() const
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::InputSpeedBoostUsed( inputdata_t &input )
 {
-	MapEventStat( input.pActivator, GetBall(), 
+	MapEventStat( input.pActivator, GetGameBall(), 
 		&CTF_GameStats.m_passtimeStats.summary.nTotalSpeedBoosts,
 		&CTF_GameStats.m_passtimeStats.summary.nTotalCarrierSpeedBoosts );
 }
@@ -702,7 +1068,7 @@ void CTFPasstimeLogic::InputSpeedBoostUsed( inputdata_t &input )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::InputJumpPadUsed( inputdata_t &input )
 {
-	MapEventStat( input.pActivator, GetBall(), 
+	MapEventStat( input.pActivator, GetGameBall(), 
 		&CTF_GameStats.m_passtimeStats.summary.nTotalJumpPads,
 		&CTF_GameStats.m_passtimeStats.summary.nTotalCarrierJumpPads );
 }
@@ -760,6 +1126,17 @@ void CTFPasstimeLogic::Precache()
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::OnEnterGoal( CPasstimeBall *pBall, CFuncPasstimeGoal *pGoal )
 {
+	if ( !pBall )
+	{
+		return;
+	}
+
+	if ( pBall->IsPracticeBall() )
+	{
+		DestroyPracticeBallsForPlayer( pBall->GetOwner() );
+		return;
+	}
+
 	if ( pGoal->BDisableBallScore() || !IsGamestatePlayable() )
 	{
 		return;
@@ -769,7 +1146,7 @@ void CTFPasstimeLogic::OnEnterGoal( CPasstimeBall *pBall, CFuncPasstimeGoal *pGo
 	if ( pGoal->Points() == -1 ) 
 	{
 		m_onBallRemoved.FireOutput( pGoal, pGoal );
-		SetContextThink( &CTFPasstimeLogic::RespawnBall, gpGlobals->curtime, "spawnball" );
+		RespawnBall( pBall );
 		return;
 	}
 
@@ -802,10 +1179,18 @@ void CTFPasstimeLogic::OnEnterGoal( CTFPlayer *pPlayer, CFuncPasstimeGoal *pGoal
 {
 	if ( IsGamestatePlayable() 
 		&& pGoal->BEnablePlayerScore()
-		&& pPlayer->m_Shared.HasPasstimeBall() 
-		&& (pPlayer->GetTeamNumber() == pGoal->GetTeamNumber()) )
+		&& pPlayer->m_Shared.HasPasstimeBall() )
 	{
-		Score( pPlayer, pGoal );
+		CPasstimeBall *pBall = GetCarriedBall( pPlayer );
+		if ( pBall && pBall->IsPracticeBall() )
+		{
+			return;
+		}
+
+		if ( pPlayer->GetTeamNumber() == pGoal->GetTeamNumber() )
+		{
+			Score( pPlayer, pGoal );
+		}
 	}
 }
 
@@ -823,6 +1208,11 @@ void CTFPasstimeLogic::OnStayInGoal( CTFPlayer *pPlayer, CFuncPasstimeGoal *pGoa
 //-----------------------------------------------------------------------------
 bool CTFPasstimeLogic::OnBallCollision( CPasstimeBall *pBall, int index, gamevcollisionevent_t *pEvent )
 {
+	if ( pBall && pBall->IsPracticeBall() )
+	{
+		return true;
+	}
+
 	if ( !IsGamestatePlayable() )
 	{
 		return false;
@@ -840,15 +1230,66 @@ bool CTFPasstimeLogic::OnBallCollision( CPasstimeBall *pBall, int index, gamevco
 //-----------------------------------------------------------------------------
 bool CTFPasstimeLogic::BCanPlayerPickUpBall( CTFPlayer *pPlayer, HudNotification_t *pReason ) const
 {
+	return BCanPlayerPickUpBall( pPlayer, nullptr, pReason );
+}
+
+//-----------------------------------------------------------------------------
+bool CTFPasstimeLogic::BCanPlayerPickUpBall( CTFPlayer *pPlayer, CPasstimeBall *pBall, HudNotification_t *pReason ) const
+{
 	if ( pReason ) *pReason = (HudNotification_t) 0;
 
-	const auto *pBall = m_hBall.Get();
-	if ( !pBall ) 
-	{ 
-		return false; 
+	if ( !pPlayer )
+	{
+		return false;
 	}
 
-	if ( !pPlayer || !IsGamestatePlayable() )
+	CPasstimeBall *pCarriedBall = GetCarriedBall( pPlayer );
+	if ( !pBall )
+	{
+		// Caller did not specify a ball, so we can pick up any available ball.
+		// If the player is already carrying another ball, they cannot pick up more.
+		if ( pCarriedBall )
+		{
+			return false;
+		}
+		pBall = GetGameBall();
+		if ( !pBall )
+		{
+			return false;
+		}
+	}
+	else if ( pCarriedBall && ( pCarriedBall != pBall ) )
+	{
+		// Player is already carrying a different ball.
+		return false;
+	}
+
+	if ( EntityIsInNoBallZone( pPlayer ) )
+	{
+		if ( pReason ) *pReason = HUD_NOTIFY_PASSTIME_NO_OOB;
+		return false;
+	}
+
+	// Practice/training balls can be carried by their owner at any time, regardless of round state.
+	// A thrown training ball can't be re-caught by its owner until it lands.
+	if ( pBall && pBall->IsPracticeBall() )
+	{
+		return pBall->CanPlayerInteract( pPlayer ) && ( pBall->GetThrower() != pPlayer );
+	}
+
+	// a game ball can't be picked up by the player who threw it until it lands
+	if ( pBall && ( pBall->GetThrower() == pPlayer ) )
+	{
+		return false;
+	}
+
+	// while the player has a training ball in the world, they can't interact with game balls
+	if ( GetTrainingBallForPlayer( pPlayer ) )
+	{
+		return false;
+	}
+
+	if ( !IsGamestatePlayable() )
 	{
 		return false;
 	}
@@ -921,12 +1362,6 @@ bool CTFPasstimeLogic::BCanPlayerPickUpBall( CTFPlayer *pPlayer, HudNotification
 		}
 	}
 
-	if ( EntityIsInNoBallZone( pPlayer ) )
-	{
-		if ( pReason ) *pReason = HUD_NOTIFY_PASSTIME_NO_OOB;
-		return false;
-	}
-
 	// Check for jack armor cooldown - use GetLastThrower() which persists even after ball is neutralized
 	if ( tf_passtime_no_jack_armor.GetBool() && pBall->GetLastThrower() == pPlayer )
 	{
@@ -953,15 +1388,15 @@ int CTFPasstimeLogic::UpdateTransmitState()
 }
 
 //-----------------------------------------------------------------------------
-void CTFPasstimeLogic::RespawnBall()
+void CTFPasstimeLogic::RespawnBall( CPasstimeBall *pBall )
 {
-	Assert( m_hBall );
-	if ( !m_hBall ) // paranoia
+	pBall = pBall ? pBall : GetGameBall();
+	if ( !pBall || pBall->IsPracticeBall() ) // training balls never respawn
 	{
 		return;
 	}
 
-	ClearBallPower();
+	ClearBallPower( pBall );
 
 	// TFGameRules only checks capture limit once per second, so this code can't rely on game state changing
 	int iScoreLimit = tf_passtime_scores_per_round.GetInt();
@@ -971,59 +1406,102 @@ void CTFPasstimeLogic::RespawnBall()
 	gamerules_roundstate_t state = TFGameRules()->State_Get();
 	if ( bGameOver || (state == GR_STATE_GAME_OVER) || (state == GR_STATE_TEAM_WIN) || (state == GR_STATE_RESTART) )
 	{
-		m_hBall->SetStateOutOfPlay();
-		MoveBallToSpawner();
+		pBall->RetireBall();
 	}
 	else if ( ( state == GR_STATE_RND_RUNNING ) || ( state == GR_STATE_STALEMATE ) )
 	{
-		m_hBall->SetStateOutOfPlay();
-		MoveBallToSpawner();
-		
-		// Pause the timer when ball is out of play
-		CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
-		if ( pTimer && !pTimer->IsTimerPaused() )
-		{
-			pTimer->PauseTimer();
-		}
-		
-		if ( !pTimer || ( pTimer->GetTimeRemaining() > m_iBallSpawnCountdownSec ) )
-		{
-			m_pRespawnCountdown->Start( m_iBallSpawnCountdownSec );
+		pBall->SetStateOutOfPlay();
+		PauseRoundTimerIfNoGameBallInPlay( pBall );
 
-			SpawnBallAtRandomSpawnerThink();
-		}
-		//----------------------------------------
-		// ends game if not enough time to spawn ball
-		else if ( pTimer->GetTimeRemaining() < m_iBallSpawnCountdownSec )
+		// ends game if not enough time to spawn ball (overtime has no clock to run out)
+		CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
+		if ( !TFGameRules()->InOvertime() && pTimer && ( pTimer->GetTimeRemaining() < m_iBallSpawnCountdownSec ) )
 		{
+			MoveBallToSpawner( pBall );
 			pTimer->SetTimeRemaining(0);
 			EndRoundExpiredTimer();
 		}
-		//----------------------------------------
+		else
+		{
+			// game balls are replaced by new entities when the countdown finishes
+			m_iBallsToRespawn++;
+			pBall->RetireBall();
+			m_pRespawnCountdown->Start( m_iBallSpawnCountdownSec );
+			SetContextThink( &CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink, gpGlobals->curtime + 1, "spawnball" );
+		}
 	}
 	else // pre-round etc
 	{
-		SpawnBallAtRandomSpawner(); 
+		pBall->SetStateOutOfPlay();
+		MoveBallToSpawner( pBall );
 	}
 
 	m_ballLastHeldTimes.RemoveAll();
 }
 
 //-----------------------------------------------------------------------------
+void CTFPasstimeLogic::PauseRoundTimerIfNoGameBallInPlay( CPasstimeBall *pBall )
+{
+	CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
+	if ( pTimer && !pTimer->IsTimerPaused() && !BAnyGameBallInPlay( pBall ) )
+	{
+		pTimer->PauseTimer();
+	}
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::ResumeRoundTimer()
+{
+	gamerules_roundstate_t state = TFGameRules()->State_Get();
+	if ( ( state != GR_STATE_RND_RUNNING ) && ( state != GR_STATE_STALEMATE ) )
+	{
+		return;
+	}
+	CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
+	if ( pTimer && pTimer->IsTimerPaused() )
+	{
+		pTimer->ResumeTimer();
+	}
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::RespawnAllBalls()
+{
+	for ( int i = 0; i < m_iNumBalls; ++i )
+	{
+		CPasstimeBall *pBall = GetBall( i );
+		if ( pBall && !pBall->IsPracticeBall() )
+		{
+			RespawnBall( pBall );
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 void CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink()
 {
+	if ( m_iBallsToRespawn == 0 )
+	{
+		return;
+	}
+
 	if ( TFGameRules()->State_Get() == GR_STATE_GAME_OVER )
 	{
-		m_hBall->SetStateOutOfPlay();
+		m_iBallsToRespawn = 0;
 		m_pRespawnCountdown->Disable();
+		return;
 	}
-	else if ( m_pRespawnCountdown->Tick( 1 ) )
+
+	if ( m_pRespawnCountdown->Tick( 1 ) )
 	{
-		SpawnBallAtRandomSpawner();
-	}
-	else
-	{
-		SetContextThink( &CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink, gpGlobals->curtime + 1, "spawnball" );
+		for ( int i = 0; i < m_iBallsToRespawn; ++i )
+		{
+			SpawnBallAtRandomSpawner();
+		}
+		m_iBallsToRespawn = 0;
+		m_pRespawnCountdown->Disable();
+		ResumeRoundTimer();
+		return;
 	}
 
 	if ( (int)m_pRespawnCountdown->GetTimeRemain() == 11 )
@@ -1037,56 +1515,62 @@ void CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink()
 		WRITE_FLOAT( m_pRespawnCountdown->GetTimeRemain() + 1.0f );
 		MessageEnd();
 	}
+
+	SetContextThink( &CTFPasstimeLogic::SpawnBallAtRandomSpawnerThink, gpGlobals->curtime + 1, "spawnball" );
 }
 
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::SpawnBallAtRandomSpawner()
 {
-	const auto &allSpawns = IPasstimeBallSpawnAutoList::AutoList();
-	int i = RandomInt( 0, allSpawns.Count() - 1 );
-	CPasstimeBallSpawn *pSpawner = static_cast< CPasstimeBallSpawn *>( allSpawns[i] );	
-	SpawnBallAtSpawner( pSpawner );
+	if ( CPasstimeBallSpawn *pSpawner = ClaimSpawnerForBall( nullptr ) )
+	{
+		SpawnBallAtSpawner( pSpawner );
+	}
 }
 
 //-----------------------------------------------------------------------------
-void CTFPasstimeLogic::MoveBallToSpawner()
+void CTFPasstimeLogic::MoveBallToSpawner( CPasstimeBall *pBall )
 {
-	const auto &allSpawns = IPasstimeBallSpawnAutoList::AutoList();
-	int i = RandomInt( 0, allSpawns.Count() - 1 );
-	CPasstimeBallSpawn *pSpawner = static_cast< CPasstimeBallSpawn *>( allSpawns[i] );	
-	m_hBall->MoveTo( pSpawner->GetAbsOrigin(), Vector( 0, 0, 0 ) );
+	pBall = pBall ? pBall : GetGameBall();
+	if ( !pBall )
+	{
+		return;
+	}
+	if ( CPasstimeBallSpawn *pSpawner = ClaimSpawnerForBall( pBall ) )
+	{
+		pBall->TeleportTo( pSpawner->GetAbsOrigin(), Vector( 0, 0, 0 ) );
+	}
 }
 
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::SpawnBallAtSpawner( CPasstimeBallSpawn *pSpawner )
 {
-	if ( !m_hBall )
+	CPasstimeBall *pBall = SpawnGameBall( pSpawner->GetAbsOrigin(), QAngle(0,0,0) );
+	if ( !pBall )
 	{
-		// NOTE: this is the first place where the ball is created - on first spawn
-		m_hBall = CPasstimeBall::Create( pSpawner->GetAbsOrigin(), QAngle(0,0,0) );
+		return;
 	}
 
 	StopAskForBallEffects();
-	m_hBall->SetStateFree();
-	m_hBall->MoveToSpawner( pSpawner->GetAbsOrigin() );
-	m_hBall->ChangeTeam( pSpawner->GetTeamNumber() );
-	m_hBall->SetPanacea( true );
-	m_hBall->SetWinstrat( false );
-	m_onBallFree.FireOutput( m_hBall, this );
+	pBall->SetStateFree();
+	pBall->MoveToSpawner( pSpawner->GetAbsOrigin() );
+	pBall->ChangeTeam( pSpawner->GetTeamNumber() );
+	pBall->SetPanacea( true );
+	pBall->SetWinstrat( false );
+	if ( !pBall->IsPracticeBall() )
+	{
+		m_onBallFree.FireOutput( pBall, this );
+	}
 	pSpawner->m_onSpawnBall.FireOutput( pSpawner, pSpawner );
 
-	// Resume the timer when ball comes back into play
-	gamerules_roundstate_t state = TFGameRules()->State_Get();
-	if ( ( state == GR_STATE_RND_RUNNING ) || ( state == GR_STATE_STALEMATE ) )
-	{
-		CTeamRoundTimer *pTimer = TFGameRules()->GetActiveRoundTimer();
-		if ( pTimer && pTimer->IsTimerPaused() )
-		{
-			pTimer->ResumeTimer();
-		}
-	}
+	ResumeRoundTimer();
 
-	TFGameRules()->BroadcastSound( 255, "Passtime.BallSpawn" );
+	// Only broadcast the spawn whistle once during rapid/batched spawns to avoid overlapping loud sounds.
+	if ( ( m_flLastBallSpawnSoundTime < 0 ) || ( gpGlobals->curtime - m_flLastBallSpawnSoundTime >= 0.5f ) )
+	{
+		TFGameRules()->BroadcastSound( 255, "Passtime.BallSpawn" );
+		m_flLastBallSpawnSoundTime = gpGlobals->curtime;
+	}
 	
 	//
 	// PF
@@ -1151,13 +1635,13 @@ void CTFPasstimeLogic::OnBallCarrierMeleeHit( CTFPlayer *pPlayer, CTFPlayer *pAt
 		return;
 	}
 
-	Assert( m_hBall );
-	if( !m_hBall )
+	CPasstimeBall *pBall = GetCarriedBall( pPlayer );
+	if ( !pBall )
 	{
 		return;
 	}
 
-	bool bTooLong = (m_hBall->GetCarryDuration() > tf_passtime_teammate_steal_time.GetFloat());
+	bool bTooLong = (pBall->GetCarryDuration() > tf_passtime_teammate_steal_time.GetFloat());
 	if ( pPlayer->m_bPasstimeBallSlippery || bTooLong )
 	{
 		// once a player has held the ball too long, mark them as a jerk
@@ -1192,8 +1676,8 @@ void CTFPasstimeLogic::OnBallCarrierDamaged( CTFPlayer *pPlayer, CTFPlayer *pAtt
 		return;
 	}
 
-	Assert( m_hBall );
-	if ( !m_hBall )
+	CPasstimeBall *pBall = GetCarriedBall( pPlayer );
+	if ( !pBall )
 	{
 		return;
 	}
@@ -1223,13 +1707,25 @@ void CTFPasstimeLogic::CrowdReactionSound( int iTeam )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::StealBall( CTFPlayer *pFrom, CTFPlayer *pTo ) 
 {
+	StealBall( GetCarriedBall( pFrom ), pFrom, pTo );
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::StealBall( CPasstimeBall *pBall, CTFPlayer *pFrom, CTFPlayer *pTo ) 
+{
+	pBall = pBall ? pBall : GetGameBall();
+	if ( !pBall || !pFrom )
+	{
+		return;
+	}
+
 	if ( pFrom->m_Shared.HasPasstimeBall() )
 	{
-		EjectBall( pFrom, pTo );
+		EjectBall( pBall, pFrom, pTo );
 	}
 
 	HudNotification_t cantPickUpReason;
-	if ( BCanPlayerPickUpBall( pTo, &cantPickUpReason ) )
+	if ( BCanPlayerPickUpBall( pTo, pBall, &cantPickUpReason ) )
 	{
 		if ( !pFrom->m_bPasstimeBallSlippery )
 		{
@@ -1240,8 +1736,8 @@ void CTFPasstimeLogic::StealBall( CTFPlayer *pFrom, CTFPlayer *pTo )
 
 		++CTF_GameStats.m_passtimeStats.summary.nTotalSteals;
 
-		m_hBall->SetStateCarried( pTo );
-		OnBallGet();
+		pBall->SetStateCarried( pTo );
+		OnBallGet( pBall );
 		pTo->m_Shared.AddCond( TF_COND_PASSTIME_INTERCEPTION, tf_passtime_speedboost_on_get_ball_time.GetFloat() );
 
 		int pointsToAward = 5;
@@ -1323,12 +1819,19 @@ void CTFPasstimeLogic::SetLastPassTime( CTFPlayer* pPlayer )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::EjectBall( CTFPlayer *pPlayer, CTFPlayer *pAttacker )
 {
-	if ( !m_hBall )
+	EjectBall( GetCarriedBall( pPlayer ), pPlayer, pAttacker );
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::EjectBall( CPasstimeBall *pBall, CTFPlayer *pPlayer, CTFPlayer *pAttacker )
+{
+	pBall = pBall ? pBall : GetCarriedBall( pPlayer );
+	if ( !pBall )
 	{
 		// I'm not sure how this is possible, but if I'm recording with hltv in
 		// a listen server that has bots in it (which requires a hack in the bot
 		// concommand) and I restart the game while a bot is holding the ball...
-		// then m_hBall is invalid.
+		// then the ball is invalid.
 		if ( pPlayer )
 		{
 			// This has to be true to get into this function for the case I just
@@ -1341,19 +1844,22 @@ void CTFPasstimeLogic::EjectBall( CTFPlayer *pPlayer, CTFPlayer *pAttacker )
 		return;
 	}
 
-	m_hBall->SetStateFree();
-	m_hBall->ChangeTeam( TEAM_UNASSIGNED );
+	pBall->SetStateFree();
+	pBall->ChangeTeam( TEAM_UNASSIGNED );
 	
 	Vector vecEjectVel( 0, 0, 600 );
 	vecEjectVel += pPlayer->GetAbsVelocity() * 0.1f;
-	m_hBall->MoveTo( pPlayer->GetAbsOrigin() + Vector( 0, 0, 32 ), vecEjectVel );
+	pBall->MoveTo( pPlayer->GetAbsOrigin() + Vector( 0, 0, 32 ), vecEjectVel );
 	if ( pPlayer != pAttacker ) 
 	{
 		pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_LOST_OBJECT );
 		pAttacker->SpeakConceptIfAllowed( MP_CONCEPT_PLAYER_TAUNTS );
 	}
 
-	m_onBallFree.FireOutput( m_hBall, this );
+	if ( !pBall->IsPracticeBall() )
+	{
+		m_onBallFree.FireOutput( pBall, this );
+	}
 	
 	//PF
 	//Make Merasmus question whoever died with the ball, 1% chance
@@ -1379,13 +1885,28 @@ void CTFPasstimeLogic::EjectBall( CTFPlayer *pPlayer, CTFPlayer *pAttacker )
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::LaunchBall( CTFPlayer *pPlayer, const Vector &vecPos, const Vector &vecVel )
 {
+	LaunchBall( GetCarriedBall( pPlayer ), pPlayer, vecPos, vecVel );
+}
+
+//-----------------------------------------------------------------------------
+void CTFPasstimeLogic::LaunchBall( CPasstimeBall *pBall, CTFPlayer *pPlayer, const Vector &vecPos, const Vector &vecVel )
+{
+	pBall = pBall ? pBall : GetCarriedBall( pPlayer );
+	if ( !pBall )
+	{
+		return;
+	}
+
 	if ( !p4ss_whistle_more.GetBool() )
 	{
 		StopAskForBallEffects();
 	}
-	m_hBall->SetStateFree();
-	m_hBall->MoveTo( vecPos, vecVel );
-	m_onBallFree.FireOutput( m_hBall, this );
+	pBall->SetStateFree();
+	pBall->MoveTo( vecPos, vecVel );
+	if ( !pBall->IsPracticeBall() )
+	{
+		m_onBallFree.FireOutput( pBall, this );
+	}
 	std::pair<CTFPlayer*, float> toAdd( pPlayer, gpGlobals->realtime );
 	for ( int i = 0; i < m_ballLastHeldTimes.Count(); i++ )
 	{
@@ -1404,7 +1925,7 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CFuncPasstimeGoal *pGoal )
 {
 	Assert( pPlayer && pGoal );
 	pGoal->OnScore( pPlayer->GetTeamNumber() );
-	Score( pPlayer, nullptr, pGoal->GetTeamNumber(), pGoal->Points(), pGoal->BWinOnScore(), false );
+	Score( pPlayer, GetCarriedBall( pPlayer ), pGoal->GetTeamNumber(), pGoal->Points(), pGoal->BWinOnScore(), false );
 }
 
 //-----------------------------------------------------------------------------
@@ -1435,7 +1956,6 @@ void CTFPasstimeLogic::AddCondToTeam( ETFCond eCond, int iTeam, float flTime )
 void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTeam, int iPoints, bool bForceWin, bool _isDeathBomb ) 
 {
 	StopAskForBallEffects();
-	m_pRespawnCountdown->Disable();
 
 	Assert( pPlayer );
 	if ( !pPlayer || ( iTeam == TEAM_UNASSIGNED ) )
@@ -1574,21 +2094,25 @@ void CTFPasstimeLogic::Score( CTFPlayer *pPlayer, CPasstimeBall *pBall, int iTea
 	//
 	// Game state management
 	//
-	ClearBallPower();
-	m_hBall->SetStateOutOfPlay();
-	MoveBallToSpawner(); // move it now instead of when it spawns to avoid lerping
+	CPasstimeBall *pOutOfPlayBall = pBall ? pBall : GetGameBall();
+	if ( pOutOfPlayBall )
+	{
+		ClearBallPower( pOutOfPlayBall );
 
-	//
-	// Finish round or respawn ball
-	//
-	CTeamRoundTimer *pRoundTimer = TFGameRules()->GetActiveRoundTimer();
-	if ( ( TFGameRules()->State_Get() == GR_STATE_STALEMATE ) || ( pRoundTimer && ( pRoundTimer->GetTimeRemaining() <= 0.0f ) ) )
-	{
-		EndRoundExpiredTimer();
-	}
-	else
-	{
-		SetContextThink( &CTFPasstimeLogic::RespawnBall, gpGlobals->curtime, "spawnball" );
+		//
+		// Finish round or respawn ball
+		//
+		CTeamRoundTimer *pRoundTimer = TFGameRules()->GetActiveRoundTimer();
+		if ( ( TFGameRules()->State_Get() == GR_STATE_STALEMATE ) || ( pRoundTimer && ( pRoundTimer->GetTimeRemaining() <= 0.0f ) ) )
+		{
+			pOutOfPlayBall->SetStateOutOfPlay();
+			MoveBallToSpawner( pOutOfPlayBall ); // move it now instead of when it spawns to avoid lerping
+			EndRoundExpiredTimer();
+		}
+		else
+		{
+			RespawnBall( pOutOfPlayBall );
+		}
 	}
 
 	//
@@ -1612,8 +2136,14 @@ bool TraceEntityFilterPlayer( IHandleEntity *entity, int contentsMask ) {
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pBall )
 {
-	if ( pBall != m_hBall )
+	if ( !pBall )
 	{
+		return;
+	}
+
+	if ( pBall->IsPracticeBall() )
+	{
+		pBall->SetStateCarried( pCatcher );
 		return;
 	}
 
@@ -1637,8 +2167,8 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 		int iDistanceBonus = ( int ) ( pBall->GetAirtimeSec() * tf_passtime_powerball_airtimebonus.GetFloat() );
 		iDistanceBonus = clamp( iDistanceBonus, 0, tf_passtime_powerball_maxairtimebonus.GetInt() );
 		int iPassPoints = tf_passtime_powerball_passpoints.GetInt();
-		AddBallPower( iPassPoints + iDistanceBonus );
-		bAllowCheerSound = m_iBallPower < tf_passtime_powerball_threshold.GetInt();
+		AddBallPower( pBall, iPassPoints + iDistanceBonus );
+		bAllowCheerSound = pBall->GetBallPower() < tf_passtime_powerball_threshold.GetInt();
 
 		CPASFilter pasFilter( pCatcher->GetAbsOrigin() );
 		pCatcher->EmitSound( pasFilter, pCatcher->entindex(), "Passtime.BallCatch" );
@@ -1866,36 +2396,41 @@ void CTFPasstimeLogic::OnPlayerTouchBall( CTFPlayer *pCatcher, CPasstimeBall *pB
 
 	if ( ((iExperiment == EPasstimeExperiment_Telepass::TeleportToCatcherMaintainPossession)
 			|| (iExperiment == EPasstimeExperiment_Telepass::SwapWithCatcher))
-		&& BCanPlayerPickUpBall( pThrower, nullptr ) )
+		&& BCanPlayerPickUpBall( pThrower, (CPasstimeBall*)nullptr ) )
 	{
 		EjectBall( pCatcher, pThrower );
-		m_hBall->SetStateCarried( pThrower );
-		OnBallGet();					
+		pBall->SetStateCarried( pThrower );
+		OnBallGet( pBall );					
 	}
 	else 
 	{
 		pBall->SetStateCarried( pCatcher );
-		OnBallGet();
+		OnBallGet( pBall );
 	}
 }
 
 //-----------------------------------------------------------------------------
-void CTFPasstimeLogic::OnBallGet() 
+void CTFPasstimeLogic::OnBallGet( CPasstimeBall *pBall ) 
 {	
+	if ( !pBall )
+	{
+		return;
+	}
+
 	if ( p4ss_whistle_more.GetBool() )
 	{
-		StopAskForBallEffectsOnOpposingTeam(m_hBall->GetCarrier());
+		StopAskForBallEffectsOnOpposingTeam( pBall->GetCarrier() );
 	}
 	else
 	{
 		StopAskForBallEffects();
 	}
-	if ( CTFPlayer *pPlayer = m_hBall->GetCarrier() )
+	if ( CTFPlayer *pPlayer = pBall->IsPracticeBall() ? nullptr : pBall->GetCarrier() )
 	{
-		if (m_hBall->GetPrevCarrier() != pPlayer)
+		if (pBall->GetPrevCarrier() != pPlayer)
 		{
-			m_flBallLastReceived = gpGlobals->curtime;
-			m_bProtActive = false;
+			pBall->SetLastReceived( gpGlobals->curtime );
+			pBall->SetProtActive( false );
 		}
 		m_onBallGetAny.FireOutput( pPlayer, this );
 		if ( pPlayer->GetTeamNumber() == TF_TEAM_RED )
@@ -1906,14 +2441,30 @@ void CTFPasstimeLogic::OnBallGet()
 		{
 			m_onBallGetBlu.FireOutput( pPlayer, this );
 		}
-		CPasstimeBallController::BallPickedUp( m_hBall, pPlayer );
+		CPasstimeBallController::BallPickedUp( pBall, pPlayer );
 	}
 }
 
 //-----------------------------------------------------------------------------
 void CTFPasstimeLogic::InputSpawnBall( inputdata_t &input )
 {
-	RespawnBall();
+	int iCount = input.value.Int();
+	if ( iCount <= 0 )
+	{
+		iCount = clamp( pf_ball_count.GetInt(), 1, kMaxPasstimeBalls );
+	}
+	else
+	{
+		iCount = clamp( iCount, 1, kMaxPasstimeBalls );
+	}
+
+	int iRoom = kMaxPasstimeBalls - GetGameBallCount();
+	iCount = MIN( iCount, iRoom );
+
+	for ( int i = 0; i < iCount; ++i )
+	{
+		SpawnBallAtRandomSpawner();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1935,7 +2486,6 @@ void CTFPasstimeLogic::InputTimeUp( inputdata_t &input )
 
 	if ( ( iPointDifference <= iMaxPossibleScoreGain ) && !ShouldEndOvertime() )
 	{
-		m_pRespawnCountdown->Disable();
 		TFGameRules()->SetOvertime( true );
 		TFGameRules()->BroadcastSound( 255, "Passtime.Merasmus.Overtime" );
 		ThinkExpiredTimer();
@@ -1951,15 +2501,11 @@ void CTFPasstimeLogic::ThinkExpiredTimer()
 {
  	if ( TFGameRules() && (TFGameRules()->State_Get() != GR_STATE_RND_RUNNING) ) 
 	{
-		if ( m_pRespawnCountdown )
-		{
-			// just in case
-			m_pRespawnCountdown->Disable();
-		}
+		m_pOvertimeCountdown->Disable();
 		return;
 	}
 
-	if ( ShouldEndOvertime() || m_pRespawnCountdown->Tick( gpGlobals->frametime ) )
+	if ( ShouldEndOvertime() || m_pOvertimeCountdown->Tick( gpGlobals->frametime ) )
 	{
 		EndRoundExpiredTimer();
 		return;
@@ -1969,31 +2515,30 @@ void CTFPasstimeLogic::ThinkExpiredTimer()
 	// or the conditions are met that allow an expired timer to end the round.
 	SetContextThink( &CTFPasstimeLogic::ThinkExpiredTimer, gpGlobals->curtime, "ThinkExpiredTimer" );
 
-	Assert( m_hBall ); // verified in ShouldEndOvertime
-	Assert( m_pRespawnCountdown ); // always valid after Spawn
-	bool bBallUnassigned = m_hBall->GetTeamNumber() == TEAM_UNASSIGNED;
-	bool bCountdownRunning = !m_pRespawnCountdown->IsDisabled();
-	if ( bBallUnassigned && !bCountdownRunning )
+	CPasstimeBall *pBall = GetGameBall();
+	Assert( pBall ); // verified in ShouldEndOvertime
+	bool bBallUnassigned = pBall && ( pBall->GetTeamNumber() == TEAM_UNASSIGNED );
+	// a queued respawn is on its way, so the ball isn't idle
+	bool bIdle = bBallUnassigned && ( m_iBallsToRespawn == 0 );
+	bool bCountdownRunning = !m_pOvertimeCountdown->IsDisabled();
+	if ( bIdle && !bCountdownRunning )
 	{
 		// start the countdown when the ball turns neutral
 		if ( p4ss_golden_goal.GetBool() )
 		{
 			// keeps respawn ball timer as normal
-			m_pRespawnCountdown->Start( m_iBallSpawnCountdownSec );
+			m_pOvertimeCountdown->Start( m_iBallSpawnCountdownSec );
 		}
 		else
 		{
 			// overtime respawn ball timer
-			m_pRespawnCountdown->Start(
-			tf_passtime_overtime_idle_sec.GetFloat() );
+			m_pOvertimeCountdown->Start( tf_passtime_overtime_idle_sec.GetFloat() );
 		}
-		
-		
 	}
-	else if ( !bBallUnassigned && bCountdownRunning ) 
+	else if ( !bIdle && bCountdownRunning ) 
 	{
-		// stop the countdown when the ball is picked up
-		m_pRespawnCountdown->Disable();
+		// stop the countdown when the ball is picked up or a respawn is queued
+		m_pOvertimeCountdown->Disable();
 	}
 }
 
@@ -2001,14 +2546,15 @@ void CTFPasstimeLogic::ThinkExpiredTimer()
 //-----------------------------------------------------------------------------
 bool CTFPasstimeLogic::ShouldEndOvertime() const
 {
-	if ( !m_hBall || !TFGameRules() ) 
+	CPasstimeBall *pBall = GetGameBall();
+	if ( !pBall || !TFGameRules() ) 
 	{
 		return true;
 	}
 
 	// if nobody has the ball, only the respawn countdown can end overtime
-	CTFPlayer *pBallCarrier = m_hBall->GetCarrier();
-	if ( m_hBall->GetTeamNumber() == TEAM_UNASSIGNED || !pBallCarrier )
+	CTFPlayer *pBallCarrier = pBall->GetCarrier();
+	if ( pBall->GetTeamNumber() == TEAM_UNASSIGNED || !pBallCarrier )
 	{
 		return false;
 	}
@@ -2033,6 +2579,7 @@ void CTFPasstimeLogic::EndRoundExpiredTimer()
 {
 	StopAskForBallEffects();
 	m_pRespawnCountdown->Disable();
+	m_pOvertimeCountdown->Disable();
 	SetContextThink( &CTFPasstimeLogic::ThinkExpiredTimer, TICK_NEVER_THINK, "ThinkExpiredTimer" );
 	
 	// copied from TeamplayRoundBasedGameRules::State_Think_RND_RUNNING

@@ -36,6 +36,14 @@ CPasstimeBallControllerHoming::~CPasstimeBallControllerHoming()
 void CPasstimeBallControllerHoming::StartHoming( CPasstimeBall *pBall, CTFPlayer *pTarget, bool isCharged )
 {
 	Assert( pTarget && pBall );
+	if ( pBall->IsPracticeBall() )
+	{
+		return;
+	}
+	if ( g_pPasstimeLogic && ( g_pPasstimeLogic->GetCarriedBall( pTarget ) || g_pPasstimeLogic->GetTrainingBallForPlayer( pTarget ) ) )
+	{
+		return;
+	}
 	SetIsEnabled( true );
 	m_bIsHoming = true;
 	m_hTarget = pTarget;
@@ -86,7 +94,7 @@ bool CPasstimeBallControllerHoming::IsActive() const
 //-----------------------------------------------------------------------------
 bool CPasstimeBallControllerHoming::Apply( CPasstimeBall *ball )
 {
-	if ( ball != m_hBall )
+	if ( ball != m_hBall || ball->IsPracticeBall() )
 		return false;
 
 	if ( !m_hBall.Get() )

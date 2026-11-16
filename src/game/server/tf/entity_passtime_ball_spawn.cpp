@@ -28,7 +28,7 @@ LINK_ENTITY_TO_CLASS( info_passtime_ball_spawn, CPasstimeBallSpawn );
 IMPLEMENT_AUTO_LIST( IPasstimeBallSpawnAutoList );
 
 //-----------------------------------------------------------------------------
-CPasstimeBallSpawn::CPasstimeBallSpawn() : m_bDisabled( false ) {}
+CPasstimeBallSpawn::CPasstimeBallSpawn() : m_bDisabled( false ), m_flLastBallSpawnTime( -1000.0f ) {}
 bool CPasstimeBallSpawn::IsEnabled() const { return !m_bDisabled; }
 void CPasstimeBallSpawn::InputEnable( inputdata_t& input ) { m_bDisabled = false; }
 void CPasstimeBallSpawn::InputDisable( inputdata_t& input ) {	m_bDisabled = true; }
