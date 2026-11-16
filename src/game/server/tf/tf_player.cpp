@@ -11827,6 +11827,12 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 		}
 	}
 
+	// Remove any practice/training balls owned by this player.
+	if ( g_pPasstimeLogic )
+	{
+		g_pPasstimeLogic->DestroyPracticeBallsForPlayer( this );
+	}
+
 	// Remove all items...
 	RemoveAllItems( true );
 
@@ -15071,13 +15077,20 @@ bool CTFPlayer::SayAskForBall()
 		return false;
 	}
 
-	CPasstimeBall *pBall = g_pPasstimeLogic->GetBall();
-	if ( !pBall )
+	CTFPlayer *pBallCarrier = nullptr;
+	for ( int i = 0; i < g_pPasstimeLogic->GetBallCount(); ++i )
 	{
-		return false;
+		CPasstimeBall *pBall = g_pPasstimeLogic->GetBall( i );
+		if ( pBall )
+		{
+			pBallCarrier = pBall->GetCarrier();
+			if ( pBallCarrier )
+			{
+				break;
+			}
+		}
 	}
 
-	CTFPlayer *pBallCarrier = pBall->GetCarrier();
 	if ( !pBallCarrier && !p4ss_whistle_more.GetBool())
 	{
 		return false;
@@ -15750,7 +15763,7 @@ void CTFPlayer::CheckObserverSettings()
 
 		if ( TFGameRules()->IsPasstimeMode() && g_pPasstimeLogic && (GetObserverMode() == OBS_MODE_POI)  )
 		{
-			CPasstimeBall *pBall = g_pPasstimeLogic->GetBall();
+			CPasstimeBall *pBall = g_pPasstimeLogic->GetGameBall();
 			if ( !pBall || ((m_hObserverTarget.Get() == pBall) && pBall->BOutOfPlay()) )
 			{
 				FindInitialObserverTarget();

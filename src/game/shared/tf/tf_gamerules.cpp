@@ -2624,6 +2624,7 @@ CTFGameRules::CTFGameRules()
 	: m_mapTeleportLocations( DefLessFunc(string_t) )
 	, m_bMapCycleNeedsUpdate( false )
 	, m_bMapForcedTruceDuringBossFight( false )
+	, m_bIsJumpMap( false )
 	, m_flNextHalloweenGiftUpdateTime( -1 )
 #else
 	: m_bRecievedBaseline( false )
@@ -3390,6 +3391,9 @@ void CTFGameRules::Activate()
 	m_bPlayingSpecialDeliveryMode.Set( false );
 	m_bPlayingRobotDestructionMode.Set( false );
 	m_bPowerupMode.Set( false );
+#ifdef GAME_DLL
+	m_bIsJumpMap = MapHasPrefix( STRING( gpGlobals->mapname ), "jump_" );
+#endif
 
 	m_redPayloadToPush = NULL;
 	m_bluePayloadToPush = NULL;
@@ -8286,10 +8290,13 @@ void CTFGameRules::SetWinningTeam( int team, int iWinReason, bool bForceMapReset
 		// stats reporting happens as a result of BaseClass::SetWinningTeam, but we need to make sure to
 		// update ball carry data before stats are reported.
 		// FIXME: refactor this so we're not calling it just for its side effects :/
-		CPasstimeBall *pBall = g_pPasstimeLogic->GetBall();
-		if ( pBall )
+		for ( int i = 0; i < g_pPasstimeLogic->GetBallCount(); ++i )
 		{
-			pBall->SetStateOutOfPlay();
+			CPasstimeBall *pBall = g_pPasstimeLogic->GetBall( i );
+			if ( pBall )
+			{
+				pBall->SetStateOutOfPlay();
+			}
 		}
 	}
 
@@ -14800,17 +14807,17 @@ int CTFGameRules::GetClassLimit( int iClass )
 {
 	switch ( iClass )
 	{
-	case TF_CLASS_SCOUT: return 0; break;
-	case TF_CLASS_SNIPER: return 0; break;
-	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt(); break;
-	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt(); break;
-	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt(); break;
-	case TF_CLASS_HEAVYWEAPONS: return 0; break;
-	case TF_CLASS_PYRO: return 0; break;
-	case TF_CLASS_SPY: return 0; break;
-	case TF_CLASS_ENGINEER: return 0; break;
+	case TF_CLASS_SCOUT: return 0;
+	case TF_CLASS_SNIPER: return 0;
+	case TF_CLASS_SOLDIER: return pf_classlimit_soldier.GetInt();
+	case TF_CLASS_DEMOMAN: return pf_classlimit_demoman.GetInt();
+	case TF_CLASS_MEDIC: return pf_classlimit_medic.GetInt();
+	case TF_CLASS_HEAVYWEAPONS: return 0;
+	case TF_CLASS_PYRO: return 0;
+	case TF_CLASS_SPY: return 0;
+	case TF_CLASS_ENGINEER: return 0;
 	default:
-		break;
+		return 0;
 	}
 }
 
