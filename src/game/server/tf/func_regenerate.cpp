@@ -12,6 +12,9 @@
 #include "tf_gamerules.h"
 #include "eventqueue.h"
 
+ConVar pf_mute_resupply_on_jump_maps( "pf_mute_resupply_on_jump_maps", "1", FCVAR_NONE,
+	"Mute the resupply locker sound on maps with the 'jump_' prefix in the filename" );
+
 LINK_ENTITY_TO_CLASS( func_regenerate, CRegenerateZone );
 
 #define TF_REGENERATE_SOUND				"Regenerate.Touch"
@@ -201,8 +204,12 @@ void CRegenerateZone::Regenerate( CTFPlayer *pPlayer )
 	pPlayer->Regenerate();
 	pPlayer->SetNextRegenTime( gpGlobals->curtime + TF_REGENERATE_NEXT_USE_TIME );
 
-	CSingleUserRecipientFilter filter( pPlayer );
-	EmitSound( filter, pPlayer->entindex(), TF_REGENERATE_SOUND );
+	//Mute this on jump maps. I want to jump in peace and quiet
+	if ( !TFGameRules()->IsJumpMap() || !pf_mute_resupply_on_jump_maps.GetBool() )
+	{
+		CSingleUserRecipientFilter filter( pPlayer );
+		EmitSound( filter, pPlayer->entindex(), TF_REGENERATE_SOUND );
+	}
 
 	if ( m_hAssociatedModel )
 	{
