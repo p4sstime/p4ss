@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> PASS Fortress has moved to a private repository, and this public repository is now archived. The repo is preserved for reference and no longer reflects active development or the current state of the project.
+
 # 4v4 PASS Time mod
 
 Hello! Welcome to the source code for the (soon to be) standalone 4v4 PASS Time Team Fortress 2 mod.
